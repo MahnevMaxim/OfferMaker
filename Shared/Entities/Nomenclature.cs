@@ -12,6 +12,8 @@ namespace Shared
 
         public string Title { get; set; }
 
+        public Category Category { get; set; }
+
         public IEnumerable<string> Description { get; set; }
 
         public decimal CostPrice { get; set; }
