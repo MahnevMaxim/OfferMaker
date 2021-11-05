@@ -10,19 +10,23 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OfferMaker.MvvmFactory;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
-namespace OfferMaker
+namespace OfferMaker.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow, IView
     {
         public MainWindow()
         {
             InitializeComponent();
         }
+
+        void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);
     }
 }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    public class Category
+    class Category : ICategory
     {
-        public int Id { get; set; }
+        public int Id { get; set ; }
 
         public string Title { get; set; }
 

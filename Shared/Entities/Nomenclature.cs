@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    public class Nomenclature
+    class Nomenclature : INomenclature
     {
         public int Id { get; set; }
 
         public string Title { get; set; }
 
-        public List<string> Description { get; set; }
+        public IEnumerable<string> Description { get; set; }
 
         public decimal CostPrice { get; set; }
 
@@ -22,12 +22,14 @@ namespace Shared
 
         public decimal Profit { get; set; }
 
-        public Currency Currency { get; set; }
+        public ICurrency Currency { get; set; }
 
         public DateTime? LastChangePriceDate { get; set; }
 
         public int ActualPricePeriod { get; set; }
 
         public bool IsPriceActual { get; set; }
+
+        public IEnumerable<string> Photos { get; set; }
     }
 }

@@ -11,30 +11,31 @@ namespace API.Data
 {
     public class APIContext : DbContext
     {
+        public DbSet<INomenclature> Nomenclature { get; set; }
+        public DbSet<IUser> User { get; set; }
+        public DbSet<ICustomer> Customer { get; set; }
+        public DbSet<ICategory> Category { get; set; }
+        public DbSet<ICurrency> Currency { get; set; }
+
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)
         {
+            Database.EnsureCreated();
         }
-
-        public DbSet<Category> Category { get; set; }
-
-        public DbSet<Currency> Currency { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Nomenclature>().Property(p => p.Description).HasConversion(
+            builder.Entity<INomenclature>().Property(p => p.Description).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<List<string>>(v));
 
-            builder.Entity<User>().Property(p => p.Permissions).HasConversion(
+            builder.Entity<INomenclature>().Property(p => p.Photos).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<List<string>>(v));
+
+            builder.Entity<IUser>().Property(p => p.Permissions).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<List<Permissions>>(v));
         }
-
-        public DbSet<Nomenclature> Nomenclature { get; set; }
-
-        public DbSet<Shared.User> User { get; set; }
-
-        public DbSet<Shared.Customer> Customer { get; set; }
     }
 }

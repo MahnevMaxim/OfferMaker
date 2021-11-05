@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    public class Customer
+    public interface ICategory
     {
         public int Id { get; set; }
 
-        public string FullName { get; set; }
+        public string Title { get; set; }
 
-        public string Location { get; set; }
-
-        public string Organization { get; set; }
+        public int ParentId { get; set; }
     }
 }

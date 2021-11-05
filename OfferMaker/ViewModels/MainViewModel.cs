@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared
+namespace OfferMaker.ViewModels
 {
-    class Groups
+    public class MainViewModel : MvvmFactory.BaseViewModel
     {
     }
 }
