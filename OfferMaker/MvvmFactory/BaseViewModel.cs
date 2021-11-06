@@ -12,8 +12,12 @@ namespace OfferMaker.MvvmFactory
     {
         BaseModel model;
 
-        public void SetModel(BaseModel model) => this.model = model;
-
+        public void SetModel(BaseModel model)
+        {
+            this.model = model;
+            SendCommand += model.SendCommand;
+        }
+        
         #region Commands
 
         public delegate void CommandHandlerNew(object parameters);

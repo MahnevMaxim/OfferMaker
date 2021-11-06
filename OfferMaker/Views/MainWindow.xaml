@@ -5,9 +5,410 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:local="clr-namespace:OfferMaker.Views"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
-                 Title="MainWindow" Height="450" Width="800">
+                 Title="KIP Offer Maker" Height="650" Width="1100">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         
+        <TabControl x:Name="tabControl"
+                    Grid.Row="0"
+                    mah:TabControlHelper.Underlined="TabItems">
+            <TabItem Header="Конструктор" 
+                     mah:TabControlHelper.Underlined="TabPanel"
+                     mah:HeaderedControlHelper.HeaderFontSize="16">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="5">
+                        <Button CommandParameter="FindProfile"
+                                VerticalAlignment="Top"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                ToolTip="Фото юзера, профиль, админка"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                            <iconPacks:PackIconMaterial Kind="CardAccountDetailsOutline"
+                                                        Width="20"
+                                                        Height="20"/>
+                        </Button>
+                        <Button CommandParameter="FindProfile"
+                                VerticalAlignment="Top"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                ToolTip="Баннер"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                            <iconPacks:PackIconRadixIcons Kind="Image"
+                                                          Width="20"
+                                                          Height="20"/>
+                        </Button>
+                        <Button CommandParameter="FindProfile"
+                                VerticalAlignment="Top"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                ToolTip="Описание"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                            <iconPacks:PackIconMaterial Kind="Text"
+                                                          Width="20"
+                                                          Height="20"/> 
+                        </Button>
+                        <ComboBox Width="150"
+                                  Height="0"
+                                  VerticalAlignment="Top"
+                                  mah:TextBoxHelper.ClearTextButton="True"
+                                  mah:TextBoxHelper.UseFloatingWatermark="True"
+                                  mah:TextBoxHelper.Watermark="Менеджер"
+                                  SelectedIndex="0"
+                                  Margin="5"/>
+                        <StackPanel Margin="5">
+                            <CheckBox Content="Детально"/>
+                            <CheckBox Content="По себестоимости"
+                                       Margin="0,5"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <CheckBox Content="Пересчитать КП в валюту"/>
+                            <CheckBox Content="Итоговая сумма в рублях"
+                                      Margin="0,5"/>
+                            <ComboBox Width="150"
+                                  mah:TextBoxHelper.ClearTextButton="True"
+                                  mah:TextBoxHelper.UseFloatingWatermark="True"
+                                  mah:TextBoxHelper.Watermark="Валюта"
+                                  SelectedIndex="0"
+                                  Margin="0,5,0,0"
+                                      HorizontalAlignment="Left"/>
+                        </StackPanel>
+                        <StackPanel Margin="5">
+                            <ComboBox Width="150"
+                                      SelectedIndex="0"
+                                      HorizontalAlignment="Left">
+                                <ComboBoxItem Content="С НДС"/>
+                                <ComboBoxItem Content="Без НДС"/>
+                            </ComboBox>
+                            <CheckBox Content="Скрыть надпись НДС"
+                                      Margin="0,5"/>
+                        </StackPanel>
+                        
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Документ"
+                     mah:TabControlHelper.Underlined="TabPanel"
+                     mah:HeaderedControlHelper.HeaderFontSize="16">
+                <Grid Background="#FFE5E5E5">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="5">
+                        <Button CommandParameter="FindProfile"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                ToolTip="Открыть документ"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                            <iconPacks:PackIconMaterial Kind="FolderOpenOutline"
+                                                        Width="20"
+                                                        Height="20"/>
+                        </Button>
+                        <Button CommandParameter="FindProfile"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                ToolTip="Сохранить документ">
+                            <iconPacks:PackIconMaterial Kind="ContentSaveOutline"
+                                                        Width="20"
+                                                        Height="20"/>
+                        </Button>
+                        <Button CommandParameter="FindProfile"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                ToolTip="Открыть шаблон">
+                            <iconPacks:PackIconMaterial Kind="BookOpenOutline"
+                                                        Width="20"
+                                                        Height="20"/>
+                        </Button>
+                        <Button CommandParameter="FindProfile"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                ToolTip="Сохранить шаблон">
+                            <iconPacks:PackIconMaterial Kind="ContentSaveCogOutline"
+                                                        Width="20"
+                                                        Height="20"/>
+                        </Button>
+                        <Button CommandParameter="FindProfile"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                ToolTip="Сохранить в PDF">
+                            <iconPacks:PackIconCodicons Kind="FilePdf"
+                                                        Width="20"
+                                                        Height="20"/>
+                        </Button>
+                        <Button CommandParameter="FindProfile"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                ToolTip="Сохранить в PDF одностраничное предложение">
+                            <iconPacks:PackIconBoxIcons Kind="SolidFilePdf"
+                                                        Width="20"
+                                                        Height="20"/>
+                        </Button>
+                        <Button CommandParameter="FindProfile"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                ToolTip="Сохранить в архив">
+                            <iconPacks:PackIconRemixIcon Kind="ArchiveDrawerLine"
+                                                        Width="20"
+                                                        Height="20"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Каталог"
+                     mah:TabControlHelper.Underlined="TabPanel"
+                     mah:HeaderedControlHelper.HeaderFontSize="16">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Button CommandParameter="FindProfile"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Command="{Binding Cmd}"
+                            Height="35"
+                            Width="35"
+                            Margin="5"
+                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                            ToolTip="Валюты">
+                        <iconPacks:PackIconMaterial Kind="CashMultiple"
+                                                    Width="20"
+                                                    Height="20"/>
+                    </Button>
+                    <TextBox mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
+                             Grid.Column="1"
+                             Grid.Row="0"
+                             Height="30"
+                             mah:TextBoxHelper.ClearTextButton="True"
+                             mah:TextBoxHelper.Watermark="Поиск..."/>
+                    <Button CommandParameter="FindProfile"
+                            Grid.Column="2"
+                            Grid.Row="0"
+                            Command="{Binding Cmd}"
+                            Height="28"
+                            Width="28"
+                            Margin="5"
+                            Style="{DynamicResource MahApps.Styles.Button.Square}"
+                            ToolTip="Искать">
+                        <iconPacks:PackIconMaterial Kind="Magnify"
+                                                    Width="20"
+                                                    Height="20"/>
+                    </Button>
+                    
+                </Grid>
+            </TabItem>
+            <TabItem Header="Архив"
+                     mah:TabControlHelper.Underlined="TabPanel"
+                     mah:HeaderedControlHelper.HeaderFontSize="16">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBox mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
+                             Grid.Column="0"
+                             Grid.Row="0"
+                             Height="30"
+                             mah:TextBoxHelper.ClearTextButton="True"
+                             mah:TextBoxHelper.Watermark="Поиск..."/>
+                    <Button CommandParameter="FindProfile"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Command="{Binding Cmd}"
+                            Height="28"
+                            Width="28"
+                            Margin="5"
+                            Style="{DynamicResource MahApps.Styles.Button.Square}"
+                            ToolTip="Искать">
+                        <iconPacks:PackIconMaterial Kind="Magnify"
+                                                    Width="20"
+                                                    Height="20"/>
+                    </Button>
+                    <Button CommandParameter="FindProfile"
+                            Grid.Column="2"
+                            Grid.Row="0"
+                            Command="{Binding Cmd}"
+                            Height="35"
+                            Width="35"
+                            Margin="5"
+                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                            ToolTip="Фильтр">
+                        <iconPacks:PackIconMaterial Kind="FilterVariant"
+                                                    Width="20"
+                                                    Height="20"/>
+                    </Button>
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+        <Grid Grid.Row="1">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="0">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="1">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="400" MinWidth="400" MaxWidth="900"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" 
+                            Grid.Row="0"
+                            Margin="5">
+                    <TextBlock FontWeight="Bold"
+                               Text="Итоговая сумма"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                    <TextBlock FontWeight="Bold"
+                               Text="0"
+                               Margin="5"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                </StackPanel>
+                <ListView Grid.Row="1"
+                          Margin="5">
+                </ListView>
+                <Button Grid.Row="2" 
+                        Content="Добавить"
+                        Style="{DynamicResource MahApps.Styles.Button.Square}"
+                        Margin="5"/>
+            </Grid>
+
+            <GridSplitter Width="2" Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" MaxWidth="300" MinWidth="150"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="*" MinWidth="200"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="*" MinWidth="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="2">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <GroupBox Header="Категории" 
+                              Grid.Row="1" 
+                              Grid.Column="0"
+                              Margin="5,5,2,5"
+                              VerticalAlignment="Stretch">
+                <AdornerDecorator>
+                    <TreeView/>
+                </AdornerDecorator>
+            </GroupBox>
+            <GridSplitter Width="2" Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+            <GroupBox Header="Номенклатура" 
+                      Grid.Row="1" 
+                      Grid.Column="2"
+                      Margin="2,5,5,5"
+                      VerticalAlignment="Stretch">
+                <AdornerDecorator>
+                    <DataGrid>
+
+                    </DataGrid>
+                </AdornerDecorator>
+            </GroupBox>
+            <GridSplitter Width="2" Grid.Column="3"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+            <GroupBox Header="Группы" 
+                      Grid.Row="1" 
+                      Grid.Column="5"
+                      Margin="2,5,5,5"
+                      VerticalAlignment="Stretch">
+                <AdornerDecorator>
+                    <ListView>
+
+                    </ListView>
+                </AdornerDecorator>
+            </GroupBox>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="3">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <GroupBox Header="Архив" 
+                              Grid.Row="1" 
+                              Grid.ColumnSpan="3"
+                              Margin="5"
+                              VerticalAlignment="Stretch">
+                <AdornerDecorator>
+                    <DataGrid>
+
+                    </DataGrid>
+                </AdornerDecorator>
+            </GroupBox>
+        </Grid>
+
     </Grid>
 </mah:MetroWindow>

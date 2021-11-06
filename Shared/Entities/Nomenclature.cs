@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shared
 {
-    class Nomenclature : INomenclature
+    public class Nomenclature 
     {
         public int Id { get; set; }
 
@@ -14,17 +16,19 @@ namespace Shared
 
         public Category Category { get; set; }
 
-        public IEnumerable<string> Description { get; set; }
+        public ObservableCollection<string> Description { get; set; }
 
         public decimal CostPrice { get; set; }
 
         public decimal Markup { get; set; }
 
+        [NotMapped]
         public decimal Price { get; set; }
 
+        [NotMapped]
         public decimal Profit { get; set; }
 
-        public ICurrency Currency { get; set; }
+        public int CurrencyIsoCode { get; set; }
 
         public DateTime? LastChangePriceDate { get; set; }
 
@@ -32,6 +36,6 @@ namespace Shared
 
         public bool IsPriceActual { get; set; }
 
-        public IEnumerable<string> Photos { get; set; }
+        public ObservableCollection<string> Photos { get; set; }
     }
 }

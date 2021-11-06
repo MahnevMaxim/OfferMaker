@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    class Group : IGroup
+    public class Group 
     {
+        public int Id { get; set; }
     }
 }

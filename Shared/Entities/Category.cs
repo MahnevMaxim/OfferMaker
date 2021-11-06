@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    class Category : ICategory
+    public class Category 
     {
         public int Id { get; set ; }
 

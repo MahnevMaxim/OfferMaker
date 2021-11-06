@@ -10,7 +10,7 @@ namespace OfferMaker
     {
         internal override void Run()
         {
-            OnSendMessage("Hello!!!");
+            //OnSendMessage("Hello!!!");
         }
     }
 }

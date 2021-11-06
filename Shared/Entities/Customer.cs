@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Shared
 {
-    class Customer : ICustomer
+    public class Customer 
     {
         public int Id { get; set; }
 
