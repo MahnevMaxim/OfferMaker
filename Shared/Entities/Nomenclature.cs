@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shared
 {
-    public class Nomenclature 
+    public class Nomenclature : INomenclature
     {
         public int Id { get; set; }
 

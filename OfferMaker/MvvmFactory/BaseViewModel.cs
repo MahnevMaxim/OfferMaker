@@ -11,17 +11,26 @@ namespace OfferMaker.MvvmFactory
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
         BaseModel model;
+        public IView view;
 
-        public void SetModel(BaseModel model)
+        public void SetModel(BaseModel model, IView view)
         {
+            this.view = view;
             this.model = model;
             SendCommand += model.SendCommand;
+            InitializeViewModel();
         }
         
+        /// <summary>
+        /// Если что-то дополнительно надо инициализировать,
+        /// то делать это здесь.
+        /// </summary>
+        virtual public void InitializeViewModel() { }
+
         #region Commands
 
-        public delegate void CommandHandlerNew(object parameters);
-        public event CommandHandlerNew SendCommand;
+        public delegate void CommandHandler(object parameters);
+        public event CommandHandler SendCommand;
 
         public RelayCommand Cmd { get => new RelayCommand(obj => SendCommand(obj)); }
 

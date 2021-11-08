@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared
+namespace OfferMaker.Models
 {
-    public class Group : IGroup
+    class DataRepository
     {
-        public int Id { get; set; }
+        //GetUsers()
+        //{
+
+        //}
     }
 }

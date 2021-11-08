@@ -11,7 +11,7 @@ namespace OfferMaker.MvvmFactory
     {
         public static void CreateWindow(BaseModel model, BaseViewModel viewModel, IView view)
         {
-            viewModel.SetModel(model);
+            viewModel.SetModel(model, view);
             (view as MetroWindow).DataContext = viewModel;
             model.SendMessage += (object sender, string e) => view.OnSendMessage(e);
             view.Show();

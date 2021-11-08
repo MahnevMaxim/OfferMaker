@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.ObjectModel;
 
 namespace Shared
 {
@@ -13,7 +14,9 @@ namespace Shared
 
         public string Title { get; set; }
 
-        public IEnumerable<string> Description { get; set; }
+        public Category Category { get; set; }
+
+        public ObservableCollection<string> Description { get; set; }
 
         public decimal CostPrice { get; set; }
 
@@ -25,7 +28,7 @@ namespace Shared
         [NotMapped]
         public decimal Profit { get; set; }
 
-        public ICurrency Currency { get; set; }
+        public int CurrencyIsoCode { get; set; }
 
         public DateTime? LastChangePriceDate { get; set; }
 
@@ -33,6 +36,6 @@ namespace Shared
 
         public bool IsPriceActual { get; set; }
 
-        public IEnumerable<string> Photos { get; set; }
+        public ObservableCollection<string> Photos { get; set; }
     }
 }

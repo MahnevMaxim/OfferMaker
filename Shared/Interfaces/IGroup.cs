@@ -8,5 +8,6 @@ namespace Shared
 {
     public interface IGroup
     {
+        public int Id { get; set; }
     }
 }

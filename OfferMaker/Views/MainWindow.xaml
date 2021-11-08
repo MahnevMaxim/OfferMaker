@@ -8,6 +8,13 @@
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
                  Title="KIP Offer Maker" Height="650" Width="1100">
+    <mah:MetroWindow.RightWindowCommands>
+        <mah:WindowCommands ShowLastSeparator="False">
+            <Button Content="Themes"
+                    Command="{Binding Cmd}" CommandParameter="SelectThemes"
+                    ToolTip="Настройка тем" />
+        </mah:WindowCommands>
+    </mah:MetroWindow.RightWindowCommands>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

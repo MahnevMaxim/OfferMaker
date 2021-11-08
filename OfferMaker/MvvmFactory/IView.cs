@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OfferMaker.MvvmFactory
 {
-    interface IView
+    public interface IView
     {
         void Show();
 

@@ -10,12 +10,16 @@ namespace Shared
     {
         public int Id { get; set; }
 
-        public int Code { get; set; }
+        public int IsoCode { get; set; }
+
+        public string CharCode { get; set; }
 
         public string Name { get; set; }
 
         public decimal Rate { get; set; }
 
         public string Symbol { get; set; }
+
+        public DateTime RateDatetime { get; set; }
     }
 }

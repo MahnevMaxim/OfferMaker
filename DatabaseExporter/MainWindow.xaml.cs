@@ -157,13 +157,23 @@ namespace DatabaseExporter
                 symbols.TryGetValue(code, out symb);
                 currs[i].Symbol = symb;
             }
-            
+
+            int i_ = 0;
             foreach (var curr in currs)
             {
                 var res = await client.CurrenciesPOSTAsync(curr);
+                i_++;
+                if (i_ == 100) break;
             }
 
             MessageBox.Show("валюты добавлены");
+        }
+
+        private void button3_Click(object sender, RoutedEventArgs e)
+        {
+            button_Click_1(null, null);
+            button1_Click(null, null);
+            button2_Click(null, null);
         }
     }
 }

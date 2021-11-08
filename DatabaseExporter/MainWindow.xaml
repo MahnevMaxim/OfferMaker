@@ -7,8 +7,9 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button x:Name="button" Content="Export users" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.05,0.152" Width="102" Click="button_Click_1"/>
-        <Button x:Name="button1" Content="Export nomenclature" HorizontalAlignment="Left" Margin="137,10,0,0" VerticalAlignment="Top" Width="144" Click="button1_Click"/>
-        <Button x:Name="button2" Content="Export currency" HorizontalAlignment="Left" Margin="304,10,0,0" VerticalAlignment="Top" Width="196" Click="button2_Click"/>
+        <Button x:Name="button" Content="Export users" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.05,0.152" Width="196" Click="button_Click_1"/>
+        <Button x:Name="button1" Content="Export nomenclature" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Width="196" Click="button1_Click"/>
+        <Button x:Name="button2" Content="Export currency" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top" Width="196" Click="button2_Click"/>
+        <Button x:Name="button3" Content="Export all" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top" Width="196" Click="button3_Click"/>
     </Grid>
 </Window>

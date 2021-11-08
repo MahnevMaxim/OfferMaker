@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace Shared
 {
-    public class Offer
+    public class Offer : IOffer
     {
         public int Id { get; set; }
 

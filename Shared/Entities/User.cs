@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace Shared
 {
-    public class User 
+    public class User : IUser
     {
         public int Id { get; set; }
 
