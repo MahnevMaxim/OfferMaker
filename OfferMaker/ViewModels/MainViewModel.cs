@@ -5,15 +5,37 @@ using System.Text;
 using System.Threading.Tasks;
 using ControlzEx.Theming;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace OfferMaker.ViewModels
 {
-    public class MainViewModel : MvvmFactory.BaseViewModel
+    public class MainViewModel : BaseViewModel
     {
-        override public void InitializeViewModel()
+        Main modelMain;
+
+        public override void InitializeViewModel()
         {
-            //ThemeManager.Current.ChangeTheme(Application.Current, "Light.Green");
+            modelMain = (Main)model;
         }
 
+        public ObservableCollection<Currency> Currencies
+        {
+            get { return modelMain.Currencies; }
+            set
+            {
+                modelMain.Currencies = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Nomenclature> Nomenclatures
+        {
+            get { return modelMain.Nomenclatures; }
+            set
+            {
+                modelMain.Nomenclatures = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

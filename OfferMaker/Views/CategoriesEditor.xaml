@@ -1,0 +1,58 @@
+﻿<mah:MetroWindow x:Class="OfferMaker.Views.CategoriesEditor"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:OfferMaker.Views"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 mc:Ignorable="d"
+                 GlowBrush="Black"
+                 WindowStartupLocation="CenterScreen"
+                 BorderThickness="0"
+                 Title="Редактор категорий" Height="430" Width="800">
+    <Grid>
+        <StackPanel>
+            <Border>
+                <TreeView x:Name="treeView" 
+                      ItemsSource="{Binding Categories}" 
+                      HorizontalAlignment="Stretch" Height="300" 
+                      Margin="10" 
+                      VerticalAlignment="Top"
+                          BorderThickness="1"
+                          BorderBrush="#cc647687">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding ChildrenTypes}">
+                            <TextBlock Text="{Binding Name}"/>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsExpanded" Value="True"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsNeedHide}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=IsExpanded}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                </TreeView>
+            </Border>
+            
+            <StackPanel Margin="10,0" >
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <TextBlock Text="Родительская категория: " Width="150"/>
+                    <TextBlock x:Name="parentNameTextBlock" Text="отсутствует" Width="250"/>
+                    <Button Content="Сброс" Width="60" Style="{StaticResource MahApps.Styles.Button.Square.Accent}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,5">
+                    <TextBox x:Name="newCategoryNameTextBox" Text="Новая категория" Width="390"/>
+                    <Button Content="Добавить" Margin="10,0,0,0"  Width="60" Style="{StaticResource MahApps.Styles.Button.Square.Accent}"/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</mah:MetroWindow>

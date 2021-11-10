@@ -105,7 +105,6 @@ namespace DatabaseExporter
                 }
                 catch
                 { }
-                
             }
             MessageBox.Show("номенклатура добавлена");
         }
@@ -121,6 +120,16 @@ namespace DatabaseExporter
 
             var date = DateTime.Parse(dateString);
             List<Currency> currs = new List<Currency>();
+
+            currs.Add(new Currency()
+            {
+                Symbol = "₽",
+                IsoCode = 810,
+                CharCode = "RUB",
+                Rate = 1,
+                RateDatetime = DateTime.Now
+            });
+
             foreach (var currencyEl in els)
             {
                 int numCode = Int32.Parse(currencyEl.Element("NumCode").Value.ToString());
@@ -138,15 +147,6 @@ namespace DatabaseExporter
                 };
                 currs.Add(curr);
             }
-
-            currs.Add(new Currency()
-            {
-                Symbol = "₽",
-                IsoCode = 810,
-                CharCode = "RUB",
-                Rate = 1,
-                RateDatetime = DateTime.Now
-            });
 
             //устанавливаем символы
             var symbols = JsonConvert.DeserializeObject<Dictionary<int, string>>(File.ReadAllText("symbols.json"));

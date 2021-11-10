@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MahApps.Metro.Controls;
 
-namespace OfferMaker.MvvmFactory
+namespace OfferMaker
 {
     class MvvmFactory
     {

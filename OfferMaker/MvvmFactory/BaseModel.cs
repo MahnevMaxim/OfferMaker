@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
 
-namespace OfferMaker.MvvmFactory
+namespace OfferMaker
 {
     abstract public class BaseModel : INotifyPropertyChanged
     {

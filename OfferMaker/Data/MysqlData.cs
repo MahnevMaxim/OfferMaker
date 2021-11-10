@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OfferMaker.Models
+namespace OfferMaker
 {
-    class DataRepository
+    class MysqlData
     {
-        //GetUsers()
-        //{
-
-        //}
     }
 }

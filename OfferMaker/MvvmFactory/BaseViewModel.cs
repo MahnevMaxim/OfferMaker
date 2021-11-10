@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace OfferMaker.MvvmFactory
+namespace OfferMaker
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
-        BaseModel model;
+        public BaseModel model;
         public IView view;
 
         public void SetModel(BaseModel model, IView view)
         {
             this.view = view;
             this.model = model;
+            this.model.viewModel = this;
             SendCommand += model.SendCommand;
             InitializeViewModel();
         }

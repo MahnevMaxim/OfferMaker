@@ -17,11 +17,11 @@ using MahApps.Metro.Controls.Dialogs;
 namespace OfferMaker.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CategoriesEditor.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow, IView
+    public partial class CategoriesEditor : MetroWindow, IView
     {
-        public MainWindow()
+        public CategoriesEditor()
         {
             InitializeComponent();
         }
