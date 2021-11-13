@@ -14,7 +14,7 @@ namespace OfferMaker
             AppDomain.CurrentDomain.UnhandledException +=
             new UnhandledExceptionEventHandler(L.AppDomain_CurrentDomain_UnhandledException);
             System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(L.Application_ThreadException);
-            MvvmFactory.CreateWindow(new Main(), new ViewModels.MainViewModel(), new Views.MainWindow());
+            MvvmFactory.CreateWindow(new Main(), new ViewModels.MainViewModel(), new Views.MainWindow(), ViewMode.Show);
         }
     }
 }

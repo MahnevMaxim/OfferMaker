@@ -16,6 +16,6 @@ namespace OfferMaker
 
         public int ParentId { get; set; }
 
-        public ObservableCollection<Category> Childs { get; set; }
+        public ObservableCollection<Category> Childs { get; set; } = new ObservableCollection<Category>();
     }
 }

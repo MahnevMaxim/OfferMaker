@@ -58,6 +58,25 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Сохранение валют на сервере
+        /// </summary>
+        /// <param name="currencies"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies)
+        {
+            try
+            {
+                IEnumerable<ApiLib.Currency> currs = Helpers.CloneObject<IEnumerable<ApiLib.Currency>>(currencies);
+                await client.CurrenciesPUTAsync(currs);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить валюты на сервере", ex) };
+            }
+        }
+
+        /// <summary>
         /// Пытаемся получить категории с сервера
         /// </summary>
         /// <returns></returns>

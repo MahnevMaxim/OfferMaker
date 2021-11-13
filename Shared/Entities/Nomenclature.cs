@@ -28,7 +28,7 @@ namespace Shared
         [NotMapped]
         public decimal Profit { get; set; }
 
-        public int CurrencyIsoCode { get; set; }
+        public string CurrencyCharCode { get; set; }
 
         public DateTime? LastChangePriceDate { get; set; }
 

@@ -9,11 +9,61 @@ namespace OfferMaker
 {
     public class CategoriesEditor : BaseModel
     {
-        ObservableCollection<Category> Categories = new ObservableCollection<Category>(); 
+        Category selectedCat;
+        string newCatName;
+        string selectedParentName;
 
-        override internal void Run()
+        public ObservableCollection<Category> CategoriesTree { get; set; }
+
+        public Category SelectedCat
         {
+            get { return selectedCat; }
+            set
+            {
+                selectedCat = value;
+                SelectedParentName = selectedCat?.Title;
+                OnPropertyChanged();
+            }
+        }
 
+        public string NewCatName
+        {
+            get { return newCatName; }
+            set
+            {
+                newCatName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string SelectedParentName
+        {
+            get { return selectedParentName; }
+            set
+            {
+                selectedParentName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public CategoriesEditor(ObservableCollection<Category> categoriesTree)
+        {
+            CategoriesTree = categoriesTree;
+        }
+
+        public void ResetParent() => SelectedCat = null;
+
+        public void AddCategory()
+        {
+            if (SelectedCat?.Title == "Все") return;
+            if (SelectedCat == null)
+            {
+                CategoriesTree.Add(new Category() { Title = NewCatName });
+            }
+            else
+            {
+                SelectedCat.Childs.Add(new Category() { Title = NewCatName });
+            }
         }
     }
 }

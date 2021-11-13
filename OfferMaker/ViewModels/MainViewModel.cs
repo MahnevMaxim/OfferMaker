@@ -18,6 +18,48 @@ namespace OfferMaker.ViewModels
             modelMain = (Main)model;
         }
 
+        #region Catalog
+
+        public ObservableCollection<Nomenclature> Nomenclatures
+        {
+            get { return modelMain.Catalog.Nomenclatures; }
+            set
+            {
+                modelMain.Catalog.Nomenclatures = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Category> CategoriesTree
+        {
+            get { return modelMain.Catalog.CategoriesTree; }
+            set
+            {
+                modelMain.Catalog.CategoriesTree = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Category SelectedCat
+        {
+            get { return modelMain.Catalog.SelectedCat; }
+            set
+            {
+                modelMain.Catalog.SelectedCat = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion Catalog
+
+        #region Settings
+
+        public Settings Settings { get => modelMain.Settings; }
+
+        #endregion Settings
+
+        #region Main
+
         public ObservableCollection<Currency> Currencies
         {
             get { return modelMain.Currencies; }
@@ -28,14 +70,6 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public ObservableCollection<Nomenclature> Nomenclatures
-        {
-            get { return modelMain.Nomenclatures; }
-            set
-            {
-                modelMain.Nomenclatures = value;
-                OnPropertyChanged();
-            }
-        }
+        #endregion Main
     }
 }

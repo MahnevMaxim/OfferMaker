@@ -1,0 +1,31 @@
+﻿<mah:MetroWindow x:Class="OfferMaker.CurrenciesView"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:local="clr-namespace:OfferMaker"
+                 mc:Ignorable="d"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 GlowBrush="Black"
+                 WindowStartupLocation="CenterScreen"
+                 BorderThickness="0"
+                 ResizeMode="NoResize"
+                 Title="Валюты" Height="450" Width="550">
+    <Grid>
+        <DataGrid ItemsSource="{Binding}" 
+                  AutoGenerateColumns="False"
+                  BorderThickness="1"
+                  BorderBrush="#cc647687"
+                  Margin="10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding CharCode}" DisplayIndex="0"/>
+                <DataGridTextColumn Header="Код" Binding="{Binding IsoCode}" DisplayIndex="1"/>
+                <DataGridTextColumn Header="Курс" Binding="{Binding Rate}" DisplayIndex="2"/>
+                <DataGridTextColumn Header="Дата" Binding="{Binding RateDatetime}" DisplayIndex="3"/>
+                <DataGridTextColumn Header="Символ" Binding="{Binding Symbol}" DisplayIndex="4"/>
+                <DataGridCheckBoxColumn Header="Включена" Binding="{Binding IsEnabled}" DisplayIndex="5"/>
+            </DataGrid.Columns>
+            
+        </DataGrid>
+    </Grid>
+</mah:MetroWindow>

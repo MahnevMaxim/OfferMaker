@@ -32,13 +32,29 @@ namespace OfferMaker
             var callResult = await ServerData.GetCurrencies();
             if (callResult.Success)
             {
-                LocalData.UpdateCurrencies(callResult.Data);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.CurrenciesPath);
                 return callResult.Data;
             }
-            var callResultLocal = await LocalData.GetCurrencies(); 
+
+            var callResultLocal = await LocalData.GetCache<ObservableCollection<Currency>>(LocalDataConfig.CurrenciesPath);
             if (callResultLocal.Success)
                 return callResultLocal.Data;
             return null;
+        }
+
+        /// <summary>
+        /// Сохраняем настройки валют на сервере и локально
+        /// </summary>
+        /// <param name="currencies"></param>
+        /// <returns></returns>
+        async internal Task SaveCurrencies(ObservableCollection<Currency> currencies)
+        {
+            var callResult = await ServerData.SaveCurrencies(currencies);
+            if (callResult.Success)
+            {
+                
+            }
+            LocalData.UpdateCache(currencies, LocalDataConfig.CurrenciesPath);
         }
 
         /// <summary>
@@ -50,11 +66,11 @@ namespace OfferMaker
             CallResult<ObservableCollection<Nomenclature>> callResult = await ServerData.GetNomenclatures();
             if (callResult.Success)
             {
-                LocalData.UpdateNomenclatures(callResult.Data);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.NomenclaturesPath);
                 return callResult.Data;
             }
   
-            var callResultLocal = await LocalData.GetNomenclatures();
+            var callResultLocal = await LocalData.GetCache<ObservableCollection<Nomenclature>>(LocalDataConfig.NomenclaturesPath);
             if (callResultLocal.Success) 
                 return callResultLocal.Data;
             return null;
@@ -69,11 +85,11 @@ namespace OfferMaker
             CallResult<ObservableCollection<Category>> callResult = await ServerData.GetCategories();
             if (callResult.Success)
             {
-                LocalData.UpdateCategories(callResult.Data);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.CategoriesPath);
                 return callResult.Data;
             }
 
-            var callResultLocal = await LocalData.GetCategories();
+            var callResultLocal = await LocalData.GetCache<ObservableCollection<Category>>(LocalDataConfig.CategoriesPath);
             if (callResultLocal.Success)
                 return callResultLocal.Data;
             return null;
@@ -88,11 +104,11 @@ namespace OfferMaker
             CallResult<ObservableCollection<User>> callResult = await ServerData.GetUsers();
             if (callResult.Success)
             {
-                LocalData.UpdateUsers(callResult.Data);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.UsersPath);
                 return callResult.Data;
             }
 
-            var callResultLocal = await LocalData.GetUsers();
+            var callResultLocal = await LocalData.GetCache<ObservableCollection<User>>(LocalDataConfig.UsersPath);
             if (callResultLocal.Success)
                 return callResultLocal.Data;
             return null;

@@ -4,26 +4,29 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:local="clr-namespace:OfferMaker.Views"
+                 xmlns:root="clr-namespace:OfferMaker"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="0"
-                 Title="Редактор категорий" Height="430" Width="800">
+                 Title="Редактор категорий" Height="430" Width="480">
     <Grid>
         <StackPanel>
             <Border>
-                <TreeView x:Name="treeView" 
-                      ItemsSource="{Binding Categories}" 
-                      HorizontalAlignment="Stretch" Height="300" 
-                      Margin="10" 
-                      VerticalAlignment="Top"
-                          BorderThickness="1"
-                          BorderBrush="#cc647687">
+                <root:ExtendedTreeView ItemsSource="{Binding CategoriesTree}"
+                                       SelectedItem_="{Binding SelectedCat, Mode=TwoWay}"
+                                       HorizontalAlignment="Stretch" Height="300" 
+                                       Margin="10" 
+                                       VerticalAlignment="Top"
+                                       BorderThickness="1"
+                                       BorderBrush="#cc647687">
                     <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding ChildrenTypes}">
-                            <TextBlock Text="{Binding Name}"/>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock Text="{Binding Title}" FontSize="16"/>
+                            </Border>
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                     <TreeView.ItemContainerStyle>
@@ -39,18 +42,30 @@
                             </Style.Triggers>
                         </Style>
                     </TreeView.ItemContainerStyle>
-                </TreeView>
+                </root:ExtendedTreeView>
             </Border>
             
             <StackPanel Margin="10,0" >
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Родительская категория: " Width="150"/>
-                    <TextBlock x:Name="parentNameTextBlock" Text="отсутствует" Width="250"/>
-                    <Button Content="Сброс" Width="60" Style="{StaticResource MahApps.Styles.Button.Square.Accent}"/>
+                    <TextBlock Text="{Binding SelectedParentName}"
+                               Width="250"/>
+                    <Button Content="Сброс"
+                            CommandParameter="ResetParent"
+                            Command="{Binding Cmd}"
+                            Width="60"
+                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,5">
-                    <TextBox x:Name="newCategoryNameTextBox" Text="Новая категория" Width="390"/>
-                    <Button Content="Добавить" Margin="10,0,0,0"  Width="60" Style="{StaticResource MahApps.Styles.Button.Square.Accent}"/>
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,5">
+                    <TextBox Text="{Binding NewCatName}"
+                             Width="390"/>
+                    <Button Content="Добавить"
+                            CommandParameter="AddCategory"
+                            Command="{Binding Cmd}"
+                            Margin="10,0,0,0"  
+                            Width="60" 
+                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

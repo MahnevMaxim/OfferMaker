@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace OfferMaker
 {
-    public interface IView
+    class Global
     {
-        void Show();
-
-        bool? ShowDialog();
-
-        void OnSendMessage(string message);
+        public static Main Main;
     }
 }

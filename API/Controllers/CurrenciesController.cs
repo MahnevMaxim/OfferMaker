@@ -73,6 +73,35 @@ namespace API.Controllers
             return NoContent();
         }
 
+        // PUT: api/Currencies/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        public async Task<IActionResult> PutCurrencies(IEnumerable<Currency> currencies)
+        {
+            int id=0;
+            try
+            {
+                foreach(Currency currency in currencies)
+                {
+                    id = currency.Id;
+                    await PutCurrency(currency.Id, currency);
+                }
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CurrencyExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Currencies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

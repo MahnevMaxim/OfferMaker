@@ -13,38 +13,16 @@ namespace OfferMaker
 
         #region Fields
 
-        ObservableCollection<Currency> currencies;
-        ObservableCollection<Nomenclature> nomenclatures;
         ObservableCollection<User> users;
-        ObservableCollection<Category> categories;
+        ObservableCollection<Currency> currencies;
 
         #endregion Fields
 
         #region Propetries
 
-        public ObservableCollection<Currency> Currencies
-        {
-            get { return currencies; }
-            set
-            {
-                currencies = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<Nomenclature> Nomenclatures
-        {
-            get { return nomenclatures; }
-            set
-            {
-                nomenclatures = value;
-                OnPropertyChanged();
-            }
-        }
-
         public ObservableCollection<User> Users
         {
-            get { return users; }
+            get => users; 
             set
             {
                 users = value;
@@ -52,12 +30,12 @@ namespace OfferMaker
             }
         }
 
-        public ObservableCollection<Category> Categories
+        public ObservableCollection<Currency> Currencies
         {
-            get { return categories; }
+            get => currencies;
             set
             {
-                categories = value;
+                currencies = value;
                 OnPropertyChanged();
             }
         }
@@ -66,20 +44,37 @@ namespace OfferMaker
 
         #endregion MVVVM 
 
-        DataRepository DataRepository { get; set; }
+        #region Properties
+
+        DataRepository DataRepository { get; set; } = DataRepository.GetInstance();
+
+        public Catalog Catalog { get; set; } = Catalog.GetInstance();
+
+        public Settings Settings { get; set; } = Settings.GetInstance();
+
+        #endregion Properties
 
         async internal override void Run()
         {
-            DataRepository = new DataRepository();
+            Global.Main = this;
+            MvvmFactory.RegisterModel(this, Catalog);
+            Settings.SetSettings();
             Currencies = await DataRepository.GetCurrencies();
-            Nomenclatures = await DataRepository.GetNomenclatures();
-            Categories = await DataRepository.GetCategories();
+            Catalog.Nomenclatures = await DataRepository.GetNomenclatures();
+            Catalog.Categories = await DataRepository.GetCategories();
+            Catalog.Run();
         }
 
-        public void EditCategories()
-        {
-            CategoriesEditor editor = new CategoriesEditor();
-            MvvmFactory.CreateWindow(editor, new ViewModels.CategoriesEditorViewModel(), new Views.CategoriesEditor());
-        }
+        #region Commands
+
+        public void EditCategories() => Catalog.EditCategories();
+
+        public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
+
+        public void EditCurrencies() => new CurrenciesView(Currencies).ShowDialog();
+
+        async public void SaveCatalog() => await DataRepository.SaveCurrencies(Currencies);
+
+        #endregion Commands
     }
 }

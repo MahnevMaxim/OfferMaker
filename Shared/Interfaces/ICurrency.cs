@@ -21,5 +21,7 @@ namespace Shared
         public string Symbol { get; set; }
 
         public DateTime RateDatetime { get; set; }
+
+        public bool IsEnabled { get; set; }
     }
 }

@@ -23,6 +23,8 @@ namespace OfferMaker
 
         #region Singleton
 
+        private DataRepository() { }
+
         private static readonly DataRepository instance = new DataRepository();
 
         public static DataRepository GetInstance() => instance;
@@ -31,9 +33,13 @@ namespace OfferMaker
 
         async public Task<ObservableCollection<Currency>> GetCurrencies() => await Proxy.GetCurrencies();
 
+        async public Task SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
+
         internal async Task<ObservableCollection<Nomenclature>> GetNomenclatures() => await Proxy.GetNomenclatures();
 
         internal async Task<ObservableCollection<Category>> GetCategories() => await Proxy.GetCategories();
+
+        internal async Task<ObservableCollection<User>> GetUsers() => await Proxy.GetUsers();
 
         public void SyncData()
         {

@@ -27,7 +27,7 @@ namespace OfferMaker
         /// <summary>
         /// Стартовый метод
         /// </summary>
-        internal abstract void Run();
+        internal virtual void Run() { }
 
         internal void SendCommand(object parameters)
         {

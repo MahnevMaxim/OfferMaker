@@ -88,23 +88,34 @@ namespace DatabaseExporter
                 }
                 decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
                 decimal markUp = decimal.Parse(nom["Markup"].ToString());
-                int isoCode = Int32.Parse( nom["CourseId"].ToString());
+                //потому-что заебал
+                string charCode = "";
+                try
+                {
+                    charCode = nom["valute"]["Name"].ToString();
+                }
+                catch(Exception ex)
+                {
+                    charCode = "RUB";
+                }
 
                 Nomenclature nomenclature = new Nomenclature()
                 {
-                    CostPrice=costPrice,
-                    Description= descs,
-                    Markup=markUp,
-                    Title=title, 
-                    CurrencyIsoCode=isoCode
+                    CostPrice = costPrice,
+                    Description = descs,
+                    Markup = markUp,
+                    Title = title,
+                    CurrencyCharCode = charCode
                 };
 
                 try
                 {
                     var res = await client.NomenclaturesPOSTAsync(nomenclature);
                 }
-                catch
-                { }
+                catch(Exception ex)
+                {
+                    Console.Write(ex);
+                }
             }
             MessageBox.Show("номенклатура добавлена");
         }
@@ -150,7 +161,7 @@ namespace DatabaseExporter
 
             //устанавливаем символы
             var symbols = JsonConvert.DeserializeObject<Dictionary<int, string>>(File.ReadAllText("symbols.json"));
-            for(int i=0;i<currs.Count;i++)
+            for (int i = 0; i < currs.Count; i++)
             {
                 int code = currs[i].IsoCode;
                 string symb = "";

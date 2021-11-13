@@ -5,6 +5,8 @@
              Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
+            <SolidColorBrush x:Key="DataGrid.EvenRow.Background" Color="#FFF"/>
+            <SolidColorBrush x:Key="DataGrid.OddRow.Background" Color="#330A7AFF"/>
             <ResourceDictionary.MergedDictionaries>
                 <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />

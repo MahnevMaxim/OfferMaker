@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace OfferMaker
 {
-    public interface IView
+    public class CurrenciesMod : BaseModel
     {
-        void Show();
 
-        bool? ShowDialog();
-
-        void OnSendMessage(string message);
     }
 }

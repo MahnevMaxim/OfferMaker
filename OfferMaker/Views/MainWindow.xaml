@@ -4,33 +4,95 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:local="clr-namespace:OfferMaker.Views"
+                 xmlns:root="clr-namespace:OfferMaker"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="0"
+                 WindowState = "Maximized"
                  Title="KIP Offer Maker" Height="650" Width="1100">
+    
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands ShowLastSeparator="False">
-            <Button Content="Themes"
-                    Command="{Binding Cmd}" CommandParameter="SelectThemes"
-                    ToolTip="Настройка тем" />
+            <Button Content="Settings"
+                    Command="{Binding Cmd}" CommandParameter="OpenSettings"
+                    ToolTip="Настройки" />
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <Grid.Resources>
+
+            <DataTemplate x:Key="CatalogButtons">
+                <StackPanel Orientation="Horizontal">
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                            Height="35"
+                            Width="35"
+                            Margin="5"
+                            ToolTip="Добавить в категорию">
+                        <iconPacks:PackIconMaterial Kind="CardsVariant" 
+                                                  Width="20"
+                                                  Height="20"/>
+                        <!--<Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                            <Binding Source="OpenProfileCommand"/>
+                            <Binding Path="ProfilePath"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>-->
+                    </Button>
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                            Height="35"
+                            Width="35"
+                            Margin="5"
+                            ToolTip="Открыть карточку">
+                        <iconPacks:PackIconMaterial Kind="ArrowLeft" 
+                                                  Width="20"
+                                                  Height="20"/>
+                        <!--<Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                            <Binding Source="OpenProfileCommand"/>
+                            <Binding Path="ProfilePath"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>-->
+                    </Button>
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                            Height="35"
+                            Width="35"
+                            Margin="5"
+                            ToolTip="Открыть карточку">
+                        <iconPacks:PackIconMaterial Kind="ArrowRight" 
+                                                  Width="20"
+                                                  Height="20"/>
+                        <!--<Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                            <Binding Source="OpenProfileCommand"/>
+                            <Binding Path="ProfilePath"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>-->
+                    </Button>
+                </StackPanel>
+            </DataTemplate>
+
+        </Grid.Resources>
         
+
         <TabControl x:Name="tabControl"
                     Grid.Row="0"
                     mah:TabControlHelper.Underlined="TabItems">
             <TabItem Header="Конструктор" 
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="{Binding Settings.AdditionalColor}">
                     <StackPanel Orientation="Horizontal"
                                 Margin="5">
                         <Button CommandParameter="FindProfile"
@@ -69,6 +131,18 @@
                                                           Width="20"
                                                           Height="20"/> 
                         </Button>
+                        <Button CommandParameter="FindProfile"
+                                VerticalAlignment="Top"
+                                Command="{Binding Cmd}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                ToolTip="Скидка"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                            <iconPacks:PackIconFontAwesome Kind="PercentageSolid"
+                                                          Width="20"
+                                                          Height="20"/>
+                        </Button>
                         <ComboBox Width="150"
                                   Height="0"
                                   VerticalAlignment="Top"
@@ -80,7 +154,9 @@
                         <StackPanel Margin="5">
                             <CheckBox Content="Детально"/>
                             <CheckBox Content="По себестоимости"
-                                       Margin="0,5"/>
+                                       Margin="0,5,0,0"/>
+                            <CheckBox Content="Скрыть цены номенклатур"
+                                       Margin="0,5,0,0"/>
                         </StackPanel>
                         <StackPanel Margin="5">
                             <CheckBox Content="Пересчитать КП в валюту"/>
@@ -115,7 +191,7 @@
             <TabItem Header="Документ"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="{Binding Settings.AdditionalColor}">
                     <StackPanel Orientation="Horizontal"
                                 Margin="5">
                         <Button CommandParameter="FindProfile"
@@ -201,7 +277,7 @@
             <TabItem Header="Каталог"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="{Binding Settings.AdditionalColor}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="auto"/>
                         <ColumnDefinition Width="*"/>
@@ -214,7 +290,7 @@
                     <StackPanel Orientation="Horizontal"
                                 Grid.Column="0"
                                 Grid.Row="0">
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="EditCurrencies"
                             Command="{Binding Cmd}"
                             Height="35"
                             Width="35"
@@ -236,7 +312,7 @@
                                                     Width="20"
                                                     Height="20"/>
                         </Button>
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="SaveCatalog"
                                 Command="{Binding Cmd}"
                                 Height="35"
                                 Width="35"
@@ -274,7 +350,7 @@
             <TabItem Header="Архив"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
-                <Grid Background="#FFE5E5E5">
+                <Grid Background="{Binding Settings.AdditionalColor}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="auto"/>
@@ -374,7 +450,7 @@
 
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" MaxWidth="300" MinWidth="150"/>
+                <ColumnDefinition Width="250" MaxWidth="300" MinWidth="150"/>
                 <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="*" MinWidth="200"/>
                 <ColumnDefinition Width="2"/>
@@ -397,7 +473,22 @@
                       VerticalAlignment="Stretch"
                       MinWidth="150">
                 <AdornerDecorator>
-                    <TreeView/>
+                    <root:ExtendedTreeView ItemsSource="{Binding CategoriesTree}"
+                                           SelectedItem_="{Binding SelectedCat, Mode=TwoWay}"
+                                           HorizontalAlignment="Stretch" 
+                                           VerticalAlignment="Stretch"
+                                           Margin="10" >
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
+                                <TextBlock Text="{Binding Title}" FontSize="16"/>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="IsExpanded" Value="True"/>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                    </root:ExtendedTreeView>
                 </AdornerDecorator>
             </GroupBox>
             <GridSplitter Width="2" Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />
@@ -412,8 +503,38 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <DataGrid ItemsSource="{Binding Nomenclatures}" MinWidth="150">
-
+                        <DataGrid ItemsSource="{Binding Nomenclatures}"
+                                  AutoGenerateColumns="False"
+                                  MinWidth="150"
+                                  AlternationCount="2"
+                                  IsReadOnly="True">
+                            <!--<DataGrid.RowStyle>
+                                <Style TargetType="{x:Type DataGridRow}">
+                                    <Style.Triggers>
+                                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                            <Setter Property="Background" Value="{DynamicResource DataGrid.EvenRow.Background}" />
+                                        </Trigger>
+                                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                            <Setter Property="Background" Value="{DynamicResource DataGrid.OddRow.Background}" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>-->
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="310" DisplayIndex="0">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Header="Затраты" Binding="{Binding CostPrice}" DisplayIndex="1"/>
+                                <DataGridTextColumn Header="Наценка" Binding="{Binding Markup}" DisplayIndex="2"/>
+                                <DataGridTextColumn Header="Цена" Binding="{Binding Price}" DisplayIndex="3"/>
+                                <DataGridTextColumn Header="Прибыль" Binding="{Binding Profit}" DisplayIndex="4"/>
+                                <DataGridTextColumn Header="Валюта" Binding="{Binding CurrencyCharCode}" DisplayIndex="5"/>
+                                <DataGridTemplateColumn Header="" DisplayIndex="6" CellTemplate="{StaticResource CatalogButtons}"/>
+                            </DataGrid.Columns>
                         </DataGrid>
                         <Button Grid.Row="1" 
                                 Content="Добавить"
