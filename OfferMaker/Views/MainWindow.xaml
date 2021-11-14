@@ -13,7 +13,11 @@
                  BorderThickness="0"
                  WindowState = "Maximized"
                  Title="KIP Offer Maker" Height="650" Width="1100">
-    
+
+    <Window.Resources>
+        <root:MultiConverter x:Key="MultiConverter"/>
+    </Window.Resources>
+
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands ShowLastSeparator="False">
             <Button Content="Settings"
@@ -21,7 +25,7 @@
                     ToolTip="Настройки" />
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -37,54 +41,53 @@
                             Height="35"
                             Width="35"
                             Margin="5"
-                            ToolTip="Добавить в категорию">
+                            ToolTip="Открыть карточку">
                         <iconPacks:PackIconMaterial Kind="CardsVariant" 
                                                   Width="20"
                                                   Height="20"/>
-                        <!--<Button.CommandParameter>
-                        <MultiBinding Converter="{StaticResource MultiConverter}">
-                            <Binding Source="OpenProfileCommand"/>
-                            <Binding Path="ProfilePath"/>
-                        </MultiBinding>
-                    </Button.CommandParameter>-->
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                <Binding Source="OpenNomenclurueCard"/>
+                                <Binding Path="."/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
                     </Button>
                     <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
                             Height="35"
                             Width="35"
                             Margin="5"
-                            ToolTip="Открыть карточку">
+                            ToolTip="Добавить в категорию">
                         <iconPacks:PackIconMaterial Kind="ArrowLeft" 
                                                   Width="20"
                                                   Height="20"/>
-                        <!--<Button.CommandParameter>
-                        <MultiBinding Converter="{StaticResource MultiConverter}">
-                            <Binding Source="OpenProfileCommand"/>
-                            <Binding Path="ProfilePath"/>
-                        </MultiBinding>
-                    </Button.CommandParameter>-->
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                <Binding Source="AddToCategoryCommand"/>
+                                <Binding Path="."/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
                     </Button>
                     <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
                             Height="35"
                             Width="35"
                             Margin="5"
-                            ToolTip="Открыть карточку">
+                            ToolTip="Добавить в группу">
                         <iconPacks:PackIconMaterial Kind="ArrowRight" 
                                                   Width="20"
                                                   Height="20"/>
-                        <!--<Button.CommandParameter>
-                        <MultiBinding Converter="{StaticResource MultiConverter}">
-                            <Binding Source="OpenProfileCommand"/>
-                            <Binding Path="ProfilePath"/>
-                        </MultiBinding>
-                    </Button.CommandParameter>-->
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                <Binding Source="AddToGroupCommand"/>
+                                <Binding Path="ProfilePath"/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
                     </Button>
                 </StackPanel>
             </DataTemplate>
 
         </Grid.Resources>
-        
 
         <TabControl x:Name="tabControl"
                     Grid.Row="0"
@@ -129,7 +132,7 @@
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
                             <iconPacks:PackIconMaterial Kind="Text"
                                                           Width="20"
-                                                          Height="20"/> 
+                                                          Height="20"/>
                         </Button>
                         <Button CommandParameter="FindProfile"
                                 VerticalAlignment="Top"
@@ -167,7 +170,6 @@
                             <ComboBox ItemsSource="{Binding Currencies}" 
                                       DisplayMemberPath="CharCode"
                                       Width="150"
-                                      mah:TextBoxHelper.ClearTextButton="True"
                                       mah:TextBoxHelper.UseFloatingWatermark="True"
                                       mah:TextBoxHelper.Watermark="Валюта"
                                       SelectedIndex="0"
@@ -184,7 +186,7 @@
                             <CheckBox Content="Скрыть надпись НДС"
                                       Margin="0,5"/>
                         </StackPanel>
-                        
+
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -324,7 +326,7 @@
                                                     Height="20"/>
                         </Button>
                     </StackPanel>
-                    
+
                     <TextBox mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
                              Grid.Column="1"
                              Grid.Row="0"
@@ -344,7 +346,7 @@
                                                     Width="20"
                                                     Height="20"/>
                     </Button>
-                    
+
                 </Grid>
             </TabItem>
             <TabItem Header="Архив"
@@ -360,7 +362,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    
+
                     <TextBox mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
                              Grid.Column="0"
                              Grid.Row="0"
@@ -541,7 +543,7 @@
                                 Style="{DynamicResource MahApps.Styles.Button.Square}"
                                 Margin="5"/>
                     </Grid>
-                    
+
                 </AdornerDecorator>
             </GroupBox>
             <GridSplitter Width="2" Grid.Column="3"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />

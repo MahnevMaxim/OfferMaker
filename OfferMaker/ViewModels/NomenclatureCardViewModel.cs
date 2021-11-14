@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OfferMaker
+namespace OfferMaker.ViewModels
 {
-    public class CurrenciesMod : BaseModel
+    public class NomenclatureCardViewModel : BaseViewModel
     {
-
     }
 }

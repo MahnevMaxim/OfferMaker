@@ -71,16 +71,18 @@ namespace OfferMaker
 
         #endregion Singleton
 
-        internal override void Run()
-        {
-            CreateCategoriesTree();
-        }
-
+        internal override void Run() => CreateCategoriesTree();
+        
         #region Cats
 
         private void CreateCategoriesTree()
         {
             CategoriesTree = new ObservableCollection<Category>() { new Category() { Title = "Все" } };
+        }
+
+        internal void OpenNomenclurueCard(Nomenclature nomenclature)
+        {
+            MvvmFactory.CreateWindow(new NomenclurueCard(nomenclature), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
         }
 
         public void EditCategories()

@@ -69,6 +69,8 @@ namespace OfferMaker
 
         public void EditCategories() => Catalog.EditCategories();
 
+        public void OpenNomenclurueCard(Nomenclature nomenclature) => Catalog.OpenNomenclurueCard(nomenclature);
+
         public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
 
         public void EditCurrencies() => new CurrenciesView(Currencies).ShowDialog();

@@ -11,17 +11,21 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
-namespace OfferMaker.SimpleViews
+namespace OfferMaker.Views
 {
     /// <summary>
-    /// Interaction logic for SomeWindow.xaml
+    /// Interaction logic for NomenclatureCard.xaml
     /// </summary>
-    public partial class SomeWindow : Window
+    public partial class NomenclatureCard : MetroWindow, IView
     {
-        public SomeWindow(System.Collections.ObjectModel.ObservableCollection<Currency> currencies)
+        public NomenclatureCard()
         {
             InitializeComponent();
         }
+
+        void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);
     }
 }
