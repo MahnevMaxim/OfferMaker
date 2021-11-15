@@ -7,8 +7,15 @@ using System.Collections.ObjectModel;
 
 namespace OfferMaker
 {
-    public class Nomenclature 
+    public class Nomenclature : BaseModel
     {
+        decimal costPrice;
+        decimal markup;
+        decimal price;
+        decimal profit;
+        string currencyCharCode;
+
+
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -17,15 +24,55 @@ namespace OfferMaker
 
         public ObservableCollection<string> Description { get; set; }
 
-        public decimal CostPrice { get; set; }
+        public decimal CostPrice
+        {
+            get => costPrice;
+            set
+            {
+                costPrice = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public decimal Markup { get; set; }
+        public decimal Markup
+        {
+            get => markup;
+            set
+            {
+                markup = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public decimal Price { get; set; }
+        public decimal Price 
+        { 
+            get => CostPrice * Markup;
+            set
+            {
+                price = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public decimal Profit { get; set; }
+        public decimal Profit
+        {
+            get => Price - CostPrice;
+            set
+            {
+                profit = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string CurrencyCharCode { get; set; }
+        public string CurrencyCharCode
+        {
+            get => currencyCharCode;
+            set
+            {
+                currencyCharCode = value;
+                OnPropertyChanged();
+            }
+        }
 
         public DateTime? LastChangePriceDate { get; set; }
 

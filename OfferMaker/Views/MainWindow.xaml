@@ -57,6 +57,22 @@
                             Height="35"
                             Width="35"
                             Margin="5"
+                            ToolTip="Удалить">
+                        <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
+                                                    Width="20"
+                                                    Height="20"/>
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                <Binding Source="DeleteNomenclurue"/>
+                                <Binding Path="."/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                            Height="35"
+                            Width="35"
+                            Margin="5"
                             ToolTip="Добавить в категорию">
                         <iconPacks:PackIconMaterial Kind="ArrowLeft" 
                                                   Width="20"
@@ -167,7 +183,7 @@
                                       Margin="0,5"/>
                         </StackPanel>
                         <StackPanel Margin="5">
-                            <ComboBox ItemsSource="{Binding Currencies}" 
+                            <ComboBox ItemsSource="{Binding UsingCurrencies}" 
                                       DisplayMemberPath="CharCode"
                                       Width="150"
                                       mah:TextBoxHelper.UseFloatingWatermark="True"
@@ -454,7 +470,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250" MaxWidth="300" MinWidth="150"/>
                 <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="*" MinWidth="200"/>
+                <ColumnDefinition Width="1.25*" MinWidth="200"/>
                 <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="*" MinWidth="200"/>
             </Grid.ColumnDefinitions>

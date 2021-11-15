@@ -80,11 +80,6 @@ namespace OfferMaker
             CategoriesTree = new ObservableCollection<Category>() { new Category() { Title = "Все" } };
         }
 
-        internal void OpenNomenclurueCard(Nomenclature nomenclature)
-        {
-            MvvmFactory.CreateWindow(new NomenclurueCard(nomenclature), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
-        }
-
         public void EditCategories()
         {
             CategoriesEditor editor = new CategoriesEditor(CategoriesTree);
@@ -93,6 +88,15 @@ namespace OfferMaker
 
         #endregion Cats
 
-        
+        #region Nomenclature
+
+        internal void OpenNomenclurueCard(Nomenclature nomenclature)
+        {
+            MvvmFactory.CreateWindow(new NomenclurueCard(nomenclature), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
+        }
+
+        internal void DeleteNomenclurue(Nomenclature nomenclature) => Nomenclatures.Remove(nomenclature);
+
+        #endregion Nomenclature
     }
 }

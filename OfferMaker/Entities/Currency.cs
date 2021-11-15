@@ -7,8 +7,10 @@ using Shared;
 
 namespace OfferMaker
 {
-    public class Currency : ICurrency
+    public class Currency : BaseModel, ICurrency
     {
+        bool isEnabled;
+
         public int Id { get; set; }
 
         public int IsoCode { get; set; }
@@ -23,6 +25,14 @@ namespace OfferMaker
 
         public DateTime RateDatetime { get; set; }
 
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled
+        {
+            get => isEnabled;
+            set
+            {
+                isEnabled = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

@@ -37,6 +37,16 @@ namespace OfferMaker
             {
                 currencies = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(UsingCurrencies));
+            }
+        }
+
+        public ObservableCollection<Currency> UsingCurrencies
+        {
+            get
+            {
+                if (currencies == null) return null;
+                return new ObservableCollection<Currency>(currencies.Where(c => c.IsEnabled || c.CharCode == "RUB"));
             }
         }
 
@@ -71,9 +81,15 @@ namespace OfferMaker
 
         public void OpenNomenclurueCard(Nomenclature nomenclature) => Catalog.OpenNomenclurueCard(nomenclature);
 
+        public void DeleteNomenclurue(Nomenclature nomenclature) => Catalog.DeleteNomenclurue(nomenclature);
+
         public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
 
-        public void EditCurrencies() => new CurrenciesView(Currencies).ShowDialog();
+        public void EditCurrencies()
+        {
+            new CurrenciesView(Currencies).ShowDialog();
+            OnPropertyChanged(nameof(UsingCurrencies));
+        }
 
         async public void SaveCatalog() => await DataRepository.SaveCurrencies(Currencies);
 

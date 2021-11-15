@@ -14,14 +14,13 @@
                  Title="Редактор категорий" Height="430" Width="480">
     <Grid>
         <StackPanel>
-            <Border>
-                <root:ExtendedTreeView ItemsSource="{Binding CategoriesTree}"
-                                       SelectedItem_="{Binding SelectedCat, Mode=TwoWay}"
-                                       HorizontalAlignment="Stretch" Height="300" 
-                                       Margin="10" 
-                                       VerticalAlignment="Top"
-                                       BorderThickness="1"
-                                       BorderBrush="#cc647687">
+            <root:ExtendedTreeView ItemsSource="{Binding CategoriesTree}"
+                                   SelectedItem_="{Binding SelectedCat, Mode=TwoWay}"
+                                   HorizontalAlignment="Stretch" Height="300" 
+                                   Margin="10" 
+                                   VerticalAlignment="Top"
+                                   BorderThickness="1"
+                                   BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -43,9 +42,8 @@
                         </Style>
                     </TreeView.ItemContainerStyle>
                 </root:ExtendedTreeView>
-            </Border>
-            
-            <StackPanel Margin="10,0" >
+
+                <StackPanel Margin="10,0" >
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Родительская категория: " Width="150"/>
                     <TextBlock Text="{Binding SelectedParentName}"

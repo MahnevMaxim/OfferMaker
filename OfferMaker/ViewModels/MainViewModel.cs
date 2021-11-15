@@ -70,6 +70,11 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public ObservableCollection<Currency> UsingCurrencies
+        {
+            get => modelMain.UsingCurrencies;
+        }
+
         #endregion Main
     }
 }
