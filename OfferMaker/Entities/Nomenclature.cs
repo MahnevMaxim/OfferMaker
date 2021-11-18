@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Shared;
 
 namespace OfferMaker
 {
@@ -14,6 +15,7 @@ namespace OfferMaker
         decimal price;
         decimal profit;
         string currencyCharCode;
+        DateTime? lastChangePriceDate;
 
 
         public int Id { get; set; }
@@ -22,7 +24,7 @@ namespace OfferMaker
 
         public Category Category { get; set; }
 
-        public ObservableCollection<string> Description { get; set; }
+        public ObservableCollection<Description> Descriptions { get; set; }
 
         public decimal CostPrice
         {
@@ -31,6 +33,8 @@ namespace OfferMaker
             {
                 costPrice = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Price));
+                OnPropertyChanged(nameof(Profit));
             }
         }
 
@@ -41,6 +45,8 @@ namespace OfferMaker
             {
                 markup = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Price));
+                OnPropertyChanged(nameof(Profit));
             }
         }
 
@@ -50,7 +56,15 @@ namespace OfferMaker
             set
             {
                 price = value;
+                if (price != 0 && CostPrice != 0)
+                {
+                    markup = price / costPrice;
+                    profit = costPrice * markup - costPrice;
+                    LastChangePriceDate = DateTime.Now;
+                }
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Profit));
+                OnPropertyChanged(nameof(Markup));
             }
         }
 
@@ -60,7 +74,15 @@ namespace OfferMaker
             set
             {
                 profit = value;
+                if (price != 0 && profit != 0)
+                {
+                    markup = (value + costPrice) / costPrice;
+                    price = costPrice * markup;                    
+                }
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(Markup));
+                OnPropertyChanged(nameof(Price));
+                
             }
         }
 
@@ -74,12 +96,23 @@ namespace OfferMaker
             }
         }
 
-        public DateTime? LastChangePriceDate { get; set; }
+        public DateTime? LastChangePriceDate
+        {
+            get => lastChangePriceDate;
+            set
+            {
+                lastChangePriceDate = value;
+                OnPropertyChanged();
+            }
+        }
 
         public int ActualPricePeriod { get; set; }
 
         public bool IsPriceActual { get; set; }
 
+        /// <summary>
+        /// Колекция, т.к. не понимаю: нужна одна картинка или несколько
+        /// </summary>
         public ObservableCollection<string> Photos { get; set; }
     }
 }

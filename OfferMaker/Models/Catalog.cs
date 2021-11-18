@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Shared;
 
 namespace OfferMaker
 {
@@ -14,6 +15,8 @@ namespace OfferMaker
         #region Fields
 
         ObservableCollection<Nomenclature> nomenclatures;
+        ObservableCollection<NomenclatureGroup> nomenclatureGroups = new ObservableCollection<NomenclatureGroup>();
+        NomenclatureGroup selectedNomenclatureGroup;
         ObservableCollection<Category> categoriesTree;
         Category selectedCat;
 
@@ -27,6 +30,26 @@ namespace OfferMaker
             set
             {
                 nomenclatures = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<NomenclatureGroup> NomenclatureGroups
+        {
+            get { return nomenclatureGroups; }
+            set
+            {
+                nomenclatureGroups = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public NomenclatureGroup SelectedNomenclatureGroup
+        {
+            get { return selectedNomenclatureGroup; }
+            set
+            {
+                selectedNomenclatureGroup = value;
                 OnPropertyChanged();
             }
         }
@@ -72,13 +95,11 @@ namespace OfferMaker
         #endregion Singleton
 
         internal override void Run() => CreateCategoriesTree();
-        
+
         #region Cats
 
-        private void CreateCategoriesTree()
-        {
-            CategoriesTree = new ObservableCollection<Category>() { new Category() { Title = "Все" } };
-        }
+        private void CreateCategoriesTree() => CategoriesTree = new ObservableCollection<Category>() { new Category() { Title = "Все" } };
+        
 
         public void EditCategories()
         {
@@ -96,6 +117,23 @@ namespace OfferMaker
         }
 
         internal void DeleteNomenclurue(Nomenclature nomenclature) => Nomenclatures.Remove(nomenclature);
+
+        internal void DelNomGroup(NomenclatureGroup nomenclatureGroup) => NomenclatureGroups.Remove(nomenclatureGroup);
+
+        internal void AddNomenclatureGroup() => NomenclatureGroups.Add(new NomenclatureGroup() { Name = "Новая группа" });
+
+        internal CallResult AddNomenclatureToGroup(Nomenclature nomenclature)
+        {
+            if (SelectedNomenclatureGroup!=null)
+            {
+                SelectedNomenclatureGroup.Nomenclatures.Add(nomenclature);
+                return new CallResult();
+            }
+            else
+            {
+                return new CallResult() { Error = new Error("Не выбрана группа, в которую нужно добавить номенклатуру")};
+            }
+        }
 
         #endregion Nomenclature
     }

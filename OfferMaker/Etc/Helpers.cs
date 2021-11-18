@@ -10,6 +10,27 @@ namespace OfferMaker
 {
     class Helpers
     {
+        internal static string GetFilePath(string fileFilter = null)
+        {
+            string path = null;
+            try
+            {
+                Microsoft.Win32.OpenFileDialog dialog = new Microsoft.Win32.OpenFileDialog();
+                dialog.Filter = fileFilter;
+                Nullable<bool> result = dialog.ShowDialog();
+
+                if (result == true)
+                {
+                    path = dialog.FileName;
+                }
+            }
+            catch (Exception ex)
+            {
+                L.LW(ex);
+            }
+            return path;
+        }
+
         public static void SaveObject(string filePath, object obj)
         {
             try

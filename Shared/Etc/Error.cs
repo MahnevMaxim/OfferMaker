@@ -12,6 +12,7 @@ namespace Shared
         /// The error code
         /// </summary>
         public int? Code { get; set; }
+
         /// <summary>
         /// The message for the error that occured
         /// </summary>

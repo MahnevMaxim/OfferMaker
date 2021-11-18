@@ -23,16 +23,16 @@ namespace API.Controllers
 
         // GET: api/Currencies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Currency>>> GetCurrency()
+        public async Task<ActionResult<IEnumerable<Currency>>> GetCurrencies()
         {
-            return await _context.Currency.ToListAsync();
+            return await _context.Currencies.ToListAsync();
         }
 
         // GET: api/Currencies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Currency>> GetCurrency(int id)
         {
-            var currency = await _context.Currency.FindAsync(id);
+            var currency = await _context.Currencies.FindAsync(id);
 
             if (currency == null)
             {
@@ -78,10 +78,10 @@ namespace API.Controllers
         [HttpPut]
         public async Task<IActionResult> PutCurrencies(IEnumerable<Currency> currencies)
         {
-            int id=0;
+            int id = 0;
             try
             {
-                foreach(Currency currency in currencies)
+                foreach (Currency currency in currencies)
                 {
                     id = currency.Id;
                     await PutCurrency(currency.Id, currency);
@@ -107,7 +107,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Currency>> PostCurrency(Currency currency)
         {
-            _context.Currency.Add(currency);
+            _context.Currencies.Add(currency);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCurrency", new { id = currency.Id }, currency);
@@ -117,13 +117,13 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCurrency(int id)
         {
-            var currency = await _context.Currency.FindAsync(id);
+            var currency = await _context.Currencies.FindAsync(id);
             if (currency == null)
             {
                 return NotFound();
             }
 
-            _context.Currency.Remove(currency);
+            _context.Currencies.Remove(currency);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -131,7 +131,7 @@ namespace API.Controllers
 
         private bool CurrencyExists(int id)
         {
-            return _context.Currency.Any(e => e.Id == id);
+            return _context.Currencies.Any(e => e.Id == id);
         }
     }
 }

@@ -95,12 +95,50 @@
                                                   Height="20"/>
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="AddToGroupCommand"/>
-                                <Binding Path="ProfilePath"/>
+                                <Binding Source="AddNomenclatureToGroup"/>
+                                <Binding Path="."/>
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
                 </StackPanel>
+            </DataTemplate>
+
+            <DataTemplate x:Key="DelNomGroupButton">
+                <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                            Height="35"
+                            Width="35"
+                            Margin="5"
+                            ToolTip="Удалить группу">
+                    <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
+                                                  Width="20"
+                                                  Height="20"/>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                            <Binding Source="DelNomGroup"/>
+                            <Binding Path="."/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+            </DataTemplate>
+
+            <DataTemplate x:Key="DelNomenclatureFromGroupButton">
+                <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                        Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                        Height="35"
+                        Width="35"
+                        Margin="5"
+                        ToolTip="Удалить номенклатуру из группы">
+                    <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
+                                                Width="20"
+                                                Height="20"/>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                            <Binding Source="DelNomenclatureFromGroup"/>
+                            <Binding Path="."/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
             </DataTemplate>
 
         </Grid.Resources>
@@ -526,6 +564,7 @@
                                   MinWidth="150"
                                   AlternationCount="2"
                                   IsReadOnly="True">
+                            <!--Тут будет зебра, но потом-->
                             <!--<DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Style.Triggers>
@@ -546,10 +585,10 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Header="Затраты" Binding="{Binding CostPrice}" DisplayIndex="1"/>
-                                <DataGridTextColumn Header="Наценка" Binding="{Binding Markup}" DisplayIndex="2"/>
-                                <DataGridTextColumn Header="Цена" Binding="{Binding Price}" DisplayIndex="3"/>
-                                <DataGridTextColumn Header="Прибыль" Binding="{Binding Profit}" DisplayIndex="4"/>
+                                <DataGridTextColumn Header="Затраты" Binding="{Binding CostPrice, StringFormat=F2}" DisplayIndex="1"/>
+                                <DataGridTextColumn Header="Наценка" Binding="{Binding Markup, StringFormat=F2}" DisplayIndex="2"/>
+                                <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat=F2}" DisplayIndex="3"/>
+                                <DataGridTextColumn Header="Прибыль" Binding="{Binding Profit, StringFormat=F2}" DisplayIndex="4"/>
                                 <DataGridTextColumn Header="Валюта" Binding="{Binding CurrencyCharCode}" DisplayIndex="5"/>
                                 <DataGridTemplateColumn Header="" DisplayIndex="6" CellTemplate="{StaticResource CatalogButtons}"/>
                             </DataGrid.Columns>
@@ -579,17 +618,49 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
-                        <ListView Grid.Column="0" MinWidth="100">
 
-                        </ListView>
+                        <DataGrid ItemsSource="{Binding NomenclatureGroups}"
+                                  SelectedItem="{Binding SelectedNomenclatureGroup}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название" Binding="{Binding Name}" DisplayIndex="0">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTextColumn Binding="{Binding Nomenclatures.Count}" IsReadOnly="True" DisplayIndex="1"/>
+                                <DataGridTemplateColumn DisplayIndex="2" CellTemplate="{StaticResource DelNomGroupButton}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        
                         <Button Grid.Row="1" 
+                                CommandParameter="AddNomenclatureGroup"
+                                Command="{Binding Cmd}"
                                 Content="Добавить"
                                 Style="{DynamicResource MahApps.Styles.Button.Square}"
                                 Margin="5"/>
                         <GridSplitter Width="2" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
-                        <ListView Grid.Column="2" Grid.RowSpan="2"  MinWidth="100">
 
-                        </ListView>
+                        <DataGrid Grid.Column="2" Grid.RowSpan="2"  MinWidth="100"
+                                  ItemsSource="{Binding SelectedNomenclatureGroup.Nomenclatures}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  IsReadOnly="True">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Название" Binding="{Binding Title}" DisplayIndex="0">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style>
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+                                <DataGridTemplateColumn DisplayIndex="1" CellTemplate="{StaticResource DelNomenclatureFromGroupButton}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        
                     </Grid>
                 </AdornerDecorator>
             </GroupBox>

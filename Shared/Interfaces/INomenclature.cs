@@ -16,7 +16,7 @@ namespace Shared
 
         public Category Category { get; set; }
 
-        public ObservableCollection<string> Description { get; set; }
+        public ObservableCollection<Description> Descriptions { get; set; }
 
         public decimal CostPrice { get; set; }
 

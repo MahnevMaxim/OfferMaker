@@ -47,14 +47,23 @@ namespace OfferMaker
         /// </summary>
         /// <param name="currencies"></param>
         /// <returns></returns>
-        async internal Task SaveCurrencies(ObservableCollection<Currency> currencies)
+        async internal Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies)
         {
             var callResult = await ServerData.SaveCurrencies(currencies);
-            if (callResult.Success)
-            {
-                
-            }
             LocalData.UpdateCache(currencies, LocalDataConfig.CurrenciesPath);
+            return callResult;
+        }
+
+        /// <summary>
+        /// Сохраняем группы номенклатур на сервере и локально
+        /// </summary>
+        /// <param name="currencies"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups)
+        {
+            var callResult = await ServerData.SaveNomenclatureGroups(nomenclatureGroups);
+            LocalData.UpdateCache(nomenclatureGroups, LocalDataConfig.NomenclatureGroupsPath);
+            return callResult;
         }
 
         /// <summary>

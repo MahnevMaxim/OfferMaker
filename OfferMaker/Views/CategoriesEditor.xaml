@@ -21,29 +21,27 @@
                                    VerticalAlignment="Top"
                                    BorderThickness="1"
                                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
-                            <Border BorderBrush="Black" BorderThickness="1">
-                                <TextBlock Text="{Binding Title}" FontSize="16"/>
-                            </Border>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                    <TreeView.ItemContainerStyle>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <Setter Property="IsExpanded" Value="True"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsNeedHide}" Value="True">
-                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=IsExpanded}" Value="True">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TreeView.ItemContainerStyle>
-                </root:ExtendedTreeView>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
+                        <TextBlock Text="{Binding Title}" FontSize="16"/>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded" Value="True"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsNeedHide}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}, Path=IsExpanded}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+            </root:ExtendedTreeView>
 
-                <StackPanel Margin="10,0" >
+            <StackPanel Margin="10,0" >
                 <StackPanel Orientation="Horizontal" Margin="0,5">
                     <TextBlock Text="Родительская категория: " Width="150"/>
                     <TextBlock Text="{Binding SelectedParentName}"

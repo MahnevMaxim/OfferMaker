@@ -23,16 +23,16 @@ namespace API.Controllers
 
         // GET: api/Nomenclatures
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Nomenclature>>> GetNomenclature()
+        public async Task<ActionResult<IEnumerable<Nomenclature>>> GetNomenclatures()
         {
-            return await _context.Nomenclature.ToListAsync();
+            return await _context.Nomenclatures.ToListAsync();
         }
 
         // GET: api/Nomenclatures/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Nomenclature>> GetNomenclature(int id)
         {
-            var nomenclature = await _context.Nomenclature.FindAsync(id);
+            var nomenclature = await _context.Nomenclatures.FindAsync(id);
 
             if (nomenclature == null)
             {
@@ -78,7 +78,7 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<Nomenclature>> PostNomenclature(Nomenclature nomenclature)
         {
-            _context.Nomenclature.Add(nomenclature);
+            _context.Nomenclatures.Add(nomenclature);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetNomenclature", new { id = nomenclature.Id }, nomenclature);
@@ -88,13 +88,13 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNomenclature(int id)
         {
-            var nomenclature = await _context.Nomenclature.FindAsync(id);
+            var nomenclature = await _context.Nomenclatures.FindAsync(id);
             if (nomenclature == null)
             {
                 return NotFound();
             }
 
-            _context.Nomenclature.Remove(nomenclature);
+            _context.Nomenclatures.Remove(nomenclature);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -102,7 +102,7 @@ namespace API.Controllers
 
         private bool NomenclatureExists(int id)
         {
-            return _context.Nomenclature.Any(e => e.Id == id);
+            return _context.Nomenclatures.Any(e => e.Id == id);
         }
     }
 }

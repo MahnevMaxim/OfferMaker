@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shared
 {
@@ -11,6 +13,7 @@ namespace Shared
     {
         public int Id { get; set; }
 
+        [Required]
         public string FirstName { get; set; }
 
         public string LastName { get; set; }

@@ -30,6 +30,26 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public ObservableCollection<NomenclatureGroup> NomenclatureGroups
+        {
+            get { return modelMain.Catalog.NomenclatureGroups; }
+            set
+            {
+                modelMain.Catalog.NomenclatureGroups = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public NomenclatureGroup SelectedNomenclatureGroup
+        {
+            get { return modelMain.Catalog.SelectedNomenclatureGroup; }
+            set
+            {
+                modelMain.Catalog.SelectedNomenclatureGroup = value;
+                OnPropertyChanged();
+            }
+        }
+
         public ObservableCollection<Category> CategoriesTree
         {
             get { return modelMain.Catalog.CategoriesTree; }
@@ -70,10 +90,7 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public ObservableCollection<Currency> UsingCurrencies
-        {
-            get => modelMain.UsingCurrencies;
-        }
+        public ObservableCollection<Currency> UsingCurrencies { get => modelMain.UsingCurrencies; }
 
         #endregion Main
     }

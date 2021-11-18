@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Shared;
 
 namespace OfferMaker
 {
@@ -83,6 +84,16 @@ namespace OfferMaker
 
         public void DeleteNomenclurue(Nomenclature nomenclature) => Catalog.DeleteNomenclurue(nomenclature);
 
+        public void DelNomGroup(NomenclatureGroup nomenclatureGroup) => Catalog.DelNomGroup(nomenclatureGroup);
+
+        public void AddNomenclatureGroup() => Catalog.AddNomenclatureGroup();
+
+        public void AddNomenclatureToGroup(Nomenclature nomenclature)
+        {
+            CallResult cr = Catalog.AddNomenclatureToGroup(nomenclature);
+            if (!cr.Success) OnSendMessage(cr.Error.Message);
+        }
+            
         public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
 
         public void EditCurrencies()
@@ -91,7 +102,12 @@ namespace OfferMaker
             OnPropertyChanged(nameof(UsingCurrencies));
         }
 
-        async public void SaveCatalog() => await DataRepository.SaveCurrencies(Currencies);
+        async public void SaveCatalog()
+        {
+            CallResult crSaveCurrencies = await DataRepository.SaveCurrencies(Currencies);
+            CallResult crSaveNomenclatureGroups = await DataRepository.SaveNomenclatureGroups(Catalog.NomenclatureGroups);
+        }
+            
 
         #endregion Commands
     }

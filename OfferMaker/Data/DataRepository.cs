@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Shared;
 
 namespace OfferMaker
 {
@@ -33,7 +34,9 @@ namespace OfferMaker
 
         async public Task<ObservableCollection<Currency>> GetCurrencies() => await Proxy.GetCurrencies();
 
-        async public Task SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
+        async public Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
+
+        async public Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups) => await Proxy.SaveNomenclatureGroups(nomenclatureGroups);
 
         internal async Task<ObservableCollection<Nomenclature>> GetNomenclatures() => await Proxy.GetNomenclatures();
 

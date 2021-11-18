@@ -12,26 +12,32 @@ namespace API.Data
 {
     public class APIContext : DbContext
     {
-        public DbSet<Nomenclature> Nomenclature { get; set; }
-        public DbSet<User> User { get; set; }
-        public DbSet<Customer> Customer { get; set; }
-        public DbSet<Category> Category { get; set; }
-        public DbSet<Currency> Currency { get; set; }
-        public DbSet<Offer> Offer { get; set; }
+        public DbSet<Nomenclature> Nomenclatures { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<Offer> Offers { get; set; }
+        public DbSet<NomenclatureGroup> NomenclatureGroups { get; set; }
 
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.LogTo(message => L.LW(message));
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Currency>().Property(p => p.Rate).HasPrecision(18, 6);
 
-            builder.Entity<Nomenclature>().Property(p => p.Description).HasConversion(
+            builder.Entity<Nomenclature>().Property(p => p.Descriptions).HasConversion(
                 v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
+                v => JsonConvert.DeserializeObject<ObservableCollection<Description>>(v));
 
             builder.Entity<Nomenclature>().Property(p => p.Photos).HasConversion(
                 v => JsonConvert.SerializeObject(v),
@@ -44,6 +50,10 @@ namespace API.Data
             builder.Entity<Offer>().Property(p => p.Images).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
+
+            builder.Entity<NomenclatureGroup>().Property(p => p.NomenclaturesIds).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<int>>(v));
         }
     }
 }

@@ -81,10 +81,10 @@ namespace DatabaseExporter
                 string s = nom.ToString();
 
                 string title = nom["Name"].ToString();
-                List<string> descs = new List<string>();
+                List<Description> descs = new List<Description>();
                 foreach (var desc in nom["Descriptions"])
                 {
-                    descs.Add(desc["Text"].ToString());
+                    descs.Add(new Description() { Text = desc["Text"].ToString() });
                 }
                 decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
                 decimal markUp = decimal.Parse(nom["Markup"].ToString());
@@ -102,7 +102,7 @@ namespace DatabaseExporter
                 Nomenclature nomenclature = new Nomenclature()
                 {
                     CostPrice = costPrice,
-                    Description = descs,
+                    Descriptions = descs,
                     Markup = markUp,
                     Title = title,
                     CurrencyCharCode = charCode
