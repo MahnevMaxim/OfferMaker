@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
+using Shared;
 
 namespace OfferMaker
 {
@@ -31,16 +32,18 @@ namespace OfferMaker
             return path;
         }
 
-        public static void SaveObject(string filePath, object obj)
+        public static CallResult SaveObject(string filePath, object obj)
         {
             try
             {
                 string output = JsonConvert.SerializeObject(obj);
                 File.WriteAllText(filePath, output);
+                return new CallResult();
             }
             catch (Exception ex)
             {
                 L.LW(ex);
+                return new CallResult() { Error = new Error(ex.Message) };
             }
         }
 

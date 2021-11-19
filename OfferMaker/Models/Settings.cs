@@ -11,6 +11,13 @@ using System.Windows.Media;
 
 namespace OfferMaker
 {
+    public enum AppMode
+    {
+        Auto,
+        Offline,
+        Online
+    }
+
     public class Settings : BaseModel
     {
         #region MVVM
@@ -18,7 +25,7 @@ namespace OfferMaker
         #region Fields
 
         string selectedTheme;
-        bool isOffline;
+        AppMode appMode;
         string lightOrDark;
 
         #endregion Fields
@@ -39,15 +46,15 @@ namespace OfferMaker
             }
         }
 
-        public bool IsOffline
+        public AppMode AppMode
         {
             get
             {
-                return isOffline;
+                return appMode;
             }
             set
             {
-                isOffline = value;
+                appMode = value;
                 UpdateSettings();
                 OnPropertyChanged();
             }
@@ -86,7 +93,7 @@ namespace OfferMaker
             ThemeManager.Current.Themes.Where(t => t.BaseColorScheme == "Light")
                 .Select(t => t.ColorScheme).ToList().ForEach(t => Themes.Add(t)); //просто получаем список тем
             LightOrDarkList = new List<string>() { "Light", "Dark" };
-            isOffline = AppSettings.Default.IsOnlyOffline;
+            appMode = (AppMode)AppSettings.Default.AppMode;
             selectedTheme = AppSettings.Default.Theme;
             lightOrDark = AppSettings.Default.LightOrDark;
             SetSettings();
@@ -96,7 +103,7 @@ namespace OfferMaker
 
         private void UpdateSettings()
         {
-            AppSettings.Default.IsOnlyOffline = IsOffline;
+            AppSettings.Default.AppMode = (int)appMode;
             if (LightOrDark != null) 
                 AppSettings.Default.LightOrDark = LightOrDark;
             if (LightOrDark != null) 

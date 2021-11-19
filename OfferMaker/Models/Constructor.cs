@@ -31,7 +31,21 @@ namespace OfferMaker
         /// </summary>
         /// <param name="offerGroup"></param>
         internal void AddNomenclatureToOfferGroup(OfferGroup offerGroup) =>
-            MvvmFactory.CreateWindow(new AddNomToConstructor(), new ViewModels.AddNomToConstructorViewModel(), new Views.AddNomToConstructor(), ViewMode.ShowDialog);
+            MvvmFactory.CreateWindow(new AddNomToConstructor(offerGroup), new ViewModels.AddNomToConstructorViewModel(), new Views.AddNomToConstructor(), ViewMode.ShowDialog);
+
+        /// <summary>
+        /// Удаление номенклатуры из группы в конструкторе
+        /// </summary>
+        /// <param name="nomWrapper"></param>
+        /// <param name="offerGroup"></param>
+        internal void DeleteNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => offerGroup.NomWrappers.Remove(nomWrapper);
+
+        /// <summary>
+        /// Удаление описания из номенклатуры из обертки номенклатуры для группы номенклатур в конструкторе.
+        /// </summary>
+        /// <param name="description"></param>
+        /// <param name="nomWrapper"></param>
+        internal void DeleteDescriptionFromNomWrapper(Description description, NomWrapper nomWrapper) => nomWrapper.Nomenclature.Descriptions.Remove(description);
         
     }
 }

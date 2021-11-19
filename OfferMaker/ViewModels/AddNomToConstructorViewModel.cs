@@ -45,5 +45,15 @@ namespace OfferMaker.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public Nomenclature SelectedNomenclature
+        {
+            get { return addNom.SelectedNomenclature; }
+            set
+            {
+                addNom.SelectedNomenclature = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

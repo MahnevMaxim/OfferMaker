@@ -13,6 +13,7 @@ namespace OfferMaker
 
         #region Fields
 
+        Nomenclature selectedNomenclature;
         NomenclatureGroup selectedNomenclatureGroup;
         ObservableCollection<Category> categoriesTree;
         Category selectedCat;
@@ -21,11 +22,13 @@ namespace OfferMaker
 
         #region Propetries
 
+        public Nomenclature SelectedNomenclature { get; set; }
+
+        public NomenclatureGroup SelectedNomenclatureGroup { get; set; }
+
         public ObservableCollection<Nomenclature> Nomenclatures { get; set; }
 
         public ObservableCollection<NomenclatureGroup> NomenclatureGroups { get; set; }
-
-        public NomenclatureGroup SelectedNomenclatureGroup { get; set; }
 
         public ObservableCollection<Category> CategoriesTree
         {
@@ -51,11 +54,23 @@ namespace OfferMaker
 
         #endregion MVVVM 
 
-        public AddNomToConstructor()
+        OfferGroup offerGroup;
+
+        public AddNomToConstructor(OfferGroup offerGroup)
         {
             Nomenclatures = Global.Main.Catalog.Nomenclatures;
             CategoriesTree = Global.Main.Catalog.CategoriesTree;
             NomenclatureGroups = Global.Main.Catalog.NomenclatureGroups;
+            this.offerGroup = offerGroup;
+        }
+
+        /// <summary>
+        /// Добавление номенклатуры в конструктор.
+        /// </summary>
+        public void AddNomenclature()
+        {
+            offerGroup.NomWrappers.Add(new NomWrapper() { Nomenclature = SelectedNomenclature });
+            Close();
         }
     }
 }

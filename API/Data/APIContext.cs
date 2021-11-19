@@ -51,9 +51,9 @@ namespace API.Data
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
 
-            builder.Entity<NomenclatureGroup>().Property(p => p.NomenclaturesIds).HasConversion(
+            builder.Entity<NomenclatureGroup>().Property(p => p.Nomenclatures).HasConversion(
                 v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<ObservableCollection<int>>(v));
+                v => JsonConvert.DeserializeObject<ObservableCollection<Nomenclature>>(v));
         }
     }
 }

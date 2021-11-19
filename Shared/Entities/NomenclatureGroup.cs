@@ -13,6 +13,6 @@ namespace Shared
 
         public string Name { get; set; }
 
-        public ObservableCollection<int> NomenclaturesIds { get; set; }
+        public ObservableCollection<Nomenclature> Nomenclatures { get; set; }
     }
 }

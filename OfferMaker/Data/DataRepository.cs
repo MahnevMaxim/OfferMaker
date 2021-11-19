@@ -44,7 +44,7 @@ namespace OfferMaker
 
         async internal Task<CallResult<ObservableCollection<Category>>> GetCategories() => await Proxy.GetCategories();
 
-        async internal Task<ObservableCollection<User>> GetUsers() => await Proxy.GetUsers();
+        async internal Task<CallResult<ObservableCollection<User>>> GetUsers() => await Proxy.GetUsers();
 
         public void SyncData()
         {
@@ -55,7 +55,5 @@ namespace OfferMaker
         {
 
         }
-
-        
     }
 }

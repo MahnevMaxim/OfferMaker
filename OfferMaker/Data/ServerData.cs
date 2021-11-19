@@ -35,7 +35,8 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult<ObservableCollection<Currency>>() { Error = new Error("Ошибка при попытке получить валюты с сервера.", ex) };
+                L.LW(ex);
+                return new CallResult<ObservableCollection<Currency>>() { Error = new Error("Ошибка при попытке получить валюты с сервера.") };
             }
         }
 
@@ -54,7 +55,8 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить валюты на сервере.", ex) };
+                L.LW(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить валюты на сервере.") };
             }
         }
 
@@ -72,7 +74,8 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error("Ошибка при попытке получить номенклатуру с сервера.", ex) };
+                L.LW(ex);
+                return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error("Ошибка при попытке получить номенклатуру с сервера.") };
             }
         }
 
@@ -90,7 +93,8 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult<ObservableCollection<Category>>() { Error = new Error("Ошибка при попытке получить категории с сервера.", ex) };
+                L.LW(ex);
+                return new CallResult<ObservableCollection<Category>>() { Error = new Error("Ошибка при попытке получить категории с сервера.") };
             }
         }
 
@@ -108,7 +112,8 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult<ObservableCollection<User>>() { Error = new Error("Ошибка при попытке получить пользователей с сервера.", ex) };
+                L.LW(ex);
+                return new CallResult<ObservableCollection<User>>() { Error = new Error("Ошибка при попытке получить пользователей с сервера.") };
             }
         }
 
@@ -126,7 +131,8 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult<ObservableCollection<NomenclatureGroup>>() { Error = new Error("Ошибка при попытке получить группы номенклатур с сервера.", ex) };
+                L.LW(ex);
+                return new CallResult<ObservableCollection<NomenclatureGroup>>() { Error = new Error("Ошибка при попытке получить группы номенклатур с сервера.") };
             }
         }
 
@@ -145,7 +151,8 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить группы номенклатур на сервере.", ex) };
+                L.LW(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить группы номенклатур на сервере.") };
             }
         }
     }

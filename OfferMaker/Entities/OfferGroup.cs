@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace OfferMaker
 {
@@ -21,5 +22,7 @@ namespace OfferMaker
                 OnPropertyChanged();
             }
         }
+
+        public ObservableCollection<NomWrapper> NomWrappers { get; set; } = new ObservableCollection<NomWrapper>();
     }
 }

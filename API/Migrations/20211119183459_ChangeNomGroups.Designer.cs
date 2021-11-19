@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20211119183459_ChangeNomGroups")]
+    partial class ChangeNomGroups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,6 +143,9 @@ namespace API.Migrations
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("NomenclatureGroupId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Photos")
                         .HasColumnType("nvarchar(max)");
 
@@ -150,6 +155,8 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("NomenclatureGroupId");
 
                     b.ToTable("Nomenclatures");
                 });
@@ -162,9 +169,6 @@ namespace API.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nomenclatures")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -272,6 +276,10 @@ namespace API.Migrations
                         .WithMany()
                         .HasForeignKey("CategoryId");
 
+                    b.HasOne("Shared.NomenclatureGroup", null)
+                        .WithMany("Nomenclatures")
+                        .HasForeignKey("NomenclatureGroupId");
+
                     b.Navigation("Category");
                 });
 
@@ -300,6 +308,11 @@ namespace API.Migrations
                     b.Navigation("Manager");
 
                     b.Navigation("OfferCreator");
+                });
+
+            modelBuilder.Entity("Shared.NomenclatureGroup", b =>
+                {
+                    b.Navigation("Nomenclatures");
                 });
 
             modelBuilder.Entity("Shared.Offer", b =>

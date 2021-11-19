@@ -13,5 +13,7 @@ namespace OfferMaker
         bool? ShowDialog();
 
         void OnSendMessage(string message);
+
+        void Close();
     }
 }

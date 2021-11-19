@@ -23,7 +23,7 @@ namespace OfferMaker
 
         public ObservableCollection<User> Users
         {
-            get => users; 
+            get => users;
             set
             {
                 users = value;
@@ -73,36 +73,65 @@ namespace OfferMaker
             MvvmFactory.RegisterModel(this, Catalog);
             MvvmFactory.RegisterModel(this, Constructor);
             Settings.SetSettings();
+            await InitData();
+            Catalog.Run();
+        }
+
+        async private Task InitData()
+        {
+            string errorMessage = "";
 
             //получаем валюты
             var currenciesCr = await DataRepository.GetCurrencies();
             if (currenciesCr.Success)
                 Currencies = currenciesCr.Data;
             else
-                OnSendMessage(currenciesCr.Error.Message);
+                errorMessage += currenciesCr.Error.Message + "\n";
 
             //получаем категории
             var categoriesCr = await DataRepository.GetCategories();
             if (categoriesCr.Success)
                 Catalog.Categories = categoriesCr.Data;
             else
-                OnSendMessage(categoriesCr.Error.Message);
+                errorMessage += categoriesCr.Error.Message + "\n";
 
             //получаем номенклатуры
             var nomenclaturesCr = await DataRepository.GetNomenclatures();
             if (nomenclaturesCr.Success)
                 Catalog.Nomenclatures = nomenclaturesCr.Data;
             else
-                OnSendMessage(nomenclaturesCr.Error.Message);
+                errorMessage += nomenclaturesCr.Error.Message + "\n";
 
             //получаем группы номенклатур
             var nomGroupsCr = await DataRepository.GetNomGroups();
             if (nomGroupsCr.Success)
+            {
                 Catalog.NomenclatureGroups = nomGroupsCr.Data;
-            else
-                OnSendMessage(nomGroupsCr.Error.Message);
+                SetNomGroups();
+            }
 
-            Catalog.Run();
+            else
+                errorMessage += nomGroupsCr.Error.Message + "\n";
+
+            if (!string.IsNullOrWhiteSpace(errorMessage))
+                OnSendMessage(errorMessage);
+        }
+
+        private void SetNomGroups()
+        {
+            for (int i = 0; i < Catalog.NomenclatureGroups.Count; i++)
+            {
+                for(int j=0;j < Catalog.NomenclatureGroups[i].Nomenclatures.Count;j++)
+                {
+                    var nom = Catalog.NomenclatureGroups[i].Nomenclatures[j];
+                    if(nom.Id!=0)
+                    {
+                        Catalog.NomenclatureGroups[i].Nomenclatures.Remove(nom);
+                        var existNom = Catalog.Nomenclatures.Where(n => n.Id == nom.Id).FirstOrDefault();
+                        if (existNom != null) Catalog.NomenclatureGroups[i].Nomenclatures.Add(existNom);
+                    }
+                }
+            }
         }
 
         #region Commands
@@ -146,6 +175,9 @@ namespace OfferMaker
         public void DelOfferGroup(OfferGroup offerGroup) => Constructor.DelOfferGroup(offerGroup);
 
         public void AddNomenclatureToOfferGroup(OfferGroup offerGroup) => Constructor.AddNomenclatureToOfferGroup(offerGroup);
+
+        public void DeleteNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => Constructor.DeleteNomWrapper(nomWrapper, offerGroup);
+        public void DeleteDescriptionFromNomWrapper(Description description, NomWrapper nomWrapper) => Constructor.DeleteDescriptionFromNomWrapper(description, nomWrapper);
 
         #endregion Constructor
 

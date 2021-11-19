@@ -58,5 +58,17 @@ namespace OfferMaker {
                 this["IsOnlyOffline"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AppMode {
+            get {
+                return ((int)(this["AppMode"]));
+            }
+            set {
+                this["AppMode"] = value;
+            }
+        }
     }
 }

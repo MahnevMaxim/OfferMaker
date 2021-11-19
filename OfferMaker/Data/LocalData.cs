@@ -17,7 +17,7 @@ namespace OfferMaker
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="path"></param>
-        internal void UpdateCache(object obj, string path) => Helpers.SaveObject(path, obj);
+        internal CallResult UpdateCache(object obj, string path) => Helpers.SaveObject(path, obj);
 
         #endregion Update cache
 

@@ -41,15 +41,15 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public bool IsOffline
+        public int AppMode
         {
             get
             {
-                return settingsModel.IsOffline;
+                return (int)settingsModel.AppMode;
             }
             set
             {
-                settingsModel.IsOffline = value;
+                settingsModel.AppMode = (AppMode)value;
                 OnPropertyChanged();
             }
         }

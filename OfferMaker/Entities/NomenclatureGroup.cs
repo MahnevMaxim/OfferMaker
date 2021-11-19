@@ -5,32 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using Shared;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 namespace OfferMaker
 {
     /// <summary>
     /// Именованная группа номенклатур для каталога.
     /// </summary>
-    public class NomenclatureGroup : INomenclatureGroup
+    public class NomenclatureGroup 
     {
-        ObservableCollection<int> nomenclaturesIds = new ObservableCollection<int>();
+        ObservableCollection<Nomenclature> nomenclatures;
 
         public int Id { get; set; }
 
         public string Name { get; set; }
 
-        public ObservableCollection<int> NomenclaturesIds 
+        public ObservableCollection<Nomenclature> Nomenclatures 
         { 
             get
             {
-                ObservableCollection<int> coll = new ObservableCollection<int>();
-                Nomenclatures.Select(n=>n.Id).ToList<int>().ForEach(e=>coll.Add(e));
-                return coll;
+                if (nomenclatures == null) nomenclatures = new ObservableCollection<Nomenclature>();
+                return nomenclatures;
             }
-            set { }
+            set
+            {
+                nomenclatures = value;
+            }
         } 
-
-
-        public ObservableCollection<Nomenclature> Nomenclatures { get; set; } = new ObservableCollection<Nomenclature>();
     }
 }
