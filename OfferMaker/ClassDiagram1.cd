@@ -1,54 +1,80 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="OfferMaker.Main" Collapsed="true">
-    <Position X="6.75" Y="2" Width="1.5" />
+    <Position X="8.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IAADgCAACQIAIAABAIACAAABAEAIAAACgAAAAAAAAAI=</HashCode>
       <FileName>Models\Main.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="OfferMaker.Catalog" Collapsed="true">
-    <Position X="4.25" Y="3" Width="1.75" />
+  <Class Name="OfferMaker.Catalog">
+    <Position X="4.25" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AECCgAAAgAIARAABAAQAAAAABEBIFAAAAAAAAIBAAAI=</HashCode>
       <FileName>Models\Catalog.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Categories" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OfferMaker.CategoriesEditor" Collapsed="true">
+    <Position X="6" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAQAAAAAAQABAAAAAQAAAgAgAAIAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Models\CategoriesEditor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OfferMaker.Models.Constructor" Collapsed="true">
+    <Position X="7.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Constructor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OfferMaker.NomenclurueCard" Collapsed="true">
+    <Position X="9.75" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAIEAACAAEAAgAAAAAAAgEAAAABAAEAAAAAAAQAA=</HashCode>
+      <FileName>Models\NomenclurueCard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OfferMaker.Settings">
+    <Position X="11.5" Y="5.25" Width="1.5" />
+    <AssociationLine Name="instance" Type="OfferMaker.Settings">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="2.09" Y="0.145" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAIAAAAAAAQAAAAAICABADgABAQIAAQAAAAAAA=</HashCode>
+      <FileName>Models\Settings.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="instance" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="OfferMaker.BaseModel" Collapsed="true">
-    <Position X="8" Y="0.75" Width="1.5" />
+    <Position X="8" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAICAQAAAAgACAAAAACAAAAAAAAAI=</HashCode>
       <FileName>MvvmFactory\BaseModel.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="OfferMaker.CategoriesEditor" Collapsed="true">
-    <Position X="6.75" Y="3" Width="1.5" />
+  <Class Name="OfferMaker.MvvmFactory" Collapsed="true">
+    <Position X="2.75" Y="3" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AEAQAAAAAAQABAAAAAQAAAgAgAAIAAAAABAAAAAAAAA=</HashCode>
-      <FileName>Models\CategoriesEditor.cs</FileName>
+      <HashCode>AAAIAAAAAAAAAAAAAAAgAAAAAAAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MvvmFactory\MvvmFactory.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="OfferMaker.NomenclurueCard" Collapsed="true">
-    <Position X="9" Y="3" Width="1.5" />
+  <Class Name="OfferMaker.Category" Collapsed="true">
+    <Position X="8" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAABAIEAACAAEAAgAAAAAAAgEAAAABAAEAAAAAAAQAA=</HashCode>
-      <FileName>Models\NomenclurueCard.cs</FileName>
+      <HashCode>AAACAAAAAAAAAMAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Entities\Category.cs</FileName>
     </TypeIdentifier>
-  </Class>
-  <Class Name="OfferMaker.Settings" Collapsed="true">
-    <Position X="10.75" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAgAIAAAAAAAQAAAAAICABADgABAQIAAQAAAAAAA=</HashCode>
-      <FileName>Models\Settings.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="OfferMaker.Models.Constructor" Collapsed="true">
-    <Position X="12.5" Y="3" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Models\Constructor.cs</FileName>
-    </TypeIdentifier>
+    <Lollipop Position="0.2" />
   </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

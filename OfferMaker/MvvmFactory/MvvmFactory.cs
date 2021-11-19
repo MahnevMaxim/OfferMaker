@@ -7,18 +7,16 @@ using MahApps.Metro.Controls;
 
 namespace OfferMaker
 {
-    enum ViewMode { Show, ShowDialog }
-
     class MvvmFactory
     {
-        public static void CreateWindow(BaseModel model, BaseViewModel viewModel, IView view, ViewMode ViewMode)
+        public static void CreateWindow(BaseModel model, BaseViewModel viewModel, IView view, ViewMode viewMode)
         {
             viewModel.SetModel(model, view);
             (view as MetroWindow).DataContext = viewModel;
             model.SendMessage += (object sender, string e) => view.OnSendMessage(e);
-            if(ViewMode == ViewMode.Show)
+            if(viewMode == ViewMode.Show)
                 view.Show();
-            if (ViewMode == ViewMode.ShowDialog)
+            if (viewMode == ViewMode.ShowDialog)
                 view.ShowDialog();
             model.Run();
         }

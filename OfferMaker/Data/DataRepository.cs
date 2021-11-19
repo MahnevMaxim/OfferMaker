@@ -32,17 +32,19 @@ namespace OfferMaker
 
         #endregion Singleton
 
-        async public Task<ObservableCollection<Currency>> GetCurrencies() => await Proxy.GetCurrencies();
+        async public Task<CallResult<ObservableCollection<Currency>>> GetCurrencies() => await Proxy.GetCurrencies();
 
         async public Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
 
+        async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups() => await Proxy.GetNomGroups();
+
         async public Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups) => await Proxy.SaveNomenclatureGroups(nomenclatureGroups);
 
-        internal async Task<ObservableCollection<Nomenclature>> GetNomenclatures() => await Proxy.GetNomenclatures();
+        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures() => await Proxy.GetNomenclatures();
 
-        internal async Task<ObservableCollection<Category>> GetCategories() => await Proxy.GetCategories();
+        async internal Task<CallResult<ObservableCollection<Category>>> GetCategories() => await Proxy.GetCategories();
 
-        internal async Task<ObservableCollection<User>> GetUsers() => await Proxy.GetUsers();
+        async internal Task<ObservableCollection<User>> GetUsers() => await Proxy.GetUsers();
 
         public void SyncData()
         {
@@ -53,5 +55,7 @@ namespace OfferMaker
         {
 
         }
+
+        
     }
 }

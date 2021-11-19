@@ -93,5 +93,19 @@ namespace OfferMaker.ViewModels
         public ObservableCollection<Currency> UsingCurrencies { get => modelMain.UsingCurrencies; }
 
         #endregion Main
+
+        #region Constructor
+
+        public ObservableCollection<OfferGroup> OfferGroups
+        {
+            get { return modelMain.Constructor.OfferGroups; }
+            set
+            {
+                modelMain.Constructor.OfferGroups = value;
+                OnPropertyChanged();
+            }
+        }
+
+        #endregion Constructor
     }
 }

@@ -63,20 +63,51 @@ namespace OfferMaker
 
         public Settings Settings { get; set; } = Settings.GetInstance();
 
+        public Constructor Constructor { get; set; } = new Constructor();
+
         #endregion Properties
 
         async internal override void Run()
         {
             Global.Main = this;
             MvvmFactory.RegisterModel(this, Catalog);
+            MvvmFactory.RegisterModel(this, Constructor);
             Settings.SetSettings();
-            Currencies = await DataRepository.GetCurrencies();
-            Catalog.Nomenclatures = await DataRepository.GetNomenclatures();
-            Catalog.Categories = await DataRepository.GetCategories();
+
+            //получаем валюты
+            var currenciesCr = await DataRepository.GetCurrencies();
+            if (currenciesCr.Success)
+                Currencies = currenciesCr.Data;
+            else
+                OnSendMessage(currenciesCr.Error.Message);
+
+            //получаем категории
+            var categoriesCr = await DataRepository.GetCategories();
+            if (categoriesCr.Success)
+                Catalog.Categories = categoriesCr.Data;
+            else
+                OnSendMessage(categoriesCr.Error.Message);
+
+            //получаем номенклатуры
+            var nomenclaturesCr = await DataRepository.GetNomenclatures();
+            if (nomenclaturesCr.Success)
+                Catalog.Nomenclatures = nomenclaturesCr.Data;
+            else
+                OnSendMessage(nomenclaturesCr.Error.Message);
+
+            //получаем группы номенклатур
+            var nomGroupsCr = await DataRepository.GetNomGroups();
+            if (nomGroupsCr.Success)
+                Catalog.NomenclatureGroups = nomGroupsCr.Data;
+            else
+                OnSendMessage(nomGroupsCr.Error.Message);
+
             Catalog.Run();
         }
 
         #region Commands
+
+        #region Catalog
 
         public void EditCategories() => Catalog.EditCategories();
 
@@ -93,8 +124,6 @@ namespace OfferMaker
             CallResult cr = Catalog.AddNomenclatureToGroup(nomenclature);
             if (!cr.Success) OnSendMessage(cr.Error.Message);
         }
-            
-        public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
 
         public void EditCurrencies()
         {
@@ -107,7 +136,20 @@ namespace OfferMaker
             CallResult crSaveCurrencies = await DataRepository.SaveCurrencies(Currencies);
             CallResult crSaveNomenclatureGroups = await DataRepository.SaveNomenclatureGroups(Catalog.NomenclatureGroups);
         }
-            
+
+        #endregion Catalog
+
+        #region Constructor
+
+        public void AddOfferGroup() => Constructor.AddOfferGroup();
+
+        public void DelOfferGroup(OfferGroup offerGroup) => Constructor.DelOfferGroup(offerGroup);
+
+        public void AddNomenclatureToOfferGroup(OfferGroup offerGroup) => Constructor.AddNomenclatureToOfferGroup(offerGroup);
+
+        #endregion Constructor
+
+        public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
 
         #endregion Commands
     }

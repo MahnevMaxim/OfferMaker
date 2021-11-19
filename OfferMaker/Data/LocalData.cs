@@ -24,7 +24,7 @@ namespace OfferMaker
         #region Get data from cache
 
         /// <summary>
-        /// Пытаемся получить пользователей из кэша
+        /// Пытаемся получить данные из кэша
         /// </summary>
         /// <returns></returns>
         async internal Task<CallResult<T>> GetCache<T>(string path)

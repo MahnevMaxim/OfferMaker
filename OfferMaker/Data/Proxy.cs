@@ -27,19 +27,15 @@ namespace OfferMaker
         /// Пытаемся получить категории с сервера или из кэша
         /// </summary>
         /// <returns></returns>
-        async internal Task<ObservableCollection<Currency>> GetCurrencies()
+        async internal Task<CallResult<ObservableCollection<Currency>>> GetCurrencies()
         {
             var callResult = await ServerData.GetCurrencies();
             if (callResult.Success)
             {
                 LocalData.UpdateCache(callResult.Data, LocalDataConfig.CurrenciesPath);
-                return callResult.Data;
+                return callResult;
             }
-
-            var callResultLocal = await LocalData.GetCache<ObservableCollection<Currency>>(LocalDataConfig.CurrenciesPath);
-            if (callResultLocal.Success)
-                return callResultLocal.Data;
-            return null;
+            return await LocalData.GetCache<ObservableCollection<Currency>>(LocalDataConfig.CurrenciesPath);
         }
 
         /// <summary>
@@ -67,41 +63,48 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Пытаемся получить валюты с сервера или из кэша
+        /// Пытаемся получить группы номенклатур с сервера или из кэша
         /// </summary>
         /// <returns></returns>
-        async internal Task<ObservableCollection<Nomenclature>> GetNomenclatures()
+        async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups()
+        {
+            CallResult<ObservableCollection<NomenclatureGroup>> callResult = await ServerData.GetNomGroups();
+            if (callResult.Success)
+            {
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.NomenclatureGroupsPath);
+                return callResult;
+            }
+            return await LocalData.GetCache<ObservableCollection<NomenclatureGroup>>(LocalDataConfig.NomenclatureGroupsPath);
+        }
+
+        /// <summary>
+        /// Пытаемся получить валюты с сервера или из кэша.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures()
         {
             CallResult<ObservableCollection<Nomenclature>> callResult = await ServerData.GetNomenclatures();
             if (callResult.Success)
             {
                 LocalData.UpdateCache(callResult.Data, LocalDataConfig.NomenclaturesPath);
-                return callResult.Data;
+                return callResult;
             }
-  
-            var callResultLocal = await LocalData.GetCache<ObservableCollection<Nomenclature>>(LocalDataConfig.NomenclaturesPath);
-            if (callResultLocal.Success) 
-                return callResultLocal.Data;
-            return null;
+            return await LocalData.GetCache<ObservableCollection<Nomenclature>>(LocalDataConfig.NomenclaturesPath);
         }
 
         /// <summary>
         /// Пытаемся получить категории с сервера или из кэша
         /// </summary>
         /// <returns></returns>
-        async internal Task<ObservableCollection<Category>> GetCategories()
+        async internal Task<CallResult<ObservableCollection<Category>>> GetCategories()
         {
             CallResult<ObservableCollection<Category>> callResult = await ServerData.GetCategories();
             if (callResult.Success)
             {
                 LocalData.UpdateCache(callResult.Data, LocalDataConfig.CategoriesPath);
-                return callResult.Data;
+                return callResult;
             }
-
-            var callResultLocal = await LocalData.GetCache<ObservableCollection<Category>>(LocalDataConfig.CategoriesPath);
-            if (callResultLocal.Success)
-                return callResultLocal.Data;
-            return null;
+            return await LocalData.GetCache<ObservableCollection<Category>>(LocalDataConfig.CategoriesPath);
         }
 
         /// <summary>

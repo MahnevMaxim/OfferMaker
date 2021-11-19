@@ -22,7 +22,7 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Пытаемся получить валюты с сервера
+        /// Пытаемся получить валюты с сервера.
         /// </summary>
         /// <returns></returns>
         async internal Task<CallResult<ObservableCollection<Currency>>> GetCurrencies()
@@ -35,30 +35,12 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult<ObservableCollection<Currency>>() { Error = new Error("Ошибка при попытке получить валюты с сервера", ex) };
+                return new CallResult<ObservableCollection<Currency>>() { Error = new Error("Ошибка при попытке получить валюты с сервера.", ex) };
             }
         }
 
         /// <summary>
-        /// Пытаемся получить номенклатуру с сервера
-        /// </summary>
-        /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures()
-        {
-            try
-            {
-                var response = await client.NomenclaturesAllAsync();
-                ObservableCollection<Nomenclature> res = Helpers.CloneObject<ObservableCollection<Nomenclature>>(response);
-                return new CallResult<ObservableCollection<Nomenclature>>() { Data = res };
-            }
-            catch (Exception ex)
-            {
-                return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error("Ошибка при попытке получить номенклатуру с сервера", ex) };
-            }
-        }
-
-        /// <summary>
-        /// Сохранение валют на сервере
+        /// Сохранение валют на сервере.
         /// </summary>
         /// <param name="currencies"></param>
         /// <returns></returns>
@@ -72,26 +54,30 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить валюты на сервере", ex) };
-            }
-        }
-
-        async internal Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups)
-        {
-            try
-            {
-                IEnumerable<ApiLib.NomenclatureGroup> nomeGroups = Helpers.CloneObject<IEnumerable<ApiLib.NomenclatureGroup>>(nomenclatureGroups);
-                await client.NomenclatureGroupsPUTAsync(nomeGroups);
-                return new CallResult();
-            }
-            catch (Exception ex)
-            {
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить группы номенклатур на сервере", ex) };
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить валюты на сервере.", ex) };
             }
         }
 
         /// <summary>
-        /// Пытаемся получить категории с сервера
+        /// Пытаемся получить номенклатуру с сервера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures()
+        {
+            try
+            {
+                var response = await client.NomenclaturesAllAsync();
+                ObservableCollection<Nomenclature> res = Helpers.CloneObject<ObservableCollection<Nomenclature>>(response);
+                return new CallResult<ObservableCollection<Nomenclature>>() { Data = res };
+            }
+            catch (Exception ex)
+            {
+                return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error("Ошибка при попытке получить номенклатуру с сервера.", ex) };
+            }
+        }
+
+        /// <summary>
+        /// Пытаемся получить категории с сервера.
         /// </summary>
         /// <returns></returns>
         async internal Task<CallResult<ObservableCollection<Category>>> GetCategories()
@@ -104,12 +90,12 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult<ObservableCollection<Category>>() { Error = new Error("Ошибка при попытке получить категории с сервера", ex) };
+                return new CallResult<ObservableCollection<Category>>() { Error = new Error("Ошибка при попытке получить категории с сервера.", ex) };
             }
         }
 
         /// <summary>
-        /// Пытаемся получить пользователей с сервера
+        /// Пытаемся получить пользователей с сервера.
         /// </summary>
         /// <returns></returns>
         async internal Task<CallResult<ObservableCollection<User>>> GetUsers()
@@ -122,7 +108,44 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult<ObservableCollection<User>>() { Error = new Error("Ошибка при попытке получить пользователей с сервера", ex) };
+                return new CallResult<ObservableCollection<User>>() { Error = new Error("Ошибка при попытке получить пользователей с сервера.", ex) };
+            }
+        }
+
+        /// <summary>
+        /// Пытаемся получить группы номенклатур с сервера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups()
+        {
+            try
+            {
+                var response = await client.NomenclatureGroupsAllAsync();
+                ObservableCollection<NomenclatureGroup> res = Helpers.CloneObject<ObservableCollection<NomenclatureGroup>>(response);
+                return new CallResult<ObservableCollection<NomenclatureGroup>>() { Data = res };
+            }
+            catch (Exception ex)
+            {
+                return new CallResult<ObservableCollection<NomenclatureGroup>>() { Error = new Error("Ошибка при попытке получить группы номенклатур с сервера.", ex) };
+            }
+        }
+
+        /// <summary>
+        /// Пытаемся получить группы номенклатур с сервера.
+        /// </summary>
+        /// <param name="nomenclatureGroups"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups)
+        {
+            try
+            {
+                IEnumerable<ApiLib.NomenclatureGroup> nomeGroups = Helpers.CloneObject<IEnumerable<ApiLib.NomenclatureGroup>>(nomenclatureGroups);
+                await client.NomenclatureGroupsPUTAsync(nomeGroups);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить группы номенклатур на сервере.", ex) };
             }
         }
     }

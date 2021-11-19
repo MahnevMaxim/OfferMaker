@@ -8,6 +8,9 @@ using System.Collections.ObjectModel;
 
 namespace OfferMaker
 {
+    /// <summary>
+    /// Именованная группа номенклатур для каталога.
+    /// </summary>
     public class NomenclatureGroup : INomenclatureGroup
     {
         ObservableCollection<int> nomenclaturesIds = new ObservableCollection<int>();

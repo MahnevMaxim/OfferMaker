@@ -5,6 +5,7 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:local="clr-namespace:OfferMaker.Views"
                  xmlns:root="clr-namespace:OfferMaker"
+                 xmlns:controls="clr-namespace:OfferMaker.Controls"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
@@ -492,9 +493,17 @@
                                HorizontalAlignment="Left"/>
                 </StackPanel>
                 <ListView Grid.Row="1"
+                          ItemsSource="{Binding OfferGroups}"
                           Margin="5">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <controls:OfferGroupItemControl/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
                 </ListView>
                 <Button Grid.Row="2" 
+                        CommandParameter="AddOfferGroup"
+                        Command="{Binding Cmd}"
                         Content="Добавить"
                         Style="{DynamicResource MahApps.Styles.Button.Square}"
                         Margin="5"/>
