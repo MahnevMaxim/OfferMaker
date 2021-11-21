@@ -13,8 +13,6 @@ namespace OfferMaker
 
         #region Fields
 
-        Nomenclature selectedNomenclature;
-        NomenclatureGroup selectedNomenclatureGroup;
         ObservableCollection<Category> categoriesTree;
         Category selectedCat;
 
@@ -24,7 +22,7 @@ namespace OfferMaker
 
         public Nomenclature SelectedNomenclature { get; set; }
 
-        public NomenclatureGroup SelectedNomenclatureGroup { get; set; }
+        public NomenclatureGroup SelectedNomGroup { get; set; }
 
         public ObservableCollection<Nomenclature> Nomenclatures { get; set; }
 
@@ -66,10 +64,32 @@ namespace OfferMaker
 
         /// <summary>
         /// Добавление номенклатуры в конструктор.
+        /// В конструкторе работаем с копией, т.к. нам не нужно, чтобы изменялся оригинальный объект, 
+        /// а в конструкторе есть возможность редактирования номеклатуры и описания.
         /// </summary>
         public void AddNomenclature()
         {
-            offerGroup.NomWrappers.Add(new NomWrapper() { Nomenclature = SelectedNomenclature });
+            if (SelectedNomenclature == null)
+            {
+                OnSendMessage("Выберите номенклатуру для добавления");
+                return;
+            }
+            offerGroup.NomWrappers.Add(new NomWrapper() { Nomenclature = Helpers.CloneObject<Nomenclature>(SelectedNomenclature) });
+            Close();
+        }
+
+        /// <summary>
+        /// Добавление группы номенклатур в конструктор.
+        /// </summary>
+        public void AddNomenclatureGroup()
+        {
+            if(SelectedNomGroup==null)
+            {
+                OnSendMessage("Выберите группу номенклатур для добавления");
+                return;
+            }
+            foreach(var nomen in SelectedNomGroup.Nomenclatures)
+                offerGroup.NomWrappers.Add(new NomWrapper() { Nomenclature = Helpers.CloneObject<Nomenclature>(nomen) });
             Close();
         }
     }

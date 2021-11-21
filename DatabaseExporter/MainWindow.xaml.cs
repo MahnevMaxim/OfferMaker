@@ -94,7 +94,7 @@ namespace DatabaseExporter
                 {
                     charCode = nom["valute"]["Name"].ToString();
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
                     charCode = "RUB";
                 }

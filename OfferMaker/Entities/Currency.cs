@@ -34,5 +34,7 @@ namespace OfferMaker
                 OnPropertyChanged();
             }
         }
+
+        public override string ToString() => CharCode;
     }
 }

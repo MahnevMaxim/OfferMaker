@@ -46,14 +46,8 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public Nomenclature SelectedNomenclature
-        {
-            get { return addNom.SelectedNomenclature; }
-            set
-            {
-                addNom.SelectedNomenclature = value;
-                OnPropertyChanged();
-            }
-        }
+        public NomenclatureGroup SelectedNomGroup { set => addNom.SelectedNomGroup = value; }
+
+        public Nomenclature SelectedNomenclature { set => addNom.SelectedNomenclature = value; }
     }
 }

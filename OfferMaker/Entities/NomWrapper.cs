@@ -18,5 +18,5 @@ namespace OfferMaker
         public bool IsShowPrice { get; set; } = true;
 
         public Nomenclature Nomenclature { get; set; }
-}
+    }
 }

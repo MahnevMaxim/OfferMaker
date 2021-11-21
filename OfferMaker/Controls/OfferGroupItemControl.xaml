@@ -14,21 +14,52 @@
         <root:MultiConverter x:Key="MultiConverter"/>
     </UserControl.Resources>
 
-
-
     <Grid>
         <Grid.Resources>
-            <DataTemplate x:Key="CatalogButtons">
+            <DataTemplate x:Key="NomButtons">
                 <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                    
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                            Height="35"
-                            Width="35"
-                            Margin="5"
-                            ToolTip="Открыть карточку">
-                        <iconPacks:PackIconMaterial Kind="CardsVariant" 
-                                                  Width="20"
-                                                  Height="20"/>
+                            Height="28"
+                            Width="28"
+                            Margin="3"
+                            ToolTip="Вверх">
+                        <iconPacks:PackIconMaterial Kind="ArrowUp" 
+                                                  Width="15"
+                                                  Height="15"/>
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                <Binding Source="AddToCategoryCommand"/>
+                                <Binding Path="."/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                            Height="28"
+                            Width="28"
+                            Margin="3"
+                            ToolTip="Вниз">
+                        <iconPacks:PackIconMaterial Kind="ArrowDown" 
+                                                  Width="15"
+                                                  Height="15"/>
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                <Binding Source="AddNomenclatureToGroup"/>
+                                <Binding Path="."/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                            Height="28"
+                            Width="28"
+                            Margin="3"
+                            ToolTip="Добавить описание">
+                        <iconPacks:PackIconMaterial Kind="TextBoxOutline" 
+                                                    Width="15"
+                                                    Height="15"/>
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
                                 <Binding Source="OpenNomenclurueCard"/>
@@ -36,15 +67,31 @@
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                        Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
-                        Height="35"
-                        Width="35"
-                        Margin="5"
-                        ToolTip="Удалить">
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                            Height="28"
+                            Width="28"
+                            Margin="3"
+                            ToolTip="Добавить комментарий">
+                        <iconPacks:PackIconMaterial Kind="CommentTextOutline" 
+                                                    Width="15"
+                                                    Height="15"/>
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                <Binding Source="OpenNomenclurueCard"/>
+                                <Binding Path="."/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
+                            Height="28"
+                            Width="28"
+                            Margin="3"
+                            ToolTip="Удалить">
                         <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
-                                                    Width="20"
-                                                    Height="20"/>
+                                                    Width="15"
+                                                    Height="15"/>
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
                                 <Binding Source="DeleteNomWrapper"/>
@@ -53,52 +100,20 @@
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                            Height="35"
-                            Width="35"
-                            Margin="5"
-                            ToolTip="Добавить в категорию">
-                        <iconPacks:PackIconMaterial Kind="ArrowLeft" 
-                                                  Width="20"
-                                                  Height="20"/>
-                        <Button.CommandParameter>
-                            <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="AddToCategoryCommand"/>
-                                <Binding Path="."/>
-                            </MultiBinding>
-                        </Button.CommandParameter>
-                    </Button>
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                            Height="35"
-                            Width="35"
-                            Margin="5"
-                            ToolTip="Добавить в группу">
-                        <iconPacks:PackIconMaterial Kind="ArrowRight" 
-                                                  Width="20"
-                                                  Height="20"/>
-                        <Button.CommandParameter>
-                            <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="AddNomenclatureToGroup"/>
-                                <Binding Path="."/>
-                            </MultiBinding>
-                        </Button.CommandParameter>
-                    </Button>
                 </StackPanel>
             </DataTemplate>
 
             <DataTemplate x:Key="DescriptionButtons">
                 <StackPanel Orientation="Horizontal">
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                            Height="35"
-                            Width="35"
+                            Height="28"
+                            Width="28"
                             Margin="5"
                             ToolTip="Открыть карточку">
                         <iconPacks:PackIconMaterial Kind="CardsVariant" 
-                                                  Width="20"
-                                                  Height="20"/>
+                                                  Width="15"
+                                                  Height="15"/>
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
                                 <Binding Source="OpenNomenclurueCard"/>
@@ -106,15 +121,15 @@
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
                         Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
-                        Height="35"
-                        Width="35"
+                        Height="28"
+                        Width="28"
                         Margin="5"
                         ToolTip="Удалить">
                         <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
-                                                    Width="20"
-                                                    Height="20"/>
+                                                    Width="15"
+                                                    Height="15"/>
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
                                 <Binding Source="DeleteDescriptionFromNomWrapper"/>
@@ -123,15 +138,15 @@
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                            Height="35"
-                            Width="35"
+                            Height="28"
+                            Width="28"
                             Margin="5"
                             ToolTip="Добавить в категорию">
                         <iconPacks:PackIconMaterial Kind="ArrowLeft" 
-                                                  Width="20"
-                                                  Height="20"/>
+                                                  Width="15"
+                                                  Height="15"/>
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
                                 <Binding Source="AddToCategoryCommand"/>
@@ -139,15 +154,15 @@
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                            Height="35"
-                            Width="35"
+                            Height="28"
+                            Width="28"
                             Margin="5"
                             ToolTip="Добавить в группу">
                         <iconPacks:PackIconMaterial Kind="ArrowRight" 
-                                                  Width="20"
-                                                  Height="20"/>
+                                                  Width="15"
+                                                  Height="15"/>
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
                                 <Binding Source="AddNomenclatureToGroup"/>
@@ -164,7 +179,7 @@
             <ColumnDefinition Width="70"/>
             <ColumnDefinition/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="140"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -176,9 +191,9 @@
             <Button Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                     Height="28"
                     Width="28"
-                    Margin="5"
-                    Style="{DynamicResource MahApps.Styles.Button.Square}"
-                    ToolTip="Вверх">
+                    Margin="5,0,0,0"
+                    Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"
+                    ToolTip="Добавить номенклатуру">
                 <iconPacks:PackIconMaterial Kind="Plus"
                                             Width="15"
                                             Height="15"/>
@@ -192,8 +207,8 @@
             <Button Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                     Height="28"
                     Width="28"
-                    Margin="5"
-                    Style="{DynamicResource MahApps.Styles.Button.Square}"
+                    Margin="5,0,0,0"
+                    Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"
                     ToolTip="Вверх">
                 <iconPacks:PackIconMaterial Kind="ArrowUp"
                                             Width="15"
@@ -208,8 +223,8 @@
             <Button Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                     Height="28"
                     Width="28"
-                    Margin="5"
-                    Style="{DynamicResource MahApps.Styles.Button.Square}"
+                    Margin="5,0,0,0"
+                    Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"
                     ToolTip="Вниз">
                 <iconPacks:PackIconMaterial Kind="ArrowDown"
                                             Width="15"
@@ -224,9 +239,9 @@
             <Button Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                     Height="28"
                     Width="28"
-                    Margin="5"
-                    Style="{DynamicResource MahApps.Styles.Button.Square}"
-                    ToolTip="Вверх">
+                    Margin="5,0,0,0"
+                    Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"
+                    ToolTip="Удалить группу">
                 <iconPacks:PackIconMaterial Kind="DeleteForeverOutline"
                                             Width="15"
                                             Height="15"/>
@@ -241,8 +256,9 @@
 
         <TextBox Text="{Binding GroupTitle, UpdateSourceTrigger=PropertyChanged}"
                  Grid.Row="0" 
-                 Grid.Column="1"
-                 Grid.ColumnSpan="2"
+                 Grid.Column="0"
+                 Grid.ColumnSpan="3"
+                 Margin="5"
                  Height="30"/>
 
         <DataGrid Grid.Row="1" Grid.ColumnSpan="4"
@@ -250,7 +266,8 @@
                   d:Height="200"
                   ItemsSource="{Binding NomWrappers}"
                   IsReadOnly="True"
-                  AutoGenerateColumns="False">
+                  AutoGenerateColumns="False"
+                  CanUserSortColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Название" Binding="{Binding Nomenclature.Title}" Width="310" DisplayIndex="0">
                     <DataGridTextColumn.ElementStyle>
@@ -264,13 +281,14 @@
                 <DataGridTextColumn Header="Цена" Binding="{Binding Nomenclature.Price, StringFormat=F2}" DisplayIndex="3"/>
                 <DataGridTextColumn Header="Прибыль" Binding="{Binding Nomenclature.Profit, StringFormat=F2}" DisplayIndex="4"/>
                 <DataGridTextColumn Header="Валюта" Binding="{Binding Nomenclature.CurrencyCharCode}" DisplayIndex="5"/>
-                <DataGridTemplateColumn Header="" DisplayIndex="6" CellTemplate="{StaticResource CatalogButtons}"/>
+                <DataGridTemplateColumn Header="" DisplayIndex="6" CellTemplate="{StaticResource NomButtons}"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     <DataGrid ItemsSource="{Binding Nomenclature.Descriptions}"
                               IsReadOnly="True"
-                              AutoGenerateColumns="False">
+                              AutoGenerateColumns="False"
+                              CanUserSortColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Описание" Binding="{Binding Text}" Width="310" DisplayIndex="0">
                                 <DataGridTextColumn.ElementStyle>
@@ -287,5 +305,6 @@
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
         </DataGrid>
+
     </Grid>
 </UserControl>

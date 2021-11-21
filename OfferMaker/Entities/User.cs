@@ -16,6 +16,8 @@ namespace OfferMaker
 
         public string LastName { get; set; }
 
+        public string FullName { get => FirstName + " " + LastName; }
+
         public ObservableCollection<Permissions> Permissions { get; set; }
 
         public string PhoneNumber1 { get; set; }
@@ -25,5 +27,7 @@ namespace OfferMaker
         public string Email { get; set; }
 
         public string PhotoPath { get; set; }
+
+        public override string ToString() => FullName;
     }
 }

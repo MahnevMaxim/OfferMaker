@@ -139,6 +139,7 @@
                     </Grid.RowDefinitions>
 
                     <DataGrid ItemsSource="{Binding NomenclatureGroups}"
+                              SelectedItem="{Binding SelectedNomGroup}"
                               x:Name="nomGroupsDataGrid"
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
@@ -163,11 +164,12 @@
                             Margin="5"/>
                     <GridSplitter Width="2" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 
-                    <DataGrid Grid.Column="2" Grid.RowSpan="2"  MinWidth="100"
-                                  ItemsSource="{Binding SelectedItem.Nomenclatures, ElementName=nomGroupsDataGrid}"
-                                  AutoGenerateColumns="False"
-                                  CanUserAddRows="False"
-                                  IsReadOnly="True">
+                    <DataGrid Grid.Column="2" Grid.RowSpan="2" 
+                              MinWidth="100"
+                              ItemsSource="{Binding SelectedItem.Nomenclatures, ElementName=nomGroupsDataGrid}"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Название" Binding="{Binding Title}" DisplayIndex="0">
                                 <DataGridTextColumn.ElementStyle>

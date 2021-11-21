@@ -13,7 +13,7 @@
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="0"
                  WindowState = "Maximized"
-                 Title="KIP Offer Maker" Height="650" Width="1100">
+                 Title="KIP Offer Maker" Height="650" Width="1200">
 
     <Window.Resources>
         <root:MultiConverter x:Key="MultiConverter"/>
@@ -105,15 +105,15 @@
             </DataTemplate>
 
             <DataTemplate x:Key="DelNomGroupButton">
-                <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                <Button Style="{StaticResource MahApps.Styles.Button.Square}"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                            Height="35"
-                            Width="35"
-                            Margin="5"
+                            Height="28"
+                            Width="28"
+                            Margin="3"
                             ToolTip="Удалить группу">
                     <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
-                                                  Width="20"
-                                                  Height="20"/>
+                                                  Width="14"
+                                                  Height="14"/>
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource MultiConverter}">
                             <Binding Source="DelNomGroup"/>
@@ -124,15 +124,15 @@
             </DataTemplate>
 
             <DataTemplate x:Key="DelNomenclatureFromGroupButton">
-                <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                <Button Style="{StaticResource MahApps.Styles.Button.Square}"
                         Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                        Height="35"
-                        Width="35"
-                        Margin="5"
+                        Height="28"
+                        Width="28"
+                        Margin="3"
                         ToolTip="Удалить номенклатуру из группы">
                     <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
-                                                Width="20"
-                                                Height="20"/>
+                                                Width="14"
+                                                Height="14"/>
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource MultiConverter}">
                             <Binding Source="DelNomenclatureFromGroup"/>
@@ -189,7 +189,7 @@
                                                           Width="20"
                                                           Height="20"/>
                         </Button>
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="SkipOffer"
                                 VerticalAlignment="Top"
                                 Command="{Binding Cmd}"
                                 Height="35"
@@ -201,44 +201,64 @@
                                                           Width="20"
                                                           Height="20"/>
                         </Button>
-                        <ComboBox Width="150"
-                                  Height="0"
+                        <ComboBox ItemsSource="{Binding Managers}"
+                                  SelectedItem="{Binding Manager}"
+                                  Width="150"
+                                  Height="62"
                                   VerticalAlignment="Top"
                                   mah:TextBoxHelper.ClearTextButton="True"
                                   mah:TextBoxHelper.UseFloatingWatermark="True"
                                   mah:TextBoxHelper.Watermark="Менеджер"
-                                  SelectedIndex="0"
-                                  Margin="5"/>
+                                  Margin="5">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{Binding PhotoPath}"
+                                               Width="38"
+                                               Height="38"/>
+                                        <StackPanel Margin="5,0,0,0">
+                                            <TextBlock Text="{Binding FirstName}"/>
+                                            <TextBlock Text="{Binding LastName}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                         <StackPanel Margin="5">
-                            <CheckBox Content="Детально"/>
+                            <CheckBox Content="Детально"
+                                      IsChecked="{Binding IsShowPriceDetails, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                             <CheckBox Content="По себестоимости"
-                                       Margin="0,5,0,0"/>
+                                      IsChecked="{Binding IsCreateByCostPrice, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                      Margin="0,5,0,0"/>
                             <CheckBox Content="Скрыть цены номенклатур"
-                                       Margin="0,5,0,0"/>
+                                      IsChecked="{Binding IsHideNomsPrice, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                      Margin="0,5,0,0"/>
                         </StackPanel>
                         <StackPanel Margin="5">
-                            <CheckBox Content="Пересчитать КП в валюту"/>
-                            <CheckBox Content="Итоговая сумма в рублях"
+                            <CheckBox IsChecked="{Binding ResultSummInRub}" 
+                                      Content="Итоговая сумма в рублях"
                                       Margin="0,5"/>
-                        </StackPanel>
-                        <StackPanel Margin="5">
                             <ComboBox ItemsSource="{Binding UsingCurrencies}" 
+                                      SelectedItem="{Binding Currency}"
                                       DisplayMemberPath="CharCode"
                                       Width="150"
                                       mah:TextBoxHelper.UseFloatingWatermark="True"
                                       mah:TextBoxHelper.Watermark="Валюта"
                                       SelectedIndex="0"
-                                      Margin="0,5,0,0"
                                       HorizontalAlignment="Left"/>
                         </StackPanel>
                         <StackPanel Margin="5">
+
+                        </StackPanel>
+                        <StackPanel Margin="5">
                             <ComboBox Width="150"
-                                      SelectedIndex="0"
+                                      SelectedIndex="{Binding IsWithNds}"
                                       HorizontalAlignment="Left">
                                 <ComboBoxItem Content="С НДС"/>
                                 <ComboBoxItem Content="Без НДС"/>
                             </ComboBox>
                             <CheckBox Content="Скрыть надпись НДС"
+                                      IsChecked="{Binding IsHiddenTextNds}"
                                       Margin="0,5"/>
                         </StackPanel>
 
@@ -295,13 +315,13 @@
                                                         Width="20"
                                                         Height="20"/>
                         </Button>
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="SaveToPdfWithBanner"
                                 Command="{Binding Cmd}"
                                 Height="35"
                                 Width="35"
                                 Margin="5"
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                ToolTip="Сохранить в PDF">
+                                ToolTip="Сохранить в PDF с баннером">
                             <iconPacks:PackIconCodicons Kind="FilePdf"
                                                         Width="20"
                                                         Height="20"/>
@@ -312,7 +332,7 @@
                                 Width="35"
                                 Margin="5"
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                ToolTip="Сохранить в PDF одностраничное предложение">
+                                ToolTip="Сохранить в PDF без баннера">
                             <iconPacks:PackIconBoxIcons Kind="SolidFilePdf"
                                                         Width="20"
                                                         Height="20"/>
@@ -495,9 +515,25 @@
                 <ListView Grid.Row="1"
                           ItemsSource="{Binding OfferGroups}"
                           Margin="5">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <controls:OfferGroupItemControl/>
+                            <Border BorderThickness="2"
+                                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                    Margin="5">
+                                <controls:OfferGroupItemControl/>
+                            </Border>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -511,6 +547,7 @@
 
             <GridSplitter Width="2" Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 
+            <controls:PdfControl x:Name="pdfControl" Grid.Column="2"/>
         </Grid>
 
         <Grid Grid.Row="1">
@@ -619,9 +656,9 @@
                 <AdornerDecorator>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*" MinWidth="150"/>
                             <ColumnDefinition Width="2"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"  MinWidth="150"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -633,7 +670,12 @@
                                   AutoGenerateColumns="False"
                                   CanUserAddRows="False">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Название" Binding="{Binding Name}" DisplayIndex="0">
+                                <DataGridTextColumn Header="Название"
+                                                    Binding="{Binding Name}"
+                                                    DisplayIndex="0"
+                                                    Width="250"
+                                                    MaxWidth="350"
+                                                    MinWidth="100">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style>
                                             <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
@@ -644,7 +686,7 @@
                                 <DataGridTemplateColumn DisplayIndex="2" CellTemplate="{StaticResource DelNomGroupButton}"/>
                             </DataGrid.Columns>
                         </DataGrid>
-                        
+
                         <Button Grid.Row="1" 
                                 CommandParameter="AddNomenclatureGroup"
                                 Command="{Binding Cmd}"
@@ -659,7 +701,12 @@
                                   CanUserAddRows="False"
                                   IsReadOnly="True">
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Название" Binding="{Binding Title}" DisplayIndex="0">
+                                <DataGridTextColumn Header="Название"
+                                                    Binding="{Binding Title}"
+                                                    DisplayIndex="0"
+                                                    Width="300"
+                                                    MaxWidth="350"
+                                                    MinWidth="100">
                                     <DataGridTextColumn.ElementStyle>
                                         <Style>
                                             <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
@@ -669,7 +716,7 @@
                                 <DataGridTemplateColumn DisplayIndex="1" CellTemplate="{StaticResource DelNomenclatureFromGroupButton}"/>
                             </DataGrid.Columns>
                         </DataGrid>
-                        
+
                     </Grid>
                 </AdornerDecorator>
             </GroupBox>

@@ -14,19 +14,21 @@ namespace OfferMaker
 
         #region Fields
 
-        ObservableCollection<User> users;
+        ObservableCollection<User> managers = new ObservableCollection<User>();
         ObservableCollection<Currency> currencies;
 
         #endregion Fields
 
         #region Propetries
 
-        public ObservableCollection<User> Users
+        public User User { get; set; }
+
+        public ObservableCollection<User> Managers
         {
-            get => users;
+            get => managers;
             set
             {
-                users = value;
+                managers = value;
                 OnPropertyChanged();
             }
         }
@@ -63,20 +65,42 @@ namespace OfferMaker
 
         public Settings Settings { get; set; } = Settings.GetInstance();
 
-        public Constructor Constructor { get; set; } = new Constructor();
+        public Constructor Constructor { get; set; } = Constructor.GetInstance();
+
+        public DocManager DocManager { get; set; }
 
         #endregion Properties
+
+        #region Initialization Main
 
         async internal override void Run()
         {
             Global.Main = this;
+            DocManager = DocManager.GetInstance();
             MvvmFactory.RegisterModel(this, Catalog);
             MvvmFactory.RegisterModel(this, Constructor);
             Settings.SetSettings();
+            
+            //Фейковая авторизация.
+            CallResult cr = await Hello.SetUsers(DataRepository);
+            if (!cr.Success)
+            {
+                OnSendMessage("Ошибка при получении пользователей");
+                await Task.Delay(7000);
+                Close();
+                return;
+            }
+            User = Hello.User;
+            Managers = Hello.Managers;
+
             await InitData();
             Catalog.Run();
         }
 
+        /// <summary>
+        /// Инициализация данных
+        /// </summary>
+        /// <returns></returns>
         async private Task InitData()
         {
             string errorMessage = "";
@@ -109,22 +133,36 @@ namespace OfferMaker
                 Catalog.NomenclatureGroups = nomGroupsCr.Data;
                 SetNomGroups();
             }
-
             else
                 errorMessage += nomGroupsCr.Error.Message + "\n";
 
             if (!string.IsNullOrWhiteSpace(errorMessage))
                 OnSendMessage(errorMessage);
+
+            Constructor.Offer.OfferCreator = User;
+
+            InitImages();
         }
 
+        /// <summary>
+        /// Инициализация изображений.
+        /// </summary>
+        private void InitImages()
+        {
+            Constructor.PhotoLogo = AppDomain.CurrentDomain.BaseDirectory + "common_images\\logo.png";
+        }
+
+        /// <summary>
+        /// Установка ссылок на объекты номенклатур в группы номенклатур.
+        /// </summary>
         private void SetNomGroups()
         {
             for (int i = 0; i < Catalog.NomenclatureGroups.Count; i++)
             {
-                for(int j=0;j < Catalog.NomenclatureGroups[i].Nomenclatures.Count;j++)
+                for (int j = 0; j < Catalog.NomenclatureGroups[i].Nomenclatures.Count; j++)
                 {
                     var nom = Catalog.NomenclatureGroups[i].Nomenclatures[j];
-                    if(nom.Id!=0)
+                    if (nom.Id != 0)
                     {
                         Catalog.NomenclatureGroups[i].Nomenclatures.Remove(nom);
                         var existNom = Catalog.Nomenclatures.Where(n => n.Id == nom.Id).FirstOrDefault();
@@ -133,6 +171,8 @@ namespace OfferMaker
                 }
             }
         }
+
+        #endregion Initialization Main
 
         #region Commands
 
@@ -177,11 +217,24 @@ namespace OfferMaker
         public void AddNomenclatureToOfferGroup(OfferGroup offerGroup) => Constructor.AddNomenclatureToOfferGroup(offerGroup);
 
         public void DeleteNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => Constructor.DeleteNomWrapper(nomWrapper, offerGroup);
+
         public void DeleteDescriptionFromNomWrapper(Description description, NomWrapper nomWrapper) => Constructor.DeleteDescriptionFromNomWrapper(description, nomWrapper);
+
+        public void SkipOffer() => Constructor.SkipOffer();
 
         #endregion Constructor
 
+        #region DocManager
+
+        public void SaveToPdfWithBanner() => DocManager.SaveToPdfWithBanner();
+
+        #endregion DocManager
+
+        #region Settings
+
         public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
+
+        #endregion Settings
 
         #endregion Commands
     }
