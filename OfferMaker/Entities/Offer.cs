@@ -10,6 +10,7 @@ namespace OfferMaker
     public class Offer : BaseModel
     {
         ObservableCollection<OfferGroup> offerGroups = new ObservableCollection<OfferGroup>();
+        ObservableCollection<string> afterTitleCollection;
         User manager;
         User offerCreator;
         bool isHiddenTextNds;
@@ -20,9 +21,14 @@ namespace OfferMaker
         bool isCreateByCostPrice;
         bool isHideNomsPrice;
         DateTime createDate = DateTime.Now;
+        string createDateString;
+        string banner;
 
         public int Id { get; set; }
 
+        /// <summary>
+        /// Создатель КП.
+        /// </summary>
         public User OfferCreator
         {
             get => offerCreator;
@@ -33,12 +39,33 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Назначенный менеджер КП.
+        /// </summary>
         public User Manager
         {
             get => manager;
             set
             {
                 manager = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Баннер.
+        /// </summary>
+        public string Banner
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(banner))
+                    return banner;
+                return Environment.CurrentDirectory + @"\Images\no-image.jpg";
+            }
+            set
+            {
+                banner = value;
                 OnPropertyChanged();
             }
         }
@@ -58,11 +85,37 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Отображение даты в удобочитаемом формате.
+        /// </summary>
+        public string CreateDateString
+        {
+            get => CreateDate.ToLongDateString();
+            set
+            {
+                createDateString = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string OfferName { get; set; }
 
         public Customer Customer { get; set; }
 
         public decimal TotalSum { get; set; }
+
+        /// <summary>
+        /// Рекламмные материалы, идущие после титульника.
+        /// </summary>
+        public ObservableCollection<string> AfterTitleCollection
+        {
+            get => afterTitleCollection;            
+            set
+            {
+                afterTitleCollection = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Группы номенклатур для контрола конструктора.

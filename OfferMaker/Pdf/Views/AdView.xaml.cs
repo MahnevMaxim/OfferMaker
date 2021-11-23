@@ -17,24 +17,24 @@ using OfferMaker.Pdf;
 namespace OfferMaker.Pdf.Views
 {
     /// <summary>
-    /// Interaction logic for TitulView.xaml
+    /// Interaction logic for AdView.xaml
     /// </summary>
-    public partial class TitulView : UserControl, IClonable
+    public partial class AdView : UserControl, IClonable
     {
-        public TitulView()
+        public AdView()
         {
             InitializeComponent();
         }
 
-        public TitulView(object DataContext)
+        public AdView(object DataContext)
         {
-            this.DataContext = DataContext;
             InitializeComponent();
+            this.DataContext = DataContext;
         }
 
         public UserControl Copy()
         {
-            TitulView titul = new TitulView(DataContext);
+            AdView titul = new AdView(DataContext);
             return titul;
         }
     }

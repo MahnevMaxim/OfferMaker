@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Shared;
+using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace OfferMaker
 {
@@ -59,15 +61,21 @@ namespace OfferMaker
 
         #region Properties
 
+        #region Modules
+
         DataRepository DataRepository { get; set; } = DataRepository.GetInstance();
 
         public Catalog Catalog { get; set; } = Catalog.GetInstance();
 
-        public Settings Settings { get; set; } = Settings.GetInstance();
-
         public Constructor Constructor { get; set; } = Constructor.GetInstance();
 
+        public BannersManager BannersManager { get; set; } = BannersManager.GetInstance();
+
+        public Settings Settings { get; set; } = Settings.GetInstance();
+
         public DocManager DocManager { get; set; }
+
+        #endregion Modules
 
         #endregion Properties
 
@@ -141,15 +149,28 @@ namespace OfferMaker
 
             Constructor.Offer.OfferCreator = User;
 
-            InitImages();
+            InitBanners();
+            InitAdvertising();
         }
 
         /// <summary>
-        /// Инициализация изображений.
+        /// Инициализация рекламных материалов.
         /// </summary>
-        private void InitImages()
+        private void InitAdvertising()
         {
-            Constructor.PhotoLogo = AppDomain.CurrentDomain.BaseDirectory + "common_images\\logo.png";
+            string advertisingsPath = AppDomain.CurrentDomain.BaseDirectory + "\\advertisings";
+            var files = Directory.GetFiles(advertisingsPath);
+            files.ToList().ForEach(f => BannersManager.Advertisings.Add(f));
+        }
+
+        /// <summary>
+        /// Инициализация баннеров.
+        /// </summary>
+        private void InitBanners()
+        {
+            string bannersPath = AppDomain.CurrentDomain.BaseDirectory + "\\banners";
+            var files = Directory.GetFiles(bannersPath);
+            files.ToList().ForEach(f => BannersManager.Banners.Add(f)); 
         }
 
         /// <summary>
@@ -186,6 +207,8 @@ namespace OfferMaker
 
         public void DelNomGroup(NomenclatureGroup nomenclatureGroup) => Catalog.DelNomGroup(nomenclatureGroup);
 
+        public void DelNomFromNomenclatureGroup(Nomenclature nomenclature) => Catalog.DelNomFromNomenclatureGroup(nomenclature);
+
         public void AddNomenclatureGroup() => Catalog.AddNomenclatureGroup();
 
         public void AddNomenclatureToGroup(Nomenclature nomenclature)
@@ -221,6 +244,8 @@ namespace OfferMaker
         public void DeleteDescriptionFromNomWrapper(Description description, NomWrapper nomWrapper) => Constructor.DeleteDescriptionFromNomWrapper(description, nomWrapper);
 
         public void SkipOffer() => Constructor.SkipOffer();
+
+        public void OpenBanners() => Constructor.OpenBanners();
 
         #endregion Constructor
 

@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="OfferMaker.Controls.TitulView"
+﻿<UserControl x:Class="OfferMaker.Pdf.Views.TitulView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OfferMaker.Controls"
+             xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
              mc:Ignorable="d" 
              x:Name="title">
 
@@ -54,10 +54,10 @@
                                     </Viewbox>
                                 </Border>
                                 <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="0,2,0,5" TextWrapping="Wrap" FontFamily="Segoe UI Light" FontSize="10pt" >
-                               <TextBlock TextWrapping="Wrap"  FontSize="10pt" FontFamily="Segoe UI Light" Margin="14,0,0,0" Text="{Binding DataContext.KpNumber, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, ElementName=customerControlPDF}"/>
+                               <TextBlock TextWrapping="Wrap"  FontSize="10pt" FontFamily="Segoe UI Light" Margin="14,0,0,0" Text="{Binding KpNumber}"/>
                                <TextBlock>
                                    <TextBlock TextWrapping="Wrap" Margin="10,0,0,0" Text=" от " FontSize="10pt" FontFamily="Segoe UI Light"/>
-                                   <TextBlock TextWrapping="Wrap" Text="{Binding CreateDate}" FontFamily="Segoe UI Light" FontSize="10pt"/>
+                                   <TextBlock TextWrapping="Wrap" Text="{Binding CreateDateString}" FontFamily="Segoe UI Light" FontSize="10pt"/>
                                </TextBlock>
                         </TextBlock>
                         </Grid>
@@ -74,13 +74,13 @@
                                     </Viewbox>
                                 </Border>
                                 <TextBlock Grid.Column="1"
-                                 Margin="14,0,0,5"
-                                   TextWrapping="Wrap" 
-                                   FontFamily="Segoe UI Light" 
-                                   VerticalAlignment="Center" 
-                                   FontSize="10pt" 
-                                    HorizontalAlignment="Left"
-                                   Text="{Binding DataContext.Name, ElementName=customerControlPDF}"/>
+                                           Margin="14,0,0,5"
+                                           TextWrapping="Wrap" 
+                                           FontFamily="Segoe UI Light" 
+                                           VerticalAlignment="Center" 
+                                           FontSize="10pt" 
+                                           HorizontalAlignment="Left"
+                                           Text="{Binding CustomerName}"/>
                             </Grid>
                         </Border>
                         <Border  Grid.Row="2" >
@@ -95,22 +95,19 @@
                                     </Viewbox>
                                 </Border>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock 
-                                  Visibility="{Binding VisibilityOrganization, Converter={StaticResource BoolToVis}}"
-                                   FontFamily="Segoe UI Light" 
-                                   TextWrapping="WrapWithOverflow" 
-                                   Margin="14,0,0,0"
-                                   FontSize="10pt"
-                                
-                                   Text="{Binding DataContext.Organization, ElementName=customerControlPDF}"/>
-                                    <TextBlock 
-                                   Visibility="{Binding VisibilityLocation, Converter={StaticResource BoolToVis}}"
-                                   FontFamily="Segoe UI Light" 
-                                   TextWrapping="WrapWithOverflow" 
-                                HorizontalAlignment="Left"
-                                     Margin="14,0,0,5"
-                                   FontSize="10pt"
-                                   Text="{Binding DataContext.Location, ElementName=customerControlPDF}"/>
+                                    <TextBlock Visibility="{Binding VisibilityOrganization, Converter={StaticResource BoolToVis}}"
+                                               FontFamily="Segoe UI Light" 
+                                               TextWrapping="WrapWithOverflow" 
+                                               Margin="14,0,0,0"
+                                               FontSize="10pt"    
+                                               Text="{Binding CustomerCompany}"/>
+                                    <TextBlock Visibility="{Binding VisibilityLocation, Converter={StaticResource BoolToVis}}"
+                                               FontFamily="Segoe UI Light" 
+                                               TextWrapping="WrapWithOverflow" 
+                                               HorizontalAlignment="Left"
+                                               Margin="14,0,0,5"
+                                               FontSize="10pt"
+                                               Text="{Binding CustomerLocation}"/>
                                 </StackPanel>
 
                             </Grid>
@@ -124,16 +121,15 @@
                     </Grid.RowDefinitions>
                     <StackPanel  HorizontalAlignment="Stretch" Background="Transparent" Orientation="Vertical" >
                         <TextBlock FontSize="34pt" 
-                           FontFamily="Segoe UI Light" 
-                           Text="КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ"
-                           TextAlignment="Center"
-                           TextWrapping="Wrap"   
-                           />
+                                   FontFamily="Segoe UI Light" 
+                                   Text="КОММЕРЧЕСКОЕ ПРЕДЛОЖЕНИЕ"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
                         <TextBlock FontFamily="Segoe UI Light" Grid.Row="1" Background="Transparent" Margin="0,-10,0,0"
-                           FontSize="26pt" 
-                           TextWrapping="WrapWithOverflow" 
-                           TextAlignment="Center"
-                           Text="{Binding DataContext.KpName, ElementName=customerControlPDF}">
+                                   FontSize="26pt" 
+                                   TextWrapping="WrapWithOverflow" 
+                                   TextAlignment="Center"
+                                   Text="{Binding KpName}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>
@@ -153,7 +149,7 @@
         </StackPanel>
 
         <Viewbox Grid.Row="1">
-            <Image Height="180" Width="180" Stretch="Uniform" Source="{Binding ModBanner, Mode=TwoWay}" />
+            <Image Height="180" Width="180" Stretch="Uniform" Source="{Binding Banner}" />
         </Viewbox>
 
     </Grid>

@@ -101,12 +101,14 @@ namespace OfferMaker.ViewModels
 
         #region Constructor
 
-        public ObservableCollection<DebugTreeItem> DebugTree
+        #region Offer
+
+        public string CreateDateString
         {
-            get => modelMain.Constructor.DebugTree; 
+            get => modelMain.Constructor.Offer.CreateDateString;
             set
             {
-                modelMain.Constructor.DebugTree = value;
+                modelMain.Constructor.Offer.CreateDateString = value;
                 OnPropertyChanged();
             }
         }
@@ -211,6 +213,30 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public string Banner
+        {
+            get => modelMain.Constructor.Offer.Banner;
+            set
+            {
+                modelMain.Constructor.Offer.Banner = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<string> AfterTitleCollection { get => modelMain.Constructor.Offer.AfterTitleCollection; }
+
+        #endregion Offer
+
+        public ObservableCollection<DebugTreeItem> DebugTree
+        {
+            get => modelMain.Constructor.DebugTree;
+            set
+            {
+                modelMain.Constructor.DebugTree = value;
+                OnPropertyChanged();
+            }
+        }
+
         public FixedDocument PdfDocument
         {
             get => modelMain.Constructor.PdfDocument;
@@ -227,6 +253,36 @@ namespace OfferMaker.ViewModels
             set
             {
                 modelMain.Constructor.PhotoLogo = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PhotoNumber
+        {
+            get => modelMain.Constructor.PhotoNumber;
+            set
+            {
+                modelMain.Constructor.PhotoNumber = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PhotoCustomer
+        {
+            get => modelMain.Constructor.PhotoCustomer;
+            set
+            {
+                modelMain.Constructor.PhotoCustomer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PhotoAdress
+        {
+            get => modelMain.Constructor.PhotoAdress;
+            set
+            {
+                modelMain.Constructor.PhotoAdress = value;
                 OnPropertyChanged();
             }
         }

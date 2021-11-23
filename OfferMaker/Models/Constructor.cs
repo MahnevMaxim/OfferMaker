@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows.Documents;
+using System.Windows.Media.Imaging;
 
 namespace OfferMaker
 {
@@ -14,8 +15,19 @@ namespace OfferMaker
     /// </summary>
     public class Constructor : BaseModel
     {
+        #region MVVM
+
+        #region Fields
+
         FixedDocument pdfDocument;
         string photoLogo;
+        string photoNumber;
+        string photoCustomer;
+        string photoAdress;
+
+        #endregion Fields
+
+        #region Properties
 
         /// <summary>
         /// Сущность коммерческого предложения, хранящая все настройки и данные.
@@ -37,6 +49,35 @@ namespace OfferMaker
             }
         }
 
+        public string PhotoNumber
+        {
+            get => photoNumber;
+            set
+            {
+                photoNumber = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PhotoCustomer
+        {
+            get => photoCustomer;
+            set
+            {
+                photoCustomer = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PhotoAdress
+        {
+            get => photoAdress;
+            set
+            {
+                photoAdress = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Документ для предпросмотра.
@@ -51,10 +92,31 @@ namespace OfferMaker
             }
         }
 
+        #endregion Properties
+
+        #endregion MVVM
+
+        #region Fields
+
+        /// <summary>
+        /// Маленький логотип внизу документа.
+        /// </summary>
+        BitmapImage smallLogo;
+
+        #endregion Fields
+
         #region Singleton
 
         private Constructor()
         {
+            Uri uri = new Uri(AppDomain.CurrentDomain.BaseDirectory + "common_images\\logosmall.png", UriKind.Absolute);
+            smallLogo = new BitmapImage(uri);
+            PhotoLogo = AppDomain.CurrentDomain.BaseDirectory + "common_images\\logo.png";
+            PhotoNumber = AppDomain.CurrentDomain.BaseDirectory + "common_images\\number.png";
+            PhotoCustomer = AppDomain.CurrentDomain.BaseDirectory + "common_images\\customer.png";
+            PhotoAdress = AppDomain.CurrentDomain.BaseDirectory + "common_images\\address.png";
+            Offer.Banner = Settings.GetDefaultBanner();
+            Offer.AfterTitleCollection = new ObservableCollection<string>() { Offer.Banner, Offer.Banner, Offer.Banner, Offer.Banner, Offer.Banner, Offer.Banner };
             Offer.PropertyChanged += Offer_PropertyChanged;
         }
             
@@ -86,19 +148,21 @@ namespace OfferMaker
             CreatePdf();
         }
 
+        /// <summary>
+        /// Обновление документа КП.
+        /// </summary>
         private void CreatePdf()
         {
             FlowDocument flowDocument = ((Views.MainWindow)viewModel.view).pdfControl.flowDocumentAll;
-            WrapperAllPages wrapper = new WrapperAllPages(flowDocument, viewModel);
-            FixedDocument fd1 = wrapper.GetPdf(2, 1, 1, 1);
-            PdfDocument = fd1;
+            WrapperAllPages wrapper = new WrapperAllPages(flowDocument, viewModel, smallLogo);
+            PdfDocument = wrapper.GetPdf(2, 1, 1, 1);
         }
 
         /// <summary>
         /// Добавление новой группы в конструктор.
         /// </summary>
         internal void AddOfferGroup() => Offer.OfferGroups.Add(new OfferGroup() { GroupTitle = "ГРУППА" });
-        
+
 
         /// <summary>
         /// Удаление группы из конструктора.
@@ -136,6 +200,19 @@ namespace OfferMaker
             Offer.PropertyChanged += Offer_PropertyChanged;
             Offer.OnPropertyChanged(String.Empty);
             viewModel.OnPropertyChanged(String.Empty);
+        }
+
+        /// <summary>
+        /// Окно выбора баннера и рекламмы.
+        /// </summary>
+        internal void OpenBanners()
+        {
+            MvvmFactory.CreateWindow(Global.Main.BannersManager, new ViewModels.BannersManagerViewModel(), new Views.BannersManager(), ViewMode.ShowDialog);
+            if(Global.Main.BannersManager.SelectedBanner!=null)
+            {
+                Offer.Banner = Global.Main.BannersManager.SelectedBanner;
+                viewModel.OnPropertyChanged(String.Empty);
+            }
         }
     }
 }

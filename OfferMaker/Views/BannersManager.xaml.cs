@@ -10,19 +10,22 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
-namespace OfferMaker.Pdf
+namespace OfferMaker.Views
 {
     /// <summary>
-    /// Interaction logic for PdfControl.xaml
+    /// Interaction logic for BannersManager.xaml
     /// </summary>
-    public partial class PdfControl : UserControl
+    public partial class BannersManager : MetroWindow, IView
     {
-        public PdfControl()
+        public BannersManager()
         {
             InitializeComponent();
         }
+
+        void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);
     }
 }

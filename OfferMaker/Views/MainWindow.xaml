@@ -6,6 +6,7 @@
                  xmlns:local="clr-namespace:OfferMaker.Views"
                  xmlns:root="clr-namespace:OfferMaker"
                  xmlns:controls="clr-namespace:OfferMaker.Controls"
+                 xmlns:pdf="clr-namespace:OfferMaker.Pdf"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
@@ -135,7 +136,7 @@
                                                 Height="14"/>
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource MultiConverter}">
-                            <Binding Source="DelNomenclatureFromGroup"/>
+                            <Binding Source="DelNomFromNomenclatureGroup"/>
                             <Binding Path="."/>
                         </MultiBinding>
                     </Button.CommandParameter>
@@ -171,18 +172,6 @@
                                 Height="35"
                                 Width="35"
                                 Margin="5"
-                                ToolTip="Баннер"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconRadixIcons Kind="Image"
-                                                          Width="20"
-                                                          Height="20"/>
-                        </Button>
-                        <Button CommandParameter="FindProfile"
-                                VerticalAlignment="Top"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
                                 ToolTip="Описание"
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
                             <iconPacks:PackIconMaterial Kind="Text"
@@ -201,6 +190,22 @@
                                                           Width="20"
                                                           Height="20"/>
                         </Button>
+                        <Border Width="62"
+                                Height="62"
+                                Margin="5"
+                                VerticalAlignment="Top"
+                                BorderThickness="1"
+                                BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+                            <Image Source="{Binding Banner}"  
+                                   Margin="2"
+                                   ToolTip="Баннер">
+                                <Image.InputBindings>
+                                    <MouseBinding MouseAction="LeftClick"
+                                                  CommandParameter="OpenBanners"
+                                                  Command="{Binding Cmd}"/>
+                                </Image.InputBindings>
+                            </Image>
+                        </Border>
                         <ComboBox ItemsSource="{Binding Managers}"
                                   SelectedItem="{Binding Manager}"
                                   Width="150"
@@ -491,7 +496,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="400" MinWidth="400" MaxWidth="900"/>
+                <ColumnDefinition Width="800" MinWidth="400" MaxWidth="900"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
@@ -547,7 +552,7 @@
 
             <GridSplitter Width="2" Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />
 
-            <controls:PdfControl x:Name="pdfControl" Grid.Column="2"/>
+            <pdf:PdfControl x:Name="pdfControl" Grid.Column="2"/>
         </Grid>
 
         <Grid Grid.Row="1">

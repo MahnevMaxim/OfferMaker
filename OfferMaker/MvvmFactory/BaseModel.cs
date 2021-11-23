@@ -38,7 +38,7 @@ namespace OfferMaker
             else
             {
                 List<object> params_ = (List<object>)parameters;
-                if(params_.Count==3)
+                if (params_.Count == 3)
                 {
                     GetType().GetMethod(params_[0] as string)?.Invoke(this, new object[] { params_[1], params_[2], });
                 }
@@ -53,7 +53,7 @@ namespace OfferMaker
         /// Кто знает более правильный метод закрывания окна из модели - может поделиться.
         /// </summary>
         protected void Close() => viewModel.view.Close();
-        
+
 
         #region INotifyPropertyChanged code
 

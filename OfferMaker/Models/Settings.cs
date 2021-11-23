@@ -120,5 +120,13 @@ namespace OfferMaker
             Application.Current.Resources["DataGrid.OddRow.Background"] = new SolidColorBrush(Color.FromArgb(255, 115, 194, 251));
             ThemeManager.Current.ChangeTheme(Application.Current, theme);
         }
+
+        public static void SetDefaultBanner(string path)
+        {
+            AppSettings.Default.DefaultBanner = path;
+            AppSettings.Default.Save();
+        }
+
+        public static string GetDefaultBanner() => AppSettings.Default.DefaultBanner;
     }
 }

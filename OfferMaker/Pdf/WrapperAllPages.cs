@@ -8,27 +8,30 @@ using OfferMaker.Pdf;
 using OfferMaker.Controls;
 using System.Windows;
 using System.Windows.Markup;
+using System.Windows.Media.Imaging;
+using OfferMaker.Pdf.Views;
 
 namespace OfferMaker
 {
     class WrapperAllPages
     {
         private FlowDocument sourceDocument;
-        private System.Windows.Media.Imaging.BitmapImage image;
+        private BitmapImage image;
         object _context;
         private double left, top, right, bottom;
 
-        public WrapperAllPages(FlowDocument flowDocumentAll, object context)
+        public WrapperAllPages(FlowDocument flowDocumentAll, object context, BitmapImage image)
         {
+            this.image = image;
             sourceDocument = flowDocumentAll;
             _context = context;
         }
 
         internal FixedDocument GetPdf(double Left, double Top, double Right, double Bottom)
         {
-            left = Left; 
+            left = Left;
             top = Top;
-            right = Right; 
+            right = Right;
             bottom = Bottom;
             FixedDocument result = new FixedDocument();
             result.DocumentPaginator.PageSize = PrintLayout.A4.Size;
@@ -54,38 +57,51 @@ namespace OfferMaker
             PageContainer pageContainerShort = null;
             PageContainer pageContainerOptionShort = null;
             PageContainer pageContainerGroup = null;
-            PageContainer pageContainer = new PageContainer(GetWidth(), GetHeight(), pageNumber, image, _context);//создаем одинн контейнер на весь документ
-            
+            PageContainer pageContainer = new PageContainer(GetWidth(), GetHeight(), pageNumber, image, _context); //создаем одинн контейнер на весь документ
+
             object lastGroup = null;
             foreach (Block block in blocks)
             {
-                if (block is Paragraph)
-                {
-                    if (((Paragraph)block).Inlines.FirstInline is InlineUIContainer)
-                    {
+                if (!(block is Paragraph)) continue;
+                if (!(((Paragraph)block).Inlines.FirstInline is InlineUIContainer)) continue;
 
-                        InlineUIContainer container = (InlineUIContainer)((Paragraph)block).Inlines.FirstInline;
-                        //титульник
-                        if (container.Child is TitulView)
+                InlineUIContainer container = (InlineUIContainer)((Paragraph)block).Inlines.FirstInline;
+
+                //титульник
+                if (container.Child is TitulView)
+                {
+                    pageContainer.TryAddElement(((IClonable)(System.Windows.Controls.UserControl)container.Child).Copy());
+                    p_container.Add(pageContainer); //когда страница закончилась
+                }
+
+                //рекламные баннеры
+                if (block.Name == "adv")
+                {
+                    PageContainer pageContainerAd = new PageContainer(GetWidth(), GetHeight(), -1, image, _context);
+                    foreach (var item in ((System.Windows.Controls.ItemsControl)container.Child).Items)
+                    {
+                        AdView adBlock = new AdView(item);
+                        AdView adBlock2 = (AdView)((IClonable)adBlock).Copy();
+                        if (adBlock2 != null)
                         {
-                            pageContainer.TryAddElement(((IClonable)(System.Windows.Controls.UserControl)container.Child).Copy());
-                            p_container.Add(pageContainer);//когда страница закончилась
+                            pageContainerAd.TryAddElement(adBlock2);
+                            ad_container.Add(pageContainerAd);
+                            pageContainerAd = new PageContainer(GetWidth(), GetHeight(), -1, image, _context);
                         }
+                    }
+
+                    foreach (PageContainer page in ad_container)
+                    {
+                        p_container.Add(page);
                     }
                 }
             }
             return p_container;
         }
 
-        double GetWidth()
-        {
-            return PrintLayout.A4.Size.Width - ((left + right) * PrintLayout.A4.Size.Width / 21);
-        }
+        double GetWidth() => PrintLayout.A4.Size.Width - ((left + right) * PrintLayout.A4.Size.Width / 21);
 
-        double GetHeight()
-        {
-            return PrintLayout.A4.Size.Height - ((top + bottom) * PrintLayout.A4.Size.Height / 29.7);
-        }
+        double GetHeight() => PrintLayout.A4.Size.Height - ((top + bottom) * PrintLayout.A4.Size.Height / 29.7);
 
         FixedDocument GetFixedDocument(List<PageContainer> pagesContainer)
         {
@@ -99,6 +115,7 @@ namespace OfferMaker
         }
 
         enum Colontitul { None, WithNumeric, WithoutNumeric }
+
         PageContent GetPageContent(List<UIElement> elements, Colontitul colontitul)
         {
             PageContent result = new PageContent();

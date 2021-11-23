@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 
-namespace OfferMaker.Controls
+namespace OfferMaker.Pdf
 {
     public interface IClonable
     {

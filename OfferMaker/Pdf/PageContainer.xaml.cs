@@ -54,11 +54,8 @@ namespace OfferMaker.Controls
             Arrange(new Rect(new Size(_width, _height)));
         }
 
-        public UserControl Copy()
-        {
-            return this;
-        }
-
+        public UserControl Copy() => this;
+        
         public double TryAddElement(UserControl element)
         {
             element.Width = _width;
