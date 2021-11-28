@@ -128,5 +128,7 @@ namespace OfferMaker
         }
 
         public static string GetDefaultBanner() => AppSettings.Default.DefaultBanner;
+
+        public static int GetMaxInfoblocksCount() => AppSettings.Default.MaxInfoblocksCount;
     }
 }

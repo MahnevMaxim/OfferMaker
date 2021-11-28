@@ -54,6 +54,10 @@ namespace OfferMaker
 
         OfferGroup offerGroup;
 
+        /// <summary>
+        /// Передаём ссылку на группу, в которую будем добавлять номенклатуру.
+        /// </summary>
+        /// <param name="offerGroup"></param>
         public AddNomToConstructor(OfferGroup offerGroup)
         {
             Nomenclatures = Global.Main.Catalog.Nomenclatures;
@@ -74,7 +78,9 @@ namespace OfferMaker
                 OnSendMessage("Выберите номенклатуру для добавления");
                 return;
             }
-            offerGroup.NomWrappers.Add(new NomWrapper() { Nomenclature = Helpers.CloneObject<Nomenclature>(SelectedNomenclature) });
+            Nomenclature nomenclature = Helpers.CloneObject<Nomenclature>(SelectedNomenclature);
+            offerGroup.NomWrappers.Add(new NomWrapper(offerGroup, nomenclature));
+            offerGroup.OnPropertyChanged(string.Empty);
             Close();
         }
 
@@ -88,8 +94,13 @@ namespace OfferMaker
                 OnSendMessage("Выберите группу номенклатур для добавления");
                 return;
             }
+            List<NomWrapper> list = new List<NomWrapper>();
             foreach(var nomen in SelectedNomGroup.Nomenclatures)
-                offerGroup.NomWrappers.Add(new NomWrapper() { Nomenclature = Helpers.CloneObject<Nomenclature>(nomen) });
+            {
+                var nom = Helpers.CloneObject<Nomenclature>(nomen);
+                list.Add(new NomWrapper(offerGroup, nom));
+            }
+            offerGroup.AddNomenclatures(list);
             Close();
         }
     }

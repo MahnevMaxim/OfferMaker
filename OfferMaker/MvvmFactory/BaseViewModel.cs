@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace OfferMaker
 {
-    public abstract class BaseViewModel : INotifyPropertyChanged
+    public abstract class BaseViewModel : BaseEntity
     {
         public BaseModel model;
         public IView view;
@@ -34,17 +34,6 @@ namespace OfferMaker
         public event CommandHandler SendCommand;
 
         public RelayCommand Cmd { get => new RelayCommand(obj => SendCommand(obj)); }
-
-        #endregion
-
-        #region INotifyPropertyChanged code
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
 
         #endregion
     }

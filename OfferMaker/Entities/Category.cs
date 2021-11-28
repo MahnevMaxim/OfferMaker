@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace OfferMaker
 {
-    public class Category : ICategory
+    public class Category : BaseEntity
     {
         public int Id { get; set; }
 

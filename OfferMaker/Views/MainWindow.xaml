@@ -10,6 +10,7 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
+                 xmlns:dd="urn:gong-wpf-dragdrop"
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="0"
@@ -18,7 +19,130 @@
 
     <Window.Resources>
         <root:MultiConverter x:Key="MultiConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
+
+    <mah:MetroWindow.Flyouts>
+
+        <mah:FlyoutsControl x:Name="Flyouts">
+            
+            <mah:Flyout Header="Описание"
+                        Position="Left"
+                        IsModal="True"
+                        IsOpen="{Binding IsInfoBlocksOpen}">
+                <StackPanel Width="700" Margin="5 5 5 5">
+                    <ItemsControl ItemsSource="{Binding OfferInfoBlocks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <CheckBox IsChecked="{Binding IsEnabled}" Margin="5,0" VerticalAlignment="Top"/>
+                                    <TextBox Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                             IsEnabled="{Binding IsEnabled}"
+                                             Margin="0,0,5,5" Grid.Column="1" AcceptsReturn="True"
+                                             VerticalAlignment="Top"/>
+                                    <Button Style="{StaticResource MahApps.Styles.Button.Square}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.Cmd}"
+                                            Visibility="{Binding IsCustom, Converter={StaticResource BoolToVis}}"
+                                            Height="25"
+                                            Width="25"
+                                            Margin="5,0,6,0"
+                                            VerticalAlignment="Top"
+                                            Grid.Column="2"
+                                            ToolTip="Удалить">
+                                        <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
+                                                    Width="14"
+                                                    Height="14"/>
+                                        <Button.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                <Binding Source="RemoveInformBlock"/>
+                                                <Binding Path="."/>
+                                            </MultiBinding>
+                                        </Button.CommandParameter>
+                                    </Button>
+                                    <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             IsEnabled="{Binding IsEnabled}"
+                                             Margin="5" Grid.Row="1" Grid.ColumnSpan="3" AcceptsReturn="True"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Button Content="Добавить информационный блок" 
+                            CommandParameter="AddInformBlock"
+                            Command="{Binding Cmd}"
+                            Style="{DynamicResource MahApps.Styles.Button.Square}"
+                            Margin="10"/>
+                </StackPanel>
+
+            </mah:Flyout>
+
+            <mah:Flyout Header="Скидка"
+                        IsModal="True"
+                        Position="Left"
+                        IsOpen="{Binding IsDiscountOpen}">
+                <StackPanel Width="300" Margin="40">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="50"/>
+                        </Grid.RowDefinitions>
+                        <mah:NumericUpDown Margin="10"
+                                           Maximum="100"
+                                           Minimum="0"
+                                           Width="100"
+                                           Height="30"
+                                           StringFormat="N2"
+                                           Value="{Binding Discount.Percentage}" 
+                                           HorizontalAlignment="Right"/>
+                        <CheckBox IsChecked="{Binding Discount.IsPercentage}" 
+                                  Content="считать в %" 
+                                  Grid.Column="1" 
+                                  HorizontalAlignment="Left"
+                                  Margin="10"
+                                  ToolTip="Если стоит галочка, то при применении скидки&#x0a;при изменении цены скидка будет высчитываться по процентам,&#x0a;иначе - по величине, установленной в поле РАЗМЕР СКИДКИ"/>
+                        <TextBlock Text="первоначальная цена" Grid.Row="1" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center"/>
+                        <TextBlock Text="размер скидки" Grid.Row="2" HorizontalAlignment="Right" Margin="10" VerticalAlignment="Center"/>
+                        <TextBlock Text="цена КП со скидкой" Grid.Row="3" HorizontalAlignment="Right"  Margin="10" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding TotalSum, StringFormat={}{0:N2}}" Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Center"/>
+                        <TextBox Text="{Binding Discount.DiscountSum, StringFormat={}{0:N2}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="10"/>
+                        <TextBox Text="{Binding Discount.PriceWithDiscount, StringFormat={}{0:N2}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="10"/>
+                        <Button Content="Применить" 
+                                Grid.Row="4" Grid.Column="0"
+                                CommandParameter="AddInformBlock"
+                                Command="{Binding Cmd}"
+                                Style="{DynamicResource MahApps.Styles.Button.Square}"
+                                Margin="10"
+                                Height="30"/>
+                        <Button Content="Отмена" 
+                                Grid.Row="4" Grid.Column="1"
+                                CommandParameter="AddInformBlock"
+                                Command="{Binding Cmd}"
+                                Style="{DynamicResource MahApps.Styles.Button.Square}"
+                                Height="30"
+                                Margin="10"/>
+                    </Grid>
+                    
+                </StackPanel>
+            </mah:Flyout>
+            
+        </mah:FlyoutsControl>
+        
+    </mah:MetroWindow.Flyouts>
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands ShowLastSeparator="False">
@@ -147,13 +271,14 @@
 
         <TabControl x:Name="tabControl"
                     Grid.Row="0"
+                    Margin="0"
                     mah:TabControlHelper.Underlined="TabItems">
             <TabItem Header="Конструктор" 
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
                 <Grid Background="{Binding Settings.AdditionalColor}">
                     <StackPanel Orientation="Horizontal"
-                                Margin="5">
+                                Margin="5,5,5,0">
                         <Button CommandParameter="FindProfile"
                                 VerticalAlignment="Top"
                                 Command="{Binding Cmd}"
@@ -163,20 +288,45 @@
                                 ToolTip="Фото юзера, профиль, админка"
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
                             <iconPacks:PackIconMaterial Kind="CardAccountDetailsOutline"
-                                                        Width="20"
-                                                        Height="20"/>
+                                                        Width="23"
+                                                        Height="23"/>
                         </Button>
-                        <Button CommandParameter="FindProfile"
+                        <Button Name="FlyInfoBlocks"
                                 VerticalAlignment="Top"
-                                Command="{Binding Cmd}"
+                                Command="{Binding FlyInfoBlocks}"
                                 Height="35"
                                 Width="35"
                                 Margin="5"
                                 ToolTip="Описание"
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
                             <iconPacks:PackIconMaterial Kind="Text"
-                                                          Width="20"
-                                                          Height="20"/>
+                                                          Width="23"
+                                                          Height="23"/>
+                        </Button>
+                        <Button Name="EditCustomer"
+                                VerticalAlignment="Top"
+                                Command="{Binding Cmd}"
+                                CommandParameter="EditCustomer"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                ToolTip="Клиент"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                            <iconPacks:PackIconMaterial Kind="AccountCashOutline"
+                                                          Width="23"
+                                                          Height="23"/>
+                        </Button>
+                        <Button Name="FlyDiscount"
+                                VerticalAlignment="Top"
+                                Command="{Binding FlyDiscount}"
+                                Height="35"
+                                Width="35"
+                                Margin="5"
+                                ToolTip="Скидка"
+                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                            <iconPacks:PackIconFontAwesome Kind="PercentageSolid"
+                                                          Width="23"
+                                                          Height="23"/>
                         </Button>
                         <Button CommandParameter="SkipOffer"
                                 VerticalAlignment="Top"
@@ -184,11 +334,11 @@
                                 Height="35"
                                 Width="35"
                                 Margin="5"
-                                ToolTip="Скидка"
+                                ToolTip="Новое КП"
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconFontAwesome Kind="PercentageSolid"
-                                                          Width="20"
-                                                          Height="20"/>
+                            <iconPacks:PackIconMaterial Kind="NewBox"
+                                                          Width="23"
+                                                          Height="23"/>
                         </Button>
                         <Border Width="62"
                                 Height="62"
@@ -242,10 +392,9 @@
                         <StackPanel Margin="5">
                             <CheckBox IsChecked="{Binding ResultSummInRub}" 
                                       Content="Итоговая сумма в рублях"
-                                      Margin="0,5"/>
+                                      Margin="0,0,0,5"/>
                             <ComboBox ItemsSource="{Binding UsingCurrencies}" 
                                       SelectedItem="{Binding Currency}"
-                                      DisplayMemberPath="CharCode"
                                       Width="150"
                                       mah:TextBoxHelper.UseFloatingWatermark="True"
                                       mah:TextBoxHelper.Watermark="Валюта"
@@ -266,7 +415,6 @@
                                       IsChecked="{Binding IsHiddenTextNds}"
                                       Margin="0,5"/>
                         </StackPanel>
-
                     </StackPanel>
                 </Grid>
             </TabItem>
@@ -498,27 +646,111 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="800" MinWidth="400" MaxWidth="900"/>
             </Grid.ColumnDefinitions>
+            
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal" 
-                            Grid.Row="0"
-                            Margin="5">
-                    <TextBlock FontWeight="Bold"
-                               Text="Итоговая сумма"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"/>
-                    <TextBlock FontWeight="Bold"
-                               Text="0"
-                               Margin="5"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"/>
-                </StackPanel>
+
+                <Border Grid.Row="0"
+                        Margin="0, -3"
+                        BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
+                        BorderThickness="0 1 0 2">
+                    <Grid Background="{DynamicResource MahApps.Brushes.Accent4}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="30"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="350"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="80"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="80"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="1" 
+                                   VerticalAlignment="Center"
+                                   Margin="5"
+                                   Text="Затраты"
+                                   FontFamily="Arial"
+                                   FontSize="12"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Column="2" 
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   Text="Наценка"
+                                   FontFamily="Arial"
+                                   FontSize="12"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Column="4" 
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   Text="Прибыль"
+                                   FontFamily="Arial"
+                                   FontSize="12"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Column="7" 
+                                   Margin="5"
+                                   VerticalAlignment="Center"
+                                   Text="Сумма"
+                                   FontFamily="Arial"
+                                   FontSize="12"
+                                   FontWeight="Bold"/>
+
+                        <TextBlock Grid.Column="0" 
+                                    Grid.Row="1" 
+                                   VerticalAlignment="Center"
+                                   Text="Итого:"
+                                   FontFamily="Arial"
+                                   FontSize="12"
+                                   Margin="30,0"
+                                   TextAlignment="Right"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Column="1"
+                                   Margin="5"
+                                    Grid.Row="1" 
+                                   VerticalAlignment="Center"
+                                   Text="{Binding TotalCostPriceSum, StringFormat=F2}"
+                                   FontFamily="Arial"
+                                   FontSize="12"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Column="2" 
+                                   Margin="5"
+                                   Grid.Row="1" 
+                                   VerticalAlignment="Center"
+                                   Text="{Binding AverageMarkup, StringFormat=F2}"
+                                   FontFamily="Arial"
+                                   FontSize="12"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Column="4"
+                                   Margin="5"
+                                   Grid.Row="1" 
+                                   VerticalAlignment="Center"
+                                   Text="{Binding ProfitSum, StringFormat=F2}"
+                                   FontFamily="Arial"
+                                   FontSize="12"
+                                   FontWeight="Bold"/>
+                        <TextBlock Grid.Column="7"
+                                   Margin="5"
+                                   Grid.Row="1" 
+                                   VerticalAlignment="Center"
+                                   Text="{Binding TotalSum, StringFormat=F2}"
+                                   FontFamily="Arial"
+                                   FontSize="12"
+                                   FontWeight="Bold"/>
+                    </Grid>
+
+                </Border>
+                
                 <ListView Grid.Row="1"
                           ItemsSource="{Binding OfferGroups}"
+                          dd:DragDrop.IsDropTarget="True" 
+                          dd:DragDrop.IsDragSource="True"
                           Margin="5">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListViewItem}">
@@ -536,7 +768,7 @@
                         <DataTemplate>
                             <Border BorderThickness="2"
                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
-                                    Margin="5">
+                                    Margin="5,10">
                                 <controls:OfferGroupItemControl/>
                             </Border>
                         </DataTemplate>
@@ -547,7 +779,7 @@
                         Command="{Binding Cmd}"
                         Content="Добавить"
                         Style="{DynamicResource MahApps.Styles.Button.Square}"
-                        Margin="5"/>
+                        Margin="10"/>
             </Grid>
 
             <GridSplitter Width="2" Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />
@@ -752,4 +984,5 @@
         </Grid>
 
     </Grid>
+    
 </mah:MetroWindow>

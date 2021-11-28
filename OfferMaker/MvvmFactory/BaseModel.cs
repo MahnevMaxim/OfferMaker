@@ -11,6 +11,7 @@ namespace OfferMaker
     abstract public class BaseModel : INotifyPropertyChanged
     {
         public BaseViewModel viewModel;
+        delegate void MethodContainer();
 
         #region Events
 
@@ -31,22 +32,20 @@ namespace OfferMaker
 
         internal void SendCommand(object parameters)
         {
-            if (parameters is string)
-            {
-                GetType().GetMethod(parameters.ToString())?.Invoke(this, null);
-            }
+            MethodContainer mc;
+            if (parameters is string) mc = () => GetType().GetMethod(parameters.ToString())?.Invoke(this, null);
             else
             {
                 List<object> params_ = (List<object>)parameters;
-                if (params_.Count == 3)
+                mc = params_.Count switch
                 {
-                    GetType().GetMethod(params_[0] as string)?.Invoke(this, new object[] { params_[1], params_[2], });
-                }
-                else
-                {
-                    GetType().GetMethod(params_[0] as string)?.Invoke(this, new object[] { params_[1] });
-                }
+                    2 => () => GetType().GetMethod(params_[0] as string)?.Invoke(this, new object[] { params_[1] }),
+                    3 => () => GetType().GetMethod(params_[0] as string)?.Invoke(this, new object[] { params_[1], params_[2] }),
+                    4 => () => GetType().GetMethod(params_[0] as string)?.Invoke(this, new object[] { params_[1], params_[2], params_[3] }),
+                    _ => () => throw new NotImplementedException()
+                };
             }
+            mc?.Invoke();
         }
 
         /// <summary>
@@ -63,6 +62,10 @@ namespace OfferMaker
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
             viewModel?.OnPropertyChanged(prop);
+            //if(viewModel!=null)
+            //    L.LW(viewModel.GetType().Name + " " + prop);
+            //else
+            //    L.LW(GetType().Name + " " + prop);
         }
 
         #endregion

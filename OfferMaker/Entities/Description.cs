@@ -7,12 +7,40 @@ using Shared;
 
 namespace OfferMaker
 {
-    public class Description : BaseModel, IDescription
+    public class Description : BaseEntity, IDescription
     {
-        public string Text { get; set; }
+        string text;
+        bool isEnabled = true;
+        bool isComment;
 
-        public bool IsEnabled { get; set; } = true;
+        public string Text
+        {
+            get => text;
+            set
+            {
+                text = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public bool IsComment { get; set; }
+        public bool IsEnabled
+        {
+            get => isEnabled;
+            set
+            {
+                isEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsComment
+        {
+            get => isComment;
+            set
+            {
+                isComment = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

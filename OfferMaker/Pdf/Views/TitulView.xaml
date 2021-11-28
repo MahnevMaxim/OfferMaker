@@ -4,11 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
+             xmlns:root="clr-namespace:OfferMaker"
              mc:Ignorable="d" 
              x:Name="title">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <root:EmptyStringToVisibilityConverter x:Key="TrueIfStringNotEmpty" />
     </UserControl.Resources>
 
     <Grid Background="White">
@@ -63,11 +65,23 @@
                         </Grid>
                         </Border>
                         <Border Grid.Row="1">
-                            <Grid Visibility="{Binding VisibilityPhotoCustomer}">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="6*"/>
                                 </Grid.ColumnDefinitions>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Setters>
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </Style.Setters>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Customer.FullName, Converter={StaticResource TrueIfStringNotEmpty}}" Value="False">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
                                 <Border Grid.Column="0" Margin="5">
                                     <Viewbox>
                                         <Image Stretch="None" Source="{Binding PhotoCustomer}"/>
@@ -80,34 +94,50 @@
                                            VerticalAlignment="Center" 
                                            FontSize="10pt" 
                                            HorizontalAlignment="Left"
-                                           Text="{Binding CustomerName}"/>
+                                           Text="{Binding Customer.FullName}"/>
                             </Grid>
                         </Border>
                         <Border  Grid.Row="2" >
-                            <Grid Visibility="{Binding VisibilityPhotoAdress, Converter={StaticResource BoolToVis}}">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="6*"/>
                                 </Grid.ColumnDefinitions>
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Style.Setters>
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </Style.Setters>
+                                        <Style.Triggers>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding Customer.Organization, Converter={StaticResource TrueIfStringNotEmpty}}" Value="False"/>
+                                                    <Condition Binding="{Binding Customer.Location, Converter={StaticResource TrueIfStringNotEmpty}}" Value="False"/>
+                                                </MultiDataTrigger.Conditions>
+                                                <MultiDataTrigger.Setters>
+                                                    <Setter Property="Visibility" Value="Hidden" />
+                                                </MultiDataTrigger.Setters>
+                                            </MultiDataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
                                 <Border Grid.Column="0" Margin="5" >
                                     <Viewbox>
                                         <Image Source="{Binding PhotoAdress}"/>
                                     </Viewbox>
                                 </Border>
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock Visibility="{Binding VisibilityOrganization, Converter={StaticResource BoolToVis}}"
-                                               FontFamily="Segoe UI Light" 
+                                    <TextBlock FontFamily="Segoe UI Light" 
                                                TextWrapping="WrapWithOverflow" 
                                                Margin="14,0,0,0"
                                                FontSize="10pt"    
-                                               Text="{Binding CustomerCompany}"/>
-                                    <TextBlock Visibility="{Binding VisibilityLocation, Converter={StaticResource BoolToVis}}"
-                                               FontFamily="Segoe UI Light" 
+                                               Text="{Binding Customer.Organization}"/>
+                                    <TextBlock FontFamily="Segoe UI Light" 
                                                TextWrapping="WrapWithOverflow" 
                                                HorizontalAlignment="Left"
                                                Margin="14,0,0,5"
                                                FontSize="10pt"
-                                               Text="{Binding CustomerLocation}"/>
+                                               Text="{Binding Customer.Location}"/>
                                 </StackPanel>
 
                             </Grid>
@@ -129,7 +159,7 @@
                                    FontSize="26pt" 
                                    TextWrapping="WrapWithOverflow" 
                                    TextAlignment="Center"
-                                   Text="{Binding KpName}">
+                                   Text="{Binding OfferName}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
                                     <Style.Triggers>

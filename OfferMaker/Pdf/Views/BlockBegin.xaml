@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="OfferMaker.Pdf.Views.BlockBegin"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
+             mc:Ignorable="d" 
+             x:Name="main">
+    <StackPanel HorizontalAlignment="Stretch">
+        <Grid Width="18cm" Background="White">
+            <Rectangle Margin="0.212cm, 0, 0, 0" Stroke="Black" StrokeThickness="1"/>
+            <TextBlock Margin="0.6cm, 0.2cm, 0, 0.3cm" Text="{Binding GroupTitle}" FontSize="14pt" TextWrapping="WrapWithOverflow" FontFamily="Segoe UI Semibold"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

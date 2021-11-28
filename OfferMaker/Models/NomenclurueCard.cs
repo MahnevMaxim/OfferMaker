@@ -46,7 +46,7 @@ namespace OfferMaker
         {
             Nomenclature = nomenclature;
             CurrencyCharCode = nomenclature.CurrencyCharCode;
-            Currencies = Global.Main.UsingCurrencies.Select(c => c.CharCode).ToList();
+            Currencies = Global.Main.UsingCurrencies.ToList();
             if (!Currencies.Contains(CurrencyCharCode))
             {
                 Currencies.Add(CurrencyCharCode);

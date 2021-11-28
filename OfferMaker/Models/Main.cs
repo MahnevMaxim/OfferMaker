@@ -46,12 +46,13 @@ namespace OfferMaker
             }
         }
 
-        public ObservableCollection<Currency> UsingCurrencies
+        public ObservableCollection<string> UsingCurrencies
         {
             get
             {
                 if (currencies == null) return null;
-                return new ObservableCollection<Currency>(currencies.Where(c => c.IsEnabled || c.CharCode == "RUB"));
+                var list = currencies.Where(c => c.IsEnabled || c.CharCode == "RUB").Select(c=>c.CharCode).ToList();
+                return new ObservableCollection<string>(list);
             }
         }
 
@@ -233,19 +234,61 @@ namespace OfferMaker
 
         #region Constructor
 
+        #region OfferGroup
+
         public void AddOfferGroup() => Constructor.AddOfferGroup();
 
         public void DelOfferGroup(OfferGroup offerGroup) => Constructor.DelOfferGroup(offerGroup);
 
         public void AddNomenclatureToOfferGroup(OfferGroup offerGroup) => Constructor.AddNomenclatureToOfferGroup(offerGroup);
 
+        public void UpOfferGroup(OfferGroup offerGroup) => Constructor.UpOfferGroup(offerGroup);
+
+        public void DownOfferGroup(OfferGroup offerGroup) => Constructor.DownOfferGroup(offerGroup);
+
+        #endregion OfferGroup
+
+        #region NomWrapper
+
         public void DeleteNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => Constructor.DeleteNomWrapper(nomWrapper, offerGroup);
 
         public void DeleteDescriptionFromNomWrapper(Description description, NomWrapper nomWrapper) => Constructor.DeleteDescriptionFromNomWrapper(description, nomWrapper);
 
+        public void DescriptionMoveUp(Description description, NomWrapper nomWrapper) => Constructor.DescriptionMoveUp(description, nomWrapper);
+
+        public void DescriptionMoveDown(Description description, NomWrapper nomWrapper) => Constructor.DescriptionMoveDown(description, nomWrapper);
+
+        public void OpenDescriptions(NomWrapper nomWrapper) => Constructor.OpenDescriptions(nomWrapper);
+
+        public void CloseRowDetails(NomWrapper nomWrapper) => Constructor.CloseRowDetails(nomWrapper);
+
+        public void AddDescriptionToNomWrapper(NomWrapper nomWrapper) => Constructor.AddDescriptionToNomWrapper(nomWrapper);
+
+        public void AddCommentToNomWrapper(NomWrapper nomWrapper) => Constructor.AddCommentToNomWrapper(nomWrapper);
+
+        public void MoveUpNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => Constructor.MoveUpNomWrapper(nomWrapper, offerGroup);
+
+        public void MoveDownNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => Constructor.MoveDownNomWrapper(nomWrapper, offerGroup);
+
+        #endregion NomWrapper
+
+        #region Etc
+
         public void SkipOffer() => Constructor.SkipOffer();
 
+        public void EditCustomer() => Constructor.EditCustomer();
+
         public void OpenBanners() => Constructor.OpenBanners();
+
+        public void AddInformBlock()
+        {
+            var cr = Constructor.AddInformBlock();
+            if (!cr.Success) OnSendMessage(cr.Error.Message);
+        }
+            
+        public void RemoveInformBlock(OfferInfoBlock offerInfoBlock) => Constructor.RemoveInformBlock(offerInfoBlock);
+
+        #endregion Etc
 
         #endregion Constructor
 

@@ -32,10 +32,6 @@ namespace OfferMaker.Pdf.Views
             InitializeComponent();
         }
 
-        public UserControl Copy()
-        {
-            TitulView titul = new TitulView(DataContext);
-            return titul;
-        }
+        public UserControl Copy() => new TitulView(DataContext);
     }
 }

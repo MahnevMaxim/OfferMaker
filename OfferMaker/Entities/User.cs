@@ -8,7 +8,7 @@ using Shared;
 
 namespace OfferMaker
 {
-    public class User : IUser
+    public class User : BaseEntity
     {
         public int Id { get; set; }
 

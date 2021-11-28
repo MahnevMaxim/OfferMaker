@@ -1,0 +1,223 @@
+﻿<UserControl x:Class="OfferMaker.Pdf.Views.DetailCalculateEnd"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
+             mc:Ignorable="d" 
+             xmlns:convert="clr-namespace:OfferMaker.Pdf">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
+        <convert:NumConvertors x:Key="numConvertors"></convert:NumConvertors>
+    </UserControl.Resources>
+
+    <StackPanel HorizontalAlignment="Stretch" Width="18cm">
+        <Grid Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Итоговая стоимость" 
+                       Margin="0.6cm,0.3cm,0,0.2cm"
+                       VerticalAlignment="Center" 
+                       FontSize="14pt" 
+                       FontFamily="Segoe UI" />
+
+            <TextBlock Text="{Binding TotalSumWithoutOptions, Converter={StaticResource numConvertors}}"
+                       HorizontalAlignment="Right"
+                       Margin="0,5,0,0" 
+                       Grid.Column="3" 
+                       VerticalAlignment="Center" 
+                       FontSize="18pt" 
+                       FontFamily="Segoe UI Semibold">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                                <Setter Property="TextBlock.TextDecorations">
+                                    <Setter.Value>
+                                        <TextDecorationCollection>
+                                            <TextDecoration Location="Strikethrough">
+                                                <TextDecoration.Pen>
+                                                    <Pen Brush="Black" Thickness="2"/>
+                                                </TextDecoration.Pen>
+                                            </TextDecoration>
+                                        </TextDecorationCollection>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="TextBlock.Foreground" Value="Black"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                                <Setter Property="TextBlock.TextDecorations">
+                                    <Setter.Value>
+                                        <TextDecorationCollection>
+                                            <TextDecoration Location="Strikethrough">
+                                                <TextDecoration.Pen>
+                                                    <Pen Brush="{x:Null}" Thickness="0"/>
+                                                </TextDecoration.Pen>
+                                            </TextDecoration>
+                                        </TextDecorationCollection>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="TextBlock.Foreground" Value="#1074bc"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <TextBlock Text="{Binding Currency}"
+                       HorizontalAlignment="Left" 
+                       Margin="5,5,10,0" 
+                       Grid.Column="4"  
+                       VerticalAlignment="Center"
+                       FontSize="18pt" 
+                       FontFamily="Segoe UI Semibold">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                                <Setter Property="TextBlock.Foreground" Value="Black"/>
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                                <Setter Property="TextBlock.Foreground" Value="#1074bc"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <TextBlock Text="Персональная скидка клиента" 
+                       FontSize="14pt" 
+                       Grid.Column="0" Grid.Row="1" 
+                       FontFamily="Segoe UI "
+                       Margin="23,5,0,0">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <TextBlock Text="{Binding DataContext.ModMainVMProperty.Discount.DiscountSize, Converter={StaticResource numConvertors}}"
+                       FontSize="14pt"
+                       HorizontalAlignment="Right"
+                       Grid.Column="3" Grid.Row="1" 
+                       FontFamily="Segoe UI semibold"
+                       Margin="0,5,0,0">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <TextBlock Text="{Binding DataContext.ModMainVMProperty.TotalSumVM.ValuteName}"
+                       FontSize="14pt" 
+                       HorizontalAlignment="Left" 
+                       Grid.Column="4" Grid.Row="1" 
+                       FontFamily="Segoe UI semibold"
+                       Margin="5,5,0,0">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <TextBlock Text="Итоговая стоимость со скидкой" 
+                       FontSize="14pt" 
+                       Grid.Column="0" Grid.Row="2" 
+                       FontFamily="Segoe UI"
+                       Margin="23,10,0,0">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                                <Setter Property="TextBlock.Foreground" Value="DodgerBlue"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <TextBlock Text="{Binding DataContext.ModMainVMProperty.SummGroups, Converter={StaticResource numConvertors}}" 
+                       FontSize="14pt"
+                       HorizontalAlignment="Right"
+                       Grid.Column="3" Grid.Row="2" 
+                       FontFamily="Segoe UI semibold"
+                       Margin="0,10,0,0">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                                <Setter Property="TextBlock.Foreground" Value="DodgerBlue"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <TextBlock Text="{Binding DataContext.ModMainVMProperty.TotalSumVM.ValuteName}" 
+                       FontSize="14pt" 
+                       Grid.Column="4" Grid.Row="2" 
+                       FontFamily="Segoe UI semibold"
+                       Margin="5,10,0,0">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                                <Setter Property="TextBlock.Foreground" Value="DodgerBlue"></Setter>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
+            <Line X1="0.5" Y1="0" X2="0.5" Y2="0.6cm" Stroke="Black" StrokeThickness="1" Margin="0.212cm,0,0,0" />
+            <Ellipse Fill="White" Width="0.4cm" Height="0.4cm" Stroke="Black" StrokeThickness="1" Margin="0.030cm,0.45cm,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        </Grid>
+
+    </StackPanel>
+</UserControl>

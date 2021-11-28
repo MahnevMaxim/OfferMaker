@@ -95,6 +95,11 @@
                               MinWidth="150"
                               AlternationCount="2"
                               IsReadOnly="True">
+                        <DataGrid.InputBindings>
+                            <MouseBinding MouseAction="LeftDoubleClick"
+                                          Command="{Binding Cmd}"
+                                          CommandParameter="AddNomenclature"/>
+                        </DataGrid.InputBindings>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="310" DisplayIndex="0">
                                 <DataGridTextColumn.ElementStyle>
@@ -144,6 +149,11 @@
                               AutoGenerateColumns="False"
                               CanUserAddRows="False"
                               IsReadOnly="True">
+                        <DataGrid.InputBindings>
+                            <MouseBinding MouseAction="LeftDoubleClick"
+                                          Command="{Binding Cmd}"
+                                          CommandParameter="AddNomenclatureGroup"/>
+                        </DataGrid.InputBindings>
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Название" Binding="{Binding Name}" DisplayIndex="0">
                                 <DataGridTextColumn.ElementStyle>

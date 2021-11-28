@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="OfferMaker.Pdf.Views.ShortCalculateOptionEnd"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
+             mc:Ignorable="d" 
+             xmlns:convert="clr-namespace:OfferMaker.Pdf"
+             Background="White">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
+        <convert:NumConvertors x:Key="numConvertors"/>
+    </UserControl.Resources>
+    <Grid Width="18cm" Name="ShortEndGrid" VerticalAlignment="Bottom">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="1cm"/>
+        </Grid.RowDefinitions>
+        <Line X1="0.1875cm"  Y1="0" X2="{Binding ElementName=ShortEndGrid, Path=ActualWidth}" Y2="0" Stroke="Black" StrokeThickness="1" SnapsToDevicePixels="True" />
+    </Grid>
+</UserControl>

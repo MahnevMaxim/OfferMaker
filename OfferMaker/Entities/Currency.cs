@@ -7,7 +7,7 @@ using Shared;
 
 namespace OfferMaker
 {
-    public class Currency : BaseModel, ICurrency
+    public class Currency : BaseEntity, ICurrency
     {
         bool isEnabled;
 

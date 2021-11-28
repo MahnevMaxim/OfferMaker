@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+using System.ComponentModel;
+
+namespace OfferMaker
+{
+    abstract public class BaseEntity : INotifyPropertyChanged
+    {
+        #region INotifyPropertyChanged code
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            //L.LW(GetType().Name + " " + prop);
+        }
+
+        #endregion
+    }
+}

@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace OfferMaker
 {
-    public class DebugTreeItem : BaseModel
+    public class DebugTreeItem : BaseEntity
     {
         string propertyName;
         string propertyType;

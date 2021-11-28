@@ -19,6 +19,19 @@ namespace OfferMaker
         /// </summary>
         public ObservableCollection<string> Advertisings { get; set; } = new ObservableCollection<string>();
 
+        /// <summary>
+        /// Рекламные материалы вверху.
+        /// </summary>
+        public ObservableCollection<string> AdvertisingsUp = new ObservableCollection<string>();
+
+        /// <summary>
+        /// Рекламные материалы внизу.
+        /// </summary>
+        public ObservableCollection<string> AdvertisingsDown = new ObservableCollection<string>();
+
+        /// <summary>
+        /// Выбранный баннер.
+        /// </summary>
         public string SelectedBanner { get; set; }
 
         #region Singleton
@@ -31,6 +44,10 @@ namespace OfferMaker
 
         #endregion Singleton
 
+        /// <summary>
+        /// Срабатывает при двойном клике по баннеру. Выбирает баннер, сохраняет его и закрывает окно.
+        /// </summary>
+        /// <param name="path"></param>
         public void SelectBanner(string path)
         {
             SelectedBanner = path;

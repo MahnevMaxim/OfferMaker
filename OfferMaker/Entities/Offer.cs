@@ -7,24 +7,132 @@ using System.Collections.ObjectModel;
 
 namespace OfferMaker
 {
-    public class Offer : BaseModel
+    public class Offer : BaseEntity
     {
+        /// <summary>
+        /// Счётчик добавлений групп в текущем КП,
+        /// используется только для выводв названия групп.
+        /// </summary>
+        public int addGroupsCounter;
+        /// <summary>
+        /// Обсервер.
+        /// </summary>
+        Constructor constructor;
+
         ObservableCollection<OfferGroup> offerGroups = new ObservableCollection<OfferGroup>();
-        ObservableCollection<string> afterTitleCollection;
+        ObservableCollection<OfferInfoBlock> offerInfoBlocks = new ObservableCollection<OfferInfoBlock>();
+        ObservableCollection<string> advertisingsUp;
+        ObservableCollection<string> advertisingsDown;
+        DateTime createDate = DateTime.Now;
         User manager;
         User offerCreator;
+        Currency currency;
+        Customer customer = new Customer();
+        Discount discount;
+        string createDateString;
+        string banner;
+        string offerName;
         bool isHiddenTextNds;
         bool isWithNds = true;
-        Currency currency;
         bool resultSummInRub;
         bool isShowPriceDetails;
         bool isCreateByCostPrice;
         bool isHideNomsPrice;
-        DateTime createDate = DateTime.Now;
-        string createDateString;
-        string banner;
+
 
         public int Id { get; set; }
+
+        /// <summary>
+        /// Группы номенклатур для контрола конструктора.
+        /// </summary>
+        public ObservableCollection<OfferGroup> OfferGroups
+        {
+            get => offerGroups;
+            set
+            {
+                offerGroups = value;
+                OnPropertyChanged(string.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Коллекция информблоков.
+        /// </summary>
+        public ObservableCollection<OfferInfoBlock> OfferInfoBlocks
+        {
+            get => offerInfoBlocks;
+            set
+            {
+                offerInfoBlocks = value;
+                if (offerInfoBlocks != null) offerInfoBlocks.CollectionChanged += OfferInfoBlocks_CollectionChanged;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Рекламмные материалы, идущие после титульника.
+        /// </summary>
+        public ObservableCollection<string> AdvertisingsUp
+        {
+            get => advertisingsUp;
+            set
+            {
+                advertisingsUp = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Рекламмные материалы, идущие внизу.
+        /// </summary>
+        public ObservableCollection<string> AdvertisingsDown
+        {
+            get => advertisingsDown;
+            set
+            {
+                advertisingsDown = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Дата создания КП.
+        /// </summary>
+        public DateTime CreateDate
+        {
+            get => createDate;
+            set
+            {
+                createDate = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Валюта, в которую надо пересчитать КП.
+        /// </summary>
+        public Currency Currency
+        {
+            get => currency;
+            set
+            {
+                currency = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Данные клиента.
+        /// </summary>
+        public Customer Customer
+        {
+            get => customer;
+            set
+            {
+                customer = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Создатель КП.
@@ -44,13 +152,18 @@ namespace OfferMaker
         /// </summary>
         public User Manager
         {
-            get => manager;
+            get => manager ?? offerCreator;
             set
             {
                 manager = value;
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Большая картинка с телефоном справа от менеджера.
+        /// </summary>
+        public string PhotoNumberTeh { get => constructor.PhotoNumberTeh; }
 
         /// <summary>
         /// Баннер.
@@ -70,21 +183,6 @@ namespace OfferMaker
             }
         }
 
-        public ObservableCollection<string> Images { get; set; }
-
-        /// <summary>
-        /// Дата создания КП.
-        /// </summary>
-        public DateTime CreateDate
-        {
-            get => createDate;
-            set
-            {
-                createDate = value;
-                OnPropertyChanged();
-            }
-        }
-
         /// <summary>
         /// Отображение даты в удобочитаемом формате.
         /// </summary>
@@ -98,35 +196,73 @@ namespace OfferMaker
             }
         }
 
-        public string OfferName { get; set; }
-
-        public Customer Customer { get; set; }
-
-        public decimal TotalSum { get; set; }
-
         /// <summary>
-        /// Рекламмные материалы, идущие после титульника.
+        /// Название КП.
         /// </summary>
-        public ObservableCollection<string> AfterTitleCollection
+        public string OfferName
         {
-            get => afterTitleCollection;            
+            get => offerName;
             set
             {
-                afterTitleCollection = value;
+                offerName = value;
                 OnPropertyChanged();
             }
         }
 
         /// <summary>
-        /// Группы номенклатур для контрола конструктора.
+        /// Полная цена КП.
         /// </summary>
-        public ObservableCollection<OfferGroup> OfferGroups
+        public decimal TotalSum
         {
-            get => offerGroups;
-            set
+            get
             {
-                offerGroups = value;
-                OnPropertyChanged(string.Empty);
+                decimal totalSum = 0;
+                OfferGroups.ToList().ForEach(o => totalSum += o.PriceSum);
+                return totalSum;
+            }
+        }
+
+        /// <summary>
+        /// Полная цена КП.
+        /// </summary>
+        public decimal TotalSumWithoutOptions
+        {
+            get
+            {
+                decimal totalSum = 0;
+                OfferGroups.ToList().Where(o=>!o.IsOption).ToList().ForEach(o => totalSum += o.PriceSum);
+                return totalSum;
+            }
+        }
+
+        /// <summary>
+        /// Себестоимость КП.
+        /// </summary>
+        public decimal TotalCostPriceSum
+        {
+            get
+            {
+                decimal totalSum = 0;
+                OfferGroups.ToList().ForEach(o => totalSum += o.CostPriceSum);
+                return totalSum;
+            }
+        }
+
+        /// <summary>
+        /// Усрелнённая наценка в текущем КП.
+        /// </summary>
+        public decimal AverageMarkup { get => TotalCostPriceSum != 0 ? TotalSum / TotalCostPriceSum : 0; }
+
+        /// <summary>
+        /// Предполагаемая сумма прибыли с КП.
+        /// </summary>
+        public decimal ProfitSum
+        {
+            get
+            {
+                decimal totalSum = 0;
+                OfferGroups.ToList().ForEach(o => totalSum += o.ProfitSum);
+                return totalSum;
             }
         }
 
@@ -209,16 +345,29 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Валюта, в которую надо пересчитать КП.
+        /// Объект дисконта.
         /// </summary>
-        public Currency Currency
+        public Discount Discount { get => discount; }
+
+        private Offer() { }
+
+        public Offer(Constructor constructor)
         {
-            get => currency;
-            set
-            {
-                currency = value;
-                OnPropertyChanged();
-            }
+            this.constructor = constructor;
+            PropertyChanged += Offer_PropertyChanged;
+            OfferInfoBlocks.CollectionChanged += OfferInfoBlocks_CollectionChanged;
+            discount = new Discount(this);
         }
+
+        private void OfferInfoBlocks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => OnPropertyChanged(string.Empty);
+
+        private void Offer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) => constructor?.OnPropertyChanged(string.Empty);
+
+        /// <summary>
+        /// Чтобы не получить переполнение стека.
+        /// </summary>
+        /// <param name="curr"></param>
+        internal void SetCurrencySilent(Currency curr) => currency = curr;
+
     }
 }

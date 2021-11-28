@@ -32,10 +32,6 @@ namespace OfferMaker.Pdf.Views
             this.DataContext = DataContext;
         }
 
-        public UserControl Copy()
-        {
-            AdView titul = new AdView(DataContext);
-            return titul;
-        }
+        public UserControl Copy() => new AdView(DataContext);
     }
 }

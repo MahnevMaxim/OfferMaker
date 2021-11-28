@@ -14,16 +14,16 @@
     </UserControl.Resources>
     
     <TabControl x:Name="tabControl1"
+                SelectedIndex="{Binding PdfControlSelectedIndex}"
                 mah:TabControlHelper.Underlined="TabItems"
-                Grid.Column="2"
-                SelectedIndex="2">
-        <TabItem Header="Debug"
+                Grid.Column="2">
+        <!--<TabItem Header="Debug"
                  mah:TabControlHelper.Underlined="TabPanel"
                  mah:HeaderedControlHelper.HeaderFontSize="12">
             <Grid Background="#FFE5E5E5">
                 <TreeView ItemsSource="{Binding DebugTree}"/>
             </Grid>
-        </TabItem>
+        </TabItem>-->
         <TabItem Header="Рабочая"
                  mah:TabControlHelper.Underlined="TabPanel"
                  mah:HeaderedControlHelper.HeaderFontSize="12">
@@ -43,42 +43,106 @@
                     </Paragraph>
 
                     <Paragraph Margin="0" x:Name="adv">
-                        <ItemsControl ItemsSource="{Binding AfterTitleCollection}">
+                        <ItemsControl ItemsSource="{Binding AdvertisingsUp}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Viewbox Stretch="Uniform">
                                         <local:AdView/>
-                                        <!--<Canvas Name="MainCanvas" Height="27.7cm" Width="18cm"
-                                                MaxHeight="27.7cm" MaxWidth="18cm"
-                                                AllowDrop="True" 
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Stretch">
-                                            <Canvas.Background>
-                                                <ImageBrush ImageSource="{Binding  Path=.}"/>
-                                            </Canvas.Background>
-                                        </Canvas>-->
                                     </Viewbox>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <!--<ListBox ItemsSource="{Binding AfterTitleCollection}" Height="1000"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 Margin="5">
-                            <ListBox.ItemTemplate>
+                    </Paragraph>
+
+                    <!--краткий-->
+                    <Paragraph Margin="0">
+                        <local:ShortCalculateBegin/>
+                    </Paragraph>
+
+                    <Paragraph Margin="0" x:Name="ShortBody">
+                        <ItemsControl ItemsSource="{Binding OfferGroups}">
+                            <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Width="100" Height="100"
-                                            BorderThickness="1"
-                                            BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                        <Image Source="{Binding Path=.}"
-                                               Margin="5">
-                                        </Image>
-                                    </Border>
+                                    <StackPanel HorizontalAlignment="Stretch">
+                                        <local:ShortCalculateBody/>
+                                    </StackPanel>
                                 </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>-->
-                        
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Paragraph>
+
+                    <Paragraph Margin="0" x:Name="ShortEnd">
+                        <local:ShortCalculateEnd/>
+                    </Paragraph>
+
+                    <!--краткий опции-->
+                    <Paragraph Margin="0" >
+                        <local:ShortCalculateOptionBegin/>
+                    </Paragraph>
+
+                    <Paragraph Margin="0" x:Name="ShortOptionBody">
+                        <ItemsControl ItemsSource="{Binding OfferGroups}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Viewbox Stretch="Uniform">
+                                        <local:ShortCalculateOptionBody/>
+                                    </Viewbox>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Paragraph>
+
+                    <Paragraph Margin="0" x:Name="ShortOptionEnd">
+                        <local:ShortCalculateOptionEnd/>
                     </Paragraph>
                     
+                    <!--Дополнительная информация-->
+                    <Paragraph x:Name="InformBlockPDF">
+                        <ItemsControl Margin="0" ItemsSource="{Binding OfferInfoBlocks}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <local:InformBlockPDF/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Paragraph>
+
+                    <!--Менеджер-->
+                    <Paragraph>
+                        <local:EmployeePDF/>
+                    </Paragraph>
+
+                    <!--Детальный расчёт-->
+                    <Paragraph Margin="0" >
+                        <local:DetailCalculateBegin/>
+                    </Paragraph>
+
+                    <Paragraph x:Name="DetailBody" Margin="0" BreakPageBefore="True" >
+                        <ItemsControl Margin="0" ItemsSource="{Binding OfferGroups}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Vertical" >
+                                        <local:BlockBegin Margin="0"/>
+                                        <ItemsControl ItemsSource="{Binding NomWrappers}" Margin="0">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <!--<Paragraph BreakPageBefore="True">-->
+                                                    <local:BlockBody/>
+                                                    <!--</Paragraph>-->
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <local:BlockEnd/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Paragraph>
+
+                    <Paragraph Margin="0" BreakPageBefore="True">
+                        <local:DetailCalculateEnd/>
+                    </Paragraph>
+
                 </FlowDocument>
             </FlowDocumentScrollViewer>
         </TabItem>

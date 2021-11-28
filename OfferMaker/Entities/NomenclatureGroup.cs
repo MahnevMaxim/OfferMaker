@@ -12,7 +12,7 @@ namespace OfferMaker
     /// <summary>
     /// Именованная группа номенклатур для каталога.
     /// </summary>
-    public class NomenclatureGroup 
+    public class NomenclatureGroup : BaseEntity
     {
         ObservableCollection<Nomenclature> nomenclatures;
 

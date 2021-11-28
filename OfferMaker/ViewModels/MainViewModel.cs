@@ -13,17 +13,43 @@ namespace OfferMaker.ViewModels
     public class MainViewModel : BaseViewModel
     {
         Main modelMain;
+        private bool isInfoBlocksOpen = false;
+        private bool isDiscountOpen = false;
 
         public override void InitializeViewModel()
         {
             modelMain = (Main)model;
         }
 
+        public bool IsInfoBlocksOpen
+        {
+            get { return isInfoBlocksOpen; }
+            set
+            {
+                isInfoBlocksOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsDiscountOpen
+        {
+            get { return isDiscountOpen; }
+            set
+            {
+                isDiscountOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public RelayCommand FlyInfoBlocks { get => new RelayCommand(obj => IsInfoBlocksOpen = true); }
+
+        public RelayCommand FlyDiscount { get => new RelayCommand(obj => IsDiscountOpen = true); }
+
         #region Catalog
 
         public ObservableCollection<Nomenclature> Nomenclatures
         {
-            get => modelMain.Catalog.Nomenclatures; 
+            get => modelMain.Catalog.Nomenclatures;
             set
             {
                 modelMain.Catalog.Nomenclatures = value;
@@ -33,7 +59,7 @@ namespace OfferMaker.ViewModels
 
         public ObservableCollection<NomenclatureGroup> NomenclatureGroups
         {
-            get => modelMain.Catalog.NomenclatureGroups; 
+            get => modelMain.Catalog.NomenclatureGroups;
             set
             {
                 modelMain.Catalog.NomenclatureGroups = value;
@@ -43,7 +69,7 @@ namespace OfferMaker.ViewModels
 
         public NomenclatureGroup SelectedNomenclatureGroup
         {
-            get => modelMain.Catalog.SelectedNomenclatureGroup; 
+            get => modelMain.Catalog.SelectedNomenclatureGroup;
             set
             {
                 modelMain.Catalog.SelectedNomenclatureGroup = value;
@@ -53,7 +79,7 @@ namespace OfferMaker.ViewModels
 
         public ObservableCollection<Category> CategoriesTree
         {
-            get => modelMain.Catalog.CategoriesTree; 
+            get => modelMain.Catalog.CategoriesTree;
             set
             {
                 modelMain.Catalog.CategoriesTree = value;
@@ -63,7 +89,7 @@ namespace OfferMaker.ViewModels
 
         public Category SelectedCat
         {
-            get => modelMain.Catalog.SelectedCat; 
+            get => modelMain.Catalog.SelectedCat;
             set
             {
                 modelMain.Catalog.SelectedCat = value;
@@ -83,7 +109,7 @@ namespace OfferMaker.ViewModels
 
         public ObservableCollection<Currency> Currencies
         {
-            get => modelMain.Currencies; 
+            get => modelMain.Currencies;
             set
             {
                 modelMain.Currencies = value;
@@ -91,7 +117,7 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public ObservableCollection<Currency> UsingCurrencies { get => modelMain.UsingCurrencies; }
+        public ObservableCollection<string> UsingCurrencies { get => modelMain.UsingCurrencies; }
 
         public User User { get => modelMain.User; }
 
@@ -103,6 +129,18 @@ namespace OfferMaker.ViewModels
 
         #region Offer
 
+        public Discount Discount { get => modelMain.Constructor.Offer.Discount;}
+
+        public decimal TotalCostPriceSum { get => modelMain.Constructor.Offer.TotalCostPriceSum; }
+
+        public decimal TotalSum { get => modelMain.Constructor.Offer.TotalSum; }
+
+        public decimal AverageMarkup { get => modelMain.Constructor.Offer.AverageMarkup; }
+
+        public decimal ProfitSum { get => modelMain.Constructor.Offer.ProfitSum; }
+
+        public decimal TotalSumWithoutOptions { get => modelMain.Constructor.Offer.TotalSumWithoutOptions; }
+
         public string CreateDateString
         {
             get => modelMain.Constructor.Offer.CreateDateString;
@@ -113,19 +151,20 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public Currency Currency
+        public string Currency
         {
-            get => modelMain.Constructor.Offer.Currency; 
+            get => modelMain.Constructor.Offer.Currency?.ToString();
             set
             {
-                modelMain.Constructor.Offer.Currency = value;
+                Currency curr = modelMain.Currencies.Where(c => c.CharCode == value).First();
+                modelMain.Constructor.Offer.SetCurrencySilent(curr);
                 OnPropertyChanged();
             }
         }
 
         public User Manager
         {
-            get => modelMain.Constructor.Offer.Manager; 
+            get => modelMain.Constructor.Offer.Manager;
             set
             {
                 modelMain.Constructor.Offer.Manager = value;
@@ -135,7 +174,7 @@ namespace OfferMaker.ViewModels
 
         public ObservableCollection<OfferGroup> OfferGroups
         {
-            get => modelMain.Constructor.Offer.OfferGroups; 
+            get => modelMain.Constructor.Offer.OfferGroups;
             set
             {
                 modelMain.Constructor.Offer.OfferGroups = value;
@@ -143,9 +182,19 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public ObservableCollection<OfferInfoBlock> OfferInfoBlocks
+        {
+            get => modelMain.Constructor.Offer.OfferInfoBlocks;
+            set
+            {
+                modelMain.Constructor.Offer.OfferInfoBlocks = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsHiddenTextNds
         {
-            get => modelMain.Constructor.Offer.IsHiddenTextNds; 
+            get => modelMain.Constructor.Offer.IsHiddenTextNds;
             set
             {
                 modelMain.Constructor.Offer.IsHiddenTextNds = value;
@@ -155,7 +204,7 @@ namespace OfferMaker.ViewModels
 
         public bool ResultSummInRub
         {
-            get => modelMain.Constructor.Offer.ResultSummInRub; 
+            get => modelMain.Constructor.Offer.ResultSummInRub;
             set
             {
                 modelMain.Constructor.Offer.ResultSummInRub = value;
@@ -165,7 +214,7 @@ namespace OfferMaker.ViewModels
 
         public bool IsShowPriceDetails
         {
-            get => modelMain.Constructor.Offer.IsShowPriceDetails; 
+            get => modelMain.Constructor.Offer.IsShowPriceDetails;
             set
             {
                 modelMain.Constructor.Offer.IsShowPriceDetails = value;
@@ -175,7 +224,7 @@ namespace OfferMaker.ViewModels
 
         public bool IsCreateByCostPrice
         {
-            get => modelMain.Constructor.Offer.IsCreateByCostPrice; 
+            get => modelMain.Constructor.Offer.IsCreateByCostPrice;
             set
             {
                 modelMain.Constructor.Offer.IsCreateByCostPrice = value;
@@ -223,9 +272,37 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public ObservableCollection<string> AfterTitleCollection { get => modelMain.Constructor.Offer.AfterTitleCollection; }
+        public string OfferName
+        {
+            get => modelMain.Constructor.Offer.OfferName;
+            set
+            {
+                modelMain.Constructor.Offer.OfferName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<string> AdvertisingsUp { get => modelMain.Constructor.Offer.AdvertisingsUp; }
+
+        public ObservableCollection<string> AdvertisingsDown { get => modelMain.Constructor.Offer.AdvertisingsDown; }
+
+        public Customer Customer
+        {
+            get => modelMain.Constructor.Offer.Customer;
+            set
+            {
+                modelMain.Constructor.Offer.Customer = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion Offer
+
+        public int PdfControlSelectedIndex
+        {
+            get => modelMain.Constructor.PdfControlSelectedIndex;
+            set => modelMain.Constructor.PdfControlSelectedIndex = value;
+        }
 
         public ObservableCollection<DebugTreeItem> DebugTree
         {
@@ -286,6 +363,8 @@ namespace OfferMaker.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public string PhotoNumberTeh { get => modelMain.Constructor.PhotoNumberTeh; }
 
         #endregion Constructor
     }

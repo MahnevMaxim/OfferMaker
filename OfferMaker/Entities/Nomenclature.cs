@@ -8,7 +8,7 @@ using Shared;
 
 namespace OfferMaker
 {
-    public class Nomenclature : BaseModel
+    public class Nomenclature : BaseEntity
     {
         decimal costPrice;
         decimal markup;

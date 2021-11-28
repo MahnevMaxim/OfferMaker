@@ -6,14 +6,53 @@ using System.Threading.Tasks;
 
 namespace OfferMaker
 {
-    public class Customer 
+    public class Customer : BaseEntity
     {
+        string fullName;
+        string position;
+        string location;
+        string organization;
+
         public int Id { get; set; }
 
-        public string FullName { get; set; }
+        public string FullName
+        {
+            get => fullName;
+            set
+            {
+                fullName = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string Location { get; set; }
+        public string Position
+        {
+            get => position;
+            set
+            {
+                position = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string Organization { get; set; }
+        public string Location
+        {
+            get => location;
+            set
+            {
+                location = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Organization
+        {
+            get => organization;
+            set
+            {
+                organization = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

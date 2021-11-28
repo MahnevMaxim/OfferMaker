@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="OfferMaker.Pdf.Views.ShortCalculateOptionBody"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
+             mc:Ignorable="d" 
+             xmlns:convert="clr-namespace:OfferMaker.Pdf">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
+        <convert:NumConvertors x:Key="numConvertors"/>
+    </UserControl.Resources>
+    <Grid Width="18cm" Name="GridViewTextBlock">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Name="TextBlockName" 
+            Grid.Column="0" 
+            Text="{Binding GroupTitle}" 
+            FontFamily="Segoe UI"
+            TextWrapping="WrapWithOverflow"                                                   
+            FontSize="12pt" 
+            Margin="23,2,10,10"/>
+
+        <TextBlock FontSize="12pt" 
+           Grid.Column="1" 
+           Text="{Binding Discount.OriginalPrice}" 
+           FontFamily="Segoe UI"
+           Margin="0,2,15,0">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Discount.IsApplied}" Value="True">
+                            <Setter Property="TextBlock.TextDecorations">
+                                <Setter.Value>
+                                    <TextDecorationCollection>
+                                        <TextDecoration Location="Strikethrough">
+                                            <TextDecoration.Pen>
+                                                <Pen Brush="Red" Thickness="2"/>
+                                            </TextDecoration.Pen>
+                                        </TextDecoration>
+                                    </TextDecorationCollection>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Discount.IsApplied}" Value="False">
+                            <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            <Setter Property="TextBlock.TextDecorations">
+                                <Setter.Value>
+                                    <TextDecorationCollection>
+                                        <TextDecoration Location="Strikethrough">
+                                            <TextDecoration.Pen>
+                                                <Pen Brush="Transparent" Thickness="0"/>
+                                            </TextDecoration.Pen>
+                                        </TextDecoration>
+                                    </TextDecorationCollection>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <TextBlock Name="TextBlockValue" 
+            FontSize="12pt" 
+            Grid.Column="2" 
+            Text="{Binding PriceSum}" 
+            FontFamily="Segoe UI "
+            Margin="0,2,5,10"/>
+
+        <TextBlock Name="TextBlockDescription" 
+            Grid.Column="3" 
+            FontSize="12pt" 
+            Text="{Binding CurrencySymbol}"
+            FontFamily="Segoe UI"
+            Margin="0,2,13,10"/>
+
+        <Grid Grid.ColumnSpan="4"  x:Name="linegrid" Background="Transparent">
+            <Line X1="0.2cm" Y1="0" X2="0.2cm" Y2="{Binding ActualHeight, ElementName=GridViewTextBlock}" Stroke="Black" StrokeThickness="1" SnapsToDevicePixels="True"  />
+            <Line X1="{Binding ElementName=GridViewTextBlock, Path=ActualWidth}" Y1="0" X2="{Binding ElementName=GridViewTextBlock, Path=ActualWidth}" Y2="{Binding ElementName=GridViewTextBlock, Path=ActualHeight}" Stroke="Black" StrokeThickness="2" SnapsToDevicePixels="True"  />
+        </Grid>
+    </Grid>
+</UserControl>

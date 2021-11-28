@@ -5,6 +5,7 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:local="clr-namespace:OfferMaker.Views"
                  mc:Ignorable="d"
+                 xmlns:dd="urn:gong-wpf-dragdrop"
                  xmlns:root="clr-namespace:OfferMaker"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
@@ -84,6 +85,8 @@
                             BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
                         <ListBox ItemsSource="{Binding Advertisings}" 
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 dd:DragDrop.IsDragSource="True"
+                                 dd:DragDrop.DragDropCopyKeyState="LeftMouseButton"
                                  Margin="5">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -123,8 +126,11 @@
                             <TabItem Header="После титульника"
                                      mah:TabControlHelper.Underlined="TabPanel"
                                      mah:HeaderedControlHelper.HeaderFontSize="14">
-                                <ListBox ItemsSource="{Binding Advertisings}" 
+                                <ListBox ItemsSource="{Binding AdvertisingsUp}" 
                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         dd:DragDrop.IsDropTarget="True" 
+                                         dd:DragDrop.IsDragSource="True"
+                                         ScrollViewer.CanContentScroll="False"
                                          Margin="5">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
@@ -142,8 +148,11 @@
                             <TabItem Header="В конец"
                                      mah:TabControlHelper.Underlined="TabPanel"
                                      mah:HeaderedControlHelper.HeaderFontSize="14">
-                                <ListBox ItemsSource="{Binding Advertisings}" 
+                                <ListBox ItemsSource="{Binding AdvertisingsDown}" 
                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         dd:DragDrop.IsDropTarget="True" 
+                                         dd:DragDrop.IsDragSource="True"
+                                         ScrollViewer.CanContentScroll="False"
                                          Margin="5">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
