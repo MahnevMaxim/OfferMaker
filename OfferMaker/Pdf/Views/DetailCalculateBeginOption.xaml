@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="OfferMaker.Pdf.Views.DetailCalculateBeginOption"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
+    </UserControl.Resources>
+
+    <StackPanel HorizontalAlignment="Stretch" Width="18cm">
+        <Grid Background="White" >
+            <TextBlock Margin="0.6cm, 0, 0, 0.2cm" VerticalAlignment="Bottom" Text="Детальный расчёт стоимости опций" FontSize="18pt" FontFamily="Segoe UI Semibold"/>
+            <Line X1="0.5" Y1="1.3cm" X2="0.5" Y2="0.8cm" Stroke="Black" StrokeThickness="1" Margin="0.212cm,0,0,0" />
+            <Ellipse Fill="White" Width="0.4cm" Height="0.4cm" Stroke="Black" StrokeThickness="1" Margin="0.025cm,0.5cm,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        </Grid>
+    </StackPanel>
+</UserControl>

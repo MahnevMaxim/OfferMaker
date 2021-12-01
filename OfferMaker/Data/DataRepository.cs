@@ -46,6 +46,10 @@ namespace OfferMaker
 
         async internal Task<CallResult<ObservableCollection<User>>> GetUsers() => await Proxy.GetUsers();
 
+        async internal Task<CallResult> SaveOffer(Offer offer) => await Proxy.SaveOffer(offer);
+
+        async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures) => await Proxy.SaveNomenclatures(nomenclatures);
+
         public void SyncData()
         {
 

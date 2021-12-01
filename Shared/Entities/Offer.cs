@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace Shared
 {
-    public class Offer : IOffer
+    public class Offer
     {
         public int Id { get; set; }
 
@@ -15,11 +15,7 @@ namespace Shared
 
         public User Manager { get; set; }
 
-        public ObservableCollection<string> Images { get; set; }
-
         public DateTime CreateDate { get; set; }
-
-        public string CommercialInJson { get; set; }
 
         public string OfferName { get; set; }
 
@@ -27,12 +23,30 @@ namespace Shared
 
         public decimal TotalSum { get; set; }
 
-        public ObservableCollection<Group> Groups { get; set; }
+        public ObservableCollection<OfferGroup> OfferGroups { get; set; }
+
+        public ObservableCollection<OfferInfoBlock> OfferInfoBlocks { get; set; }
 
         public bool IsHiddenTextNds { get; set; }
 
         public bool IsWithNds { get; set; }
 
         public Currency Currency { get; set; }
+
+        public ObservableCollection<string> AdvertisingsUp { get; set; }
+
+        public ObservableCollection<string> AdvertisingsDown { get; set; }
+
+        public string Banner { get; set; }
+        
+        public bool IsShowPriceDetails { get; set; }
+
+        public bool IsCreateByCostPrice { get; set; }
+
+        public bool IsHideNomsPrice { get; set; }
+
+        public bool ResultSummInRub { get; set; }
+
+        public Discount Discount { get; set; }
     }
 }

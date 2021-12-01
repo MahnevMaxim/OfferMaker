@@ -39,10 +39,6 @@ namespace API.Data
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Description>>(v));
 
-            builder.Entity<Nomenclature>().Property(p => p.Photos).HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
-
             builder.Entity<User>().Property(p => p.Permissions).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Permissions>>(v));

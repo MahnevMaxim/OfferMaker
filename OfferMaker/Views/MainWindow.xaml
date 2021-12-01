@@ -123,14 +123,14 @@
                         <TextBox Text="{Binding Discount.PriceWithDiscount, StringFormat={}{0:N2}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Margin="10"/>
                         <Button Content="Применить" 
                                 Grid.Row="4" Grid.Column="0"
-                                CommandParameter="AddInformBlock"
+                                CommandParameter="SetDiscount"
                                 Command="{Binding Cmd}"
                                 Style="{DynamicResource MahApps.Styles.Button.Square}"
                                 Margin="10"
                                 Height="30"/>
                         <Button Content="Отмена" 
                                 Grid.Row="4" Grid.Column="1"
-                                CommandParameter="AddInformBlock"
+                                CommandParameter="CancelDiscount"
                                 Command="{Binding Cmd}"
                                 Style="{DynamicResource MahApps.Styles.Button.Square}"
                                 Height="30"
@@ -394,7 +394,7 @@
                                       Content="Итоговая сумма в рублях"
                                       Margin="0,0,0,5"/>
                             <ComboBox ItemsSource="{Binding UsingCurrencies}" 
-                                      SelectedItem="{Binding Currency}"
+                                      SelectedItem="{Binding CurrencyCode}"
                                       Width="150"
                                       mah:TextBoxHelper.UseFloatingWatermark="True"
                                       mah:TextBoxHelper.Watermark="Валюта"
@@ -490,7 +490,7 @@
                                                         Width="20"
                                                         Height="20"/>
                         </Button>
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="SaveOffer"
                                 Command="{Binding Cmd}"
                                 Height="35"
                                 Width="35"
@@ -674,6 +674,7 @@
                             <ColumnDefinition Width="80"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="1" 
+                                   Visibility="{Binding IsShowPriceDetails, Converter={StaticResource BoolToVis}}" 
                                    VerticalAlignment="Center"
                                    Margin="5"
                                    Text="Затраты"
@@ -681,6 +682,7 @@
                                    FontSize="12"
                                    FontWeight="Bold"/>
                         <TextBlock Grid.Column="2" 
+                                   Visibility="{Binding IsShowPriceDetails, Converter={StaticResource BoolToVis}}" 
                                    Margin="5"
                                    VerticalAlignment="Center"
                                    Text="Наценка"
@@ -688,6 +690,7 @@
                                    FontSize="12"
                                    FontWeight="Bold"/>
                         <TextBlock Grid.Column="4" 
+                                   Visibility="{Binding IsShowPriceDetails, Converter={StaticResource BoolToVis}}" 
                                    Margin="5"
                                    VerticalAlignment="Center"
                                    Text="Прибыль"
@@ -712,6 +715,7 @@
                                    TextAlignment="Right"
                                    FontWeight="Bold"/>
                         <TextBlock Grid.Column="1"
+                                   Visibility="{Binding IsShowPriceDetails, Converter={StaticResource BoolToVis}}" 
                                    Margin="5"
                                     Grid.Row="1" 
                                    VerticalAlignment="Center"
@@ -720,6 +724,7 @@
                                    FontSize="12"
                                    FontWeight="Bold"/>
                         <TextBlock Grid.Column="2" 
+                                   Visibility="{Binding IsShowPriceDetails, Converter={StaticResource BoolToVis}}" 
                                    Margin="5"
                                    Grid.Row="1" 
                                    VerticalAlignment="Center"
@@ -728,6 +733,7 @@
                                    FontSize="12"
                                    FontWeight="Bold"/>
                         <TextBlock Grid.Column="4"
+                                   Visibility="{Binding IsShowPriceDetails, Converter={StaticResource BoolToVis}}" 
                                    Margin="5"
                                    Grid.Row="1" 
                                    VerticalAlignment="Center"
@@ -746,8 +752,9 @@
                     </Grid>
 
                 </Border>
-                
-                <ListView Grid.Row="1"
+
+                <ListView x:Name="offerGroupsListView"
+                          Grid.Row="1"
                           ItemsSource="{Binding OfferGroups}"
                           dd:DragDrop.IsDropTarget="True" 
                           dd:DragDrop.IsDragSource="True"
@@ -774,12 +781,20 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Button Grid.Row="2" 
-                        CommandParameter="AddOfferGroup"
-                        Command="{Binding Cmd}"
-                        Content="Добавить"
-                        Style="{DynamicResource MahApps.Styles.Button.Square}"
-                        Margin="10"/>
+                <Border Grid.Row="2"
+                        Margin="0, -3"
+                        BorderBrush="{DynamicResource MahApps.Brushes.Accent}"
+                        BorderThickness="0 2 0 0"
+                        Background="{DynamicResource MahApps.Brushes.Accent4}">
+                    <Button CommandParameter="AddOfferGroup"
+                            Command="{Binding Cmd}"
+                            Content="Добавить"
+                            Style="{DynamicResource MahApps.Styles.Button.Square}"
+                            Click="ButtonClickAddOfferGroup"
+                            Margin="10"/>
+                </Border>
+                
+                
             </Grid>
 
             <GridSplitter Width="2" Grid.Column="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />

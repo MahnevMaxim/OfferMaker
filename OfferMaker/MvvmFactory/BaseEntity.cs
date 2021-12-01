@@ -10,14 +10,18 @@ namespace OfferMaker
 {
     abstract public class BaseEntity : INotifyPropertyChanged
     {
+        internal bool IsPropertyChangedNoNull { get => PropertyChanged == null; }
+
         #region INotifyPropertyChanged code
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             if (PropertyChanged != null)
+            {
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
-            //L.LW(GetType().Name + " " + prop);
+                L.LW(GetType().Name + " " + prop);
+            }  
         }
 
         #endregion

@@ -79,6 +79,23 @@ namespace OfferMaker
             }
         }
 
+        async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures)
+        {
+            try
+            {
+
+                var newNoms = nomenclatures.Where(n => n.Id == 0 || n.GetIsEdit()==true).ToList();
+                IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
+                await client.NomenclaturesPUTAsync(noms);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                L.LW(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
+            }
+        }
+
         /// <summary>
         /// Пытаемся получить категории с сервера.
         /// </summary>
@@ -137,7 +154,7 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Пытаемся получить группы номенклатур с сервера.
+        /// Пытаемся сохранить группы номенклатур на сервере.
         /// </summary>
         /// <param name="nomenclatureGroups"></param>
         /// <returns></returns>

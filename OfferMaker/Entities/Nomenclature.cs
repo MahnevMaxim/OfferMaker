@@ -16,16 +16,28 @@ namespace OfferMaker
         decimal profit;
         string currencyCharCode;
         DateTime? lastChangePriceDate;
-
+        string photo;
 
         public int Id { get; set; }
 
+        /// <summary>
+        /// Название номенклатуры.
+        /// </summary>
         public string Title { get; set; }
 
+        /// <summary>
+        /// Категория.
+        /// </summary>
         public Category Category { get; set; }
 
+        /// <summary>
+        /// Описания.
+        /// </summary>
         public ObservableCollection<Description> Descriptions { get; set; }
 
+        /// <summary>
+        /// Себестоимость.
+        /// </summary>
         public decimal CostPrice
         {
             get => costPrice;
@@ -38,6 +50,9 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Наценка.
+        /// </summary>
         public decimal Markup
         {
             get => markup;
@@ -50,6 +65,9 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Цена.
+        /// </summary>
         public decimal Price 
         { 
             get => CostPrice * Markup;
@@ -68,6 +86,9 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Сумма прибыли при продаже.
+        /// </summary>
         public decimal Profit
         {
             get => Price - CostPrice;
@@ -82,10 +103,12 @@ namespace OfferMaker
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Markup));
                 OnPropertyChanged(nameof(Price));
-                
             }
         }
 
+        /// <summary>
+        /// Символьный код валюты.
+        /// </summary>
         public string CurrencyCharCode
         {
             get => currencyCharCode;
@@ -96,6 +119,9 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Дата последнего изменения цены.
+        /// </summary>
         public DateTime? LastChangePriceDate
         {
             get => lastChangePriceDate;
@@ -106,13 +132,37 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Срок в днях, по истечении которого цена номенклатуры теряет актуальность.
+        /// </summary>
         public int ActualPricePeriod { get; set; }
 
+        /// <summary>
+        /// Указывает, актуальна ли цена у номенклатуры.
+        /// </summary>
         public bool IsPriceActual { get; set; }
 
         /// <summary>
         /// Колекция, т.к. не понимаю: нужна одна картинка или несколько
         /// </summary>
-        public ObservableCollection<string> Photos { get; set; }
+        public string Photo 
+        {
+            get => photo;
+            set
+            {
+                photo = value;
+                if(!IsPropertyChangedNoNull) //чтобы во время сериализации не устанавливать isEdit
+                    SetIsEdit();
+            }
+        }
+
+        /// <summary>
+        /// Была ли номенклатура отредактирована.
+        /// </summary>
+        bool isEdit;
+
+        public void SetIsEdit() => isEdit = true;
+
+        public bool GetIsEdit() => isEdit;
     }
 }

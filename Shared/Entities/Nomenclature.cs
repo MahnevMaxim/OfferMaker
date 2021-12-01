@@ -36,6 +36,6 @@ namespace Shared
 
         public bool IsPriceActual { get; set; }
 
-        public ObservableCollection<string> Photos { get; set; }
+        public string Photo { get; set; }
     }
 }

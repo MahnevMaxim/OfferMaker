@@ -15,6 +15,17 @@ namespace OfferMaker
         bool isRowDetailsVisibility;
         int amount = 1;
         OfferGroup offerGroup;
+        Currency currency;
+
+        /// <summary>
+        /// Название номенклатуры.
+        /// </summary>
+        public string Title { get => Nomenclature.Title; }
+
+        /// <summary>
+        /// Объект номенклатурной единицы, которую оборачмваем.
+        /// </summary>
+        public Nomenclature Nomenclature { get; set; }
 
         /// <summary>
         /// Кол-во номенклатурных единиц.
@@ -25,40 +36,50 @@ namespace OfferMaker
             set
             {
                 amount = value;
+                L.LW("start");
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Sum));
                 OnPropertyChanged(nameof(CostSum));
                 OnPropertyChanged(nameof(ProfitSum));
-                offerGroup?.OnPropertyChanged(string.Empty);
+                offerGroup?.NomWrappers_CollectionChanged(null, null); 
             }
         }
 
         /// <summary>
-        /// Передаём в конструктор родительский класс, чтобы оповещать его об изменениях.
-        /// Это вариация обсервера минимальными затратами.
-        /// </summary>
-        /// <param name="offerGroup"></param>
-        public NomWrapper(OfferGroup offerGroup, Nomenclature nomenclature)
-        {
-            this.offerGroup = offerGroup;
-            Nomenclature = nomenclature;
-        }    
-        
-        /// <summary>
-        /// Делаем конструктор приватным, чтобы работал только публичный,
-        /// где мы передаём ссылку на родительский элемент.
-        /// </summary>
-        private NomWrapper() { }
-
-        /// <summary>
         /// Стоимость заданного кол-ва номенклатурных единиц.
         /// </summary>
-        public decimal Sum { get => Nomenclature.Price * amount; }
+        public decimal Sum 
+        {
+            get 
+            {
+                if(offerGroup.IsCreateByCostPrice) return Nomenclature.CostPrice * amount;
+                return Nomenclature.Price * amount;
+            } 
+        }
 
         /// <summary>
         /// Цена одной номенклатурной единицы.
         /// </summary>
-        public decimal Price { get => Nomenclature.Price; }
+        public decimal Price 
+        {
+            get
+            {
+                if (offerGroup.IsCreateByCostPrice) return Nomenclature.CostPrice;
+                return Nomenclature.Price;
+            }
+        }
+
+        /// <summary>
+        /// Наценка.
+        /// </summary>
+        public decimal Markup
+        {
+            get
+            {
+                if (offerGroup.IsCreateByCostPrice) return 1;
+                return Nomenclature.Markup;
+            }
+        }
 
         /// <summary>
         /// Себестоимость заданного кол-ва номенклатурных единиц.
@@ -68,7 +89,14 @@ namespace OfferMaker
         /// <summary>
         /// Суммарная прибыль с заданного кол-ва номенклатурных единиц.
         /// </summary>
-        public decimal ProfitSum { get => Nomenclature.Profit * amount; }
+        public decimal ProfitSum 
+        {
+            get
+            {
+                if (offerGroup.IsCreateByCostPrice) return 0;
+                return Nomenclature.Profit * amount;
+            } 
+        }
 
         /// <summary>
         /// Включать/отключать позицию.
@@ -95,15 +123,53 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Коллекция описаний.
+        /// </summary>
         public ObservableCollection<Description> Descriptions { get=> Nomenclature.Descriptions; }
 
-        public ObservableCollection<string> Photos { get => Nomenclature.Photos; }
-
-        public string Title { get => Nomenclature.Title; }
+        /// <summary>
+        /// Коллекция путей к фото номенклатуры.
+        /// </summary>
+        public string Photo { get => Nomenclature.Photo; }
 
         /// <summary>
-        /// Объект номенклатурной единицы, которую оборачмваем.
+        /// Валюта номенклатуры.
         /// </summary>
-        public Nomenclature Nomenclature { get; set; }
+        public Currency Currency
+        {
+            get
+            {
+                if (currency == null)
+                    currency = Global.Main.Currencies.Where(c => c.CharCode == Nomenclature.CurrencyCharCode).FirstOrDefault();
+                return currency;
+            }
+            set
+            {
+                currency = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Спрятать цены номенклатур не в опциях.
+        /// </summary>
+        public bool IsHideNomsPrice { get => offerGroup.IsHideNomsPrice; }
+
+        /// <summary>
+        /// Передаём в конструктор родительский класс, чтобы оповещать его об изменениях.
+        /// </summary>
+        /// <param name="offerGroup"></param>
+        public NomWrapper(OfferGroup offerGroup, Nomenclature nomenclature)
+        {
+            this.offerGroup = offerGroup;
+            Nomenclature = nomenclature;
+        }
+
+        /// <summary>
+        /// Делаем конструктор приватным, чтобы работал только публичный,
+        /// где мы передаём ссылку на родительский элемент.
+        /// </summary>
+        private NomWrapper() { }
     }
 }

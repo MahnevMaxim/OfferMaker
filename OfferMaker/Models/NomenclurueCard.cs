@@ -51,8 +51,7 @@ namespace OfferMaker
             {
                 Currencies.Add(CurrencyCharCode);
             }
-            if (Nomenclature.Photos == null) Nomenclature.Photos = new ObservableCollection<string>();
-            if (Nomenclature.Photos.Count > 0) Image = Nomenclature.Photos[0];
+            if (Nomenclature.Photo != null) Image = Nomenclature.Photo;
         }
 
         /// <summary>
@@ -69,10 +68,8 @@ namespace OfferMaker
             string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
             if (path != null)
             {
-                if (Nomenclature.Photos == null) Nomenclature.Photos = new ObservableCollection<string>();
-                Nomenclature.Photos.Clear();
-                Nomenclature.Photos.Add(path);
-                Image = Nomenclature.Photos[0];
+                Nomenclature.Photo=path;
+                Image = path;
             }
         }
 
@@ -81,8 +78,7 @@ namespace OfferMaker
         /// </summary>
         public void RemoveImage()
         {
-            if (Nomenclature.Photos == null) Nomenclature.Photos = new ObservableCollection<string>();
-            Nomenclature.Photos.Clear();
+            Nomenclature.Photo=null;
             Image = null;
         }
 

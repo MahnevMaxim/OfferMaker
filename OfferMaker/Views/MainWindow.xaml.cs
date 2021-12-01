@@ -27,5 +27,19 @@ namespace OfferMaker.Views
         }
 
         void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);
+
+        /// <summary>
+        /// Наверное это как-то можно сделать в рамках MVVVM
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ButtonClickAddOfferGroup(object sender, RoutedEventArgs e)
+        {
+            if(offerGroupsListView.Items.Count>0)
+            {
+                offerGroupsListView.Items.MoveCurrentToLast();
+                offerGroupsListView.ScrollIntoView(offerGroupsListView.Items.CurrentItem);
+            }
+        }
     }
 }

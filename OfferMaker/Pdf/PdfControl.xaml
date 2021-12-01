@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:layout="clr-namespace:OfferMaker.Pdf"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d" >
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
@@ -27,8 +26,9 @@
         <TabItem Header="Рабочая"
                  mah:TabControlHelper.Underlined="TabPanel"
                  mah:HeaderedControlHelper.HeaderFontSize="12">
-            <FlowDocumentScrollViewer>
-                <FlowDocument LineStackingStrategy="BlockLineHeight"
+            <Grid Style="{x:Null}">
+                <FlowDocumentScrollViewer Style="{x:Null}">
+                    <FlowDocument LineStackingStrategy="BlockLineHeight" Style="{x:Null}"
                               IsOptimalParagraphEnabled="True"
                               x:Name="flowDocumentAll" 
                               x:FieldModifier="public" 
@@ -37,114 +37,176 @@
                               PagePadding="{Binding Margin, Source={x:Static layout:PrintLayout.A4}}"
                               ColumnWidth="{Binding ColumnWidth, Source={x:Static layout:PrintLayout.A4}}"
                               ColumnGap="1">
-                    
-                    <Paragraph Margin="0">
-                        <local:TitulView/>
-                    </Paragraph>
 
-                    <Paragraph Margin="0" x:Name="adv">
-                        <ItemsControl ItemsSource="{Binding AdvertisingsUp}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Viewbox Stretch="Uniform">
-                                        <local:AdView/>
-                                    </Viewbox>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Paragraph>
+                        <Paragraph Margin="0">
+                            <local:TitulView/>
+                        </Paragraph>
 
-                    <!--краткий-->
-                    <Paragraph Margin="0">
-                        <local:ShortCalculateBegin/>
-                    </Paragraph>
+                        <Paragraph Margin="0" x:Name="adv">
+                            <ItemsControl ItemsSource="{Binding AdvertisingsUp}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Viewbox Stretch="Uniform">
+                                            <local:AdView/>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Paragraph>
 
-                    <Paragraph Margin="0" x:Name="ShortBody">
-                        <ItemsControl ItemsSource="{Binding OfferGroups}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel HorizontalAlignment="Stretch">
-                                        <local:ShortCalculateBody/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Paragraph>
+                        <!--краткий-->
+                        <Paragraph Margin="0">
+                            <local:ShortCalculateBegin Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}"/>
+                        </Paragraph>
 
-                    <Paragraph Margin="0" x:Name="ShortEnd">
-                        <local:ShortCalculateEnd/>
-                    </Paragraph>
+                        <Paragraph Margin="0" x:Name="ShortBody">
+                            <ItemsControl ItemsSource="{Binding OfferGroupsNotOptions}"  
+                                          Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel HorizontalAlignment="Stretch">
+                                            <local:ShortCalculateBody/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Paragraph>
 
-                    <!--краткий опции-->
-                    <Paragraph Margin="0" >
-                        <local:ShortCalculateOptionBegin/>
-                    </Paragraph>
+                        <Paragraph Margin="0" x:Name="ShortEnd">
+                            <local:ShortCalculateEnd  Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}"/>
+                        </Paragraph>
 
-                    <Paragraph Margin="0" x:Name="ShortOptionBody">
-                        <ItemsControl ItemsSource="{Binding OfferGroups}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Viewbox Stretch="Uniform">
-                                        <local:ShortCalculateOptionBody/>
-                                    </Viewbox>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Paragraph>
+                        <!--краткий опции-->
+                        <Paragraph Margin="0" >
+                            <local:ShortCalculateOptionBegin Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}"/>
+                        </Paragraph>
 
-                    <Paragraph Margin="0" x:Name="ShortOptionEnd">
-                        <local:ShortCalculateOptionEnd/>
-                    </Paragraph>
-                    
-                    <!--Дополнительная информация-->
-                    <Paragraph x:Name="InformBlockPDF">
-                        <ItemsControl Margin="0" ItemsSource="{Binding OfferInfoBlocks}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <local:InformBlockPDF/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Paragraph>
+                        <Paragraph Margin="0" x:Name="ShortOptionBody">
+                            <ItemsControl ItemsSource="{Binding OfferGroupsOptions}"
+                                          Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel HorizontalAlignment="Stretch">
+                                            <local:ShortCalculateOptionBody/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Paragraph>
 
-                    <!--Менеджер-->
-                    <Paragraph>
-                        <local:EmployeePDF/>
-                    </Paragraph>
+                        <Paragraph Margin="0" x:Name="ShortOptionEnd">
+                            <local:ShortCalculateOptionEnd Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}"/>
+                        </Paragraph>
 
-                    <!--Детальный расчёт-->
-                    <Paragraph Margin="0" >
-                        <local:DetailCalculateBegin/>
-                    </Paragraph>
+                        <!--Дополнительная информация-->
+                        <Paragraph x:Name="InformBlockPDF">
+                            <ItemsControl Margin="0" ItemsSource="{Binding OfferInfoBlocks}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <local:InformBlockPDF/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Paragraph>
 
-                    <Paragraph x:Name="DetailBody" Margin="0" BreakPageBefore="True" >
-                        <ItemsControl Margin="0" ItemsSource="{Binding OfferGroups}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Vertical" >
-                                        <local:BlockBegin Margin="0"/>
-                                        <ItemsControl ItemsSource="{Binding NomWrappers}" Margin="0">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <!--<Paragraph BreakPageBefore="True">-->
-                                                    <local:BlockBody/>
-                                                    <!--</Paragraph>-->
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                        <local:BlockEnd/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </Paragraph>
+                        <!--Менеджер-->
+                        <Paragraph>
+                            <local:EmployeePDF/>
+                        </Paragraph>
 
-                    <Paragraph Margin="0" BreakPageBefore="True">
-                        <local:DetailCalculateEnd/>
-                    </Paragraph>
+                        <!--Детальный расчёт-->
+                        <Paragraph Margin="0" >
+                            <local:DetailCalculateBegin  Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}"/>
+                        </Paragraph>
 
-                </FlowDocument>
-            </FlowDocumentScrollViewer>
+                        <Paragraph x:Name="DetailBody" 
+                               Margin="0" BreakPageBefore="True" >
+                            <ItemsControl Margin="0" ItemsSource="{Binding OfferGroupsNotOptions}" Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical" >
+                                            <local:BlockBegin Margin="0"/>
+                                            <ItemsControl ItemsSource="{Binding NomWrappers}" Margin="0">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <!--<Paragraph BreakPageBefore="True">-->
+                                                        <local:BlockBody/>
+                                                        <!--</Paragraph>-->
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <local:BlockEnd/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Paragraph>
+
+                        <Paragraph Margin="0" BreakPageBefore="True">
+                            <local:DetailCalculateEnd Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}"/>
+                        </Paragraph>
+
+                        <!--детальный опции-->
+                        <Paragraph Margin="0" BreakPageBefore="False">
+                            <local:DetailCalculateBeginOption Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}"/>
+                        </Paragraph>
+
+                        <Paragraph x:Name="DetailOptionBody" 
+                               Margin="0"  BreakPageBefore="False">
+                            <ItemsControl Margin="0" ItemsSource="{Binding OfferGroupsOptions}" Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Vertical"  >
+                                            <local:BlockBeginOption Margin="0"/>
+                                            <ItemsControl ItemsSource="{Binding NomWrappers}" Margin="0">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate >
+                                                        <local:BlockBodyOption/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <local:BlockEndOption/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Paragraph>
+
+                        <Paragraph Margin="0" >
+                            <local:DetailCalculateEndOption Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}"/>
+                        </Paragraph>
+
+                        <!--Дополнительная информация-->
+                        <Paragraph x:Name="InformBlockPDF2">
+                            <ItemsControl ItemsSource="{Binding OfferInfoBlocks}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <local:InformBlockPDF/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Paragraph>
+
+                        <!--Менеджер-->
+                        <Paragraph>
+                            <local:EmployeePDF/>
+                        </Paragraph>
+
+                        <Paragraph Margin="0" x:Name="adv2">
+                            <ItemsControl ItemsSource="{Binding AdvertisingsDown}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Viewbox Stretch="Uniform">
+                                            <local:AdView/>
+                                        </Viewbox>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Paragraph>
+
+                    </FlowDocument>
+                </FlowDocumentScrollViewer>
+            </Grid>
         </TabItem>
         <TabItem Header="С баннером"
                          mah:TabControlHelper.Underlined="TabPanel"

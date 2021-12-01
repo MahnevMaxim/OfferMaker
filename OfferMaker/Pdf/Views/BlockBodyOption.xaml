@@ -1,24 +1,17 @@
-﻿<UserControl x:Class="OfferMaker.Pdf.Views.BlockBody"
+﻿<UserControl x:Class="OfferMaker.Pdf.Views.BlockBodyOption"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
-             mc:Ignorable="d" 
-             xmlns:root="clr-namespace:OfferMaker"
              xmlns:convert="clr-namespace:OfferMaker.Pdf"
-             x:Name="main">
+             mc:Ignorable="d">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-        <root:VisToBoolConverter x:Key="TrueIfVisible" Inverted="False" Not="False" />
-        <root:VisToBoolConverter x:Key="TrueIfNotVisible" Inverted="False" Not="True" />
-        <root:VisToBoolConverter x:Key="VisibleIfTrue" Inverted="True" Not="False" />
-        <root:VisToBoolConverter x:Key="VisibleIfNotTrue" Inverted="True" Not="True" />
-        <convert:NumConvertors x:Key="numConvertors"></convert:NumConvertors>
+        <convert:NumConvertors x:Key="numConvertors"/>
     </UserControl.Resources>
-
-    <StackPanel HorizontalAlignment="Stretch" Width="18cm">
-        <Grid x:Name="maingrid">
+    <StackPanel Width="18cm" HorizontalAlignment="Stretch">
+        <Grid x:Name="maingrid" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -27,15 +20,16 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
             <!--Номенклатура и дескрипшены-->
             <Grid Grid.RowSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Margin="0.6cm,0.3cm,0.3cm,0" Text="{Binding Title}" TextWrapping="WrapWithOverflow" LineStackingStrategy="BlockLineHeight" LineHeight="18pt" FontSize="12pt" FontFamily="Segoe UI Semibold"/>
+                <TextBlock Margin="0.6cm,0.3cm,0.3cm,0" 
+                           Text="{Binding Title}" 
+                           TextWrapping="WrapWithOverflow"
+                           LineStackingStrategy="BlockLineHeight" LineHeight="18pt" FontSize="12pt" FontFamily="Segoe UI Semibold"/>
                 <ItemsControl Grid.Row="1" x:Name="list" BorderBrush="Transparent" Margin="0.2cm,0.02cm,0.2cm,0.2cm" ItemsSource="{Binding Descriptions}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -44,11 +38,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="•" 
-                                           Margin="0.4cm,0.05cm,0.2cm,0" 
-                                           FontSize="10pt"
-                                           FontFamily="Segoe UI"
-                                           Foreground="#1074bc" >
+                                <TextBlock Margin="0.4cm,0.05cm,0.2cm,0" Text="•" FontSize="10pt" FontFamily="Segoe UI" Foreground="#1074bc" >
                                     <TextBlock.Style>
                                         <Style>
                                             <Style.Triggers>
@@ -99,51 +89,44 @@
                 </Grid.RowDefinitions>
 
                 <!--картинка-->
-                <Canvas Width="6cm" Height="4cm" MaxWidth="6cm" MaxHeight="4cm" VerticalAlignment="Top" x:Name="canva" Grid.Row="0" Margin="0.5cm,0.5cm,0.3cm,-0.2cm">
-                    <Image Stretch="UniformToFill" x:Name="image" Width="6cm" Height="4cm" Source="{Binding Photo}"/>
+                <Canvas  Width="6cm" Height="4cm" MaxWidth="6cm" MaxHeight="4cm" VerticalAlignment="Top" x:Name="canva" Grid.Row="0" Margin="0.5cm,0.8cm,0.3cm,-0.2cm">
+                    <Image x:Name="image" 
+                           Stretch="UniformToFill" 
+                           Width="6cm" 
+                           Height="4cm" 
+                           Source="{Binding Photo}"/>
                 </Canvas>
 
                 <!--стоимость-->
-                <Grid VerticalAlignment="Top" Grid.Row="1" Margin="0,0.3cm,0,0"  >
+                <Grid VerticalAlignment="Top"  Grid.Row="1" Margin="0,0.3cm,0,0"  >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0" 
-                                Visibility="{Binding IsHideNomsPrice, Converter={StaticResource VisibleIfNotTrue}}"
-                                Margin="0,0,0.3cm,0" Orientation="Horizontal" CanHorizontallyScroll="False" HorizontalAlignment="Right" >
+                    <StackPanel Grid.Row="0" Margin="0,0,0.3cm,0" Orientation="Horizontal" CanHorizontallyScroll="False" HorizontalAlignment="Right" >
                         <TextBlock Text="{Binding Price, Converter={StaticResource numConvertors}}" FontSize="14pt" FontFamily="Segoe UI "/>
-                        <TextBlock Margin="5,0,0,0" Text="{Binding Currency.Symbol}" FontSize="14pt" FontFamily="Segoe UI "/>
+                        <TextBlock Margin="5,0,0,0" Text="{Binding Currency.Symbol, UpdateSourceTrigger=PropertyChanged}" FontSize="14pt" FontFamily="Segoe UI "/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Margin="0,0,0.3cm,0" Orientation="Horizontal" CanHorizontallyScroll="False" HorizontalAlignment="Right" >
-                        <TextBlock Text="x " FontSize="12pt" FontFamily="Segoe UI " LineStackingStrategy="BlockLineHeight" LineHeight="15pt"/>
+                        <TextBlock Text="x " LineStackingStrategy="BlockLineHeight" LineHeight="15pt" FontSize="12pt" FontFamily="Segoe UI "/>
                         <TextBlock Text="{Binding Amount}" LineStackingStrategy="BlockLineHeight" LineHeight="15pt" FontSize="12pt" FontFamily="Segoe UI "/>
-                        <TextBlock Text=" шт." FontSize="12pt" LineStackingStrategy="BlockLineHeight" LineHeight="15pt" FontFamily="Segoe UI "/>
+                        <TextBlock Text=" шт." LineStackingStrategy="BlockLineHeight" LineHeight="15pt" FontSize="12pt" FontFamily="Segoe UI "/>
                     </StackPanel>
-                    <StackPanel Grid.Row="2"
-                                Visibility="{Binding IsHideNomsPrice, Converter={StaticResource VisibleIfNotTrue}}"
-                                Margin="0,0,0.3cm,0" Orientation="Horizontal" CanHorizontallyScroll="False" HorizontalAlignment="Right" >
+                    <StackPanel Grid.Row="2" Margin="0,0,0.3cm,0" Orientation="Horizontal" CanHorizontallyScroll="False" HorizontalAlignment="Right" >
                         <TextBlock Foreground="#1074bc" Text="{Binding Sum, Converter={StaticResource numConvertors}}" FontSize="14pt" FontFamily="Segoe UI Semibold"/>
                         <TextBlock Foreground="#1074bc" Margin="5,0,0,0" Text="{Binding Currency.Symbol}" FontSize="14pt" FontFamily="Segoe UI Semibold"/>
                     </StackPanel>
                 </Grid>
             </Grid>
 
+
             <!--бордер-->
             <Grid Grid.ColumnSpan="2" Grid.RowSpan="2" x:Name="linegrid" Background="Transparent">
-                <Line Margin="0.225cm,0,0,0" 
-                      X1="{Binding ElementName=linegrid, Path=MinWidth}" 
-                      Y1="{Binding ElementName=linegrid, Path=MinHeight}"
-                      X2="{Binding ElementName=linegrid, Path=MinWidth}" 
-                      Y2="{Binding ActualHeight, ElementName=linegrid}"
-                      Stroke="Black" StrokeThickness="1" />
-                <Line X1="{Binding ElementName=linegrid, Path=ActualWidth}"
-                      Y1="{Binding ElementName=linegrid, Path=MinHeight}"
-                      X2="{Binding ElementName=linegrid, Path=ActualWidth}"
-                      Y2="{Binding ElementName=linegrid, Path=ActualHeight}" 
-                      Stroke="Black" StrokeThickness="2" />
+                <Line Margin="0.225cm,0,0,0" X1="{Binding ElementName=linegrid, Path=MinWidth}" Y1="{Binding ElementName=linegrid, Path=MinHeight}" X2="{Binding ElementName=linegrid, Path=MinWidth}" Y2="{Binding ActualHeight, ElementName=linegrid}" Stroke="Black" StrokeThickness="1" />
+                <Line X1="{Binding ElementName=linegrid, Path=ActualWidth}" Y1="{Binding ElementName=linegrid, Path=MinHeight}" X2="{Binding ElementName=linegrid, Path=ActualWidth}" Y2="{Binding ElementName=linegrid, Path=ActualHeight}" Stroke="Black" StrokeThickness="2" />
             </Grid>
         </Grid>
     </StackPanel>
+
 </UserControl>

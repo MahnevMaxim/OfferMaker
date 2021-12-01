@@ -18,6 +18,7 @@ namespace OfferMaker
 
         ObservableCollection<User> managers = new ObservableCollection<User>();
         ObservableCollection<Currency> currencies;
+        bool isDiscountOpen;
 
         #endregion Fields
 
@@ -51,8 +52,18 @@ namespace OfferMaker
             get
             {
                 if (currencies == null) return null;
-                var list = currencies.Where(c => c.IsEnabled || c.CharCode == "RUB").Select(c=>c.CharCode).ToList();
+                var list = currencies.Where(c => c.IsEnabled || c.CharCode == "RUB").Select(c => c.CharCode).ToList();
                 return new ObservableCollection<string>(list);
+            }
+        }
+
+        public bool IsDiscountOpen
+        {
+            get => isDiscountOpen;
+            set
+            {
+                isDiscountOpen = value;
+                OnPropertyChanged();
             }
         }
 
@@ -89,7 +100,7 @@ namespace OfferMaker
             MvvmFactory.RegisterModel(this, Catalog);
             MvvmFactory.RegisterModel(this, Constructor);
             Settings.SetSettings();
-            
+
             //Фейковая авторизация.
             CallResult cr = await Hello.SetUsers(DataRepository);
             if (!cr.Success)
@@ -171,7 +182,7 @@ namespace OfferMaker
         {
             string bannersPath = AppDomain.CurrentDomain.BaseDirectory + "\\banners";
             var files = Directory.GetFiles(bannersPath);
-            files.ToList().ForEach(f => BannersManager.Banners.Add(f)); 
+            files.ToList().ForEach(f => BannersManager.Banners.Add(f));
         }
 
         /// <summary>
@@ -228,6 +239,7 @@ namespace OfferMaker
         {
             CallResult crSaveCurrencies = await DataRepository.SaveCurrencies(Currencies);
             CallResult crSaveNomenclatureGroups = await DataRepository.SaveNomenclatureGroups(Catalog.NomenclatureGroups);
+            CallResult crSaveNomenclatures = await DataRepository.SaveNomenclatures(Catalog.Nomenclatures);
         }
 
         #endregion Catalog
@@ -272,6 +284,25 @@ namespace OfferMaker
 
         #endregion NomWrapper
 
+        #region Discount
+
+        public void SetDiscount()
+        {
+            CallResult cr = Constructor.SetDiscount();
+            if (!cr.Success)
+                OnSendMessage(cr.Error.Message);
+            else
+                IsDiscountOpen = false;
+        }
+
+        public void CancelDiscount()
+        {
+            Constructor.CancelDiscount();
+            IsDiscountOpen = false;
+        }
+
+        #endregion Discount
+
         #region Etc
 
         public void SkipOffer() => Constructor.SkipOffer();
@@ -285,7 +316,7 @@ namespace OfferMaker
             var cr = Constructor.AddInformBlock();
             if (!cr.Success) OnSendMessage(cr.Error.Message);
         }
-            
+
         public void RemoveInformBlock(OfferInfoBlock offerInfoBlock) => Constructor.RemoveInformBlock(offerInfoBlock);
 
         #endregion Etc
@@ -295,6 +326,13 @@ namespace OfferMaker
         #region DocManager
 
         public void SaveToPdfWithBanner() => DocManager.SaveToPdfWithBanner();
+
+        async public void SaveOffer()
+        {
+            CallResult cr = await DataRepository.SaveOffer(Constructor.Offer);
+            if (!cr.Success)
+                OnSendMessage(cr.Error.Message);
+        }
 
         #endregion DocManager
 

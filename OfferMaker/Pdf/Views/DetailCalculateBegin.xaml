@@ -13,7 +13,7 @@
     <StackPanel HorizontalAlignment="Stretch" Width="18cm">
         <Grid Background="White">
             <TextBlock TextWrapping="WrapWithOverflow" Margin="0.6cm, 0, 0, 0.2cm" VerticalAlignment="Bottom" FontSize="18pt" 
-                       FontFamily="Segoe UI Semibold">Детальный расчёт стоимости <Run Text ="KpName"/></TextBlock>
+                       FontFamily="Segoe UI Semibold">Детальный расчёт стоимости <Run Text ="{Binding OfferName}"/></TextBlock>
             <Line X1="0.5" Y1="{Binding ElementName=detailCalcBegin, Path=ActualHeight}" X2="0.5" Y2="0.6cm" Stroke="Black" StrokeThickness="1" Margin="0.212cm,0,0,0" />
             <Ellipse Fill="White" Width="0.4cm" Height="0.4cm" Stroke="Black" StrokeThickness="1" Margin="0.025cm,0.3cm,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
         </Grid>

@@ -37,7 +37,6 @@
                  mah:TextBoxHelper.UseFloatingWatermark="True"
                  mah:TextBoxHelper.Watermark="Название КП"
                  mah:TextBoxHelper.WatermarkAlignment="Right"
-                 SpellCheck.IsEnabled="True"
                  ToolTip="Название КП"/>
         <TextBox Margin="5" 
                  FontSize="14"
@@ -50,7 +49,6 @@
                  mah:TextBoxHelper.UseFloatingWatermark="True"
                  mah:TextBoxHelper.Watermark="ФИО"
                  mah:TextBoxHelper.WatermarkAlignment="Right"
-                 SpellCheck.IsEnabled="True"
                  ToolTip="ФИО"/>
         <TextBox Margin="5" 
                  FontSize="14"
@@ -63,7 +61,6 @@
                  mah:TextBoxHelper.UseFloatingWatermark="True"
                  mah:TextBoxHelper.Watermark="Должность"
                  mah:TextBoxHelper.WatermarkAlignment="Right"
-                 SpellCheck.IsEnabled="True"
                  ToolTip="Должность"/>
         <TextBox Margin="5" 
                  FontSize="14"
@@ -76,7 +73,6 @@
                  mah:TextBoxHelper.UseFloatingWatermark="True"
                  mah:TextBoxHelper.Watermark="Организация"
                  mah:TextBoxHelper.WatermarkAlignment="Right"
-                 SpellCheck.IsEnabled="True"
                  ToolTip="Организация"/>
         <TextBox Margin="5" 
                  FontSize="14"
@@ -89,9 +85,7 @@
                  mah:TextBoxHelper.UseFloatingWatermark="True"
                  mah:TextBoxHelper.Watermark="Город"
                  mah:TextBoxHelper.WatermarkAlignment="Right"
-                 SpellCheck.IsEnabled="True"
                  ToolTip="Город"/>
-
         <Button Grid.Row="5"
                 Margin="5" 
                 Content="Сохранить"

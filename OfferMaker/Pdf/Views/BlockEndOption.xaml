@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="OfferMaker.Pdf.Views.BlockEndOption"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
+             xmlns:convert="clr-namespace:OfferMaker.Pdf"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <convert:NumConvertors x:Key="numConvertors"/>
+    </UserControl.Resources>
+
+    <StackPanel HorizontalAlignment="Stretch" >
+        <Grid x:Name="grid" Background="White" Width="18cm">
+            <Line X1="0.225cm" Y1="0" X2="{Binding ElementName=grid, Path=ActualWidth}" Y2="0" Stroke="Black" StrokeThickness="1" SnapsToDevicePixels="True" />
+        </Grid>
+    </StackPanel>
+</UserControl>

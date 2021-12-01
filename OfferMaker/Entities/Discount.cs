@@ -26,11 +26,12 @@ namespace OfferMaker
             set
             {
                 percentage = value;
-                if(offer!+null)
+                if (offer != null)
                 {
                     discountSum = offer.TotalSum - (100 - percentage) / 100 * offer.TotalSum;
                     OnPropertyChanged(nameof(PriceWithDiscount));
                     OnPropertyChanged(nameof(DiscountSum));
+                    OnPropertyChanged();
                 }
             }
         }
@@ -41,50 +42,56 @@ namespace OfferMaker
             set
             {
                 discountSum = value;
-                if(discountSum<0)
+                if(offer!=null)
                 {
-                    discountSum = 0;
-                    percentage = 0;
-                    
+                    if (discountSum < 0)
+                    {
+                        discountSum = 0;
+                        percentage = 0;
+
+                    }
+                    else if (discountSum > offer.TotalSum)
+                    {
+                        discountSum = offer.TotalSum;
+                        percentage = 100;
+                    }
+                    else
+                    {
+                        percentage = 100 - PriceWithDiscount * 100 / offer.TotalSum;
+                    }
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(PriceWithDiscount));
+                    OnPropertyChanged(nameof(Percentage));
                 }
-                else if (discountSum > offer.TotalSum)
-                {
-                    discountSum = offer.TotalSum;
-                    percentage = 100;
-                }
-                else
-                {
-                    percentage = 100 - PriceWithDiscount * 100 / offer.TotalSum;
-                }
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(PriceWithDiscount));
-                OnPropertyChanged(nameof(Percentage));
             }
         }
 
         public decimal PriceWithDiscount
         {
-            get => IsPercentage ? offer.TotalSum - Percentage * offer.TotalSum / 100 : offer.TotalSum - DiscountSum;
+            get => offer.TotalSum - DiscountSum;
             set
             {
-                if(value> offer.TotalSum)
+                if(offer!=null)
                 {
-                    percentage = 0;
-                    discountSum = 0;
+                    if (value > offer.TotalSum)
+                    {
+                        percentage = 0;
+                        discountSum = 0;
+                    }
+                    else if (value < 0)
+                    {
+                        percentage = 100;
+                        discountSum = offer.TotalSum;
+                    }
+                    else
+                    {
+                        discountSum = offer.TotalSum - value;
+                        percentage = 100 - PriceWithDiscount * 100 / offer.TotalSum;
+                    }
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(DiscountSum));
+                    OnPropertyChanged(nameof(Percentage));
                 }
-                else if(value<0)
-                {
-                    percentage = 100;
-                    discountSum = offer.TotalSum;
-                }
-                else
-                {
-                    discountSum = offer.TotalSum - value;
-                    percentage = 100 - PriceWithDiscount * 100 / offer.TotalSum;
-                }
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(DiscountSum));
-                OnPropertyChanged(nameof(Percentage));
             }
         }
 

@@ -73,6 +73,32 @@ namespace API.Controllers
             return NoContent();
         }
 
+        // POST: api/NomenclatureGroups
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        public async Task<ActionResult<Nomenclature>> SaveNomenclatures(IEnumerable<Nomenclature> noms)
+        {
+            foreach (var nom in noms)
+            {
+                try
+                {
+                    if (nom.Id == 0)
+                    {
+                        await PostNomenclature(nom);
+                    }
+                    else
+                    {
+                        await PutNomenclature(nom.Id, nom);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    L.LW("Исключение при попытке сохранить номенклатуру " + nom.Id, ex);
+                }
+            }
+            return NoContent();
+        }
+
         // POST: api/Nomenclatures
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]

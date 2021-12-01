@@ -208,7 +208,6 @@ namespace OfferMaker
             //    };
             //    DebugTree.Add(item);
             //}
-            CreatePdf();
         }
 
         bool isCreatorBusy;
@@ -216,7 +215,7 @@ namespace OfferMaker
         /// <summary>
         /// Обновление документа КП.
         /// </summary>
-        async public void CreatePdf()
+        async public Task CreatePdf()
         {
             isNeedUpdate = true;
             if (isCreatorBusy) return;
@@ -228,9 +227,7 @@ namespace OfferMaker
                 isNeedUpdate = false;
                 try
                 {
-                    FlowDocument flowDocument = ((Views.MainWindow)viewModel.view).pdfControl.flowDocumentAll;
-                    WrapperAllPages wrapper = new WrapperAllPages(flowDocument, viewModel, smallLogo);
-                    PdfDocument = wrapper.GetPdf(2, 1, 1, 1);
+                    CreateDocument();
                     await Task.Delay(4000);
                 }
                 catch (Exception ex)
@@ -240,6 +237,13 @@ namespace OfferMaker
                 }
             }
             isCreatorBusy = false;
+        }
+
+        public void CreateDocument()
+        {
+            FlowDocument flowDocument = ((Views.MainWindow)viewModel.view).pdfControl.flowDocumentAll;
+            WrapperAllPages wrapper = new WrapperAllPages(flowDocument, viewModel, smallLogo);
+            PdfDocument = wrapper.GetPdf(2, 1, 1, 1);
         }
 
         /// <summary>
@@ -283,6 +287,25 @@ namespace OfferMaker
         /// <param name="offerGroup"></param>
         internal void AddNomenclatureToOfferGroup(OfferGroup offerGroup) =>
             MvvmFactory.CreateWindow(new AddNomToConstructor(offerGroup), new ViewModels.AddNomToConstructorViewModel(), new Views.AddNomToConstructor(), ViewMode.ShowDialog);
+
+        internal CallResult SetDiscount()
+        {
+            if(Offer.Discount.DiscountSum>0)
+            {
+                Offer.Discount.IsEnabled = true;
+                return new CallResult();
+            }
+            else
+            {
+                return new CallResult() { Error=new Error("Сумма скидки должна быть больше нуля.")};
+            }
+        }
+
+        internal void CancelDiscount()
+        {
+            Offer.Discount.IsEnabled = false;
+            Offer.Discount.Percentage = 0;
+        }
 
         /// <summary>
         /// Поднять группу вверх в списке.
@@ -346,20 +369,27 @@ namespace OfferMaker
         /// <summary>
         /// Окно выбора баннера и рекламмы.
         /// </summary>
-        async internal void OpenBanners()
+        internal void OpenBanners()
         {
             MvvmFactory.CreateWindow(Global.Main.BannersManager, new ViewModels.BannersManagerViewModel(), new Views.BannersManager(), ViewMode.ShowDialog);
-            if (Global.Main.BannersManager.SelectedBanner != null)
+            if (Global.Main.BannersManager.SelectedBanner != null && 
+                Global.Main.BannersManager.SelectedBanner!= Offer.Banner)
             {
                 Offer.Banner = Global.Main.BannersManager.SelectedBanner;
+                viewModel.OnPropertyChanged("Banner");
             }
-            Offer.AdvertisingsUp = Global.Main.BannersManager.AdvertisingsUp;
-            Offer.AdvertisingsDown = Global.Main.BannersManager.AdvertisingsDown;
-            viewModel.OnPropertyChanged(String.Empty);
+            
+            if (!Offer.AdvertisingsUp.Equals(Global.Main.BannersManager.AdvertisingsUp))
+            {
+                Offer.AdvertisingsUp = Global.Main.BannersManager.AdvertisingsUp;
+                viewModel.OnPropertyChanged("AdvertisingsUp");
+            }
 
-            //т.к. документ формируется непосредственно из XAML, а XAML нужна задержка для обновления, то обновляем принудительно с задержкой
-            await Task.Delay(100);
-            CreatePdf();
+            if (!Offer.AdvertisingsDown.Equals(Global.Main.BannersManager.AdvertisingsDown))
+            {
+                Offer.AdvertisingsDown = Global.Main.BannersManager.AdvertisingsDown;
+                viewModel.OnPropertyChanged("AdvertisingsDown");
+            }
         }
 
         /// <summary>

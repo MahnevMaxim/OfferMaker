@@ -44,6 +44,7 @@
 
             <DataTemplate x:Key="NomCostPriceTextBlock">
                 <TextBlock Text="{Binding Nomenclature.CostPrice, StringFormat=F2}"
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            Width="80"
                            TextWrapping="Wrap"
                            FontWeight="Bold"
@@ -51,7 +52,8 @@
             </DataTemplate>
 
             <DataTemplate x:Key="NomMarkup">
-                <TextBlock Text="{Binding Nomenclature.Markup, StringFormat=F2}"
+                <TextBlock Text="{Binding Markup, StringFormat=F2}"
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            TextWrapping="Wrap"
                            Width="50"
                            FontWeight="Bold"
@@ -59,7 +61,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="NomPrice">
-                <TextBlock Text="{Binding Nomenclature.Price, StringFormat=F2}"
+                <TextBlock Text="{Binding Price, StringFormat=F2}"
                            TextWrapping="Wrap"
                            Width="{StaticResource Width80}"
                            FontWeight="Bold"
@@ -68,6 +70,7 @@
 
             <DataTemplate x:Key="NomProfit">
                 <TextBlock Text="{Binding ProfitSum, StringFormat=F2}"
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            TextWrapping="Wrap"
                            Width="{StaticResource Width80}"
                            FontWeight="Bold"
@@ -445,10 +448,46 @@
             
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Название" DisplayIndex="0" Width="320" CellTemplate="{StaticResource NomTitle}"/>
-                <DataGridTemplateColumn Header="Затраты" DisplayIndex="1" Width="80" CellTemplate="{StaticResource NomCostPriceTextBlock}"/>
-                <DataGridTemplateColumn Header="Наценка" DisplayIndex="2" Width="80" CellTemplate="{StaticResource NomMarkup}"/>
+                <DataGridTemplateColumn Header="Затраты" DisplayIndex="1" Width="80" CellTemplate="{StaticResource NomCostPriceTextBlock}">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Наценка" DisplayIndex="2" Width="80" CellTemplate="{StaticResource NomMarkup}">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Цена" DisplayIndex="3" Width="80" CellTemplate="{StaticResource NomPrice}"/>
-                <DataGridTemplateColumn Header="Прибыль" DisplayIndex="4" Width="80" CellTemplate="{StaticResource NomProfit}"/>
+                <DataGridTemplateColumn Header="Прибыль" DisplayIndex="4" Width="80" CellTemplate="{StaticResource NomProfit}">
+                    <DataGridTemplateColumn.HeaderStyle>
+                        <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTemplateColumn.HeaderStyle>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Валюта" DisplayIndex="5" Width="80" CellTemplate="{StaticResource NomCurrency}"/>
                 <DataGridTemplateColumn Header="Кол-во" DisplayIndex="6" Width="100" CellTemplate="{StaticResource NomAmount}"/>
                 <DataGridTemplateColumn Header="Сумма" DisplayIndex="7" Width="80" CellTemplate="{StaticResource NomSum}"/>
@@ -514,82 +553,80 @@
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="1" 
-                                   VerticalAlignment="Center"
-                                   Margin="5"
-                                   Text="Затраты"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
+                           VerticalAlignment="Center"
+                           Margin="5"
+                           Text="Затраты"
+                           FontFamily="Arial"
+                           FontSize="12"
+                           FontWeight="Bold"/>
                 <TextBlock Grid.Column="2" 
-                                   Margin="5"
-                                   VerticalAlignment="Center"
-                                   Text="Наценка"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
-                <TextBlock Grid.Column="3" 
-                                   Margin="5"
-                                   VerticalAlignment="Center"
-                                   Text="Цена"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
+                           Margin="5"
+                           VerticalAlignment="Center"
+                           Text="Наценка"
+                           FontFamily="Arial"
+                           FontSize="12"
+                           FontWeight="Bold"/>
                 <TextBlock Grid.Column="4" 
-                                   Margin="5"
-                                   VerticalAlignment="Center"
-                                   Text="Прибыль"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
+                           Margin="5"
+                           VerticalAlignment="Center"
+                           Text="Прибыль"
+                           FontFamily="Arial"
+                           FontSize="12"
+                           FontWeight="Bold"/>
                 <TextBlock Grid.Column="7" 
-                                   Margin="5"
-                                   VerticalAlignment="Center"
-                                   Text="Сумма"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
-
+                           Margin="5"
+                           VerticalAlignment="Center"
+                           Text="Сумма"
+                           FontFamily="Arial"
+                           FontSize="12"
+                           FontWeight="Bold"/>
                 <TextBlock Grid.Column="0" 
-                                    Grid.Row="1" 
-                                   VerticalAlignment="Center"
-                                   Text="Итого:"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   Margin="30,0"
-                                   TextAlignment="Right"
-                                   FontWeight="Bold"/>
+                           Grid.Row="1" 
+                           VerticalAlignment="Center"
+                           Text="Итого:"
+                           FontFamily="Arial"
+                           FontSize="12"
+                           Margin="30,0"
+                           TextAlignment="Right"
+                           FontWeight="Bold"/>
                 <TextBlock Grid.Column="1"
-                                   Margin="5"
-                                    Grid.Row="1" 
-                                   VerticalAlignment="Center"
-                                   Text="{Binding CostPriceSum, StringFormat=F2}"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
+                           Margin="5"
+                           Grid.Row="1" 
+                           VerticalAlignment="Center"
+                           Text="{Binding CostPriceSum, StringFormat=F2}"
+                           FontFamily="Arial"
+                           FontSize="12"
+                           FontWeight="Bold"/>
                 <TextBlock Grid.Column="2" 
-                                   Margin="5"
-                                   Grid.Row="1" 
-                                   VerticalAlignment="Center"
-                                   Text="{Binding CommmonMarkup, StringFormat=F2}"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
+                           Margin="5"
+                           Grid.Row="1" 
+                           VerticalAlignment="Center"
+                           Text="{Binding CommmonMarkup, StringFormat=F2}"
+                           FontFamily="Arial"
+                           FontSize="12"
+                           FontWeight="Bold"/>
                 <TextBlock Grid.Column="4"
-                                   Margin="5"
-                                   Grid.Row="1" 
-                                   VerticalAlignment="Center"
-                                   Text="{Binding ProfitSum, StringFormat=F2}"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
+                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
+                           Margin="5"
+                           Grid.Row="1" 
+                           VerticalAlignment="Center"
+                           Text="{Binding ProfitSum, StringFormat=F2}"
+                           FontFamily="Arial"
+                           FontSize="12"
+                           FontWeight="Bold"/>
                 <TextBlock Grid.Column="7"
-                                   Margin="5"
-                                   Grid.Row="1" 
-                                   VerticalAlignment="Center"
-                                   Text="{Binding PriceSum, StringFormat=F2}"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
+                           Margin="5"
+                           Grid.Row="1" 
+                           VerticalAlignment="Center"
+                           Text="{Binding PriceSum, StringFormat=F2}"
+                           FontFamily="Arial"
+                           FontSize="12"
+                           FontWeight="Bold"/>
             </Grid>
 
         </Border>

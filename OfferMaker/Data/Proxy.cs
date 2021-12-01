@@ -119,6 +119,18 @@ namespace OfferMaker
             return await LocalData.GetCache<ObservableCollection<Nomenclature>>(LocalDataConfig.NomenclaturesPath);
         }
 
+        async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures)
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.SaveNomenclatures(nomenclatures);
+            if (AppMode == AppMode.Offline)
+                return LocalData.UpdateCache(nomenclatures, LocalDataConfig.NomenclaturesPath);
+
+            var callResult = await ServerData.SaveNomenclatures(nomenclatures);
+            LocalData.UpdateCache(nomenclatures, LocalDataConfig.NomenclaturesPath);
+            return callResult;
+        }
+
         /// <summary>
         /// Пытаемся получить категории с сервера или из кэша
         /// </summary>
@@ -158,5 +170,12 @@ namespace OfferMaker
             }
             return await LocalData.GetCache<ObservableCollection<User>>(LocalDataConfig.UsersPath);
         }
+
+
+        internal Task<CallResult> SaveOffer(Offer offer)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

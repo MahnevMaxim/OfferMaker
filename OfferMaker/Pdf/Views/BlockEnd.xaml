@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
              mc:Ignorable="d" 
              xmlns:convert="clr-namespace:OfferMaker.Pdf"
-              x:Name="main">
+             x:Name="main">
     <UserControl.Resources>
         <convert:NumConvertors x:Key="numConvertors"/>
         <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
@@ -16,25 +16,30 @@
         <Grid x:Name="grid"  Background="White" Height="55">
             <StackPanel Orientation="Vertical">
                 <StackPanel Margin="0,0.2cm,0.3cm,0.2cm" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <!--<TextBlock FontSize="26" Text="Итого стоимость (с НДС)   " FontFamily="Segoe UI" >-->
                     <TextBlock FontSize="12pt" FontFamily="Segoe UI Semibold" Margin="0,15,0,0">
                         <TextBlock.Style>
                             <Style>
-                                <Setter Property="TextBlock.Text" Value="Итого стоимость (с НДС)  "/>
-                                <!--<Style.Triggers>
-                                    <DataTrigger Binding="{Binding HiddenTextNDS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
-                                        <Setter Property="TextBlock.Text" Value="Итого стоимость   "/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsHiddenTextNds}" Value="True">
+                                        <Setter Property="TextBlock.Text" Value="Итого стоимость:   "/>
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding HiddenTextNDS, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="False">
-                                        <Setter Property="TextBlock.Text" Value="Итого стоимость (с НДС)  "/>
+                                    <DataTrigger Binding="{Binding IsHiddenTextNds}" Value="False">
+                                        <Setter Property="TextBlock.Text" Value="Итого стоимость (с НДС):  "/>
                                     </DataTrigger>
-                                </Style.Triggers>-->
+                                </Style.Triggers>
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <!--<TextBlock FontSize="26" Text="{Binding SummaryPrice, StringFormat=\{0:N0\}}" FontFamily="Segoe UI Semibold"/>-->
-                    <TextBlock FontSize="16pt" HorizontalAlignment="Right" Margin="0,10,0,0" Text="{Binding SummaryPrice, Converter={StaticResource numConvertors}}" FontFamily="Segoe UI Semibold"/>
-                    <TextBlock FontSize="16pt" Margin="5,10,0,0" HorizontalAlignment="Left" Text="{Binding CurrencySymbol, UpdateSourceTrigger=PropertyChanged}" FontFamily="Segoe UI Semibold"/>
+                    <TextBlock Text="{Binding PriceSum, Converter={StaticResource numConvertors}}"
+                               FontSize="16pt" 
+                               HorizontalAlignment="Right"
+                               Margin="0,10,0,0"  
+                               FontFamily="Segoe UI Semibold"/>
+                    <TextBlock FontSize="16pt" 
+                               Margin="5,10,0,0" 
+                               HorizontalAlignment="Left" 
+                               Text="{Binding Currency.Symbol}" 
+                               FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
             </StackPanel>
             <Line Margin="0.225cm, 0, 0, 0" 
@@ -42,19 +47,22 @@
                   Y1="{Binding ElementName=grid, Path=MinHeight}"
                   X2="{Binding ElementName=grid, Path=MinWidth}" 
                   Y2="{Binding ActualHeight, ElementName=grid}" 
-                  Stroke="Black" StrokeThickness="1"/>
+                  Stroke="Black" 
+                  StrokeThickness="1"/>
             <Line Margin="0, 0, 0,0" 
                   X1="{Binding ElementName=grid, Path=ActualWidth}" 
                   Y1="0" 
                   X2="{Binding ElementName=grid, Path=ActualWidth}"
                   Y2="{Binding ActualHeight, ElementName=grid}" 
-                  Stroke="Black" StrokeThickness="2"/>
+                  Stroke="Black" 
+                  StrokeThickness="2"/>
             <Line Margin="0.225cm, 0, 0, 0" 
                   X1="0"
                   Y1="{Binding ActualHeight, ElementName=grid}" 
                   X2="{Binding ElementName=grid, Path=ActualWidth}" 
                   Y2="{Binding ActualHeight, ElementName=grid}"
-                  Stroke="Black" StrokeThickness="2"/>
+                  Stroke="Black"
+                  StrokeThickness="2"/>
         </Grid>
     </StackPanel>
 </UserControl>

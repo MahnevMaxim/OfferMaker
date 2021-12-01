@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace OfferMaker
 {
@@ -100,25 +101,50 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Ссылка на переключатель режима создания КП по нормальной/закупочной цене.
+        /// </summary>
+        public bool IsCreateByCostPrice { get => offer.IsCreateByCostPrice; }
+
+        /// <summary>
+        /// Ссылка на валюту КП.
+        /// </summary>
+        public Currency Currency { get => offer.Currency; }
+
+        /// <summary>
+        /// Спрятать текст НДС из КП если IsHiddenTextNds=true.
+        /// </summary>
+        public bool IsHiddenTextNds { get => offer.IsHiddenTextNds; }
+
+        /// <summary>
+        /// Спрятать цены номенклатур не в опциях.
+        /// </summary>
+        public bool IsHideNomsPrice { get => offer.IsHideNomsPrice; }
+
         private OfferGroup() { }
 
         public OfferGroup(Offer offer)
         {
             this.offer = offer;
-            PropertyChanged += OfferGroup_PropertyChanged;
             NomWrappers.CollectionChanged += NomWrappers_CollectionChanged;
         }
 
-        public void AddNomenclatures(List<NomWrapper> list)
+        public void AddNomenclaturesSilent(List<NomWrapper> list)
         {
             NomWrappers.CollectionChanged -= NomWrappers_CollectionChanged;
             list.ForEach(n=> nomWrappers.Add(n));
             NomWrappers.CollectionChanged += NomWrappers_CollectionChanged;
-            OnPropertyChanged(string.Empty);
+            NomWrappers_CollectionChanged(null, null);
         }
 
-        private void NomWrappers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => OnPropertyChanged(string.Empty);
-
-        private void OfferGroup_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) => offer?.OnPropertyChanged(string.Empty);
+        public void NomWrappers_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(IsContainsNoms));
+            OnPropertyChanged(nameof(CostPriceSum));
+            OnPropertyChanged(nameof(PriceSum));
+            OnPropertyChanged(nameof(ProfitSum));
+            OnPropertyChanged(nameof(CommmonMarkup));
+            offer.OfferGroups_CollectionChanged(sender, e);
+        }
     }
 }

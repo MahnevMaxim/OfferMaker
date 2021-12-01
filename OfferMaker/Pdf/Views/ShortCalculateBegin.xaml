@@ -10,10 +10,24 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
     </UserControl.Resources>
-    <Grid Width="18cm" Visibility="{Binding DataContext.ModMainVMProperty.RequiredGroups, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVisConv}}">
-        <TextBlock Margin="0.6cm, 0, 0, 0.2cm" VerticalAlignment="Bottom" Text="Краткий расчёт стоимости" FontSize="18pt" FontFamily="Segoe UI Semibold"/>
-        <Line X1="0.2cm" Y1="1.3cm" X2="0.2cm" Y2="0.8cm" Stroke="Black" StrokeThickness="1"/>
-        <Line X1="0.2cm" Y1="{Binding ElementName=ShortBegin, Path=ActualHeight}" X2="18cm" Y2="{Binding ElementName=ShortBegin, Path=ActualHeight}" Stroke="Black" StrokeThickness="2"/>
+    <Grid Width="18cm">
+        <TextBlock Text="Краткий расчёт стоимости"
+                   Margin="0.6cm, 0, 0, 0.2cm"
+                   VerticalAlignment="Bottom" 
+                   FontSize="18pt"
+                   FontFamily="Segoe UI Semibold"/>
+        <Line X1="0.2cm" 
+              Y1="1.3cm" 
+              X2="0.2cm"
+              Y2="0.8cm" 
+              Stroke="Black" 
+              StrokeThickness="1"/>
+        <Line X1="0.2cm" 
+              Y1="{Binding ElementName=ShortBegin, Path=ActualHeight}"
+              X2="18cm"
+              Y2="{Binding ElementName=ShortBegin, Path=ActualHeight}"
+              Stroke="Black" 
+              StrokeThickness="1"/>
         <Ellipse Fill="White" Width="0.4cm" Height="0.4cm" Stroke="Black" StrokeThickness="1" Margin="0,0.55cm,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
     </Grid>
 </UserControl>

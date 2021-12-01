@@ -14,7 +14,6 @@ namespace OfferMaker.ViewModels
     {
         Main modelMain;
         private bool isInfoBlocksOpen = false;
-        private bool isDiscountOpen = false;
 
         public override void InitializeViewModel()
         {
@@ -33,10 +32,10 @@ namespace OfferMaker.ViewModels
 
         public bool IsDiscountOpen
         {
-            get { return isDiscountOpen; }
+            get { return modelMain.IsDiscountOpen; }
             set
             {
-                isDiscountOpen = value;
+                modelMain.IsDiscountOpen = value;
                 OnPropertyChanged();
             }
         }
@@ -141,6 +140,8 @@ namespace OfferMaker.ViewModels
 
         public decimal TotalSumWithoutOptions { get => modelMain.Constructor.Offer.TotalSumWithoutOptions; }
 
+        public decimal TotalSumOptions { get => modelMain.Constructor.Offer.TotalSumOptions; }
+
         public string CreateDateString
         {
             get => modelMain.Constructor.Offer.CreateDateString;
@@ -151,7 +152,7 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public string Currency
+        public string CurrencyCode
         {
             get => modelMain.Constructor.Offer.Currency?.ToString();
             set
@@ -162,9 +163,17 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public Currency Currency { get => modelMain.Constructor.Offer.Currency; }
+
         public User Manager
         {
-            get => modelMain.Constructor.Offer.Manager;
+            get
+            {
+                if (modelMain.Constructor.Offer.Manager == null) return null;
+                if (modelMain.Constructor.Offer.Manager.Id == User.Id) return null;
+                return modelMain.Constructor.Offer.Manager;
+            }
+                
             set
             {
                 modelMain.Constructor.Offer.Manager = value;
@@ -172,15 +181,15 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public ObservableCollection<OfferGroup> OfferGroups
-        {
-            get => modelMain.Constructor.Offer.OfferGroups;
-            set
-            {
-                modelMain.Constructor.Offer.OfferGroups = value;
-                OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<OfferGroup> OfferGroups { get => modelMain.Constructor.Offer.OfferGroups; }
+
+        public ObservableCollection<OfferGroup> OfferGroupsNotOptions { get => modelMain.Constructor.Offer.OfferGroupsNotOptions; }
+
+        public ObservableCollection<OfferGroup> OfferGroupsOptions { get => modelMain.Constructor.Offer.OfferGroupsOptions; }
+
+        public bool IsRequiredGroups { get => modelMain.Constructor.Offer.IsRequiredGroups; }
+
+        public bool IsRequiredOptions { get => modelMain.Constructor.Offer.IsRequiredOptions; }
 
         public ObservableCollection<OfferInfoBlock> OfferInfoBlocks
         {

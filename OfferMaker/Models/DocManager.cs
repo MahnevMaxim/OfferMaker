@@ -29,6 +29,7 @@ namespace OfferMaker
         /// </summary>
         internal void SaveToPdfWithBanner()
         {
+            constructor.CreateDocument();
             FixedDocument fixedDoc = constructor.PdfDocument;
             PrintDialog printDialog = new PrintDialog();
             printDialog.PrintQueue = new LocalPrintServer().GetPrintQueue("Microsoft Print to PDF");

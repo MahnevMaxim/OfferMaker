@@ -100,7 +100,7 @@ namespace OfferMaker
                 var nom = Helpers.CloneObject<Nomenclature>(nomen);
                 list.Add(new NomWrapper(offerGroup, nom));
             }
-            offerGroup.AddNomenclatures(list);
+            offerGroup.AddNomenclaturesSilent(list);
             Close();
         }
     }

@@ -29,7 +29,7 @@ namespace OfferMaker.SimpleViews
             Offer = offer;
 
             //для тестов, чтоб не ебаться каждый раз с заполнением
-            Offer.OfferName = "Название КП";
+            Offer.OfferName = "для ООО Монолитстрой";
             Offer.Customer.FullName = "Иванов Иван Сергеевич";
             Offer.Customer.Organization = "Монолитстрой";
             Offer.Customer.Location = "Красноярск, ул. Молокова, 1/2";

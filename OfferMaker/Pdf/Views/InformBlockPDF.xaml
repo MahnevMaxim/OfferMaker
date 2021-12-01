@@ -10,7 +10,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </UserControl.Resources>
    
-        <StackPanel Margin="10,0,0,15" IsEnabled="False" Orientation="Horizontal">
+        <StackPanel Margin="10,15,0,0" IsEnabled="False" Orientation="Horizontal">
             <Image Width="23" Height="23" Stretch="Uniform" Source="{Binding Image}" IsHitTestVisible="False"/>
             <TextBlock FontFamily="Segoe UI Light" LineHeight="12pt" LineStackingStrategy="BlockLineHeight" Margin="6.8,0,0,0" VerticalAlignment="Center" TextWrapping="Wrap" Width="5.5cm" FontSize="12pt" 
                                    Text="{Binding Title}"/>

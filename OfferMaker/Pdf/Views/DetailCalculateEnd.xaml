@@ -42,7 +42,7 @@
                 <TextBlock.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
                                 <Setter Property="TextBlock.TextDecorations">
                                     <Setter.Value>
                                         <TextDecorationCollection>
@@ -57,7 +57,7 @@
                                 <Setter Property="TextBlock.Foreground" Value="Black"/>
                             </DataTrigger>
 
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.TextDecorations">
                                     <Setter.Value>
                                         <TextDecorationCollection>
@@ -76,7 +76,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding Currency}"
+            <TextBlock Text="{Binding Currency.Symbol}"
                        HorizontalAlignment="Left" 
                        Margin="5,5,10,0" 
                        Grid.Column="4"  
@@ -86,11 +86,11 @@
                 <TextBlock.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
                                 <Setter Property="TextBlock.Foreground" Value="Black"/>
                             </DataTrigger>
 
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Foreground" Value="#1074bc"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -106,10 +106,10 @@
                 <TextBlock.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
                                 <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -117,7 +117,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding DataContext.ModMainVMProperty.Discount.DiscountSize, Converter={StaticResource numConvertors}}"
+            <TextBlock Text="{Binding  Discount.DiscountSum, Converter={StaticResource numConvertors}}"
                        FontSize="14pt"
                        HorizontalAlignment="Right"
                        Grid.Column="3" Grid.Row="1" 
@@ -126,10 +126,10 @@
                 <TextBlock.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
                                 <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -137,7 +137,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding DataContext.ModMainVMProperty.TotalSumVM.ValuteName}"
+            <TextBlock Text="{Binding Currency}"
                        FontSize="14pt" 
                        HorizontalAlignment="Left" 
                        Grid.Column="4" Grid.Row="1" 
@@ -146,10 +146,10 @@
                 <TextBlock.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
                                 <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -165,10 +165,10 @@
                 <TextBlock.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
                                 <Setter Property="TextBlock.Foreground" Value="DodgerBlue"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -185,10 +185,10 @@
                 <TextBlock.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
                                 <Setter Property="TextBlock.Foreground" Value="DodgerBlue"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>
@@ -204,10 +204,10 @@
                 <TextBlock.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="True">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
                                 <Setter Property="TextBlock.Foreground" Value="DodgerBlue"></Setter>
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding DataContext.ModMainVMProperty.Discount.IsApplied}" Value="False">
+                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
                             </DataTrigger>
                         </Style.Triggers>

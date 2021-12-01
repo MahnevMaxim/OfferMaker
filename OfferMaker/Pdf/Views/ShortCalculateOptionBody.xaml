@@ -19,18 +19,18 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Name="TextBlockName" 
-            Grid.Column="0" 
-            Text="{Binding GroupTitle}" 
-            FontFamily="Segoe UI"
-            TextWrapping="WrapWithOverflow"                                                   
-            FontSize="12pt" 
-            Margin="23,2,10,10"/>
+                   Grid.Column="0" 
+                   Text="{Binding GroupTitle}"
+                   FontFamily="Segoe UI"
+                   TextWrapping="WrapWithOverflow"        
+                   FontSize="12pt" 
+                   Margin="23,2,10,10"/>
 
-        <TextBlock FontSize="12pt" 
-           Grid.Column="1" 
-           Text="{Binding Discount.OriginalPrice}" 
-           FontFamily="Segoe UI"
-           Margin="0,2,15,0">
+        <TextBlock Text="{Binding Discount.OriginalPrice}" 
+                   FontSize="12pt" 
+                   Grid.Column="1" 
+                   FontFamily="Segoe UI"
+                   Margin="0,2,15,0">
             <TextBlock.Style>
                 <Style>
                     <Style.Triggers>
@@ -66,23 +66,37 @@
             </TextBlock.Style>
         </TextBlock>
 
-        <TextBlock Name="TextBlockValue" 
-            FontSize="12pt" 
-            Grid.Column="2" 
-            Text="{Binding PriceSum}" 
-            FontFamily="Segoe UI "
-            Margin="0,2,5,10"/>
+        <TextBlock Text="{Binding PriceSum, Converter={StaticResource numConvertors}}" 
+                   Name="TextBlockValue" 
+                   FontSize="12pt" 
+                   Grid.Column="2" 
+                   FontFamily="Segoe UI"
+                   Margin="0,2,5,10"/>
 
         <TextBlock Name="TextBlockDescription" 
-            Grid.Column="3" 
-            FontSize="12pt" 
-            Text="{Binding CurrencySymbol}"
-            FontFamily="Segoe UI"
-            Margin="0,2,13,10"/>
+                   Grid.Column="3" 
+                   FontSize="12pt" 
+                   Text="{Binding Currency.Symbol}"
+                   FontFamily="Segoe UI"
+                   Margin="0,2,13,10"/>
 
-        <Grid Grid.ColumnSpan="4"  x:Name="linegrid" Background="Transparent">
-            <Line X1="0.2cm" Y1="0" X2="0.2cm" Y2="{Binding ActualHeight, ElementName=GridViewTextBlock}" Stroke="Black" StrokeThickness="1" SnapsToDevicePixels="True"  />
-            <Line X1="{Binding ElementName=GridViewTextBlock, Path=ActualWidth}" Y1="0" X2="{Binding ElementName=GridViewTextBlock, Path=ActualWidth}" Y2="{Binding ElementName=GridViewTextBlock, Path=ActualHeight}" Stroke="Black" StrokeThickness="2" SnapsToDevicePixels="True"  />
+        <Grid x:Name="linegrid" 
+              Grid.ColumnSpan="4"
+              Background="Transparent">
+            <Line X1="0.2cm" 
+                  Y1="0"
+                  X2="0.2cm" 
+                  Y2="{Binding ActualHeight, ElementName=GridViewTextBlock}" 
+                  Stroke="Black"
+                  StrokeThickness="1" 
+                  SnapsToDevicePixels="True"/>
+            <Line X1="{Binding ElementName=GridViewTextBlock, Path=ActualWidth}" 
+                  Y1="0" 
+                  X2="{Binding ElementName=GridViewTextBlock, Path=ActualWidth}"
+                  Y2="{Binding ElementName=GridViewTextBlock, Path=ActualHeight}" 
+                  Stroke="Black" 
+                  StrokeThickness="2"
+                  SnapsToDevicePixels="True"/>
         </Grid>
     </Grid>
 </UserControl>

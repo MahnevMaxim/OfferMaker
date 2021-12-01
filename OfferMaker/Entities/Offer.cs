@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace OfferMaker
 {
@@ -21,8 +22,8 @@ namespace OfferMaker
 
         ObservableCollection<OfferGroup> offerGroups = new ObservableCollection<OfferGroup>();
         ObservableCollection<OfferInfoBlock> offerInfoBlocks = new ObservableCollection<OfferInfoBlock>();
-        ObservableCollection<string> advertisingsUp;
-        ObservableCollection<string> advertisingsDown;
+        ObservableCollection<string> advertisingsUp = new ObservableCollection<string>();
+        ObservableCollection<string> advertisingsDown = new ObservableCollection<string>();
         DateTime createDate = DateTime.Now;
         User manager;
         User offerCreator;
@@ -39,7 +40,6 @@ namespace OfferMaker
         bool isCreateByCostPrice;
         bool isHideNomsPrice;
 
-
         public int Id { get; set; }
 
         /// <summary>
@@ -54,6 +54,26 @@ namespace OfferMaker
                 OnPropertyChanged(string.Empty);
             }
         }
+
+        /// <summary>
+        /// Группы, которые являются опциями.
+        /// </summary>
+        public ObservableCollection<OfferGroup> OfferGroupsOptions { get => new ObservableCollection<OfferGroup>(OfferGroups.Where(o => o.IsOption).ToList()); }
+
+        /// <summary>
+        /// Группы, которые не являются опциями.
+        /// </summary>
+        public ObservableCollection<OfferGroup> OfferGroupsNotOptions { get => new ObservableCollection<OfferGroup>(OfferGroups.Where(o => !o.IsOption).ToList()); }
+
+        /// <summary>
+        /// Имеются ли в наличии группы, которые не опции.
+        /// </summary>
+        public bool IsRequiredGroups { get => OfferGroupsNotOptions.Count == 0 ? false : true; }
+
+        /// <summary>
+        /// Имеются ли в наличии группы, которые опции.
+        /// </summary>
+        public bool IsRequiredOptions { get => OfferGroupsOptions.Count == 0 ? false : true; }
 
         /// <summary>
         /// Коллекция информблоков.
@@ -205,7 +225,7 @@ namespace OfferMaker
             set
             {
                 offerName = value;
-                OnPropertyChanged();
+                constructor?.viewModel.OnPropertyChanged(nameof(OfferName));
             }
         }
 
@@ -223,7 +243,7 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Полная цена КП.
+        /// Полная цена КП без опций.
         /// </summary>
         public decimal TotalSumWithoutOptions
         {
@@ -231,6 +251,19 @@ namespace OfferMaker
             {
                 decimal totalSum = 0;
                 OfferGroups.ToList().Where(o=>!o.IsOption).ToList().ForEach(o => totalSum += o.PriceSum);
+                return totalSum;
+            }
+        }
+
+        /// <summary>
+        /// Полная цена КП с опциями.
+        /// </summary>
+        public decimal TotalSumOptions
+        {
+            get
+            {
+                decimal totalSum = 0;
+                OfferGroups.ToList().Where(o => o.IsOption).ToList().ForEach(o => totalSum += o.PriceSum);
                 return totalSum;
             }
         }
@@ -275,6 +308,7 @@ namespace OfferMaker
             set
             {
                 isHiddenTextNds = value;
+                OfferGroups.ToList().ForEach(g=>g.OnPropertyChanged(nameof(IsHiddenTextNds)));
                 OnPropertyChanged();
             }
         }
@@ -314,7 +348,24 @@ namespace OfferMaker
             set
             {
                 isCreateByCostPrice = value;
-                OnPropertyChanged();
+                OfferGroups.ToList().ForEach(g => g.NomWrappers.ToList().ForEach(w => 
+                {
+                    w.OnPropertyChanged("Markup");
+                    w.OnPropertyChanged("Price");
+                    w.OnPropertyChanged("Sum");
+                    w.OnPropertyChanged("ProfitSum");
+                }));
+                OfferGroups.ToList().ForEach(g => { 
+                    g.OnPropertyChanged("PriceSum");
+                    g.OnPropertyChanged("ProfitSum");
+                    g.OnPropertyChanged("CommmonMarkup");
+                });
+                OnPropertyChanged(nameof(ProfitSum));
+                OnPropertyChanged(nameof(TotalCostPriceSum));
+                OnPropertyChanged(nameof(AverageMarkup));
+                OnPropertyChanged(nameof(TotalSumOptions));
+                constructor?.viewModel.OnPropertyChanged(nameof(TotalSumWithoutOptions));
+                OnPropertyChanged(nameof(TotalSum));
             }
         }
 
@@ -327,6 +378,7 @@ namespace OfferMaker
             set
             {
                 isHideNomsPrice = value;
+                OfferGroupsNotOptions.ToList().ForEach(o => o.NomWrappers.ToList().ForEach(n => n.OnPropertyChanged()));
                 OnPropertyChanged();
             }
         }
@@ -347,7 +399,7 @@ namespace OfferMaker
         /// <summary>
         /// Объект дисконта.
         /// </summary>
-        public Discount Discount { get => discount; }
+        public Discount Discount { get => discount; set => discount = value; }
 
         private Offer() { }
 
@@ -356,18 +408,73 @@ namespace OfferMaker
             this.constructor = constructor;
             PropertyChanged += Offer_PropertyChanged;
             OfferInfoBlocks.CollectionChanged += OfferInfoBlocks_CollectionChanged;
+            OfferGroups.CollectionChanged += OfferGroups_CollectionChanged;
             discount = new Discount(this);
         }
 
-        private void OfferInfoBlocks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => OnPropertyChanged(string.Empty);
+        public void OfferGroups_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            constructor.viewModel.OnPropertyChanged(nameof(ProfitSum));
+            constructor.viewModel.OnPropertyChanged(nameof(TotalCostPriceSum));
+            constructor.viewModel.OnPropertyChanged(nameof(AverageMarkup));
+            constructor.viewModel.OnPropertyChanged(nameof(TotalSumOptions));
+            constructor.viewModel.OnPropertyChanged(nameof(TotalSumWithoutOptions));
+            constructor.viewModel.OnPropertyChanged(nameof(TotalSum));
+            UpdateColls();
+            constructor.viewModel.OnPropertyChanged(nameof(IsRequiredGroups));
+            constructor.viewModel.OnPropertyChanged(nameof(IsRequiredOptions));
+        }
 
-        private void Offer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) => constructor?.OnPropertyChanged(string.Empty);
+        bool isCreatorBusy;
+        bool isNeedUpdate;
+        DateTime beginExecuteTime;
+        DateTime needUpdateSetTime;
+        async void UpdateColls()
+        {
+            isNeedUpdate = true;
+            needUpdateSetTime = DateTime.Now; //если кто-то пришёл втечение определённого времени, то скипаем его в цикле while
+            if (isCreatorBusy) return;
+
+            isCreatorBusy = true;
+            beginExecuteTime = DateTime.Now;
+            while (isNeedUpdate)
+            {
+                isNeedUpdate = false;
+                try
+                {
+                    //скидыаем быстрые действия, вроде быстрых нажатий на клавиатуру и быстрые щелчки мышью, выполняем только последнее событие
+                    await Task.Delay(2000);
+                    if (isNeedUpdate) continue;
+                    await Task.Delay(6000);
+                    constructor.viewModel.OnPropertyChanged(nameof(OfferGroupsOptions));
+                    constructor.viewModel.OnPropertyChanged(nameof(OfferGroupsNotOptions));
+                    await Task.Delay(4000);
+                }
+                catch (Exception ex)
+                {
+                    await Task.Delay(4000);
+                    L.LW(ex);
+                }
+                var difference = (needUpdateSetTime - beginExecuteTime).Milliseconds;
+                if (difference < 1000) break;
+            }
+            isCreatorBusy = false;
+        }
+
+        private void OfferInfoBlocks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(string.Empty);
+        }
+            
+        private void Offer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+
+        }
 
         /// <summary>
         /// Чтобы не получить переполнение стека.
         /// </summary>
         /// <param name="curr"></param>
         internal void SetCurrencySilent(Currency curr) => currency = curr;
-
     }
 }

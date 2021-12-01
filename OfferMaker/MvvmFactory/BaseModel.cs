@@ -60,12 +60,12 @@ namespace OfferMaker
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             if (PropertyChanged != null)
+            {
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
+                L.LW(GetType().Name + " " + prop);
+            }
+                
             viewModel?.OnPropertyChanged(prop);
-            //if(viewModel!=null)
-            //    L.LW(viewModel.GetType().Name + " " + prop);
-            //else
-            //    L.LW(GetType().Name + " " + prop);
         }
 
         #endregion
