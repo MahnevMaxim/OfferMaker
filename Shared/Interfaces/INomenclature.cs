@@ -14,7 +14,7 @@ namespace Shared
 
         public string Title { get; set; }
 
-        public Category Category { get; set; }
+        public int? CategoryId { get; set; }
 
         public ObservableCollection<Description> Descriptions { get; set; }
 
@@ -22,19 +22,11 @@ namespace Shared
 
         public decimal Markup { get; set; }
 
-        [NotMapped]
-        public decimal Price { get; set; }
-
-        [NotMapped]
-        public decimal Profit { get; set; }
-
         public string CurrencyCharCode { get; set; }
 
         public DateTime? LastChangePriceDate { get; set; }
 
         public int ActualPricePeriod { get; set; }
-
-        public bool IsPriceActual { get; set; }
 
         public string Photo { get; set; }
     }

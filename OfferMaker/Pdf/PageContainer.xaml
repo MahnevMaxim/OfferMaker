@@ -14,7 +14,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <StackPanel VerticalAlignment="Top" Orientation="Vertical" x:Name="container"/>
-            <Grid x:Name="colontitul" Grid.Row="1"  Grid.ColumnSpan="3" >
+            <Grid x:Name="colontitul" Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>

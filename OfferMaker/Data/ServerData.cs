@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Shared;
 using System.Collections.ObjectModel;
 using ApiLib;
+using System.Collections.Specialized;
 
 namespace OfferMaker
 {
@@ -41,26 +42,6 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Сохранение валют на сервере.
-        /// </summary>
-        /// <param name="currencies"></param>
-        /// <returns></returns>
-        async internal Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies)
-        {
-            try
-            {
-                IEnumerable<ApiLib.Currency> currs = Helpers.CloneObject<IEnumerable<ApiLib.Currency>>(currencies);
-                await client.CurrenciesPUTAsync(currs);
-                return new CallResult();
-            }
-            catch (Exception ex)
-            {
-                L.LW(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить валюты на сервере.") };
-            }
-        }
-
-        /// <summary>
         /// Пытаемся получить номенклатуру с сервера.
         /// </summary>
         /// <returns></returns>
@@ -76,23 +57,6 @@ namespace OfferMaker
             {
                 L.LW(ex);
                 return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error("Ошибка при попытке получить номенклатуру с сервера.") };
-            }
-        }
-
-        async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures)
-        {
-            try
-            {
-
-                var newNoms = nomenclatures.Where(n => n.Id == 0 || n.GetIsEdit()==true).ToList();
-                IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
-                await client.NomenclaturesPUTAsync(noms);
-                return new CallResult();
-            }
-            catch (Exception ex)
-            {
-                L.LW(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
             }
         }
 
@@ -154,6 +118,25 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Пытаемся получить архив КП с сервера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers()
+        {
+            try
+            {
+                var response = await client.OffersAllAsync();
+                ObservableCollection<Offer> res = Helpers.CloneObject<ObservableCollection<Offer>>(response);
+                return new CallResult<ObservableCollection<Offer>>() { Data = res };
+            }
+            catch (Exception ex)
+            {
+                L.LW(ex);
+                return new CallResult<ObservableCollection<Offer>>() { Error = new Error("Ошибка при попытке получить архив КП с сервера.") };
+            }
+        }
+
+        /// <summary>
         /// Пытаемся сохранить группы номенклатур на сервере.
         /// </summary>
         /// <param name="nomenclatureGroups"></param>
@@ -170,6 +153,73 @@ namespace OfferMaker
             {
                 L.LW(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить группы номенклатур на сервере.") };
+            }
+        }
+
+        internal Task<CallResult<StringCollection>> GetHints()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Пытаемся сохранить КП на сервере.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveOffer(Offer offer)
+        {
+            try
+            {
+                ApiLib.Offer offerCopy = Helpers.CloneObject<ApiLib.Offer>(offer);
+                var res = await client.OffersPOSTAsync(offerCopy);
+                offer.Id = res.Id;
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                L.LW(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить КП на сервере.") };
+            }
+        }
+
+        /// <summary>
+        /// Сохранение валют на сервере.
+        /// </summary>
+        /// <param name="currencies"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies)
+        {
+            try
+            {
+                IEnumerable<ApiLib.Currency> currs = Helpers.CloneObject<IEnumerable<ApiLib.Currency>>(currencies);
+                await client.CurrenciesPUTAsync(currs);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                L.LW(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить валюты на сервере.") };
+            }
+        }
+
+        /// <summary>
+        /// Пытаемся сохранить номенклатуры на сервере.
+        /// </summary>
+        /// <param name="nomenclatures"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures)
+        {
+            try
+            {
+                var newNoms = nomenclatures.Where(n => n.Id == 0 || n.GetIsEdit() == true).ToList();
+                IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
+                await client.NomenclaturesPUTAsync(noms);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                L.LW(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
             }
         }
     }

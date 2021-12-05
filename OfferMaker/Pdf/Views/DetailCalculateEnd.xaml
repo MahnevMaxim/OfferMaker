@@ -76,7 +76,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding Currency.Symbol}"
+            <TextBlock Name="CurrencySymbol"
                        HorizontalAlignment="Left" 
                        Margin="5,5,10,0" 
                        Grid.Column="4"  
@@ -89,9 +89,14 @@
                             <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
                                 <Setter Property="TextBlock.Foreground" Value="Black"/>
                             </DataTrigger>
-
                             <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Foreground" Value="#1074bc"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
+                                <Setter Property="TextBlock.Text" Value="₽"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
+                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -137,7 +142,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding Currency}"
+            <TextBlock Name="CurrencySymbolPersonalDiscount"
                        FontSize="14pt" 
                        HorizontalAlignment="Left" 
                        Grid.Column="4" Grid.Row="1" 
@@ -151,6 +156,12 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
+                                <Setter Property="TextBlock.Text" Value="₽"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
+                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -176,7 +187,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding DataContext.ModMainVMProperty.SummGroups, Converter={StaticResource numConvertors}}" 
+            <TextBlock Text="{Binding Discount.PriceWithDiscount, Converter={StaticResource numConvertors}}" 
                        FontSize="14pt"
                        HorizontalAlignment="Right"
                        Grid.Column="3" Grid.Row="2" 
@@ -196,7 +207,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding DataContext.ModMainVMProperty.TotalSumVM.ValuteName}" 
+            <TextBlock Name="CurrencySymbolCommon" 
                        FontSize="14pt" 
                        Grid.Column="4" Grid.Row="2" 
                        FontFamily="Segoe UI semibold"
@@ -209,6 +220,12 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
+                                <Setter Property="TextBlock.Text" Value="₽"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
+                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

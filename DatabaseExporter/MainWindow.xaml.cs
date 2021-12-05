@@ -138,7 +138,7 @@ namespace DatabaseExporter
                 IsoCode = 810,
                 CharCode = "RUB",
                 Rate = 1,
-                RateDatetime = DateTime.Now
+                RateDatetime = DateTime.UtcNow
             });
 
             foreach (var currencyEl in els)

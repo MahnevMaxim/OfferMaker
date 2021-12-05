@@ -19,15 +19,18 @@ namespace OfferMaker
 
         public static ObservableCollection<User> Managers { get; set; } = new ObservableCollection<User>();
 
+        public static ObservableCollection<User> Users { get; set; } = new ObservableCollection<User>();
+
         async internal static Task<CallResult> SetUsers(DataRepository dataRepository)
         {
             int uid = 12;
             var usersCr = await dataRepository.GetUsers();
             if(usersCr.Success)
             {
+                Users = usersCr.Data;
                 usersCr.Data.ToList().ForEach(u => u.PhotoPath = GetFullPath(u.PhotoPath));
                 User = usersCr.Data.Where(u => u.Id == uid).First();
-                usersCr.Data.Where(u => u.Id != uid).ToList().ForEach(u=> Managers.Add(u));
+                usersCr.Data.ToList().ForEach(u=> Managers.Add(u));
                 return new CallResult();
             }
             else

@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using Shared;
+using System.Threading;
 
 namespace OfferMaker
 {
@@ -21,6 +22,7 @@ namespace OfferMaker
         #region Fields
 
         FixedDocument pdfDocument;
+        FixedDocument pdfDocumentShort;
         string photoLogo;
         string photoNumber;
         string photoCustomer;
@@ -42,7 +44,7 @@ namespace OfferMaker
             set
             {
                 pdfControlSelectedIndex = value;
-                if (pdfControlSelectedIndex == 1)
+                if (pdfControlSelectedIndex != 0)
                     CreatePdf(); 
             }
         }
@@ -119,6 +121,19 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Сокращённый документ для предпросмотра.
+        /// </summary>
+        public FixedDocument PdfDocumentShort
+        {
+            get => pdfDocumentShort;
+            set
+            {
+                pdfDocumentShort = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Properties
 
         #endregion MVVM
@@ -152,14 +167,124 @@ namespace OfferMaker
 
         #endregion Singleton
 
+        #region Offer
+
+        /// <summary>
+        /// Создание нового КП.
+        /// </summary>
         private void InitNewOffer()
         {
             Offer = new Offer(this);
             Offer.OfferInfoBlocks = GetInfoBlocks();
             Offer.Banner = Settings.GetDefaultBanner();
-            Offer.PropertyChanged += Offer_PropertyChanged;
         }
 
+        /// <summary>
+        /// Загрузка КП из архива.
+        /// </summary>
+        /// <param name="offer"></param>
+        internal void LoadOfferFromArchive(Offer offer)
+        {
+            Offer = offer;
+            offer.Discount.SetOffer(offer);
+            Offer.SetConstructor(this);
+            viewModel.OnPropertyChanged("OfferInfoBlocks");
+            viewModel.OnPropertyChanged("Manager");
+        }
+
+        /// <summary>
+        /// Test
+        /// </summary>
+        internal void SkipOffer()
+        {
+            Offer = new Offer(this);
+            Offer.OfferInfoBlocks = GetInfoBlocks();
+            Offer.OnPropertyChanged(String.Empty);
+            Offer.Currency = Global.Main.Currencies.Where(c => c.CharCode == "RUB").FirstOrDefault();
+            Offer.OfferCreator = Global.Main.User;
+            viewModel.OnPropertyChanged(String.Empty);
+        }
+
+        #endregion Offer
+
+        #region Create PDF
+
+        bool isCreatorBusy;
+        bool isNeedUpdate;
+        /// <summary>
+        /// Обновление документа КП.
+        /// </summary>
+        async public Task CreatePdf()
+        {
+            isNeedUpdate = true;
+            if (isCreatorBusy) return;
+            if (pdfControlSelectedIndex == 0) return;
+
+            isCreatorBusy = true;
+            while (isNeedUpdate)
+            {
+                isNeedUpdate = false;
+                try
+                {
+                    CreateDocument();
+                    await Task.Delay(4000);
+                }
+                catch (Exception ex)
+                {
+                    await Task.Delay(4000);
+                    L.LW(ex);
+                }
+            }
+            isCreatorBusy = false;
+        }
+
+        public void CreateDocument()
+        {
+            if (pdfControlSelectedIndex == 1)
+            {
+                FlowDocument flowDocument = ((Views.MainWindow)viewModel.view).pdfControl.flowDocumentAll;
+                WrapperAllPages wrapper = new WrapperAllPages(flowDocument, viewModel, smallLogo);
+                PdfDocument = wrapper.GetPdf(2, 1, 1, 1);
+            }
+            else if (pdfControlSelectedIndex == 2)
+            {
+                WrapperOnePage wrapper = new WrapperOnePage(viewModel, smallLogo);
+                PdfDocumentShort = wrapper.GetPdf(2, 1, 1, 1);
+            }
+        }
+
+        #endregion Create PDF
+
+        #region InformBlocks
+
+        /// <summary>
+        /// Добавить кастомный информ блок.
+        /// </summary>
+        /// <returns></returns>
+        internal CallResult AddInformBlock()
+        {
+            if (Settings.GetMaxInfoblocksCount() == Offer.OfferInfoBlocks.Count) return new CallResult() { Error = new Error("Слишком много блоков") };
+            var block = new OfferInfoBlock()
+            {
+                Title = "Дополнительное описание",
+                Text = "Дополнительное описание",
+                ImagePath = AppDomain.CurrentDomain.BaseDirectory + "informIcons\\Commertial5.png",
+                IsCustom = true
+            };
+            Offer.OfferInfoBlocks.Add(block);
+            return new CallResult();
+        }
+
+        /// <summary>
+        /// Удалить кастомный информ блок.
+        /// </summary>
+        /// <param name="offerInfoBlock"></param>
+        internal void RemoveInformBlock(OfferInfoBlock offerInfoBlock) => Offer.OfferInfoBlocks.Remove(offerInfoBlock);
+
+        /// <summary>
+        /// Инициализация инфоблоков.
+        /// </summary>
+        /// <returns></returns>
         private ObservableCollection<OfferInfoBlock> GetInfoBlocks()
         {
             return new ObservableCollection<OfferInfoBlock>()
@@ -189,105 +314,14 @@ namespace OfferMaker
             };
         }
 
-        /// <summary>
-        /// Для отладки информацию отображаем в TreeView.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Offer_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            //DebugTree.Clear();
-            //var props = Offer.GetType().GetProperties();
-            //foreach (var pr in props)
-            //{
-            //    DebugTreeItem item = new DebugTreeItem()
-            //    {
-            //        PropertyType = pr.PropertyType.Name,
-            //        PropertyName = pr.Name,
-            //        PropertyValue = pr.GetValue(Offer)?.ToString()
-            //    };
-            //    DebugTree.Add(item);
-            //}
-        }
+        #endregion InformBlocks
 
-        bool isCreatorBusy;
-        bool isNeedUpdate;
-        /// <summary>
-        /// Обновление документа КП.
-        /// </summary>
-        async public Task CreatePdf()
-        {
-            isNeedUpdate = true;
-            if (isCreatorBusy) return;
-            if (pdfControlSelectedIndex != 1) return;
-
-            isCreatorBusy = true;
-            while (isNeedUpdate)
-            {
-                isNeedUpdate = false;
-                try
-                {
-                    CreateDocument();
-                    await Task.Delay(4000);
-                }
-                catch (Exception ex)
-                {
-                    await Task.Delay(4000);
-                    L.LW(ex);
-                }
-            }
-            isCreatorBusy = false;
-        }
-
-        public void CreateDocument()
-        {
-            FlowDocument flowDocument = ((Views.MainWindow)viewModel.view).pdfControl.flowDocumentAll;
-            WrapperAllPages wrapper = new WrapperAllPages(flowDocument, viewModel, smallLogo);
-            PdfDocument = wrapper.GetPdf(2, 1, 1, 1);
-        }
+        #region Discount
 
         /// <summary>
-        /// Добавить кастомный информ блок.
+        /// Включение скидки.
         /// </summary>
         /// <returns></returns>
-        internal CallResult AddInformBlock()
-        {
-            if (Settings.GetMaxInfoblocksCount() == Offer.OfferInfoBlocks.Count) return new CallResult() { Error = new Error("Слишком много блоков") };
-            var block = new OfferInfoBlock()
-            {
-                Title = "Дополнительное описание",
-                Text = "Дополнительное описание",
-                ImagePath = AppDomain.CurrentDomain.BaseDirectory + "informIcons\\Commertial5.png",
-                IsCustom = true
-            };
-            Offer.OfferInfoBlocks.Add(block);
-            return new CallResult();
-        }
-
-        /// <summary>
-        /// Удалить кастомный информ блок.
-        /// </summary>
-        /// <param name="offerInfoBlock"></param>
-        internal void RemoveInformBlock(OfferInfoBlock offerInfoBlock) => Offer.OfferInfoBlocks.Remove(offerInfoBlock);
-
-        /// <summary>
-        /// Добавление новой группы в конструктор.
-        /// </summary>
-        internal void AddOfferGroup() => Offer.OfferGroups.Add(new OfferGroup(Offer) { GroupTitle = "ГРУППА " + ++Offer.addGroupsCounter });
-
-        /// <summary>
-        /// Удаление группы из конструктора.
-        /// </summary>
-        /// <param name="offerGroup"></param>
-        internal void DelOfferGroup(OfferGroup offerGroup) => Offer.OfferGroups.Remove(offerGroup);
-
-        /// <summary>
-        /// Добавление номенклатуры в группу конструктора.
-        /// </summary>
-        /// <param name="offerGroup"></param>
-        internal void AddNomenclatureToOfferGroup(OfferGroup offerGroup) =>
-            MvvmFactory.CreateWindow(new AddNomToConstructor(offerGroup), new ViewModels.AddNomToConstructorViewModel(), new Views.AddNomToConstructor(), ViewMode.ShowDialog);
-
         internal CallResult SetDiscount()
         {
             if(Offer.Discount.DiscountSum>0)
@@ -301,11 +335,18 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Выключение скидки.
+        /// </summary>
         internal void CancelDiscount()
         {
             Offer.Discount.IsEnabled = false;
             Offer.Discount.Percentage = 0;
         }
+
+        #endregion Discount
+
+        #region OfferGroups
 
         /// <summary>
         /// Поднять группу вверх в списке.
@@ -337,16 +378,26 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Редактирование данных клиента и, по стечению обстоятельств, названия КП.
+        /// Добавление новой группы в конструктор.
         /// </summary>
-        internal void EditCustomer() => new SimpleViews.EditCustomer(Offer).ShowDialog();
+        internal void AddOfferGroup() => Offer.OfferGroups.Add(new OfferGroup(Offer) { GroupTitle = "ГРУППА " + ++Offer.addGroupsCounter });
 
         /// <summary>
-        /// Удаление номенклатуры из группы в конструкторе
+        /// Удаление группы из конструктора.
         /// </summary>
-        /// <param name="nomWrapper"></param>
         /// <param name="offerGroup"></param>
-        internal void DeleteNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => offerGroup.NomWrappers.Remove(nomWrapper);
+        internal void DelOfferGroup(OfferGroup offerGroup) => Offer.OfferGroups.Remove(offerGroup);
+
+        /// <summary>
+        /// Добавление номенклатуры в группу конструктора.
+        /// </summary>
+        /// <param name="offerGroup"></param>
+        internal void AddNomenclatureToOfferGroup(OfferGroup offerGroup) =>
+            MvvmFactory.CreateWindow(new AddNomToConstructor(offerGroup), new ViewModels.AddNomToConstructorViewModel(), new Views.AddNomToConstructor(), ViewMode.ShowDialog);
+
+        #endregion OfferGroups
+
+        #region Descriptions
 
         /// <summary>
         /// Удаление описания из номенклатуры из обертки номенклатуры для группы номенклатур в конструкторе.
@@ -354,43 +405,6 @@ namespace OfferMaker
         /// <param name="description"></param>
         /// <param name="nomWrapper"></param>
         internal void DeleteDescriptionFromNomWrapper(Description description, NomWrapper nomWrapper) => nomWrapper.Nomenclature.Descriptions.Remove(description);
-
-        /// <summary>
-        /// Test
-        /// </summary>
-        internal void SkipOffer()
-        {
-            Offer = new Offer(this);
-            Offer.PropertyChanged += Offer_PropertyChanged;
-            Offer.OnPropertyChanged(String.Empty);
-            viewModel.OnPropertyChanged(String.Empty);
-        }
-
-        /// <summary>
-        /// Окно выбора баннера и рекламмы.
-        /// </summary>
-        internal void OpenBanners()
-        {
-            MvvmFactory.CreateWindow(Global.Main.BannersManager, new ViewModels.BannersManagerViewModel(), new Views.BannersManager(), ViewMode.ShowDialog);
-            if (Global.Main.BannersManager.SelectedBanner != null && 
-                Global.Main.BannersManager.SelectedBanner!= Offer.Banner)
-            {
-                Offer.Banner = Global.Main.BannersManager.SelectedBanner;
-                viewModel.OnPropertyChanged("Banner");
-            }
-            
-            if (!Offer.AdvertisingsUp.Equals(Global.Main.BannersManager.AdvertisingsUp))
-            {
-                Offer.AdvertisingsUp = Global.Main.BannersManager.AdvertisingsUp;
-                viewModel.OnPropertyChanged("AdvertisingsUp");
-            }
-
-            if (!Offer.AdvertisingsDown.Equals(Global.Main.BannersManager.AdvertisingsDown))
-            {
-                Offer.AdvertisingsDown = Global.Main.BannersManager.AdvertisingsDown;
-                viewModel.OnPropertyChanged("AdvertisingsDown");
-            }
-        }
 
         /// <summary>
         /// Поднять описание в списке.
@@ -455,6 +469,10 @@ namespace OfferMaker
             OpenDescriptions(nomWrapper);
         }
 
+        #endregion Descriptions
+
+        #region NomWrappers
+
         /// <summary>
         /// Поднять номенклатуру в списке.
         /// </summary>
@@ -485,5 +503,49 @@ namespace OfferMaker
                 offerGroup.NomWrappers.Insert(index + 1, nomWrapper);
             }
         }
+
+        /// <summary>
+        /// Удаление номенклатуры из группы в конструкторе
+        /// </summary>
+        /// <param name="nomWrapper"></param>
+        /// <param name="offerGroup"></param>
+        internal void DeleteNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => offerGroup.NomWrappers.Remove(nomWrapper);
+
+        #endregion NomWrappers
+
+        #region Etc
+
+        /// <summary>
+        /// Редактирование данных клиента и, по стечению обстоятельств, названия КП.
+        /// </summary>
+        internal void EditCustomer() => new SimpleViews.EditCustomer(Offer).ShowDialog();
+
+        /// <summary>
+        /// Окно выбора баннера и рекламмы.
+        /// </summary>
+        internal void OpenBanners()
+        {
+            MvvmFactory.CreateWindow(Global.Main.BannersManager, new ViewModels.BannersManagerViewModel(), new Views.BannersManager(), ViewMode.ShowDialog);
+            if (Global.Main.BannersManager.SelectedBanner != null &&
+                Global.Main.BannersManager.SelectedBanner != Offer.Banner)
+            {
+                Offer.Banner = Global.Main.BannersManager.SelectedBanner;
+                viewModel.OnPropertyChanged("Banner");
+            }
+
+            if (!Offer.AdvertisingsUp.Equals(Global.Main.BannersManager.AdvertisingsUp))
+            {
+                Offer.AdvertisingsUp = Global.Main.BannersManager.AdvertisingsUp;
+                viewModel.OnPropertyChanged("AdvertisingsUp");
+            }
+
+            if (!Offer.AdvertisingsDown.Equals(Global.Main.BannersManager.AdvertisingsDown))
+            {
+                Offer.AdvertisingsDown = Global.Main.BannersManager.AdvertisingsDown;
+                viewModel.OnPropertyChanged("AdvertisingsDown");
+            }
+        }
+
+        #endregion Etc
     }
 }

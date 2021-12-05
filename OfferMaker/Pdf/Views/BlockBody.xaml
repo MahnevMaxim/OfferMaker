@@ -17,7 +17,9 @@
         <convert:NumConvertors x:Key="numConvertors"></convert:NumConvertors>
     </UserControl.Resources>
 
-    <StackPanel HorizontalAlignment="Stretch" Width="18cm">
+    <StackPanel Visibility="{Binding IsIncludeIntoOffer, Converter={StaticResource VisibleIfTrue}}"
+                HorizontalAlignment="Stretch"
+                Width="18cm">
         <Grid x:Name="maingrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -35,8 +37,16 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <TextBlock Margin="0.6cm,0.3cm,0.3cm,0" Text="{Binding Title}" TextWrapping="WrapWithOverflow" LineStackingStrategy="BlockLineHeight" LineHeight="18pt" FontSize="12pt" FontFamily="Segoe UI Semibold"/>
-                <ItemsControl Grid.Row="1" x:Name="list" BorderBrush="Transparent" Margin="0.2cm,0.02cm,0.2cm,0.2cm" ItemsSource="{Binding Descriptions}">
+                <TextBlock Text="{Binding Title}" 
+                           Margin="0.6cm,0.3cm,0.3cm,0" 
+                           TextWrapping="WrapWithOverflow" 
+                           LineStackingStrategy="BlockLineHeight" 
+                           LineHeight="18pt" FontSize="12pt"
+                           FontFamily="Segoe UI Semibold"/>
+                <ItemsControl ItemsSource="{Binding Descriptions}" Grid.Row="1"
+                              x:Name="list"
+                              BorderBrush="Transparent"
+                              Margin="0.2cm,0.02cm,0.2cm,0.2cm" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
@@ -112,9 +122,15 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" 
                                 Visibility="{Binding IsHideNomsPrice, Converter={StaticResource VisibleIfNotTrue}}"
-                                Margin="0,0,0.3cm,0" Orientation="Horizontal" CanHorizontallyScroll="False" HorizontalAlignment="Right" >
-                        <TextBlock Text="{Binding Price, Converter={StaticResource numConvertors}}" FontSize="14pt" FontFamily="Segoe UI "/>
-                        <TextBlock Margin="5,0,0,0" Text="{Binding Currency.Symbol}" FontSize="14pt" FontFamily="Segoe UI "/>
+                                Margin="0,0,0.3cm,0" 
+                                Orientation="Horizontal" 
+                                CanHorizontallyScroll="False" 
+                                HorizontalAlignment="Right" >
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding IsShowPrice, Converter={StaticResource VisibleIfTrue}}">
+                            <TextBlock Text="{Binding Price, Converter={StaticResource numConvertors}}" FontSize="14pt" FontFamily="Segoe UI "/>
+                            <TextBlock Margin="5,0,0,0" Text="{Binding Currency.Symbol}" FontSize="14pt" FontFamily="Segoe UI "/>
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Margin="0,0,0.3cm,0" Orientation="Horizontal" CanHorizontallyScroll="False" HorizontalAlignment="Right" >
                         <TextBlock Text="x " FontSize="12pt" FontFamily="Segoe UI " LineStackingStrategy="BlockLineHeight" LineHeight="15pt"/>
@@ -123,9 +139,16 @@
                     </StackPanel>
                     <StackPanel Grid.Row="2"
                                 Visibility="{Binding IsHideNomsPrice, Converter={StaticResource VisibleIfNotTrue}}"
-                                Margin="0,0,0.3cm,0" Orientation="Horizontal" CanHorizontallyScroll="False" HorizontalAlignment="Right" >
-                        <TextBlock Foreground="#1074bc" Text="{Binding Sum, Converter={StaticResource numConvertors}}" FontSize="14pt" FontFamily="Segoe UI Semibold"/>
-                        <TextBlock Foreground="#1074bc" Margin="5,0,0,0" Text="{Binding Currency.Symbol}" FontSize="14pt" FontFamily="Segoe UI Semibold"/>
+                                Margin="0,0,0.3cm,0"
+                                Orientation="Horizontal"
+                                CanHorizontallyScroll="False"
+                                HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal"
+                                    Visibility="{Binding IsShowPrice, Converter={StaticResource VisibleIfTrue}}">
+                            <TextBlock Foreground="#1074bc" Text="{Binding Sum, Converter={StaticResource numConvertors}}" FontSize="14pt" FontFamily="Segoe UI Semibold"/>
+                            <TextBlock Foreground="#1074bc" Margin="5,0,0,0" Text="{Binding Currency.Symbol}" FontSize="14pt" FontFamily="Segoe UI Semibold"/>
+                        </StackPanel>
+                        
                     </StackPanel>
                 </Grid>
             </Grid>

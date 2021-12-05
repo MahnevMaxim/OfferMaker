@@ -93,23 +93,6 @@ namespace API.Migrations
                     b.ToTable("Customers");
                 });
 
-            modelBuilder.Entity("Shared.Group", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("OfferId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OfferId");
-
-                    b.ToTable("Group");
-                });
-
             modelBuilder.Entity("Shared.Nomenclature", b =>
                 {
                     b.Property<int>("Id")
@@ -118,7 +101,9 @@ namespace API.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("ActualPricePeriod")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(30);
 
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
@@ -132,11 +117,10 @@ namespace API.Migrations
                     b.Property<string>("Descriptions")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsPriceActual")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("LastChangePriceDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2021, 12, 2, 5, 55, 55, 294, DateTimeKind.Utc).AddTicks(7708));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -148,8 +132,6 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Nomenclatures");
                 });
@@ -179,48 +161,66 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CommercialInJson")
+                    b.Property<string>("AdvertisingsDown")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AdvertisingsUp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Banner")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2021, 12, 2, 5, 55, 55, 305, DateTimeKind.Utc).AddTicks(8864));
 
-                    b.Property<int?>("CurrencyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Images")
+                    b.Property<string>("Currency")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Customer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discount")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsCreateByCostPrice")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsHiddenTextNds")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsHideNomsPrice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsResultSummInRub")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsShowPriceDetails")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsWithNds")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("ManagerId")
+                    b.Property<int>("ManagerId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OfferCreatorId")
+                    b.Property<int>("OfferCreatorId")
                         .HasColumnType("int");
 
-                    b.Property<string>("OfferName")
+                    b.Property<string>("OfferGroups")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("TotalSum")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("OfferInfoBlocks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfferName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CurrencyId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("ManagerId");
-
-                    b.HasIndex("OfferCreatorId");
 
                     b.ToTable("Offers");
                 });
@@ -257,54 +257,6 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Shared.Group", b =>
-                {
-                    b.HasOne("Shared.Offer", null)
-                        .WithMany("Groups")
-                        .HasForeignKey("OfferId");
-                });
-
-            modelBuilder.Entity("Shared.Nomenclature", b =>
-                {
-                    b.HasOne("Shared.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId");
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Shared.Offer", b =>
-                {
-                    b.HasOne("Shared.Currency", "Currency")
-                        .WithMany()
-                        .HasForeignKey("CurrencyId");
-
-                    b.HasOne("Shared.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId");
-
-                    b.HasOne("Shared.User", "Manager")
-                        .WithMany()
-                        .HasForeignKey("ManagerId");
-
-                    b.HasOne("Shared.User", "OfferCreator")
-                        .WithMany()
-                        .HasForeignKey("OfferCreatorId");
-
-                    b.Navigation("Currency");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Manager");
-
-                    b.Navigation("OfferCreator");
-                });
-
-            modelBuilder.Entity("Shared.Offer", b =>
-                {
-                    b.Navigation("Groups");
                 });
 #pragma warning restore 612, 618
         }

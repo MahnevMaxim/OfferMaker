@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using Shared;
 using System.IO;
 using System.Windows.Media.Imaging;
+using System.Collections.Specialized;
 
 namespace OfferMaker
 {
@@ -19,6 +20,7 @@ namespace OfferMaker
         ObservableCollection<User> managers = new ObservableCollection<User>();
         ObservableCollection<Currency> currencies;
         bool isDiscountOpen;
+        ObservableCollection<Offer> offers = new ObservableCollection<Offer>();
 
         #endregion Fields
 
@@ -34,6 +36,11 @@ namespace OfferMaker
                 managers = value;
                 OnPropertyChanged();
             }
+        }
+
+        internal List<string> GetHints()
+        {
+            throw new NotImplementedException();
         }
 
         public ObservableCollection<Currency> Currencies
@@ -67,6 +74,16 @@ namespace OfferMaker
             }
         }
 
+        public ObservableCollection<Offer> Offers
+        {
+            get => offers;
+            set
+            {
+                offers = value;
+                OnPropertyChanged();
+            }
+        }
+
         #endregion Propetries
 
         #endregion MVVVM 
@@ -88,6 +105,10 @@ namespace OfferMaker
         public DocManager DocManager { get; set; }
 
         #endregion Modules
+
+        ObservableCollection<User> users;
+
+        public StringCollection Hints { get; set; }
 
         #endregion Properties
 
@@ -112,6 +133,7 @@ namespace OfferMaker
             }
             User = Hello.User;
             Managers = Hello.Managers;
+            users = Hello.Users;
 
             await InitData();
             Catalog.Run();
@@ -156,13 +178,60 @@ namespace OfferMaker
             else
                 errorMessage += nomGroupsCr.Error.Message + "\n";
 
+            //получаем архив КП
+            //var offersCr = await DataRepository.GetOffers();
+            //if (offersCr.Success)
+            //    SetOffers(offersCr.Data);
+            //else
+            //    errorMessage += offersCr.Error.Message + "\n";
+
+            //получаем хинты
+            //var hintsCr = await DataRepository.GetHints();
+            //if (hintsCr.Success)
+            //{
+            //    Hints = hintsCr.Data;
+            //    SetNomGroups();
+            //}
+            //else
+            //    errorMessage += hintsCr.Error.Message + "\n";
+            
+
             if (!string.IsNullOrWhiteSpace(errorMessage))
                 OnSendMessage(errorMessage);
 
-            Constructor.Offer.OfferCreator = User;
+            Constructor.Offer.Manager = User;
+            Constructor.Offer.Currency = Currencies.Where(c => c.CharCode == "RUB").FirstOrDefault();
 
             InitBanners();
             InitAdvertising();
+        }
+
+        /// <summary>
+        /// Восстанавливаем необходимые данные.
+        /// </summary>
+        /// <param name="data"></param>
+        private void SetOffers(ObservableCollection<Offer> offers)
+        {
+            ObservableCollection<Offer> restoredOffers = new ObservableCollection<Offer>();
+            foreach (var offer in offers)
+            {
+                restoredOffers.Add(RestoreOffer(offer));
+            }
+            Offers = restoredOffers;
+        }
+
+        /// <summary>
+        /// Восстанавливаем данные и взаимосвязи класса Offer.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        private Offer RestoreOffer(Offer offer)
+        {
+            offer.OfferCreator = users.Where(u => u.Id == offer.OfferCreatorId).FirstOrDefault();
+            offer.Manager = users.Where(u => u.Id == offer.ManagerId).FirstOrDefault();
+            offer.OfferGroups.ToList().ForEach(g => g.NomWrappers.ToList().ForEach(n => n.SetOfferGroup(g)));
+            offer.OfferGroups.ToList().ForEach(g => g.SetOffer(offer));
+            return offer;
         }
 
         /// <summary>
@@ -302,6 +371,12 @@ namespace OfferMaker
         }
 
         #endregion Discount
+
+        #region Archive
+
+        public void LoadOfferFromArchive(Offer offer) => Constructor.LoadOfferFromArchive(offer);
+
+        #endregion Archive
 
         #region Etc
 

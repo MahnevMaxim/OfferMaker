@@ -53,7 +53,6 @@ namespace OfferMaker
         /// </summary>
         protected void Close() => viewModel.view.Close();
 
-
         #region INotifyPropertyChanged code
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -64,7 +63,6 @@ namespace OfferMaker
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
                 L.LW(GetType().Name + " " + prop);
             }
-                
             viewModel?.OnPropertyChanged(prop);
         }
 

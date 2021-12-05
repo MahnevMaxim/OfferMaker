@@ -32,7 +32,7 @@ namespace OfferMaker
             T res = Helpers.InitObject<T>(path);
             if (res != null)
                 return new CallResult<T>() { Data = res };
-            return new CallResult<T>() { Error = new Error("Ошибка при попытке получить кэш из файла" + path) };
+            return new CallResult<T>() { Error = new Error("Ошибка при попытке получить кэш из файла " + path) };
         }
 
         #endregion Get data from cache

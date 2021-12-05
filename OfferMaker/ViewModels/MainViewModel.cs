@@ -116,6 +116,8 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public ObservableCollection<Offer> Offers { get => modelMain.Offers; }
+
         public ObservableCollection<string> UsingCurrencies { get => modelMain.UsingCurrencies; }
 
         public User User { get => modelMain.User; }
@@ -167,13 +169,7 @@ namespace OfferMaker.ViewModels
 
         public User Manager
         {
-            get
-            {
-                if (modelMain.Constructor.Offer.Manager == null) return null;
-                if (modelMain.Constructor.Offer.Manager.Id == User.Id) return null;
-                return modelMain.Constructor.Offer.Manager;
-            }
-                
+            get => modelMain.Constructor.Offer.Manager;
             set
             {
                 modelMain.Constructor.Offer.Manager = value;
@@ -206,17 +202,24 @@ namespace OfferMaker.ViewModels
             get => modelMain.Constructor.Offer.IsHiddenTextNds;
             set
             {
-                modelMain.Constructor.Offer.IsHiddenTextNds = value;
-                OnPropertyChanged();
+                if(IsWithNds==1 && value==false)
+                {
+                    OnPropertyChanged();
+                }
+                else
+                {
+                    modelMain.Constructor.Offer.IsHiddenTextNds = value;
+                    OnPropertyChanged();
+                }
             }
         }
 
-        public bool ResultSummInRub
+        public bool IsResultSummInRub
         {
-            get => modelMain.Constructor.Offer.ResultSummInRub;
+            get => modelMain.Constructor.Offer.IsResultSummInRub;
             set
             {
-                modelMain.Constructor.Offer.ResultSummInRub = value;
+                modelMain.Constructor.Offer.IsResultSummInRub = value;
                 OnPropertyChanged();
             }
         }
@@ -257,6 +260,7 @@ namespace OfferMaker.ViewModels
             set
             {
                 modelMain.Constructor.Offer.IsWithNds = value == 0 ? true : false;
+                if (value == 1) IsHiddenTextNds = true;
                 OnPropertyChanged();
             }
         }
@@ -329,6 +333,16 @@ namespace OfferMaker.ViewModels
             set
             {
                 modelMain.Constructor.PdfDocument = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public FixedDocument PdfDocumentShort
+        {
+            get => modelMain.Constructor.PdfDocumentShort;
+            set
+            {
+                modelMain.Constructor.PdfDocumentShort = value;
                 OnPropertyChanged();
             }
         }

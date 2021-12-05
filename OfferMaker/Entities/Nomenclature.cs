@@ -78,7 +78,7 @@ namespace OfferMaker
                 {
                     markup = price / costPrice;
                     profit = costPrice * markup - costPrice;
-                    LastChangePriceDate = DateTime.Now;
+                    LastChangePriceDate = DateTime.UtcNow;
                 }
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Profit));

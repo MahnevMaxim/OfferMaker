@@ -13,7 +13,7 @@ namespace OfferMaker
     {
         public static void LW(string log_string, Exception exc = null)
         {
-            DateTime date = DateTime.Now;
+            DateTime date = DateTime.UtcNow;
             string time = String.Format("[{0:H:mm:ss:fff}] ", date);
             string text = time + " ";
             if (exc != null)
@@ -44,7 +44,7 @@ namespace OfferMaker
 
         public static void ShowMessage(Exception ex)
         {
-            string text = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToLongTimeString() + "\n\r\n\r" + ex.ToString();// тут хорошо бы его отформатировать, скажем, в XML, добавить данные о времени, дате, железе и софте... 
+            string text = DateTime.UtcNow.ToShortDateString() + " " + DateTime.UtcNow.ToLongTimeString() + "\n\r\n\r" + ex.ToString();// тут хорошо бы его отформатировать, скажем, в XML, добавить данные о времени, дате, железе и софте... 
             text += "\n\r\n\rСтек вызовов:\n\r " + ex.StackTrace + "\n\r\n\rМетод:\n\r\n\r" + ex.TargetSite;
             try
             {

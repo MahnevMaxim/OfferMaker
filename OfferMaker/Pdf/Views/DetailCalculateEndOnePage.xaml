@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="OfferMaker.Pdf.Views.DetailCalculateEndOnePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
+             xmlns:convert="clr-namespace:OfferMaker.Pdf"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+        <convert:NumConvertors x:Key="numConvertors"></convert:NumConvertors>
+    </UserControl.Resources>
+
+    <StackPanel HorizontalAlignment="Stretch" Width="18cm"
+                Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}" >
+        <Grid Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Итоговая стоимость" 
+                       Foreground="#1074bc" Margin="0.6cm,0.2cm,0,0.2cm" VerticalAlignment="Center" FontSize="24" FontFamily="Segoe UI" />
+            <TextBlock Text="{Binding TotalSumWithoutOptions, Converter={StaticResource numConvertors}}"
+                       Foreground="#1074bc" Grid.Column="1" VerticalAlignment="Center"  FontSize="24" FontFamily="Segoe UI Semibold"/>
+            <TextBlock Name="CurrencySymbol"
+                       Foreground="#1074bc"
+                       Grid.Column="2" 
+                       Margin="10,0,10,0"
+                       VerticalAlignment="Center" 
+                       FontSize="24" 
+                       FontFamily="Segoe UI Semibold">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
+                                <Setter Property="TextBlock.Text" Value="₽"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
+                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <Line X1="0.5" Y1="0" X2="0.5" Y2="0.6cm" Stroke="Black" StrokeThickness="1" Margin="0.212cm,0,0,0" />
+            <Ellipse Fill="White" Width="0.4cm" Height="0.4cm" Stroke="Black" StrokeThickness="1" Margin="0.030cm,0.45cm,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        </Grid>
+
+    </StackPanel>
+</UserControl>

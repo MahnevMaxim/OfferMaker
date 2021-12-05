@@ -35,21 +35,59 @@ namespace API.Data
         {
             builder.Entity<Currency>().Property(p => p.Rate).HasPrecision(18, 6);
 
-            builder.Entity<Nomenclature>().Property(p => p.Descriptions).HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<ObservableCollection<Description>>(v));
-
             builder.Entity<User>().Property(p => p.Permissions).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Permissions>>(v));
 
-            builder.Entity<Offer>().Property(p => p.Images).HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
-
             builder.Entity<NomenclatureGroup>().Property(p => p.Nomenclatures).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Nomenclature>>(v));
+
+            #region Nomenclature
+
+            builder.Entity<Nomenclature>().Property(p => p.Descriptions).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Description>>(v));
+
+            builder.Entity<Nomenclature>().Property(n => n.ActualPricePeriod).HasDefaultValue(30);
+
+            builder.Entity<Nomenclature>().Property(n => n.LastChangePriceDate).HasDefaultValue(DateTime.UtcNow);
+
+            #endregion Nomenclature
+
+            #region Offer
+
+            builder.Entity<Offer>().Property(p => p.Customer).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Customer>(v));
+
+            builder.Entity<Offer>().Property(p => p.OfferGroups).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<OfferGroup>>(v));
+
+            builder.Entity<Offer>().Property(p => p.OfferInfoBlocks).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<OfferInfoBlock>>(v));
+
+            builder.Entity<Offer>().Property(p => p.AdvertisingsUp).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
+
+            builder.Entity<Offer>().Property(p => p.AdvertisingsDown).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
+
+            builder.Entity<Offer>().Property(p => p.Discount).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Discount>(v));
+
+            builder.Entity<Offer>().Property(p => p.Currency).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Currency>(v));
+
+            builder.Entity<Offer>().Property(n => n.CreateDate).HasDefaultValue(DateTime.UtcNow);
+
+            #endregion Offer
         }
     }
 }

@@ -8,12 +8,13 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
-                 BorderThickness="0"
+                 BorderThickness="1"
                  ResizeMode="NoResize"
                  Title="Валюты" Height="450" Width="550">
     <Grid>
         <DataGrid ItemsSource="{Binding}" 
                   AutoGenerateColumns="False"
+                  GridLinesVisibility="Horizontal"
                   BorderThickness="1"
                   BorderBrush="#cc647687"
                   Margin="10">

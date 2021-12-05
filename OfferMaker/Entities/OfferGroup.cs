@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Newtonsoft.Json;
 
 namespace OfferMaker
 {
@@ -14,13 +15,14 @@ namespace OfferMaker
         ObservableCollection<NomWrapper> nomWrappers = new ObservableCollection<NomWrapper>();
         string groupTitle;
         bool isOption;
+        bool isEnabled=true;
 
         public int Id { get; set; }
 
         /// <summary>
         /// Название группы.
         /// </summary>
-        public string GroupTitle 
+        public string GroupTitle
         {
             get => groupTitle;
             set
@@ -39,14 +41,28 @@ namespace OfferMaker
             set
             {
                 isOption = value;
+                offer?.UpdateIsOption();
+            }
+        }
+
+        /// <summary>
+        /// Вкл/выкл.
+        /// </summary>
+        public bool IsEnabled
+        {
+            get => isEnabled;
+            set
+            {
+                isEnabled = value;
                 OnPropertyChanged();
+                offer?.UpdateIsEnabled();
             }
         }
 
         /// <summary>
         /// Колекция номенклатуры.
         /// </summary>
-        public ObservableCollection<NomWrapper> NomWrappers 
+        public ObservableCollection<NomWrapper> NomWrappers
         {
             get => nomWrappers;
             set => nomWrappers = value;
@@ -58,14 +74,29 @@ namespace OfferMaker
         public bool IsContainsNoms { get => NomWrappers.Count == 0 ? false : true; }
 
         /// <summary>
+        /// Спрятать текст НДС из КП если IsHiddenTextNds=true.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsHiddenTextNds { get => offer.IsHiddenTextNds; }
+
+        /// <summary>
+        /// Спрятать цены номенклатур не в опциях.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsHideNomsPrice { get => offer.IsHideNomsPrice; }
+
+        #region money
+
+        /// <summary>
         /// Суммарная себестоимость группы КП.
         /// </summary>
+        [JsonIgnore]
         public decimal CostPriceSum
         {
             get
             {
                 decimal sum = 0;
-                NomWrappers.ToList().ForEach(n => sum += n.CostSum);
+                NomWrappers.ToList().ForEach(n => { if (n.IsIncludeIntoOffer) sum += n.CostSumInOfferCurrency; });
                 return sum;
             }
         }
@@ -73,12 +104,13 @@ namespace OfferMaker
         /// <summary>
         /// Суммарная цена группы КП.
         /// </summary>
+        [JsonIgnore]
         public decimal PriceSum
         {
             get
             {
                 decimal sum = 0;
-                NomWrappers.ToList().ForEach(n => sum += n.Sum);
+                NomWrappers.ToList().ForEach(n => { if (n.IsIncludeIntoOffer) sum += n.SumInOfferCurrency; });
                 return sum;
             }
         }
@@ -86,16 +118,18 @@ namespace OfferMaker
         /// <summary>
         /// Суммарная прибыль с группы КП.
         /// </summary>
+        [JsonIgnore]
         public decimal ProfitSum { get => PriceSum - CostPriceSum; }
 
         /// <summary>
         /// Средняя наценка в группе КП.
         /// </summary>
+        [JsonIgnore]
         public decimal CommmonMarkup
         {
             get
             {
-                if(CostPriceSum>0)
+                if (CostPriceSum > 0)
                     return PriceSum / CostPriceSum;
                 return 0;
             }
@@ -104,22 +138,24 @@ namespace OfferMaker
         /// <summary>
         /// Ссылка на переключатель режима создания КП по нормальной/закупочной цене.
         /// </summary>
+        [JsonIgnore]
         public bool IsCreateByCostPrice { get => offer.IsCreateByCostPrice; }
 
         /// <summary>
         /// Ссылка на валюту КП.
         /// </summary>
+        [JsonIgnore]
         public Currency Currency { get => offer.Currency; }
 
         /// <summary>
-        /// Спрятать текст НДС из КП если IsHiddenTextNds=true.
+        /// Для прокидывания свойства IsWithNds от Offer к NomWrapper
         /// </summary>
-        public bool IsHiddenTextNds { get => offer.IsHiddenTextNds; }
+        [JsonIgnore]
+        public bool IsWithNds { get => offer.IsWithNds; }
 
-        /// <summary>
-        /// Спрятать цены номенклатур не в опциях.
-        /// </summary>
-        public bool IsHideNomsPrice { get => offer.IsHideNomsPrice; }
+        #endregion money
+
+        #region Init
 
         private OfferGroup() { }
 
@@ -129,10 +165,16 @@ namespace OfferMaker
             NomWrappers.CollectionChanged += NomWrappers_CollectionChanged;
         }
 
+        public void SetOffer(Offer offer) => this.offer = offer;
+
+        #endregion Init
+
+        #region Methods
+
         public void AddNomenclaturesSilent(List<NomWrapper> list)
         {
             NomWrappers.CollectionChanged -= NomWrappers_CollectionChanged;
-            list.ForEach(n=> nomWrappers.Add(n));
+            list.ForEach(n => nomWrappers.Add(n));
             NomWrappers.CollectionChanged += NomWrappers_CollectionChanged;
             NomWrappers_CollectionChanged(null, null);
         }
@@ -146,5 +188,7 @@ namespace OfferMaker
             OnPropertyChanged(nameof(CommmonMarkup));
             offer.OfferGroups_CollectionChanged(sender, e);
         }
+
+        #endregion Methods
     }
 }

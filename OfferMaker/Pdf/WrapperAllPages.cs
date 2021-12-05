@@ -772,12 +772,13 @@ namespace OfferMaker
                 PageContent result = new PageContent();
                 FixedPage page = new FixedPage();
                 page.Margin = new Thickness(
-                left * PrintLayout.A4.Size.Width / 21,
-                top * PrintLayout.A4.Size.Height / 29.7,
-                right * PrintLayout.A4.Size.Width / 21,
-                bottom * PrintLayout.A4.Size.Height / 29.7);
+                    left * PrintLayout.A4.Size.Width / 21,
+                    top * PrintLayout.A4.Size.Height / 29.7,
+                    right * PrintLayout.A4.Size.Width / 21,
+                    bottom * PrintLayout.A4.Size.Height / 29.7);
 
-                PageContainer pc = new PageContainer(GetWidth(), GetHeight(), 0, image, _context);
+                int pNumber = ((PageContainer)elements[0]).pNumber;
+                PageContainer pc = new PageContainer(GetWidth(), GetHeight(), pNumber, image, _context);
 
                 foreach (UIElement element in elements)
                 {

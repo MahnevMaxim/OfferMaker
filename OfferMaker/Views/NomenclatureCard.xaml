@@ -213,6 +213,7 @@
                     <DataGrid Margin="5"
                               ItemsSource="{Binding Nomenclature.Descriptions}"
                               AutoGenerateColumns="False"
+                              GridLinesVisibility="Horizontal"
                               BorderThickness="1"
                               CanUserAddRows="False"
                               BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">

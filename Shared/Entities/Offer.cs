@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shared
 {
@@ -11,17 +12,19 @@ namespace Shared
     {
         public int Id { get; set; }
 
-        public User OfferCreator { get; set; }
-
-        public User Manager { get; set; }
-
-        public DateTime CreateDate { get; set; }
-
+        [Required]
         public string OfferName { get; set; }
 
-        public Customer Customer { get; set; }
+        [Required]
+        public int OfferCreatorId { get; set; }
 
-        public decimal TotalSum { get; set; }
+        public int ManagerId { get; set; }
+
+        [Required]
+        public DateTime CreateDate { get; set; }
+
+        [Required]
+        public Customer Customer { get; set; }
 
         public ObservableCollection<OfferGroup> OfferGroups { get; set; }
 
@@ -31,6 +34,7 @@ namespace Shared
 
         public bool IsWithNds { get; set; }
 
+        [Required]
         public Currency Currency { get; set; }
 
         public ObservableCollection<string> AdvertisingsUp { get; set; }
@@ -45,7 +49,7 @@ namespace Shared
 
         public bool IsHideNomsPrice { get; set; }
 
-        public bool ResultSummInRub { get; set; }
+        public bool IsResultSummInRub { get; set; }
 
         public Discount Discount { get; set; }
     }

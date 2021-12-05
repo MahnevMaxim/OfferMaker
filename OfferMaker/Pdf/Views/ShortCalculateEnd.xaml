@@ -123,19 +123,30 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Grid.Column="4" 
+            <TextBlock Name="CurrencySymbol" Grid.Column="4" 
                        HorizontalAlignment="Left"
                        FontSize="14pt" 
-                       Text="{Binding Currency.Symbol}"
                        FontFamily="Segoe UI semibold"
-                       Margin="5,2,10,0"/>
+                       Margin="5,2,10,0">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
+                                <Setter Property="TextBlock.Text" Value="₽"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
+                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
             <!--#endregion-->
 
             <!--#region Размер скидки -->
-            <TextBlock FontSize="14pt" 
-                       Grid.Column="0" 
+            <TextBlock Text="Персональная скидка клиента" Grid.Column="0" 
+                       FontSize="14pt" 
                        Grid.Row="1" 
-                       Text="Персональная скидка клиента" 
                        FontFamily="Segoe UI"
                        Margin="23,15,0,0">
                 <TextBlock.Style>
@@ -152,7 +163,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding Discount.DiscountSize, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource numConvertors}}"
+            <TextBlock Text="{Binding Discount.DiscountSum, Converter={StaticResource numConvertors}}"
                        FontSize="14pt"
                        HorizontalAlignment="Right"
                        Grid.Column="3" 
@@ -173,10 +184,9 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding TotalSumVM.ValuteName, UpdateSourceTrigger=PropertyChanged}"
+            <TextBlock Name="CurrencySymbolRed" Grid.Column="4" 
                        FontSize="14pt"
                        HorizontalAlignment="Left"
-                       Grid.Column="4" 
                        Grid.Row="1" 
                        FontFamily="Segoe UI semibold"
                        Margin="5,15,0,0">
@@ -189,6 +199,12 @@
                             <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
+                                <Setter Property="TextBlock.Text" Value="₽"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
+                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
+                            </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </TextBlock.Style>
@@ -196,9 +212,8 @@
             <!--#endregion-->
 
             <!--#region Цена со скидкой -->
-            <TextBlock Text="Итоговая стоимость со скидкой" 
+            <TextBlock Text="Итоговая стоимость со скидкой" Grid.Column="0"
                        FontSize="14pt" 
-                       Grid.Column="0"
                        Grid.Row="2" 
                        FontFamily="Segoe UI"
                        Margin="23,10,0,0">
@@ -216,7 +231,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding SummGroups, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource numConvertors}}" 
+            <TextBlock Text="{Binding Discount.PriceWithDiscount, Converter={StaticResource numConvertors}}" 
                        FontSize="14pt" 
                        HorizontalAlignment="Right"
                        Grid.Column="3" 
@@ -237,7 +252,7 @@
                 </TextBlock.Style>
             </TextBlock>
 
-            <TextBlock Text="{Binding TotalSumVM.ValuteName, UpdateSourceTrigger=PropertyChanged}" 
+            <TextBlock Name="CurrencySymbolCommon" 
                        FontSize="14pt"
                        HorizontalAlignment="Left"
                        Grid.Column="4" 
@@ -252,6 +267,12 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
                                 <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
+                                <Setter Property="TextBlock.Text" Value="₽"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
+                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

@@ -57,7 +57,7 @@ namespace OfferMaker
         /// <summary>
         /// Обновляем дату цены
         /// </summary>
-        public void RefreshDate() => Nomenclature.LastChangePriceDate = DateTime.Now;
+        public void RefreshDate() => Nomenclature.LastChangePriceDate = DateTime.UtcNow;
         
 
         /// <summary>

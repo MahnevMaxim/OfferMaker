@@ -16,7 +16,7 @@ namespace API
         /// <param name="exc"></param>
         public static void LW(string log_string, Exception exc = null)
         {
-            DateTime date = DateTime.Now;
+            DateTime date = DateTime.UtcNow;
             string text = "";
             if (exc != null)
             {

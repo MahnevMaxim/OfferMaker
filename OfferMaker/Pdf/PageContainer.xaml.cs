@@ -21,16 +21,17 @@ namespace OfferMaker.Controls
     public partial class PageContainer : UserControl
     {
         double _width, _height;
+        public int pNumber;
 
         public PageContainer(double width, double height, int pageNumber, BitmapImage image, object context)
         {
             DataContext = context;
             InitializeComponent();
 
+            pNumber = pageNumber;
             if (pageNumber == 0)
             {
                 colontitul.Visibility = Visibility.Visible;
-                this.pageNumber.Text = "";
                 this.image.Source = image;
             }
             else if (pageNumber > 0)

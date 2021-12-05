@@ -35,10 +35,10 @@
                                HorizontalAlignment="Right"
                                Margin="0,10,0,0"  
                                FontFamily="Segoe UI Semibold"/>
-                    <TextBlock FontSize="16pt" 
+                    <TextBlock Text="{Binding Currency.Symbol}"
+                               FontSize="16pt" 
                                Margin="5,10,0,0" 
                                HorizontalAlignment="Left" 
-                               Text="{Binding Currency.Symbol}" 
                                FontFamily="Segoe UI Semibold"/>
                 </StackPanel>
             </StackPanel>

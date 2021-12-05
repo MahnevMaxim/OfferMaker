@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Shared;
+using System.Collections.Specialized;
 
 namespace OfferMaker
 {
@@ -34,17 +35,21 @@ namespace OfferMaker
 
         async public Task<CallResult<ObservableCollection<Currency>>> GetCurrencies() => await Proxy.GetCurrencies();
 
-        async public Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
-
         async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups() => await Proxy.GetNomGroups();
-
-        async public Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups) => await Proxy.SaveNomenclatureGroups(nomenclatureGroups);
 
         async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures() => await Proxy.GetNomenclatures();
 
         async internal Task<CallResult<ObservableCollection<Category>>> GetCategories() => await Proxy.GetCategories();
 
         async internal Task<CallResult<ObservableCollection<User>>> GetUsers() => await Proxy.GetUsers();
+
+        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers() => await Proxy.GetOffers();
+
+        async internal Task<CallResult<StringCollection>> GetHints() => await Proxy.GetHints();
+
+        async internal Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
+
+        async internal Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups) => await Proxy.SaveNomenclatureGroups(nomenclatureGroups);
 
         async internal Task<CallResult> SaveOffer(Offer offer) => await Proxy.SaveOffer(offer);
 
@@ -59,5 +64,7 @@ namespace OfferMaker
         {
 
         }
+
+        
     }
 }

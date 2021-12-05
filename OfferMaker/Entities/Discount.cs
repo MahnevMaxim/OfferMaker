@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace OfferMaker
 {
@@ -11,13 +12,28 @@ namespace OfferMaker
         Offer offer;
         decimal discountSum;
         decimal percentage;
+        decimal priceWithDiscount;
+        decimal totalSum;
+        bool isEnabled;
 
-        public bool IsEnabled { get; set; }
+        public decimal TotalSum 
+        { 
+            get => totalSum;
+            set
+            {
+                totalSum = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public bool IsPercentage
+        public bool IsEnabled
         {
-            get;
-            set;
+            get => isEnabled;
+            set
+            {
+                isEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
         public decimal Percentage
@@ -26,13 +42,7 @@ namespace OfferMaker
             set
             {
                 percentage = value;
-                if (offer != null)
-                {
-                    discountSum = offer.TotalSum - (100 - percentage) / 100 * offer.TotalSum;
-                    OnPropertyChanged(nameof(PriceWithDiscount));
-                    OnPropertyChanged(nameof(DiscountSum));
-                    OnPropertyChanged();
-                }
+                CalculateByPercentage();
             }
         }
 
@@ -42,61 +52,97 @@ namespace OfferMaker
             set
             {
                 discountSum = value;
-                if(offer!=null)
-                {
-                    if (discountSum < 0)
-                    {
-                        discountSum = 0;
-                        percentage = 0;
-
-                    }
-                    else if (discountSum > offer.TotalSum)
-                    {
-                        discountSum = offer.TotalSum;
-                        percentage = 100;
-                    }
-                    else
-                    {
-                        percentage = 100 - PriceWithDiscount * 100 / offer.TotalSum;
-                    }
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(PriceWithDiscount));
-                    OnPropertyChanged(nameof(Percentage));
-                }
+                CalculateByDiscountSum();
             }
         }
 
+        [JsonIgnore]
         public decimal PriceWithDiscount
         {
-            get => offer.TotalSum - DiscountSum;
+            get => priceWithDiscount;
             set
             {
-                if(offer!=null)
-                {
-                    if (value > offer.TotalSum)
-                    {
-                        percentage = 0;
-                        discountSum = 0;
-                    }
-                    else if (value < 0)
-                    {
-                        percentage = 100;
-                        discountSum = offer.TotalSum;
-                    }
-                    else
-                    {
-                        discountSum = offer.TotalSum - value;
-                        percentage = 100 - PriceWithDiscount * 100 / offer.TotalSum;
-                    }
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(DiscountSum));
-                    OnPropertyChanged(nameof(Percentage));
-                }
+                priceWithDiscount = value;
+                CalculateByPriceWithDiscount();
             }
         }
 
         private Discount() { }
 
         public Discount(Offer offer) => this.offer = offer;
+
+        public void SetOffer(Offer offer) => this.offer = offer;
+
+        internal void CalculateByPriceWithDiscount()
+        {
+            //независимо от режима расчёта
+            if (offer == null || TotalSum <= 0) return;
+            if (priceWithDiscount > TotalSum)
+            {
+                percentage = 0;
+                discountSum = 0;
+                priceWithDiscount = TotalSum;
+            }
+            else if (priceWithDiscount < 0)
+            {
+                priceWithDiscount = 0;
+                percentage = 100;
+                discountSum = TotalSum;
+            }
+            else
+            {
+                discountSum = TotalSum - priceWithDiscount;
+                percentage = 100 - priceWithDiscount * 100 / TotalSum;
+            }
+            offer.UpdateDiscountUI();
+        }
+
+        internal void CalculateByDiscountSum()
+        {
+            //независимо от режима расчёта
+            if (offer == null || TotalSum <= 0) return;
+            if (discountSum < 0)
+            {
+                discountSum = 0;
+                percentage = 0;
+                priceWithDiscount = TotalSum;
+            }
+            else if (discountSum > TotalSum)
+            {
+                discountSum = TotalSum;
+                percentage = 100;
+                priceWithDiscount = 0;
+            }
+            else
+            {
+                percentage = 100 - priceWithDiscount * 100 / TotalSum;
+                priceWithDiscount = TotalSum - discountSum;
+            }
+            offer.UpdateDiscountUI();
+        }
+
+        internal void CalculateByPercentage()
+        {
+            //независимо от режима расчёта
+            if (offer == null || TotalSum <= 0) return;
+            discountSum = TotalSum - (100 - percentage) / 100 * TotalSum;
+            priceWithDiscount = TotalSum - discountSum;
+            offer.UpdateDiscountUI();
+        }
+
+        internal void CalculateByTotalSum()
+        {
+            if (TotalSum <= 0)
+            {
+                discountSum = 0;
+                priceWithDiscount = 0;
+            }
+            else
+            {
+                discountSum = TotalSum - (100 - percentage) / 100 * TotalSum;
+                priceWithDiscount = TotalSum - discountSum;
+            }
+            offer.UpdateDiscountUI();
+        }
     }
 }

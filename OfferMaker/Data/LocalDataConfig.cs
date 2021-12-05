@@ -13,5 +13,7 @@ namespace OfferMaker
         public static string UsersPath = "users.json";
         public static string CategoriesPath = "categories.json";
         public static string NomenclatureGroupsPath = "nomenclature_groups.json";
+        public static string OffersPath = "offers.json";
+        public static string HintsPath = "hints.json";
     }
 }
