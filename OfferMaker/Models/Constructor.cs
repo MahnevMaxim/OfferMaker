@@ -145,6 +145,7 @@ namespace OfferMaker
         /// </summary>
         BitmapImage smallLogo;
 
+
         #endregion Fields
 
         #region Singleton
@@ -163,7 +164,11 @@ namespace OfferMaker
 
         private static readonly Constructor instance = new Constructor();
 
-        public static Constructor GetInstance() => instance;
+        public static Constructor GetInstance()
+        {
+            return instance;
+        }
+            
 
         #endregion Singleton
 
@@ -174,9 +179,9 @@ namespace OfferMaker
         /// </summary>
         private void InitNewOffer()
         {
-            Offer = new Offer(this);
-            Offer.OfferInfoBlocks = GetInfoBlocks();
-            Offer.Banner = Settings.GetDefaultBanner();
+            ObservableCollection<OfferInfoBlock> offerInfoBlocks = GetInfoBlocks();
+            Currency currency = Global.GetCurrencyByCode("RUB");
+            Offer = new Offer(this, currency, offerInfoBlocks, Global.Main.User, Settings.GetDefaultBanner());
         }
 
         /// <summary>
@@ -197,11 +202,10 @@ namespace OfferMaker
         /// </summary>
         internal void SkipOffer()
         {
-            Offer = new Offer(this);
-            Offer.OfferInfoBlocks = GetInfoBlocks();
+            ObservableCollection<OfferInfoBlock> offerInfoBlocks = GetInfoBlocks();
+            Currency currency = Global.GetCurrencyByCode("RUB");
+            Offer = new Offer(this, currency, offerInfoBlocks, Global.Main.User, Settings.GetDefaultBanner());
             Offer.OnPropertyChanged(String.Empty);
-            Offer.Currency = Global.Main.Currencies.Where(c => c.CharCode == "RUB").FirstOrDefault();
-            Offer.OfferCreator = Global.Main.User;
             viewModel.OnPropertyChanged(String.Empty);
         }
 
@@ -380,7 +384,7 @@ namespace OfferMaker
         /// <summary>
         /// Добавление новой группы в конструктор.
         /// </summary>
-        internal void AddOfferGroup() => Offer.OfferGroups.Add(new OfferGroup(Offer) { GroupTitle = "ГРУППА " + ++Offer.addGroupsCounter });
+        internal void AddOfferGroup() => Offer.OfferGroups.Add(new OfferGroup(Offer) { GroupTitle = "ГРУППА " + Offer.GetAddGroupsCounter() });
 
         /// <summary>
         /// Удаление группы из конструктора.

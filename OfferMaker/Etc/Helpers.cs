@@ -52,7 +52,11 @@ namespace OfferMaker
             try
             {
                 if (File.Exists(filePath))
-                    return JsonConvert.DeserializeObject<T>(File.ReadAllText(filePath));
+                {
+                    string jsonText = File.ReadAllText(filePath);
+                    var res = JsonConvert.DeserializeObject<T>(jsonText);
+                    return res;
+                }
             }
             catch (Exception ex)
             {

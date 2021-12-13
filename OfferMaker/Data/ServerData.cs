@@ -222,5 +222,45 @@ namespace OfferMaker
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
             }
         }
+
+        /// <summary>
+        /// Удаление КП с сервера.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> DeleteOfferFromArchive(Offer offer)
+        {
+            try
+            {
+                if(offer.Id==0) return new CallResult(); // нельзя удалить то, чего нет
+                await client.OffersDELETEAsync((int)offer.Id);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                L.LW(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке удалить КП с сервера.") };
+            }
+        }
+
+        /// <summary>
+        /// Сохранение категорий на сервере.
+        /// </summary>
+        /// <param name="categoriesTree"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveCategories(ObservableCollection<Category> categoriesTree)
+        {
+            try
+            {
+                IEnumerable<ApiLib.Category> categoriesTreeCopy = Helpers.CloneObject<IEnumerable<ApiLib.Category>>(categoriesTree);
+                await client.CategoriesPUTAsync(categoriesTreeCopy);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                L.LW(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
+            }
+        }
     }
 }

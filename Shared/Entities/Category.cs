@@ -13,6 +13,11 @@ namespace Shared
         [Required]
         public string Title { get; set; }
 
-        public int ParentId { get; set; }
+        [Required]
+        public string Guid { get; set; }
+
+        public string ParentGuid { get; set; }
+
+        public int? ParentId { get; set; }
     }
 }

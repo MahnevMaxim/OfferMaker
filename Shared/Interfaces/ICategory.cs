@@ -12,6 +12,10 @@ namespace Shared
 
         public string Title { get; set; }
 
-        public int ParentId { get; set; }
+        public string Guid { get; set; }
+
+        public string ParentGuid { get; set; }
+
+        public int? ParentId { get; set; }
     }
 }

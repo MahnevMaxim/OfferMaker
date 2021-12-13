@@ -11,12 +11,12 @@
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="0"
-                 Title="Номенклатурная карточка" Height="650" Width="900" MinWidth="700" MinHeight="600">
+                 Title="Номенклатурная карточка" Height="700" Width="900" MinWidth="700" MinHeight="600">
 
     <Window.Resources>
         <root:MultiConverter x:Key="MultiConverter"/>
     </Window.Resources>
-    
+
     <Grid Margin="10,10">
         <Grid.Resources>
             <DataTemplate x:Key="RemoveDescriptionButton">
@@ -39,200 +39,210 @@
             </DataTemplate>
         </Grid.Resources>
 
-        <Grid >
-            <Grid.RowDefinitions>
-                <RowDefinition MinHeight="70" MaxHeight="100"/>
-                <RowDefinition Height="190"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
 
-            <Border Grid.ColumnSpan="2"
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="70" MaxHeight="100"/>
+            <RowDefinition Height="230"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.ColumnSpan="2"
                     Margin="0,0,0,10"
                     BorderThickness="1"
                     VerticalAlignment="Stretch"
                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                <TextBlock Text="{Binding Nomenclature.Title}" 
-                           FontSize="20"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
-            </Border>
+            <TextBox Text="{Binding Nomenclature.Title, UpdateSourceTrigger=PropertyChanged}" 
+                         TextWrapping="Wrap"
+                         Margin="0"
+                         BorderThickness="0"
+                         FontSize="18"
+                         HorizontalAlignment="Center"
+                         VerticalAlignment="Center"/>
+        </Border>
 
-            <Border Grid.Row="1" Grid.Column="0"
-                    BorderThickness="1"
-                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                <Grid Margin="5,10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition Height="40"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="150"/>
-                    </Grid.ColumnDefinitions>
+        <Border Grid.Row="1" Grid.Column="0"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+            <Grid Margin="5,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Себестоимость" Grid.Row="0" Grid.Column="0"
+                <TextBlock Text="Себестоимость" Grid.Row="0" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
+                <TextBlock Text="Наценка" Grid.Row="1" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
+                <TextBlock Text="Цена" Grid.Row="2" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
+                <TextBlock Text="Прибыль" Grid.Row="3" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
+                <TextBlock Text="Категория:" Grid.Row="4" Grid.Column="0"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
+
+                <TextBox Grid.Row="0" Grid.Column="1"
+                         Text="{Binding Nomenclature.CostPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
+                         Margin="10,0"
+                         Height="30"/>
+                <TextBox Grid.Row="1" Grid.Column="1"
+                         Text="{Binding Nomenclature.Markup, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
+                         Margin="10,0"
+                         Height="30"/>
+                <TextBox Grid.Row="2" Grid.Column="1"
+                         Text="{Binding Nomenclature.Price, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
+                         Margin="10,0"
+                         Height="30"/>
+                <TextBox Grid.Row="3" Grid.Column="1"
+                         Text="{Binding Nomenclature.Profit, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
+                         Margin="10,0"
+                         Height="30"/>
+                <TextBlock Text="{Binding CategoryTitle}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="10,0"/>
+
+                <TextBlock Text="Валюта" Grid.Row="0" Grid.Column="2"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
+                <TextBlock Text="Дата" 
+                           Grid.Row="1" Grid.Column="2"
+                           ToolTip="Дата актуализации цены"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
+                <TextBlock Text="Период" 
+                           Grid.Row="2" Grid.Column="2"
+                           ToolTip="Период актуальности цены"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"/>
+
+                <ComboBox Grid.Row="0" Grid.Column="3"
+                          ItemsSource="{Binding Currencies}" 
+                          SelectedItem="{Binding CurrencyCharCode}"
+                          Margin="10,0"
+                          Height="30"
+                          SelectedIndex="0"/>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
+                    <TextBlock Text="{Binding Nomenclature.LastChangePriceDate, StringFormat={}{0:dd.MM.yyyy}}" 
                                VerticalAlignment="Center"
-                               HorizontalAlignment="Right"/>
-                    <TextBlock Text="Наценка" Grid.Row="1" Grid.Column="0"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Right"/>
-                    <TextBlock Text="Цена" Grid.Row="2" Grid.Column="0"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Right"/>
-                    <TextBlock Text="Прибыль" Grid.Row="3" Grid.Column="0"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Right"/>
-
-                    <TextBox Grid.Row="0" Grid.Column="1"
-                             Text="{Binding Nomenclature.CostPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
-                             Margin="10,0"
-                             Height="30"/>
-                    <TextBox Grid.Row="1" Grid.Column="1"
-                             Text="{Binding Nomenclature.Markup, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
-                             Margin="10,0"
-                             Height="30"/>
-                    <TextBox Grid.Row="2" Grid.Column="1"
-                             Text="{Binding Nomenclature.Price, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
-                             Margin="10,0"
-                             Height="30"/>
-                    <TextBox Grid.Row="3" Grid.Column="1"
-                             Text="{Binding Nomenclature.Profit, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
-                             Margin="10,0"
-                             Height="30"/>
-
-                    <TextBlock Text="Валюта" Grid.Row="0" Grid.Column="2"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Right"/>
-                    <TextBlock Text="Дата" 
-                               Grid.Row="1" Grid.Column="2"
-                               ToolTip="Дата актуализации цены"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Right"/>
-                    <TextBlock Text="Период" 
-                               Grid.Row="2" Grid.Column="2"
-                               ToolTip="Период актуальности цены"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Right"/>
-
-                    <ComboBox Grid.Row="0" Grid.Column="3"
-                              ItemsSource="{Binding Currencies}" 
-                              SelectedItem="{Binding CurrencyCharCode}"
-                              Margin="10,0"
-                              Height="30"
-                              SelectedIndex="0"/>
-                    <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
-                        <TextBlock Text="{Binding Nomenclature.LastChangePriceDate, StringFormat={}{0:dd.MM.yyyy}}" 
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right"
-                                   Width="90"
-                                   Margin="10,0,0,0"/>
-                        <Button CommandParameter="RefreshDate"
-                                VerticalAlignment="Top"
-                                Command="{Binding Cmd}"
-                                Height="30"
-                                Width="30"
-                                Margin="10,5,0,0"
-                                ToolTip="Обновить дату"
-                                Style="{DynamicResource MahApps.Styles.Button.Square}">
-                            <iconPacks:PackIconBoxIcons Kind="RegularRefresh"
-                                                        Width="15"
-                                                        Height="15"/>
-                        </Button>
-                    </StackPanel>
-
-                    <mah:NumericUpDown Value="{Binding Nomenclature.ActualPricePeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                       Grid.Row="2" 
-                                       Grid.Column="3"
-                                       Margin="10,0"
-                                       Height="30"
-                                       ToolTip="Период актуальности даты в днях"
-                                       Minimum = "0"
-                                       Maximum = "365"/>
-                </Grid>
-            </Border>
-
-            <Border Grid.Row="1" Grid.Column="1"
-                    Margin="10,0,0,0"
-                    BorderThickness="1"
-                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <StackPanel>
-                        <Button CommandParameter="EditImage"
-                                VerticalAlignment="Top"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                ToolTip="Добавить фото"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconIonicons Kind="AddMD"
-                                                        Width="20"
-                                                        Height="20"/>
-                        </Button>
-                        <Button CommandParameter="RemoveImage"
-                                VerticalAlignment="Top"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5,0"
-                                ToolTip="Удалить фото"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconMaterial Kind="DeleteForeverOutline"
-                                                        Width="20"
-                                                        Height="20"/>
-                        </Button>
-                    </StackPanel>
-                    <Image Source="{Binding Image}"
-                           Grid.Column="1"
-                           Margin="5"/>
-                </Grid>
-            </Border>
-
-            <Border Grid.Row="2" Grid.ColumnSpan="2"
-                    Margin="0,10,0,0"
-                    BorderThickness="1"
-                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <DataGrid Margin="5"
-                              ItemsSource="{Binding Nomenclature.Descriptions}"
-                              AutoGenerateColumns="False"
-                              GridLinesVisibility="Horizontal"
-                              BorderThickness="1"
-                              CanUserAddRows="False"
-                              BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                        
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Описание" MinWidth="300" MaxWidth="650" Binding="{Binding Text}" DisplayIndex="0"/>
-                            <DataGridTemplateColumn Header="" DisplayIndex="1" MaxWidth="50" CellTemplate="{StaticResource RemoveDescriptionButton}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Button CommandParameter="AddDesription"
-                            Grid.Row="1"
+                               HorizontalAlignment="Right"
+                               Width="90"
+                               Margin="10,0,0,0"/>
+                    <Button CommandParameter="RefreshDate"
+                            VerticalAlignment="Top"
                             Command="{Binding Cmd}"
-                            Style="{DynamicResource MahApps.Styles.Button.Square}"
-                            Content="Добавить описание"
-                            Margin="5"
-                            Width="200"/>
-                </Grid>
-            </Border>
+                            Height="30"
+                            Width="30"
+                            Margin="10,5,0,0"
+                            ToolTip="Обновить дату"
+                            Style="{DynamicResource MahApps.Styles.Button.Square}">
+                        <iconPacks:PackIconBoxIcons Kind="RegularRefresh"
+                                                    Width="15"
+                                                    Height="15"/>
+                    </Button>
+                </StackPanel>
 
-        </Grid>
+                <mah:NumericUpDown Value="{Binding Nomenclature.ActualPricePeriod, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                   Grid.Row="2" 
+                                   Grid.Column="3"
+                                   Margin="10,0"
+                                   Height="30"
+                                   ToolTip="Период актуальности даты в днях"
+                                   Minimum = "0"
+                                   Maximum = "365"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="1"
+                Margin="10,0,0,0"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <Button CommandParameter="EditImage"
+                            VerticalAlignment="Top"
+                            Command="{Binding Cmd}"
+                            Height="35"
+                            Width="35"
+                            Margin="5"
+                            ToolTip="Добавить фото"
+                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                        <iconPacks:PackIconIonicons Kind="AddMD"
+                                                    Width="20"
+                                                    Height="20"/>
+                    </Button>
+                    <Button CommandParameter="RemoveImage"
+                            VerticalAlignment="Top"
+                            Command="{Binding Cmd}"
+                            Height="35"
+                            Width="35"
+                            Margin="5,0"
+                            ToolTip="Удалить фото"
+                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                        <iconPacks:PackIconMaterial Kind="DeleteForeverOutline"
+                                                    Width="20"
+                                                    Height="20"/>
+                    </Button>
+                </StackPanel>
+                <Image Source="{Binding Image}"
+                       Grid.Column="1"
+                       Margin="5"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Grid.ColumnSpan="2"
+                Margin="0,10,0,0"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <DataGrid Margin="5"
+                          ItemsSource="{Binding Nomenclature.Descriptions}"
+                          AutoGenerateColumns="False"
+                          GridLinesVisibility="Horizontal"
+                          BorderThickness="1"
+                          CanUserAddRows="False"
+                          BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Описание" MinWidth="300" MaxWidth="650" Binding="{Binding Text}" DisplayIndex="0"/>
+                        <DataGridTemplateColumn Header="" DisplayIndex="1" MaxWidth="50" CellTemplate="{StaticResource RemoveDescriptionButton}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button CommandParameter="AddDesription"
+                        Grid.Row="1"
+                        Command="{Binding Cmd}"
+                        Style="{DynamicResource MahApps.Styles.Button.Square}"
+                        Content="Добавить описание"
+                        Margin="5"
+                        Width="200"/>
+            </Grid>
+        </Border>
+
     </Grid>
 </mah:MetroWindow>

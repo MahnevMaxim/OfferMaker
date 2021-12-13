@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace OfferMaker
 {
-    public class EmptyStringToVisibilityConverter : IValueConverter
+    public class EmptyStringToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => string.IsNullOrWhiteSpace((string)value) switch
         {

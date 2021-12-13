@@ -58,11 +58,11 @@ namespace OfferMaker
             if (SelectedCat?.Title == "Все") return;
             if (SelectedCat == null)
             {
-                CategoriesTree.Add(new Category() { Title = NewCatName });
+                CategoriesTree.Add(new Category(NewCatName));
             }
             else
             {
-                SelectedCat.Childs.Add(new Category() { Title = NewCatName });
+                SelectedCat.Childs.Add(new Category(NewCatName));
             }
         }
     }

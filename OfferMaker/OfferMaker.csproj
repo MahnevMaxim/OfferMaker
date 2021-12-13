@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="gong-wpf-dragdrop" Version="2.4.3" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -18,6 +17,12 @@
   <ItemGroup>
     <ProjectReference Include="..\ApiClient\ApiClient.csproj" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="GongSolutions.WPF.DragDrop">
+      <HintPath>..\..\gong-wpf-dragdrop\src\GongSolutions.WPF.DragDrop\bin\Debug\net5.0-windows\GongSolutions.WPF.DragDrop.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
@@ -32,6 +37,9 @@
     <None Update="AppSettings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>AppSettings.Designer.cs</LastGenOutput>
+    </None>
+    <None Update="Images\logo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Images\no-image.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

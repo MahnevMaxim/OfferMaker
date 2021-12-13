@@ -9,7 +9,7 @@
              x:Name="onePageTitul">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-        <root:EmptyStringToVisibilityConverter x:Key="TrueIfStringNotEmpty" />
+        <root:EmptyStringToBoolConverter x:Key="TrueIfStringNotEmpty" />
     </UserControl.Resources>
     <Grid Background="White">
         <Grid.RowDefinitions>

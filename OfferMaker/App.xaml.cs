@@ -13,6 +13,12 @@ namespace OfferMaker
     /// </summary>
     public partial class App : Application
     {
-        private void Application_Startup(object sender, StartupEventArgs e) => (new EntryPoint()).Run();
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            //Disable shutdown when the dialog closes
+            Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+            (new EntryPoint()).Run();
+        }
+            
     }
 }

@@ -66,7 +66,13 @@
                                            Margin="10" >
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
-                            <TextBlock Text="{Binding Title}" FontSize="16"/>
+                            <TextBlock Text="{Binding Title}" FontSize="16">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Это не каталог, редактирование в каталоге"/>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                     <TreeView.ItemContainerStyle>

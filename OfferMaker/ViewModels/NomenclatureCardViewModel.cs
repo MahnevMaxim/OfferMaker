@@ -42,13 +42,15 @@ namespace OfferMaker.ViewModels
 
         public string CurrencyCharCode
         {
-            get => nomenclurueCard.CurrencyCharCode; 
+            get => nomenclurueCard.CurrencyCharCode;
             set
             {
                 nomenclurueCard.CurrencyCharCode = value;
                 OnPropertyChanged();
             }
         }
+
+        public string CategoryTitle { get => nomenclurueCard.CategoryTitle; }
 
         #endregion Properties
     }

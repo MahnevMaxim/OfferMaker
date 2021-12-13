@@ -31,11 +31,19 @@ namespace OfferMaker
 
         public static DataRepository GetInstance() => instance;
 
+        internal static DataRepository GetInstance(AppMode appMode)
+        {
+            instance.Proxy.defaultAppMode = appMode;
+            return instance;
+        }
+
         #endregion Singleton
 
         async public Task<CallResult<ObservableCollection<Currency>>> GetCurrencies() => await Proxy.GetCurrencies();
 
         async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups() => await Proxy.GetNomGroups();
+
+        
 
         async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures() => await Proxy.GetNomenclatures();
 
@@ -49,11 +57,15 @@ namespace OfferMaker
 
         async internal Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
 
+        async internal Task<CallResult> SaveCategories(ObservableCollection<Category> categoriesTree) => await Proxy.SaveCategories(categoriesTree);
+
         async internal Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups) => await Proxy.SaveNomenclatureGroups(nomenclatureGroups);
 
-        async internal Task<CallResult> SaveOffer(Offer offer) => await Proxy.SaveOffer(offer);
+        async internal Task<CallResult> SaveOffer(Offer offer, ObservableCollection<Offer> offers) => await Proxy.SaveOffer(offer, offers);
 
         async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures) => await Proxy.SaveNomenclatures(nomenclatures);
+
+        async internal Task<CallResult> DeleteOfferFromArchive(Offer offer, ObservableCollection<Offer> offers) => await Proxy.DeleteOfferFromArchive(offer, offers);
 
         public void SyncData()
         {

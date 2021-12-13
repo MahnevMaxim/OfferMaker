@@ -5,11 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Shared;
+using Newtonsoft.Json;
 
 namespace OfferMaker
 {
     public class Nomenclature : BaseEntity
     {
+        string categoryGuid;
         decimal costPrice;
         decimal markup;
         decimal price;
@@ -20,6 +22,8 @@ namespace OfferMaker
 
         public int Id { get; set; }
 
+        public string Guid { get; set; }
+
         /// <summary>
         /// Название номенклатуры.
         /// </summary>
@@ -28,7 +32,14 @@ namespace OfferMaker
         /// <summary>
         /// Категория.
         /// </summary>
-        public Category Category { get; set; }
+        public string CategoryGuid 
+        {
+            get => categoryGuid;
+            set
+            {
+                categoryGuid = value;
+            }
+        }
 
         /// <summary>
         /// Описания.
@@ -68,6 +79,7 @@ namespace OfferMaker
         /// <summary>
         /// Цена.
         /// </summary>
+        [JsonIgnore]
         public decimal Price 
         { 
             get => CostPrice * Markup;
@@ -89,6 +101,7 @@ namespace OfferMaker
         /// <summary>
         /// Сумма прибыли при продаже.
         /// </summary>
+        [JsonIgnore]
         public decimal Profit
         {
             get => Price - CostPrice;
@@ -138,31 +151,41 @@ namespace OfferMaker
         public int ActualPricePeriod { get; set; }
 
         /// <summary>
-        /// Указывает, актуальна ли цена у номенклатуры.
-        /// </summary>
-        public bool IsPriceActual { get; set; }
-
-        /// <summary>
         /// Колекция, т.к. не понимаю: нужна одна картинка или несколько
         /// </summary>
         public string Photo 
         {
             get => photo;
-            set
+            private set
             {
                 photo = value;
-                if(!IsPropertyChangedNoNull) //чтобы во время сериализации не устанавливать isEdit
-                    SetIsEdit();
+                SetIsEdit();
             }
         }
+
+        /// <summary>
+        /// Указывает, актуальна ли цена у номенклатуры.
+        /// </summary>
+        [JsonIgnore] 
+        public bool IsPriceActual { get; set; }
 
         /// <summary>
         /// Была ли номенклатура отредактирована.
         /// </summary>
         bool isEdit;
 
-        public void SetIsEdit() => isEdit = true;
-
+        void SetIsEdit() => isEdit = true;
+        
+        public void SetCategoryGuid(string categoryGuid)
+        {
+            CategoryGuid = categoryGuid; 
+            SetIsEdit();
+        }
+            
+        public void SetPhoto(string photo) => Photo = photo;
+        
         public bool GetIsEdit() => isEdit;
+
+        public override string ToString() => "Id:" + Id +" "+ Title;
     }
 }

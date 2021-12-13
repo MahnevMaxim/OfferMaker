@@ -11,6 +11,7 @@ namespace OfferMaker
     {
         string currencyCharCode;
         string image;
+        Catalog catalog;
 
         public Nomenclature Nomenclature { get; set; }
 
@@ -24,6 +25,8 @@ namespace OfferMaker
                 OnPropertyChanged();
             }
         }
+
+        public string CategoryTitle { get => catalog.Categories.Where(c => c.Guid == Nomenclature.CategoryGuid).FirstOrDefault()?.Title; }
 
         public List<string> Currencies { get; set; }
 
@@ -42,8 +45,9 @@ namespace OfferMaker
             }
         }
 
-        public NomenclurueCard(Nomenclature nomenclature)
+        public NomenclurueCard(Nomenclature nomenclature, Catalog catalog)
         {
+            this.catalog = catalog;
             Nomenclature = nomenclature;
             CurrencyCharCode = nomenclature.CurrencyCharCode;
             Currencies = Global.Main.UsingCurrencies.ToList();
@@ -68,7 +72,7 @@ namespace OfferMaker
             string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
             if (path != null)
             {
-                Nomenclature.Photo=path;
+                Nomenclature.SetPhoto(path);
                 Image = path;
             }
         }
@@ -78,7 +82,7 @@ namespace OfferMaker
         /// </summary>
         public void RemoveImage()
         {
-            Nomenclature.Photo=null;
+            Nomenclature.SetPhoto(null);
             Image = null;
         }
 

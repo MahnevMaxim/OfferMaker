@@ -8,6 +8,7 @@ using Shared;
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Collections.Specialized;
+using System.Windows;
 
 namespace OfferMaker
 {
@@ -20,7 +21,10 @@ namespace OfferMaker
         ObservableCollection<User> managers = new ObservableCollection<User>();
         ObservableCollection<Currency> currencies;
         bool isDiscountOpen;
-        ObservableCollection<Offer> offers = new ObservableCollection<Offer>();
+        int currentMainSelectedTabIndex;
+        ObservableCollection<User> users;
+        ArchiveFilter archiveFilter;
+        ObservableCollection<Offer> archiveOffers = new ObservableCollection<Offer>();
 
         #endregion Fields
 
@@ -74,15 +78,52 @@ namespace OfferMaker
             }
         }
 
-        public ObservableCollection<Offer> Offers
+        /// <summary>
+        /// Все КП получаем строго через ArchiveFilter.
+        /// </summary>
+        public ObservableCollection<Offer> ArchiveOffers
         {
-            get => offers;
+            get => archiveOffers;
             set
             {
-                offers = value;
+                archiveOffers = value;
                 OnPropertyChanged();
             }
         }
+
+        public Offer SelectedOfferInArchive { get; set; }
+
+        public int CurrentMainSelectedTabIndex
+        {
+            get => currentMainSelectedTabIndex;
+            set
+            {
+                currentMainSelectedTabIndex = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<User> Users 
+        { 
+            get => users; 
+            set
+            {
+                users = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ArchiveFilter ArchiveFilter
+        {
+            get => archiveFilter;
+            set
+            {
+                archiveFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public StringCollection Hints { get; set; }
 
         #endregion Propetries
 
@@ -92,186 +133,37 @@ namespace OfferMaker
 
         #region Modules
 
-        DataRepository DataRepository { get; set; } = DataRepository.GetInstance();
+        public DataRepository DataRepository { get; set; }
 
-        public Catalog Catalog { get; set; } = Catalog.GetInstance();
+        public Catalog Catalog { get; set; }
 
-        public Constructor Constructor { get; set; } = Constructor.GetInstance();
+        public Constructor Constructor { get; set; }
 
-        public BannersManager BannersManager { get; set; } = BannersManager.GetInstance();
+        public BannersManager BannersManager { get; set; }
 
-        public Settings Settings { get; set; } = Settings.GetInstance();
+        public Settings Settings { get; set; }
 
         public DocManager DocManager { get; set; }
 
         #endregion Modules
 
-        ObservableCollection<User> users;
-
-        public StringCollection Hints { get; set; }
-
         #endregion Properties
+
+        #region Fields
+
+        //ObservableCollection<Category> categories;
+        //ObservableCollection<Nomenclature> nomenclatures;
+        //ObservableCollection<NomenclatureGroup> nomenclatureGroups;
+        public ObservableCollection<Offer> offers;
+
+        #endregion Fields
 
         #region Initialization Main
 
         async internal override void Run()
         {
-            Global.Main = this;
-            DocManager = DocManager.GetInstance();
             MvvmFactory.RegisterModel(this, Catalog);
             MvvmFactory.RegisterModel(this, Constructor);
-            Settings.SetSettings();
-
-            //Фейковая авторизация.
-            CallResult cr = await Hello.SetUsers(DataRepository);
-            if (!cr.Success)
-            {
-                OnSendMessage("Ошибка при получении пользователей");
-                await Task.Delay(7000);
-                Close();
-                return;
-            }
-            User = Hello.User;
-            Managers = Hello.Managers;
-            users = Hello.Users;
-
-            await InitData();
-            Catalog.Run();
-        }
-
-        /// <summary>
-        /// Инициализация данных
-        /// </summary>
-        /// <returns></returns>
-        async private Task InitData()
-        {
-            string errorMessage = "";
-
-            //получаем валюты
-            var currenciesCr = await DataRepository.GetCurrencies();
-            if (currenciesCr.Success)
-                Currencies = currenciesCr.Data;
-            else
-                errorMessage += currenciesCr.Error.Message + "\n";
-
-            //получаем категории
-            var categoriesCr = await DataRepository.GetCategories();
-            if (categoriesCr.Success)
-                Catalog.Categories = categoriesCr.Data;
-            else
-                errorMessage += categoriesCr.Error.Message + "\n";
-
-            //получаем номенклатуры
-            var nomenclaturesCr = await DataRepository.GetNomenclatures();
-            if (nomenclaturesCr.Success)
-                Catalog.Nomenclatures = nomenclaturesCr.Data;
-            else
-                errorMessage += nomenclaturesCr.Error.Message + "\n";
-
-            //получаем группы номенклатур
-            var nomGroupsCr = await DataRepository.GetNomGroups();
-            if (nomGroupsCr.Success)
-            {
-                Catalog.NomenclatureGroups = nomGroupsCr.Data;
-                SetNomGroups();
-            }
-            else
-                errorMessage += nomGroupsCr.Error.Message + "\n";
-
-            //получаем архив КП
-            //var offersCr = await DataRepository.GetOffers();
-            //if (offersCr.Success)
-            //    SetOffers(offersCr.Data);
-            //else
-            //    errorMessage += offersCr.Error.Message + "\n";
-
-            //получаем хинты
-            //var hintsCr = await DataRepository.GetHints();
-            //if (hintsCr.Success)
-            //{
-            //    Hints = hintsCr.Data;
-            //    SetNomGroups();
-            //}
-            //else
-            //    errorMessage += hintsCr.Error.Message + "\n";
-            
-
-            if (!string.IsNullOrWhiteSpace(errorMessage))
-                OnSendMessage(errorMessage);
-
-            Constructor.Offer.Manager = User;
-            Constructor.Offer.Currency = Currencies.Where(c => c.CharCode == "RUB").FirstOrDefault();
-
-            InitBanners();
-            InitAdvertising();
-        }
-
-        /// <summary>
-        /// Восстанавливаем необходимые данные.
-        /// </summary>
-        /// <param name="data"></param>
-        private void SetOffers(ObservableCollection<Offer> offers)
-        {
-            ObservableCollection<Offer> restoredOffers = new ObservableCollection<Offer>();
-            foreach (var offer in offers)
-            {
-                restoredOffers.Add(RestoreOffer(offer));
-            }
-            Offers = restoredOffers;
-        }
-
-        /// <summary>
-        /// Восстанавливаем данные и взаимосвязи класса Offer.
-        /// </summary>
-        /// <param name="offer"></param>
-        /// <returns></returns>
-        private Offer RestoreOffer(Offer offer)
-        {
-            offer.OfferCreator = users.Where(u => u.Id == offer.OfferCreatorId).FirstOrDefault();
-            offer.Manager = users.Where(u => u.Id == offer.ManagerId).FirstOrDefault();
-            offer.OfferGroups.ToList().ForEach(g => g.NomWrappers.ToList().ForEach(n => n.SetOfferGroup(g)));
-            offer.OfferGroups.ToList().ForEach(g => g.SetOffer(offer));
-            return offer;
-        }
-
-        /// <summary>
-        /// Инициализация рекламных материалов.
-        /// </summary>
-        private void InitAdvertising()
-        {
-            string advertisingsPath = AppDomain.CurrentDomain.BaseDirectory + "\\advertisings";
-            var files = Directory.GetFiles(advertisingsPath);
-            files.ToList().ForEach(f => BannersManager.Advertisings.Add(f));
-        }
-
-        /// <summary>
-        /// Инициализация баннеров.
-        /// </summary>
-        private void InitBanners()
-        {
-            string bannersPath = AppDomain.CurrentDomain.BaseDirectory + "\\banners";
-            var files = Directory.GetFiles(bannersPath);
-            files.ToList().ForEach(f => BannersManager.Banners.Add(f));
-        }
-
-        /// <summary>
-        /// Установка ссылок на объекты номенклатур в группы номенклатур.
-        /// </summary>
-        private void SetNomGroups()
-        {
-            for (int i = 0; i < Catalog.NomenclatureGroups.Count; i++)
-            {
-                for (int j = 0; j < Catalog.NomenclatureGroups[i].Nomenclatures.Count; j++)
-                {
-                    var nom = Catalog.NomenclatureGroups[i].Nomenclatures[j];
-                    if (nom.Id != 0)
-                    {
-                        Catalog.NomenclatureGroups[i].Nomenclatures.Remove(nom);
-                        var existNom = Catalog.Nomenclatures.Where(n => n.Id == nom.Id).FirstOrDefault();
-                        if (existNom != null) Catalog.NomenclatureGroups[i].Nomenclatures.Add(existNom);
-                    }
-                }
-            }
         }
 
         #endregion Initialization Main
@@ -280,11 +172,19 @@ namespace OfferMaker
 
         #region Catalog
 
+        public void ShowAllCategory() => Catalog.ShowAllCategory();
+
+        public void ShowWithoutCategory() => Catalog.ShowWithoutCategory();
+
+        public void AddCategory() => Catalog.AddCategory();
+
         public void EditCategories() => Catalog.EditCategories();
 
         public void OpenNomenclurueCard(Nomenclature nomenclature) => Catalog.OpenNomenclurueCard(nomenclature);
 
         public void DeleteNomenclurue(Nomenclature nomenclature) => Catalog.DeleteNomenclurue(nomenclature);
+
+        public void CloneNomenclurue(Nomenclature nomenclature) => Catalog.CloneNomenclurue(nomenclature);
 
         public void DelNomGroup(NomenclatureGroup nomenclatureGroup) => Catalog.DelNomGroup(nomenclatureGroup);
 
@@ -304,12 +204,66 @@ namespace OfferMaker
             OnPropertyChanged(nameof(UsingCurrencies));
         }
 
+        /// <summary>
+        /// Сохраняем каталог.
+        /// </summary>
         async public void SaveCatalog()
         {
             CallResult crSaveCurrencies = await DataRepository.SaveCurrencies(Currencies);
             CallResult crSaveNomenclatureGroups = await DataRepository.SaveNomenclatureGroups(Catalog.NomenclatureGroups);
             CallResult crSaveNomenclatures = await DataRepository.SaveNomenclatures(Catalog.Nomenclatures);
+            ObservableCollection<Category> cats = GetPreparedCategories();
+            CallResult crSaveCategories = await DataRepository.SaveCategories(cats);
         }
+
+        /// <summary>
+        /// Переустанавливаем родителей у элементов коллекции и распрямляем дерево.
+        /// </summary>
+        /// <returns></returns>
+        private ObservableCollection<Category> GetPreparedCategories()
+        {
+            SetParents(Catalog.CategoriesTree, null, null);
+            return GetFlattenTree();
+        }
+
+        /// <summary>
+        /// Обходим дерево и устанавливаем родителей, во время редактирования и перетаскиваний всё может перемешаться.
+        /// </summary>
+        /// <param name="categoriesTree"></param>
+        /// <param name="parentId"></param>
+        private void SetParents(ObservableCollection<Category> categoriesTree, int? parentId, string parentGuid)
+        {
+            categoriesTree.ToList().ForEach(c =>
+            {
+                c.ParentId = parentId;
+                c.ParentGuid = parentGuid;
+                SetParents(c.Childs, c.Id, c.Guid);
+            });
+        }
+
+        /// <summary>
+        /// Распрямляем дерево.
+        /// </summary>
+        /// <returns></returns>
+        private ObservableCollection<Category> GetFlattenTree()
+        {
+            List<Category> flattenTree = new List<Category>();
+            foreach(var cat in Catalog.CategoriesTree)
+            {
+                var subCats = TreeWalker.Walk<Category>(cat, c => c.Childs).ToList();
+                if(subCats.Count>0)
+                {
+                    flattenTree.AddRange(subCats);
+                }
+            }
+            ObservableCollection<Category> resColl = new ObservableCollection<Category>();
+            flattenTree.ForEach(f => resColl.Add(f));
+            return resColl;
+        }
+
+        public void EditCategory(Category category, Point position) => Catalog.EditCategory(category, position);
+
+        public void DelCategory(Category category) => Catalog.DelCategory(category);
 
         #endregion Catalog
 
@@ -372,12 +326,6 @@ namespace OfferMaker
 
         #endregion Discount
 
-        #region Archive
-
-        public void LoadOfferFromArchive(Offer offer) => Constructor.LoadOfferFromArchive(offer);
-
-        #endregion Archive
-
         #region Etc
 
         public void SkipOffer() => Constructor.SkipOffer();
@@ -398,15 +346,57 @@ namespace OfferMaker
 
         #endregion Constructor
 
+        #region Archive
+
+        public void LoadOfferFromArchive(Offer offer)
+        {
+            CurrentMainSelectedTabIndex = 0;
+            Constructor.LoadOfferFromArchive(offer);
+        }
+            
+        public void LoadSelectedOfferFromArchive()
+        {
+            if (SelectedOfferInArchive != null)
+            {
+                CurrentMainSelectedTabIndex=0;
+                Constructor.LoadOfferFromArchive(SelectedOfferInArchive);
+            }
+            else
+                OnSendMessage("Выберите КП");
+        } 
+
+        public void ApplyArchiveFilter() => ArchiveOffers = ArchiveFilter.GetFilteredOffers();
+
+        public void FindOfferInArchive() => ApplyArchiveFilter();
+
+        public void ResetArchiveFilter()
+        {
+            ArchiveFilter = new ArchiveFilter(offers, User);
+            ArchiveOffers = ArchiveFilter.GetFilteredOffers();
+        }
+          
+        async public void DeleteOfferFromArchive(Offer offer)
+        {
+            offers.Remove(offer);
+            ArchiveOffers = ArchiveFilter.GetFilteredOffers();
+            var cr = await DataRepository.DeleteOfferFromArchive(offer, offers);
+            if (!cr.Success)
+                OnSendMessage(cr.Error.Message);
+        }
+
+        #endregion Archive
+
         #region DocManager
 
         public void SaveToPdfWithBanner() => DocManager.SaveToPdfWithBanner();
 
         async public void SaveOffer()
         {
-            CallResult cr = await DataRepository.SaveOffer(Constructor.Offer);
+            offers.Add(Constructor.Offer);
+            CallResult cr = await DataRepository.SaveOffer(Constructor.Offer, offers);
             if (!cr.Success)
                 OnSendMessage(cr.Error.Message);
+            ArchiveOffers = ArchiveFilter.GetFilteredOffers();
         }
 
         #endregion DocManager

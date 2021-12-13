@@ -26,7 +26,14 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ParentId")
+                    b.Property<string>("Guid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParentGuid")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -105,8 +112,8 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(30);
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<string>("CategoryGuid")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("CostPrice")
                         .HasColumnType("decimal(18,2)");
@@ -120,7 +127,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 2, 5, 55, 55, 294, DateTimeKind.Utc).AddTicks(7708));
+                        .HasDefaultValue(new DateTime(2021, 12, 11, 23, 3, 22, 763, DateTimeKind.Utc).AddTicks(9999));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -173,7 +180,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 2, 5, 55, 55, 305, DateTimeKind.Utc).AddTicks(8864));
+                        .HasDefaultValue(new DateTime(2021, 12, 11, 23, 3, 22, 771, DateTimeKind.Utc).AddTicks(5007));
 
                     b.Property<string>("Currency")
                         .IsRequired()

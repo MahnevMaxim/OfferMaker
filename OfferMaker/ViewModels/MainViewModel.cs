@@ -13,12 +13,21 @@ namespace OfferMaker.ViewModels
     public class MainViewModel : BaseViewModel
     {
         Main modelMain;
-        private bool isInfoBlocksOpen = false;
+        bool isInfoBlocksOpen = false;
+        bool isOffersFilterOpen = false;
 
         public override void InitializeViewModel()
         {
             modelMain = (Main)model;
+            NomToCatDropHandler = new NomToCatDropHandler();
+            NomToCatDragHandler = new NomToCatDragHandler();
         }
+
+        public NomToCatDropHandler NomToCatDropHandler { get; set; }
+
+        public NomToCatDragHandler NomToCatDragHandler { get; set; }
+
+        #region Fly menu
 
         public bool IsInfoBlocksOpen
         {
@@ -40,18 +49,32 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public bool IsOffersFilterOpen
+        {
+            get { return isOffersFilterOpen; }
+            set
+            {
+                isOffersFilterOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand FlyInfoBlocks { get => new RelayCommand(obj => IsInfoBlocksOpen = true); }
 
         public RelayCommand FlyDiscount { get => new RelayCommand(obj => IsDiscountOpen = true); }
+
+        public RelayCommand FlyOffersFilter { get => new RelayCommand(obj => IsOffersFilterOpen = true); }
+
+        #endregion Fly menu
 
         #region Catalog
 
         public ObservableCollection<Nomenclature> Nomenclatures
         {
-            get => modelMain.Catalog.Nomenclatures;
+            get => modelMain.Catalog.FilteredNomenclatures;
             set
             {
-                modelMain.Catalog.Nomenclatures = value;
+                modelMain.Catalog.FilteredNomenclatures = value;
                 OnPropertyChanged();
             }
         }
@@ -88,13 +111,25 @@ namespace OfferMaker.ViewModels
 
         public Category SelectedCat
         {
-            get => modelMain.Catalog.SelectedCat;
+            get => modelMain.Catalog.CatalogFilter.SelectedCat;
             set
             {
-                modelMain.Catalog.SelectedCat = value;
+                modelMain.Catalog.CatalogFilter.SelectedCat = value;
                 OnPropertyChanged();
             }
         }
+
+        public CatalogFilter CatalogFilter
+        {
+            get => modelMain.Catalog.CatalogFilter;
+            set
+            {
+                modelMain.Catalog.CatalogFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string SearchStringInCatalog { set => modelMain.Catalog.SearchStringInCatalog = value; }
 
         #endregion Catalog
 
@@ -106,6 +141,10 @@ namespace OfferMaker.ViewModels
 
         #region Main
 
+        public ArchiveFilter ArchiveFilter { get => modelMain.ArchiveFilter; }
+
+        public ObservableCollection<User> Users { get => modelMain.Users; }
+
         public ObservableCollection<Currency> Currencies
         {
             get => modelMain.Currencies;
@@ -116,7 +155,19 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public ObservableCollection<Offer> Offers { get => modelMain.Offers; }
+        public ObservableCollection<Offer> ArchiveOffers { get => modelMain.ArchiveOffers; }
+
+        public Offer SelectedOfferInArchive 
+        { 
+            get => modelMain.SelectedOfferInArchive;
+            set=> modelMain.SelectedOfferInArchive=value;
+        }
+
+        public int CurrentMainSelectedTabIndex
+        {
+            get => modelMain.CurrentMainSelectedTabIndex;
+            set => modelMain.CurrentMainSelectedTabIndex = value;
+        }
 
         public ObservableCollection<string> UsingCurrencies { get => modelMain.UsingCurrencies; }
 
@@ -189,7 +240,7 @@ namespace OfferMaker.ViewModels
 
         public ObservableCollection<OfferInfoBlock> OfferInfoBlocks
         {
-            get => modelMain.Constructor.Offer.OfferInfoBlocks;
+            get =>  modelMain.Constructor.Offer.OfferInfoBlocks;
             set
             {
                 modelMain.Constructor.Offer.OfferInfoBlocks = value;

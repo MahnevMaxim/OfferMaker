@@ -217,7 +217,7 @@
                  mah:HeaderedControlHelper.HeaderFontSize="12">
             <DocumentViewer Document="{Binding PdfDocumentShort}"/>
         </TabItem>
-        <TabItem Header="Рабочая Одностраничное КП"
+        <!--<TabItem Header="Рабочая Одностраничное КП"
                  mah:TabControlHelper.Underlined="TabPanel"
                  mah:HeaderedControlHelper.HeaderFontSize="12">
             <FlowDocumentScrollViewer MaxZoom="100" MinZoom="100" >
@@ -231,7 +231,7 @@
                           ColumnWidth="{Binding ColumnWidth, Source={x:Static layout:PrintLayout.A4}}"
                           ColumnGap="1">
 
-                    <!--добавить коллекцию после титульника-->
+                    --><!--добавить коллекцию после титульника--><!--
 
                     <Paragraph Margin="0" >
                         <local:OnePageTitul/>
@@ -249,9 +249,9 @@
                                         <ItemsControl ItemsSource="{Binding NomWrappers}" Margin="0">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate >
-                                                    <!--<Paragraph BreakPageBefore="True">-->
+                                                    --><!--<Paragraph BreakPageBefore="True">--><!--
                                                     <local:BlockBody/>
-                                                    <!--</Paragraph>-->
+                                                    --><!--</Paragraph>--><!--
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
@@ -273,6 +273,6 @@
 
                 </FlowDocument>
             </FlowDocumentScrollViewer>
-        </TabItem >
+        </TabItem >-->
     </TabControl>
 </UserControl>

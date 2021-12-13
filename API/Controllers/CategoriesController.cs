@@ -52,7 +52,8 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(category).State = EntityState.Modified;
+            var entry = _context.Categories.Find(id);
+            _context.Entry(entry).CurrentValues.SetValues(category);
 
             try
             {
@@ -70,6 +71,38 @@ namespace API.Controllers
                 }
             }
 
+            return NoContent();
+        }
+
+        // PUT: api/Categories/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        public async Task<IActionResult> SaveCategories(IEnumerable<Category> categories)
+        {
+            DeleteUnusedCategories(categories);
+
+            foreach (var category in categories)
+            {
+                try
+                {
+                    if (category.Id == 0)
+                    {
+                        var res = _context.Categories.Where(c => c.Guid == category.Guid).FirstOrDefault();
+                        if(res==null)
+                        {
+                            await PostCategory(category);
+                        }
+                    }
+                    else
+                    {
+                        await PutCategory(category.Id, category);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    L.LW("Исключение при попытке сохранить категорию " + category.Id, ex);
+                }
+            }
             return NoContent();
         }
 
@@ -103,6 +136,26 @@ namespace API.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);
+        }
+
+        private void DeleteUnusedCategories(IEnumerable<Category> categories)
+        {
+            try
+            {
+                var currentList = _context.Categories.ToList();
+                var newListIds = categories.Select(e => e.Id).ToList();
+                foreach (Category cat in currentList)
+                {
+                    if (!newListIds.Contains(cat.Id))
+                        _context.Categories.Remove(cat);
+                }
+            }
+            catch(Exception ex)
+            {
+                L.LW("",ex);
+            }
+            
+            _context.SaveChanges();
         }
     }
 }

@@ -11,13 +11,23 @@ namespace OfferMaker
 {
     /// <summary>
     /// Класс для получения данных из различных источников в зависимости
-    /// от доступности либо в зависимости от настроек приложения
+    /// от доступности либо в зависимости от настроек приложения.
+    /// Удаление из кэша производим путём обновления объекта кэша.
     /// </summary>
     class Proxy
     {
         private ServerData ServerData;
         private LocalData LocalData;
-        AppMode AppMode { get => Global.Main.Settings.AppMode; }
+        public AppMode defaultAppMode;
+
+        AppMode AppMode 
+        { 
+            get
+            {
+                if (Global.Main == null) return defaultAppMode;
+                return Global.Main.Settings.AppMode;
+            } 
+        }
 
         public Proxy()
         {
@@ -143,7 +153,7 @@ namespace OfferMaker
                 return callResult;
             }
             return await LocalData.GetCache<ObservableCollection<User>>(LocalDataConfig.UsersPath);
-        }
+         }
 
         /// <summary>
         /// Пытаемся получить хинты с сервера или из кэша.
@@ -170,15 +180,15 @@ namespace OfferMaker
         /// </summary>
         /// <param name="offer"></param>
         /// <returns></returns>
-        async internal Task<CallResult> SaveOffer(Offer offer)
+        async internal Task<CallResult> SaveOffer(Offer offer, ObservableCollection<Offer> offers)
         {
             if (AppMode == AppMode.Online)
                 return await ServerData.SaveOffer(offer);
             if (AppMode == AppMode.Offline)
-                return LocalData.UpdateCache(offer, LocalDataConfig.OffersPath);
+                return LocalData.UpdateCache(offers, LocalDataConfig.OffersPath);
 
             var callResult = await ServerData.SaveOffer(offer);
-            LocalData.UpdateCache(offer, LocalDataConfig.OffersPath);
+            LocalData.UpdateCache(offers, LocalDataConfig.OffersPath);
             return callResult;
         }
 
@@ -200,7 +210,7 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Сохраняем настройки валют на сервере и локально
+        /// Сохраняем настройки валют на сервере и локально.
         /// </summary>
         /// <param name="currencies"></param>
         /// <returns></returns>
@@ -217,7 +227,24 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Сохраняем группы номенклатур на сервере и локально
+        /// Сохраняем категории на сервере и локально.
+        /// </summary>
+        /// <param name="categoriesTree"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveCategories(ObservableCollection<Category> categoriesTree)
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.SaveCategories(categoriesTree);
+            if (AppMode == AppMode.Offline)
+                return LocalData.UpdateCache(categoriesTree, LocalDataConfig.CategoriesPath);
+
+            var callResult = await ServerData.SaveCategories(categoriesTree);
+            LocalData.UpdateCache(categoriesTree, LocalDataConfig.CategoriesPath);
+            return callResult;
+        }
+
+        /// <summary>
+        /// Сохраняем группы номенклатур на сервере и локально.
         /// </summary>
         /// <param name="currencies"></param>
         /// <returns></returns>
@@ -232,5 +259,24 @@ namespace OfferMaker
             LocalData.UpdateCache(nomenclatureGroups, LocalDataConfig.NomenclatureGroupsPath);
             return callResult;
         }
+
+        /// <summary>
+        /// Удаляем КП из кэша и с сервера.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <param name="offers"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> DeleteOfferFromArchive(Offer offer, ObservableCollection<Offer> offers)
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.DeleteOfferFromArchive(offer);
+            if (AppMode == AppMode.Offline)
+                return LocalData.UpdateCache(offers, LocalDataConfig.OffersPath);
+
+            var callResult = await ServerData.DeleteOfferFromArchive(offer);
+            LocalData.UpdateCache(offers, LocalDataConfig.OffersPath);
+            return callResult;
+        }
+
     }
 }

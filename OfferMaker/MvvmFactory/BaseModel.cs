@@ -17,6 +17,11 @@ namespace OfferMaker
 
         public event EventHandler<string> SendMessage;
 
+        internal void SendCommandEditCategory(object parameters)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// События в дочернем классе будут работать только через обёртку
         /// </summary>

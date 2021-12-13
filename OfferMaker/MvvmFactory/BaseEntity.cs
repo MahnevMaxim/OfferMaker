@@ -10,7 +10,7 @@ namespace OfferMaker
 {
     abstract public class BaseEntity : INotifyPropertyChanged
     {
-        internal bool IsPropertyChangedNoNull { get => PropertyChanged == null; }
+        internal bool IsPropertyChangedNull { get => PropertyChanged == null; }
 
         #region INotifyPropertyChanged code
 

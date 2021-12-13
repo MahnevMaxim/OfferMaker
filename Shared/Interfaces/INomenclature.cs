@@ -12,9 +12,11 @@ namespace Shared
     {
         public int Id { get; set; }
 
+        public string Guid { get; set; }
+
         public string Title { get; set; }
 
-        public int? CategoryId { get; set; }
+        public string CategoryGuid { get; set; }
 
         public ObservableCollection<Description> Descriptions { get; set; }
 
@@ -29,5 +31,7 @@ namespace Shared
         public int ActualPricePeriod { get; set; }
 
         public string Photo { get; set; }
+
+        //public ObservableCollection<NomImage> Photos { get; set; }
     }
 }

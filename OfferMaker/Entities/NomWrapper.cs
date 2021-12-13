@@ -166,7 +166,7 @@ namespace OfferMaker
         /// Цена одной номенклатурной единицы.
         /// </summary>
         [JsonIgnore]
-        public decimal Price { get => offerGroup.IsCreateByCostPrice ? CostPrice : CostPrice * Markup; }
+        public decimal Price { get => offerGroup == null ? 0 : offerGroup.IsCreateByCostPrice ? CostPrice : CostPrice * Markup; }
 
         /// <summary>
         /// Наценка.
@@ -201,17 +201,18 @@ namespace OfferMaker
         /// Для прокидывания свойства IsWithNds от Offer к NomWrapper
         /// </summary>
         [JsonIgnore]
-        public bool IsWithNds { get => offerGroup.IsWithNds; }
+        public bool IsWithNds { get => offerGroup == null ? false : offerGroup.IsWithNds; }
 
         /// <summary>
         /// Текущая валюта номенклатуры.
         /// </summary>
+        [JsonIgnore]
         public Currency Currency
         {
             get
             {
                 if (currency == null)
-                    currency = Global.Main.Currencies.Where(c => c.CharCode == CurrencyCharCode).FirstOrDefault();
+                    currency = Global.GetCurrencyByCode(CurrencyCharCode); 
                 return currency;
             }
             set
@@ -230,7 +231,7 @@ namespace OfferMaker
             get
             {
                 if (defaultCurrency == null)
-                    defaultCurrency = Global.Main.Currencies.Where(c => c.CharCode == Nomenclature.CurrencyCharCode).FirstOrDefault();
+                    defaultCurrency = Global.GetCurrencyByCode(Nomenclature.CurrencyCharCode); 
                 return defaultCurrency;
             }
         }
@@ -245,7 +246,7 @@ namespace OfferMaker
             set
             {
                 currencyCharCode = value;
-                currency = Global.Main.Currencies.Where(c => c.CharCode == currencyCharCode).FirstOrDefault();
+                currency = Global.GetCurrencyByCode(currencyCharCode); 
                 OnPropertyChanged();
                 UpdateCurrency();
             }

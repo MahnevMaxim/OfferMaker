@@ -60,7 +60,7 @@ namespace OfferMaker
         /// <param name="offerGroup"></param>
         public AddNomToConstructor(OfferGroup offerGroup)
         {
-            Nomenclatures = Global.Main.Catalog.Nomenclatures;
+            Nomenclatures = Global.Main.Catalog.GetNomenclatures();
             CategoriesTree = Global.Main.Catalog.CategoriesTree;
             NomenclatureGroups = Global.Main.Catalog.NomenclatureGroups;
             this.offerGroup = offerGroup;

@@ -15,7 +15,7 @@ namespace OfferMaker
         /// Счётчик добавлений групп в текущем КП,
         /// используется только для выводв названия групп.
         /// </summary>
-        public int addGroupsCounter;
+        int addGroupsCounter;
         /// <summary>
         /// Обсервер.
         /// </summary>
@@ -25,7 +25,7 @@ namespace OfferMaker
         ObservableCollection<OfferInfoBlock> offerInfoBlocks = new ObservableCollection<OfferInfoBlock>();
         ObservableCollection<string> advertisingsUp = new ObservableCollection<string>();
         ObservableCollection<string> advertisingsDown = new ObservableCollection<string>();
-        DateTime createDate = DateTime.UtcNow;
+        DateTime createDate = DateTime.Now;
         User manager;
 
         User offerCreator;
@@ -112,11 +112,12 @@ namespace OfferMaker
         [JsonIgnore]
         public User OfferCreator
         {
-            get => offerCreator ?? Global.Main?.User;
+            get => offerCreator;
             set
             {
                 offerCreator = value;
-                offerCreatorId = offerCreator.Id;
+                if(value!=null)
+                    offerCreatorId = offerCreator.Id;
                 OnPropertyChanged();
             }
         }
@@ -152,7 +153,7 @@ namespace OfferMaker
         /// </summary>
         public int ManagerId
         {
-            get => managerId == null ? offerCreatorId : managerId;
+            get => managerId == 0 ? offerCreatorId : managerId;
             set => managerId = value;
         }
 
@@ -446,9 +447,17 @@ namespace OfferMaker
 
         private Offer() { }
 
-        public Offer(Constructor constructor)
+        /// <summary>
+        /// Конструктор первой инициализации объекта.
+        /// </summary>
+        /// <param name="constructor"></param>
+        public Offer(Constructor constructor, Currency currency, ObservableCollection<OfferInfoBlock> offerInfoBlocks, User offerCreator, string banner)
         {
             this.constructor = constructor;
+            Currency = currency;
+            OfferInfoBlocks = offerInfoBlocks;
+            OfferCreator = offerCreator;
+            Banner = banner;
             OfferInfoBlocks.CollectionChanged += OfferInfoBlocks_CollectionChanged;
             OfferGroups.CollectionChanged += OfferGroups_CollectionChanged;
             discount = new Discount(this);
@@ -471,6 +480,8 @@ namespace OfferMaker
             currency = curr;
             UpdateOfferCurrency();
         }
+
+        public int GetAddGroupsCounter() => ++addGroupsCounter;
 
         #region InterfaceUpdaters
 
