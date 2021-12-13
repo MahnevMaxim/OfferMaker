@@ -12,12 +12,14 @@ namespace OfferMaker
     public class Nomenclature : BaseEntity
     {
         string categoryGuid;
+        ObservableCollection<Description> descriptions = new ObservableCollection<Description>();
         decimal costPrice;
         decimal markup;
         decimal price;
         decimal profit;
-        string currencyCharCode;
-        DateTime? lastChangePriceDate;
+        string currencyCharCode = "RUB";
+        DateTime? lastChangePriceDate = DateTime.Now;
+        int actualPricePeriod = 30;
         string photo;
 
         public int Id { get; set; }
@@ -44,7 +46,11 @@ namespace OfferMaker
         /// <summary>
         /// Описания.
         /// </summary>
-        public ObservableCollection<Description> Descriptions { get; set; }
+        public ObservableCollection<Description> Descriptions 
+        { 
+            get => descriptions;
+            set => descriptions = value; 
+        }
 
         /// <summary>
         /// Себестоимость.
@@ -148,20 +154,25 @@ namespace OfferMaker
         /// <summary>
         /// Срок в днях, по истечении которого цена номенклатуры теряет актуальность.
         /// </summary>
-        public int ActualPricePeriod { get; set; }
+        public int ActualPricePeriod 
+        {
+            get => actualPricePeriod;
+            set => actualPricePeriod = value;
+        }
 
         /// <summary>
         /// Колекция, т.к. не понимаю: нужна одна картинка или несколько
         /// </summary>
-        public string Photo 
+        public string Photo
         {
             get => photo;
-            private set
-            {
-                photo = value;
-                SetIsEdit();
-            }
+            set => photo = value;
         }
+
+        /// <summary>
+        /// Коллекция фото номенклатуры.
+        /// </summary>
+        public ObservableCollection<Image> Photos { get; set; } = new ObservableCollection<Image>();
 
         /// <summary>
         /// Указывает, актуальна ли цена у номенклатуры.
@@ -182,8 +193,19 @@ namespace OfferMaker
             SetIsEdit();
         }
             
-        public void SetPhoto(string photo) => Photo = photo;
-        
+        public void SetPhoto(string photo)
+        {
+            Photo = photo;
+            SetIsEdit();
+        }
+
+        internal void SetPhoto(Image image)
+        {
+            Photo = image.OriginalPath;
+            Photos.Add(image);
+            SetIsEdit();
+        }
+
         public bool GetIsEdit() => isEdit;
 
         public override string ToString() => "Id:" + Id +" "+ Title;

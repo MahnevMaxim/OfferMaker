@@ -168,7 +168,7 @@
                         Width="25"
                         Margin="5"
                         ToolTip="Удалить">
-                    <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
+                    <iconPacks:PackIconMaterial Kind="Close" 
                                                     Width="13"
                                                     Height="13"/>
                     <Button.CommandParameter>
@@ -263,7 +263,7 @@
                             Margin="5,0,0,0"
                             Style="{DynamicResource MahApps.Styles.Button.Square.Accent}"
                             ToolTip="Удалить группу">
-                        <iconPacks:PackIconMaterial Kind="DeleteForeverOutline"
+                        <iconPacks:PackIconMaterial Kind="Close"
                                                     Width="15"
                                                     Height="15"/>
                         <Button.CommandParameter>
@@ -485,7 +485,7 @@
                                             Width="28"
                                             Margin="3"
                                             ToolTip="Удалить">
-                                        <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
+                                        <iconPacks:PackIconMaterial Kind="Close" 
                                                                     Width="15"
                                                                     Height="15"/>
                                         <Button.CommandParameter>

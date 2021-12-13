@@ -145,6 +145,8 @@ namespace OfferMaker
 
         public DocManager DocManager { get; set; }
 
+        public ImageManager ImageManager { get; set; }
+
         #endregion Modules
 
         #endregion Properties
@@ -189,6 +191,8 @@ namespace OfferMaker
         public void DelNomGroup(NomenclatureGroup nomenclatureGroup) => Catalog.DelNomGroup(nomenclatureGroup);
 
         public void DelNomFromNomenclatureGroup(Nomenclature nomenclature) => Catalog.DelNomFromNomenclatureGroup(nomenclature);
+
+        public void AddNomenclature() => Catalog.AddNomenclature();
 
         public void AddNomenclatureGroup() => Catalog.AddNomenclatureGroup();
 

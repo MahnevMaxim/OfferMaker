@@ -14,7 +14,7 @@ namespace OfferMaker.ViewModels
     {
         public override void DragDropOperationFinished(DragDropEffects operationResult, IDragInfo dragInfo)
         {
-            var nomenclature = (Nomenclature)dragInfo.Data;
+            var nomenclature = dragInfo.Data as Nomenclature;
             Global.Catalog.CatalogFilter.RemoveDropedNom(nomenclature);
         }
     }

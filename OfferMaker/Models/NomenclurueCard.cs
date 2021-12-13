@@ -52,9 +52,7 @@ namespace OfferMaker
             CurrencyCharCode = nomenclature.CurrencyCharCode;
             Currencies = Global.Main.UsingCurrencies.ToList();
             if (!Currencies.Contains(CurrencyCharCode))
-            {
                 Currencies.Add(CurrencyCharCode);
-            }
             if (Nomenclature.Photo != null) Image = Nomenclature.Photo;
         }
 
@@ -72,7 +70,8 @@ namespace OfferMaker
             string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
             if (path != null)
             {
-                Nomenclature.SetPhoto(path);
+                Image image = new Image() {Guid = Guid.NewGuid().ToString(), OriginalPath=path };
+                Nomenclature.SetPhoto(image);
                 Image = path;
             }
         }
@@ -82,7 +81,8 @@ namespace OfferMaker
         /// </summary>
         public void RemoveImage()
         {
-            Nomenclature.SetPhoto(null);
+            string ph = null;
+            Nomenclature.SetPhoto(ph);
             Image = null;
         }
 

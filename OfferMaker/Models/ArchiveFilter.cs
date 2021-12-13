@@ -17,9 +17,17 @@ namespace OfferMaker
 
         public bool IsShowOnlyCurrentUser { get; set; }
 
-        public DateTime? BeginDateTime { get; set; }
+        public DateTime? BeginDateTime 
+        { 
+            get; 
+            set; 
+        }
 
-        public DateTime? EndDateTime { get; set; }
+        public DateTime? EndDateTime 
+        { 
+            get; 
+            set; 
+        }
 
         public string CustomerName { get; set; }
 
@@ -45,14 +53,25 @@ namespace OfferMaker
 
         internal ObservableCollection<Offer> GetFilteredOffers()
         {
-            EndDateTime = offers?.OrderByDescending(o => o.Id).FirstOrDefault()?.CreateDate;
+            
+            DateTime endDatetimeWithDay;
+            if (EndDateTime!=null)
+            {
+                //иначе последнее число в результаты не будет включена, так как там время 00:00:00
+                endDatetimeWithDay = EndDateTime.Value.AddDays(1);
+            }
+            else
+            {
+                endDatetimeWithDay = (DateTime)offers?.OrderByDescending(o => o.Id).FirstOrDefault()?.CreateDate;
+            }
+
             if (IsFilterEmpty()) return offers;
             List<Offer> tempOffers = new List<Offer>();
             offers.ToList().ForEach(o => tempOffers.Add(o));
 
             if (IsShowOnlyCurrentUser)
             {
-                var res = tempOffers.Where(o => o.OfferCreator.Id == currentUser.Id).ToList();
+                var res = tempOffers.Where(o => o.OfferCreator?.Id != null && o.OfferCreator.Id == currentUser.Id).ToList();
                 tempOffers = res;
             }
 
@@ -71,9 +90,9 @@ namespace OfferMaker
                 tempOffers = res;
             }
 
-            if (EndDateTime != null)
+            if (endDatetimeWithDay != null)
             {
-                var res = tempOffers.Where(o => o.CreateDate <= EndDateTime).ToList();
+                var res = tempOffers.Where(o => o.CreateDate <= endDatetimeWithDay).ToList();
                 tempOffers = res;
             }
 
@@ -97,7 +116,7 @@ namespace OfferMaker
 
             if (Creator != null)
             {
-                var res = tempOffers.Where(o => o.OfferCreator.Id == Creator.Id).ToList();
+                var res = tempOffers.Where(o => o.OfferCreator?.Id !=null && o.OfferCreator.Id == Creator.Id).ToList();
                 tempOffers = res;
             }
 

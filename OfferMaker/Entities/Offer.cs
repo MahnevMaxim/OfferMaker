@@ -28,6 +28,7 @@ namespace OfferMaker
         DateTime createDate = DateTime.Now;
         User manager;
 
+        int id;
         User offerCreator;
         Currency currency;
         int currencyId;
@@ -45,7 +46,15 @@ namespace OfferMaker
         bool isCreateByCostPrice;
         bool isHideNomsPrice;
 
-        public int Id { get; set; }
+        public int Id
+        {
+            get => id;
+            set
+            {
+                id = value;
+                OnPropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Группы номенклатур для контрола конструктора.

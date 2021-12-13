@@ -54,10 +54,6 @@ namespace OfferMaker
 
         async private Task Init()
         {
-            //main = new Main();
-            //Global.Main = main;
-            //main.Settings = Settings.GetInstance();
-            //main.Settings.SetSettings();
             main.DataRepository = DataRepository.GetInstance(); //инициализация хранилища
             dataRepository = main.DataRepository;
             await ReciveData(); //инициализация данных
@@ -153,6 +149,9 @@ namespace OfferMaker
             main.ArchiveFilter = new ArchiveFilter(offers, user);
             main.ArchiveOffers = main.ArchiveFilter.GetFilteredOffers();
             main.offers = offers;
+
+            //менеджер картинок
+            main.ImageManager = ImageManager.GetInstance();
         }
 
         /// <summary>

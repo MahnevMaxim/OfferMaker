@@ -16,7 +16,7 @@ namespace OfferMaker
     public class CatalogFilter : BaseEntity
     {
         private ObservableCollection<Nomenclature> Nomenclatures { get => catalog.Nomenclatures; }
-        private ObservableCollection<Nomenclature> nomenclaturesWithoutCat=new ObservableCollection<Nomenclature>();
+        private ObservableCollection<Nomenclature> nomenclaturesWithoutCat = new ObservableCollection<Nomenclature>();
         string keyString;
         Category selectedCat;
         Catalog catalog;
@@ -45,27 +45,28 @@ namespace OfferMaker
             }
         }
 
-        public ObservableCollection<Nomenclature> FilteredNomenclatures 
+        public ObservableCollection<Nomenclature> FilteredNomenclatures
         {
-            get 
+            get
             {
-                if(FilterMode==FilterMode.WithoutCat)
-                    return new ObservableCollection<Nomenclature>(Nomenclatures.Where(n=>n.CategoryGuid==null).ToList());
+                if (FilterMode == FilterMode.WithoutCat)
+                    return new ObservableCollection<Nomenclature>(Nomenclatures.Where(n => n.CategoryGuid == null).ToList());
                 if (FilterMode == FilterMode.Category)
                     return selectedCat.Nomenclatures;
                 return Nomenclatures;
-            }  
+            }
         }
 
         public CatalogFilter(Catalog catalog)
         {
-            this.catalog=catalog;
-            Nomenclatures.ToList().ForEach(n => { if(n.CategoryGuid == null) nomenclaturesWithoutCat.Add(n); });
+            this.catalog = catalog;
+            Nomenclatures.ToList().ForEach(n => { if (n.CategoryGuid == null) nomenclaturesWithoutCat.Add(n); });
         }
-        
+
         internal void Remove(Nomenclature nomenclature)
         {
             Nomenclatures.Remove(nomenclature);
+            catalog.RemoveNomFromCat(nomenclature);
             OnPropertyChanged(nameof(FilteredNomenclatures));
         }
 
@@ -74,25 +75,29 @@ namespace OfferMaker
             Nomenclature newNom = Helpers.CloneObject<Nomenclature>(nomenclature);
             newNom.Id = 0;
             int index = Nomenclatures.IndexOf(nomenclature);
-            Nomenclatures.Insert(index+1,newNom);
+            Nomenclatures.Insert(index + 1, newNom);
+            if (FilterMode == FilterMode.Category)
+            {
+                int indexInCat = SelectedCat.Nomenclatures.IndexOf(nomenclature);
+                SelectedCat.Nomenclatures.Insert(indexInCat + 1, newNom);
+            }
         }
 
         internal void SetMode(FilterMode mode)
         {
             FilterMode = mode;
-            if(mode!=FilterMode.Category)
+            if (mode != FilterMode.Category)
             {
                 selectedCat = null;
                 OnPropertyChanged(nameof(SelectedCat));
             }
-                
             OnPropertyChanged();
             OnPropertyChanged(nameof(FilteredNomenclatures));
         }
 
         internal void RemoveDropedNom(Nomenclature nomenclature)
         {
-            if(FilterMode==FilterMode.Category)
+            if (FilterMode == FilterMode.Category)
                 SelectedCat.Nomenclatures.Remove(nomenclature);
             OnPropertyChanged(nameof(FilteredNomenclatures));
         }

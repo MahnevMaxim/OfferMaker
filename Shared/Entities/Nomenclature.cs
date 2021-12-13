@@ -32,6 +32,6 @@ namespace Shared
 
         public string Photo { get; set; }
 
-        //public ObservableCollection<NomImage> Photos { get; set; }
+        public ObservableCollection<Image> Photos { get; set; }
     }
 }

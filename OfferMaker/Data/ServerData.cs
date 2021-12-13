@@ -7,6 +7,9 @@ using Shared;
 using System.Collections.ObjectModel;
 using ApiLib;
 using System.Collections.Specialized;
+using System.Net.Http;
+using System.IO;
+using Microsoft.AspNetCore.Http.Internal;
 
 namespace OfferMaker
 {
@@ -211,6 +214,24 @@ namespace OfferMaker
         {
             try
             {
+                //var _httpClient = new HttpClient();
+                //var formContent = new MultipartFormDataContent();
+                ////formContent.Headers.Add();
+                var file = nomenclatures[5].Photo;
+                //formContent.Add(new StreamContent(File.OpenRead(FilePath)), "files", Path.GetFileName(FilePath));
+
+                //_httpClient.BaseAddress = new Uri("https://localhost:44378/");
+                //var response = await _httpClient.PostAsync("/api/ImageUpload", formContent);
+
+                using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
+                //var formFile = new FormFile(stream, 0, stream.Length, "streamFile", file.Split(@"\").Last());
+
+
+
+                FileParameter param = new FileParameter(stream, Path.GetFileName(file));
+
+                //fileUploadApi.Files = formContent;
+                var wwww = client.ImageUploadAsync(param);
                 var newNoms = nomenclatures.Where(n => n.Id == 0 || n.GetIsEdit() == true).ToList();
                 IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
                 await client.NomenclaturesPUTAsync(noms);

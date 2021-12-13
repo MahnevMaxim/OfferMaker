@@ -49,6 +49,10 @@ namespace API.Data
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Description>>(v));
 
+            builder.Entity<Nomenclature>().Property(p => p.Photos).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Image>>(v));
+
             builder.Entity<Nomenclature>().Property(n => n.ActualPricePeriod).HasDefaultValue(30);
 
             builder.Entity<Nomenclature>().Property(n => n.LastChangePriceDate).HasDefaultValue(DateTime.UtcNow);

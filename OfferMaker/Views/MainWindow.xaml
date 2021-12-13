@@ -60,7 +60,7 @@
                                             VerticalAlignment="Top"
                                             Grid.Column="2"
                                             ToolTip="Удалить">
-                                        <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
+                                        <iconPacks:PackIconMaterial Kind="Close" 
                                                     Width="14"
                                                     Height="14"/>
                                         <Button.CommandParameter>
@@ -281,22 +281,6 @@
                             Height="35"
                             Width="35"
                             Margin="5"
-                            ToolTip="Удалить">
-                        <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
-                                                    Width="20"
-                                                    Height="20"/>
-                        <Button.CommandParameter>
-                            <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="DeleteNomenclurue"/>
-                                <Binding Path="."/>
-                            </MultiBinding>
-                        </Button.CommandParameter>
-                    </Button>
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                            Height="35"
-                            Width="35"
-                            Margin="5"
                             ToolTip="Клонировать">
                         <iconPacks:PackIconMaterial Kind="ContentCopy" 
                                                     Width="20"
@@ -313,33 +297,18 @@
                             Height="35"
                             Width="35"
                             Margin="5"
-                            ToolTip="Добавить в категорию">
-                        <iconPacks:PackIconMaterial Kind="ArrowLeft" 
-                                                  Width="20"
-                                                  Height="20"/>
+                            ToolTip="Удалить">
+                        <iconPacks:PackIconMaterial Kind="Close" 
+                                                    Width="20"
+                                                    Height="20"/>
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="AddToCategoryCommand"/>
+                                <Binding Source="DeleteNomenclurue"/>
                                 <Binding Path="."/>
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
-                    <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
-                            Height="35"
-                            Width="35"
-                            Margin="5"
-                            ToolTip="Добавить в группу">
-                        <iconPacks:PackIconMaterial Kind="ArrowRight" 
-                                                  Width="20"
-                                                  Height="20"/>
-                        <Button.CommandParameter>
-                            <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="AddNomenclatureToGroup"/>
-                                <Binding Path="."/>
-                            </MultiBinding>
-                        </Button.CommandParameter>
-                    </Button>
+                    
                 </StackPanel>
             </DataTemplate>
 
@@ -350,7 +319,7 @@
                             Width="28"
                             Margin="3"
                             ToolTip="Удалить группу">
-                    <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
+                    <iconPacks:PackIconMaterial Kind="Close" 
                                                   Width="14"
                                                   Height="14"/>
                     <Button.CommandParameter>
@@ -369,7 +338,7 @@
                         Width="28"
                         Margin="3"
                         ToolTip="Удалить номенклатуру из группы">
-                    <iconPacks:PackIconMaterial Kind="DeleteForeverOutline" 
+                    <iconPacks:PackIconMaterial Kind="Close" 
                                                 Width="14"
                                                 Height="14"/>
                     <Button.CommandParameter>
@@ -938,7 +907,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350" MaxWidth="350" MinWidth="150"/>
                 <ColumnDefinition Width="2"/>
-                <ColumnDefinition Width="1.35*" MinWidth="200"/>
+                <ColumnDefinition Width="1.25*" MinWidth="200"/>
                 <ColumnDefinition Width="2"/>
                 <ColumnDefinition Width="*" MinWidth="200"/>
             </Grid.ColumnDefinitions>
@@ -1079,8 +1048,9 @@
                                 <DataGridTemplateColumn Header="" DisplayIndex="6" CellTemplate="{StaticResource CatalogButtons}"/>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <Button Grid.Row="1" 
-                                Content="Добавить номенклатуру"
+                        <Button Content="Добавить номенклатуру" Grid.Row="1" 
+                                CommandParameter="AddNomenclature"
+                                Command="{Binding Cmd}"
                                 Style="{DynamicResource MahApps.Styles.Button.Square}"
                                 Margin="5"/>
                     </Grid>

@@ -82,7 +82,7 @@ namespace OfferMaker
             }
         }
 
-        
+
 
         public string SearchStringInCatalog
         {
@@ -144,7 +144,16 @@ namespace OfferMaker
             CatalogFilter = new CatalogFilter(this);
         }
 
-        #region Cats
+        #region Categories
+
+        internal void RemoveNomFromCat(Nomenclature nomenclature)
+        {
+            if (nomenclature.CategoryGuid != null)
+            {
+                Category cat = GetCatFromTree(nomenclature.CategoryGuid);
+                if (cat != null) cat.Nomenclatures.Remove(nomenclature);
+            }
+        }
 
         private void CreateCategoriesTree()
         {
@@ -155,11 +164,11 @@ namespace OfferMaker
         }
 
         internal void ShowAllCategory() => CatalogFilter.SetMode(FilterMode.All);
-        
+
         internal void ShowWithoutCategory() => CatalogFilter.SetMode(FilterMode.WithoutCat);
 
         private void SetNOmenclatureCache(Category ch) => Nomenclatures.Where(n => n.CategoryGuid == ch.Guid).ToList().ForEach(n => ch.Nomenclatures.Add(n));
-        
+
         private void SetChilds(ObservableCollection<Category> targetCollection, List<Category> childs)
         {
             foreach (var ch in childs)
@@ -202,8 +211,8 @@ namespace OfferMaker
             SetCatGuidNull(category);
         }
 
-        private void SetCatGuidNull(Category category) => nomenclatures.Where(n=>n.CategoryGuid==category.Guid).ToList().ForEach(n => n.CategoryGuid=null);
-        
+        private void SetCatGuidNull(Category category) => nomenclatures.Where(n => n.CategoryGuid == category.Guid).ToList().ForEach(n => n.CategoryGuid = null);
+
         /// <summary>
         /// Обход дерева для удаления.
         /// </summary>
@@ -218,6 +227,26 @@ namespace OfferMaker
                 return;
             }
             coll.ToList().ForEach(c => { DeleteCatFromTree(category, c.Childs); });
+        }
+
+        private Category GetCatFromTree(string guid, ObservableCollection<Category> coll = null)
+        {
+            if (coll == null) coll = CategoriesTree;
+            var res = coll.Where(c => c.Guid == guid).FirstOrDefault();
+
+            if (res != null)
+            {
+                return res;
+            }
+
+            foreach(Category cat in coll)
+            {
+                Category findedCat = GetCatFromTree(guid, cat.Childs);
+                if (findedCat != null)
+                    return findedCat;
+            }
+
+            return null;
         }
 
         #endregion Cats
@@ -237,6 +266,16 @@ namespace OfferMaker
         internal void OpenNomenclurueCard(Nomenclature nomenclature)
         {
             MvvmFactory.CreateWindow(new NomenclurueCard(nomenclature, this), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
+        }
+
+        /// <summary>
+        /// Добавление номенклатуры.
+        /// </summary>
+        internal void AddNomenclature()
+        {
+            Nomenclature nomenclature = new Nomenclature();
+            Nomenclatures.Add(nomenclature);
+            OpenNomenclurueCard(nomenclature);
         }
 
         /// <summary>

@@ -26,7 +26,7 @@
                         Width="30"
                         Margin="5"
                         ToolTip="Удалить описание">
-                    <iconPacks:PackIconMaterial Kind="DeleteForeverOutline"
+                    <iconPacks:PackIconMaterial Kind="Close"
                                                 Width="14"
                                                 Height="14"/>
                     <Button.CommandParameter>
@@ -39,7 +39,6 @@
             </DataTemplate>
         </Grid.Resources>
 
-
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="70" MaxHeight="100"/>
             <RowDefinition Height="230"/>
@@ -51,17 +50,19 @@
         </Grid.ColumnDefinitions>
 
         <Border Grid.ColumnSpan="2"
-                    Margin="0,0,0,10"
-                    BorderThickness="1"
-                    VerticalAlignment="Stretch"
-                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+                Margin="0,0,0,10"
+                BorderThickness="1"
+                VerticalAlignment="Stretch"
+                BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
             <TextBox Text="{Binding Nomenclature.Title, UpdateSourceTrigger=PropertyChanged}" 
-                         TextWrapping="Wrap"
-                         Margin="0"
-                         BorderThickness="0"
-                         FontSize="18"
-                         HorizontalAlignment="Center"
-                         VerticalAlignment="Center"/>
+                     TextWrapping="Wrap"
+                     Margin="0"
+                     BorderThickness="0"
+                     FontSize="18"
+                     MinWidth="620"
+                     VerticalScrollBarVisibility="Auto"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"/>
         </Border>
 
         <Border Grid.Row="1" Grid.Column="0"
@@ -137,8 +138,7 @@
                           ItemsSource="{Binding Currencies}" 
                           SelectedItem="{Binding CurrencyCharCode}"
                           Margin="10,0"
-                          Height="30"
-                          SelectedIndex="0"/>
+                          Height="30"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
                     <TextBlock Text="{Binding Nomenclature.LastChangePriceDate, StringFormat={}{0:dd.MM.yyyy}}" 
                                VerticalAlignment="Center"
@@ -201,7 +201,7 @@
                             Margin="5,0"
                             ToolTip="Удалить фото"
                             Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                        <iconPacks:PackIconMaterial Kind="DeleteForeverOutline"
+                        <iconPacks:PackIconMaterial Kind="Close"
                                                     Width="20"
                                                     Height="20"/>
                     </Button>

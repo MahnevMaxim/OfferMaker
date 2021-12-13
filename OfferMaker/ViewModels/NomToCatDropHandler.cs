@@ -53,8 +53,17 @@ namespace OfferMaker.ViewModels
                 return !isChildOf;
             }
 
+            if(dropInfo.TargetItem==null)
+            {
+                return false;
+            }
+
             if(dropInfo.Data.GetType() == typeof(Nomenclature))
             {
+                var targetCat = (Category)dropInfo.TargetItem;
+                var nomenclature = (Nomenclature)dropInfo.Data;
+                if (nomenclature.CategoryGuid == targetCat.Guid)
+                    return false;
                 return true;
             }
 
@@ -85,6 +94,9 @@ namespace OfferMaker.ViewModels
             {
                 var targetCat = (Category)dropInfo.TargetItem;
                 var nomenclature = (Nomenclature)dropInfo.Data;
+                if (nomenclature.CategoryGuid == targetCat.Guid)
+                    return;
+                Global.Catalog.RemoveNomFromCat(nomenclature);
                 nomenclature.SetCategoryGuid(targetCat.Guid);
                 targetCat.Nomenclatures.Add(nomenclature);
                 return;

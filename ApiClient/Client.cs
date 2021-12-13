@@ -947,6 +947,93 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
+        public System.Threading.Tasks.Task<string> ImageUploadAsync(FileParameter files)
+        {
+            return ImageUploadAsync(files, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public async System.Threading.Tasks.Task<string> ImageUploadAsync(FileParameter files, System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/ImageUpload");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var boundary_ = System.Guid.NewGuid().ToString();
+                    var content_ = new System.Net.Http.MultipartFormDataContent(boundary_);
+                    content_.Headers.Remove("Content-Type");
+                    content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
+
+                    if (files != null)
+                    {
+                        var content_files_ = new System.Net.Http.StreamContent(files.Data);
+                        if (!string.IsNullOrEmpty(files.ContentType))
+                            content_files_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(files.ContentType);
+                        content_.Add(content_files_, "files", files.FileName ?? "files");
+                    }
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200 || status_ == 201 || status_ == 204)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
         public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<NomenclatureGroup>> NomenclatureGroupsAllAsync()
         {
             return NomenclatureGroupsAllAsync(System.Threading.CancellationToken.None);
@@ -2703,7 +2790,7 @@ namespace ApiLib
         }
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class Category
     {
@@ -2727,7 +2814,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class Currency
     {
@@ -2758,7 +2845,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class Description
     {
@@ -2774,13 +2861,16 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class Nomenclature
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("id")]
         public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("guid")]
+        public string Guid { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("title")]
         public string Title { get; set; }
@@ -2811,7 +2901,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class NomenclatureGroup
     {
@@ -2827,7 +2917,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class Customer
     {
@@ -2846,7 +2936,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class NomWrapper
     {
@@ -2868,7 +2958,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class OfferGroup
     {
@@ -2887,7 +2977,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class OfferInfoBlock
     {
@@ -2909,7 +2999,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class Discount
     {
@@ -2928,7 +3018,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class Offer
     {
@@ -2996,7 +3086,7 @@ namespace ApiLib
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
     public enum Permissions
     {
         CanChangePermissions,
@@ -3011,7 +3101,7 @@ namespace ApiLib
         CanMakeOfferWithCostPrice
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.2.0 (Newtonsoft.Json v12.0.0.0)")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
     public partial class User
     {
@@ -3041,6 +3131,33 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("photoPath")]
         public string PhotoPath { get; set; }
 
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "")]
+    public partial class FileParameter
+    {
+        public FileParameter(System.IO.Stream data)
+            : this(data, null, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string fileName)
+            : this(data, fileName, null)
+        {
+        }
+
+        public FileParameter(System.IO.Stream data, string fileName, string contentType)
+        {
+            Data = data;
+            FileName = fileName;
+            ContentType = contentType;
+        }
+
+        public System.IO.Stream Data { get; private set; }
+
+        public string FileName { get; private set; }
+
+        public string ContentType { get; private set; }
     }
 
 
