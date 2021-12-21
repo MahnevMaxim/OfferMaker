@@ -518,7 +518,7 @@
                 <Grid Background="{Binding Settings.AdditionalColor}">
                     <StackPanel Orientation="Horizontal"
                                 Margin="5">
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="OpenOfferFromFile"
                                 Command="{Binding Cmd}"
                                 Height="35"
                                 Width="35"
@@ -529,7 +529,7 @@
                                                         Width="20"
                                                         Height="20"/>
                         </Button>
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="SaveOfferToFile"
                                 Command="{Binding Cmd}"
                                 Height="35"
                                 Width="35"
@@ -540,7 +540,7 @@
                                                         Width="20"
                                                         Height="20"/>
                         </Button>
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="LoadTemplate"
                                 Command="{Binding Cmd}"
                                 Height="35"
                                 Width="35"
@@ -551,7 +551,7 @@
                                                         Width="20"
                                                         Height="20"/>
                         </Button>
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="SaveTemplateToArchive"
                                 Command="{Binding Cmd}"
                                 Height="35"
                                 Width="35"
@@ -573,7 +573,7 @@
                                                         Width="20"
                                                         Height="20"/>
                         </Button>
-                        <Button CommandParameter="FindProfile"
+                        <Button CommandParameter="SaveToPdfWithoutBanner"
                                 Command="{Binding Cmd}"
                                 Height="35"
                                 Width="35"
