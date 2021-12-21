@@ -64,5 +64,30 @@ namespace OfferMaker
             if (fixedDocumentSequence1 != null)
                 writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
         }
+
+        internal void SaveToPdfWithoutBanner()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void SaveTemplateToArchive()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void LoadTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void SaveOfferToFile()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void OpenOfferFromFile()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

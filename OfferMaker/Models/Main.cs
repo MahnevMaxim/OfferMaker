@@ -394,6 +394,16 @@ namespace OfferMaker
 
         public void SaveToPdfWithBanner() => DocManager.SaveToPdfWithBanner();
 
+        public void SaveToPdfWithoutBanner() => DocManager.SaveToPdfWithoutBanner();
+
+        public void SaveTemplateToArchive() => DocManager.SaveTemplateToArchive();
+
+        public void LoadTemplate() => DocManager.LoadTemplate();
+
+        public void SaveOfferToFile() => DocManager.SaveOfferToFile();
+
+        public void OpenOfferFromFile() => DocManager.OpenOfferFromFile();
+
         async public void SaveOffer()
         {
             offers.Add(Constructor.Offer);
