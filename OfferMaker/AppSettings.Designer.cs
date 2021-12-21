@@ -37,7 +37,7 @@ namespace OfferMaker {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Steel")]
         public string Theme {
             get {
                 return ((string)(this["Theme"]));
