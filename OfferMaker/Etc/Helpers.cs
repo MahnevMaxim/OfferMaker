@@ -70,8 +70,6 @@ namespace OfferMaker
         {
             string output = JsonConvert.SerializeObject(obj);
             return JsonConvert.DeserializeObject<T>(output);
-            //string output = System.Text.Json.JsonSerializer.Serialize(obj);
-            //return System.Text.Json.JsonSerializer.Deserialize<T>(output);
         }
     }
 }

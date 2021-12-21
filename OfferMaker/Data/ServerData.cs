@@ -53,7 +53,7 @@ namespace OfferMaker
             try
             {
                 var response = await client.NomenclaturesAllAsync();
-                ObservableCollection<Nomenclature> res = Utils.CloneNomsCollection(response);
+                ObservableCollection<Nomenclature> res = Helpers.CloneObject<ObservableCollection<Nomenclature>>(response);
                 return new CallResult<ObservableCollection<Nomenclature>>() { Data = res };
             }
             catch (Exception ex)

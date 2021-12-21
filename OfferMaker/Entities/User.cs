@@ -10,6 +10,8 @@ namespace OfferMaker
 {
     public class User : BaseEntity
     {
+        string photoPath;
+
         public int Id { get; set; }
 
         public string FirstName { get; set; }
@@ -26,7 +28,11 @@ namespace OfferMaker
 
         public string Email { get; set; }
 
-        public string PhotoPath { get; set; }
+        public string PhotoPath 
+        { 
+            get => photoPath; 
+            set => photoPath = value; 
+        }
 
         public override string ToString() => FullName;
     }

@@ -10,17 +10,31 @@ namespace OfferMaker
 {
     public class Image : BaseEntity
     {
+        string guid;
+        int creatorid;
+        string originalPath;
         string localPhotoPath;
 
-        [Required]
-        public string Guid { get; set; }
+        public string Guid 
+        { 
+            get => guid;
+            set => guid = value;
+        }
 
-        public int Creatorid { get; set; }
+        public int Creatorid
+        {
+            get => creatorid;
+            set => creatorid = value;
+        }
 
         /// <summary>
         /// Оригинальный путь для того, чтобы если копирование сразу не удалось продолжать пытаться скопировать в фоновом режиме.
         /// </summary>
-        public string OriginalPath { get; set; }
+        public string OriginalPath
+        {
+            get => originalPath;
+            set => originalPath = value;
+        }
 
         public bool IsCopied { get; set; }
 

@@ -51,8 +51,9 @@ namespace OfferMaker.SimpleViews
             if (!cr.Success)
             {
                 await this.ShowMessageAsync("", cr.Error.Message);
-                Close();
                 DialogResult = false;
+                Close();
+                Application.Current.Shutdown();
                 return;
             }
             DialogResult = true;
@@ -85,14 +86,14 @@ namespace OfferMaker.SimpleViews
             }
             else
             {
-                return new CallResult() { Error = new Error() };
+                return new CallResult() { Error = usersCr.Error };
             }
         }
 
         private static string GetFullPath(string photoPath)
         {
-            if (string.IsNullOrWhiteSpace(photoPath)) return AppDomain.CurrentDomain.BaseDirectory + "images\\no-profile-picture.png";
-            return AppDomain.CurrentDomain.BaseDirectory + "images\\" + photoPath;
+            if (string.IsNullOrWhiteSpace(photoPath)) return AppDomain.CurrentDomain.BaseDirectory + "Images\\users\\no-profile-picture.png";
+            return AppDomain.CurrentDomain.BaseDirectory + "Images\\users\\" + photoPath;
         }
 
         #endregion Auth
