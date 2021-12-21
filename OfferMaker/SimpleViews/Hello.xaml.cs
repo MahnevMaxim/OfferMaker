@@ -75,7 +75,7 @@ namespace OfferMaker.SimpleViews
 
         async internal static Task<CallResult> SetUsers(DataRepository dataRepository)
         {
-            int uid = 29;
+            int uid = 2;
             var usersCr = await dataRepository.GetUsers();
             if (usersCr.Success)
             {

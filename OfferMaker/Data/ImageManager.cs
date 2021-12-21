@@ -154,10 +154,28 @@ namespace OfferMaker
             }
         }
 
-        async internal static void UploadNewImages(List<Nomenclature> newNoms)
+        async internal void UploadNewImages(List<Nomenclature> newNoms)
         {
-
-            //images.AddRange(newNoms);
+            foreach(var nom in newNoms)
+            {
+                foreach(var image in nom.Images)
+                {
+                    if(image.IsNew)
+                    {
+                        try
+                        {
+                            var file = TryGetLocalFilePath(image.Guid);
+                            using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
+                            FileParameter param = new FileParameter(stream, Path.GetFileName(file));
+                            var res = await client.ImagesPOSTAsync(param);
+                        }
+                        catch(Exception ex)
+                        {
+                            Log.Write(ex);
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -41,7 +41,7 @@ namespace DatabaseExporter
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             httpClient = new System.Net.Http.HttpClient();
-            string apiEndpoint = "https://localhost:44378/";
+            string apiEndpoint = "https://localhost:44333/";
             client = new Client(apiEndpoint, httpClient);
 
             string con = "Server=(localdb)\\mssqllocaldb;Database=AdsStore;Trusted_Connection=True;";

@@ -2949,15 +2949,6 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("originalPath")]
         public string OriginalPath { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("isCopied")]
-        public bool IsCopied { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("isUploaded")]
-        public bool IsUploaded { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("localPhotoPath")]
-        public string LocalPhotoPath { get; set; }
-
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]

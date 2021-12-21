@@ -10,7 +10,6 @@ namespace OfferMaker
     public class NomenclurueCard : BaseModel
     {
         string currencyCharCode;
-        Image photo;
         Catalog catalog;
         Image selectedImage;
 
@@ -74,9 +73,9 @@ namespace OfferMaker
         /// <summary>
         /// Удаляем фото номенклатуры
         /// </summary>
-        public void RemoveImage()
+        public void RemoveImage(Image image)
         {
-            Nomenclature.SetPhoto(null);
+            Nomenclature.RemoveImage(image);
         }
 
         /// <summary>

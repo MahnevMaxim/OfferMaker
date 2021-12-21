@@ -214,16 +214,11 @@ namespace OfferMaker
         {
             try
             {
-                //var file = nomenclatures[5].Photo;
-                //using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
-                //FileParameter param = new FileParameter(stream, Path.GetFileName(file));
-                //var wwww = client.ImageUploadAsync(param);
-
                 var newNoms = nomenclatures.Where(n => n.Id == 0 || n.GetIsEdit() == true).ToList();
+                Global.ImageManager.UploadNewImages(newNoms);
                 IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
                 await client.NomenclaturesPUTAsync(noms);
                 newNoms.ToList().ForEach(n => n.SkipIsEdit());
-                ImageManager.UploadNewImages(newNoms);
                 return new CallResult();
             }
             catch (Exception ex)

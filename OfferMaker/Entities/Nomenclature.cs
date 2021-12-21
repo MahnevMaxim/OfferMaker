@@ -166,12 +166,7 @@ namespace OfferMaker
         /// </summary>
         public Image Image
         {
-            get
-            {
-                if (image != null)
-                    return image;
-                return new Image() { LocalPhotoPath = Environment.CurrentDirectory + @"\Images\no-image.jpg" };
-            }
+            get => image;
             set
             {
                 image = value;
@@ -219,6 +214,16 @@ namespace OfferMaker
         {
             Image = image;
             Images.Add(image);
+            SetIsEdit();
+        }
+
+        internal void RemoveImage(Image image)
+        {
+            Images.Remove(image);
+            if (Images.Count > 0)
+                Image = Images[0];
+            else
+                Image = null;
             SetIsEdit();
         }
 

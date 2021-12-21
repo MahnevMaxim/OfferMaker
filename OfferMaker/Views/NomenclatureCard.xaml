@@ -192,19 +192,7 @@
                             Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
                         <iconPacks:PackIconIonicons Kind="AddMD"
                                                     Width="20"
-                                                    Height="20"/>
-                    </Button>
-                    <Button CommandParameter="RemoveImage"
-                            VerticalAlignment="Top"
-                            Command="{Binding Cmd}"
-                            Height="35"
-                            Width="35"
-                            Margin="5,0"
-                            ToolTip="Удалить фото"
-                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                        <iconPacks:PackIconMaterial Kind="Close"
-                                                    Width="20"
-                                                    Height="20"/>
+                                                    Height="20" />
                     </Button>
                 </StackPanel>
                 <Image Source="{Binding Nomenclature.Image.LocalPhotoPath}"
@@ -217,15 +205,51 @@
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          ScrollViewer.CanContentScroll="False"
                          Margin="5">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="IsSelected"
+                                    Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Border Width="105" Height="105"
-                                    BorderThickness="1"
-                                    Margin="5"
-                                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                <Image Source="{Binding Path=LocalPhotoPath}"
-                                       Margin="5"/>
-                            </Border>
+                            <Border Width="105"
+                                        Height="105"
+                                        BorderThickness="2"
+                                        Margin="5"
+                                        BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+                                    <Grid>
+                                    <Image Source="{Binding Path=LocalPhotoPath}"
+                                           Margin="15" />
+                                    <Button MinHeight="20"
+                                            MinWidth="20"
+                                            Margin="2"
+                                            Padding="0"
+                                            BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Top"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}"
+                                            Style="{StaticResource MahApps.Styles.Button.Square}">
+                                        <Button.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                <Binding Source="RemoveImage" />
+                                                <Binding Path="." />
+                                            </MultiBinding>
+                                        </Button.CommandParameter>
+                                        <iconPacks:PackIconMaterial Kind="Close"
+                                                                    Width="6"
+                                                                    Height="6"/>
+                                    </Button>
+                                    
+                                </Grid>
+                                </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
