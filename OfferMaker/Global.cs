@@ -8,6 +8,9 @@ namespace OfferMaker
 {
     class Global
     {
+        static bool IsRealMode;
+        public static string apiEndpoint { get => IsRealMode ? "https://kip.mybot.su/" : "https://localhost:44333/"; }
+
         public static Main Main;
 
         public static List<Currency> Currencies { get => Main.Currencies.ToList(); }
@@ -21,8 +24,5 @@ namespace OfferMaker
         public static User User { get => Main.User; }
 
         public static ImageManager ImageManager { get => Main.ImageManager; }
-
-        //public static string apiEndpoint = "https://localhost:44333/";
-        public static string apiEndpoint = "https://kip.mybot.su/";
     }
 }
