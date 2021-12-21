@@ -25,7 +25,7 @@ namespace OfferMaker {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Light")]
         public string LightOrDark {
             get {
                 return ((string)(this["LightOrDark"]));
