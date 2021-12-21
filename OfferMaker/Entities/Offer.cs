@@ -578,7 +578,7 @@ namespace OfferMaker
                 catch (Exception ex)
                 {
                     await Task.Delay(4000);
-                    L.LW(ex);
+                    Log.Write(ex);
                 }
                 var difference = (needUpdateSetTime - beginExecuteTime).Milliseconds;
                 if (difference < 1000) break;

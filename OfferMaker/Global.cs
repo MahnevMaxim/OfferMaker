@@ -17,5 +17,12 @@ namespace OfferMaker
         public static Catalog Catalog { get => Main.Catalog; }
 
         public static Settings Settings { get => Main.Settings; }
+
+        public static User User { get => Main.User; }
+
+        public static ImageManager ImageManager { get => Main.ImageManager; }
+
+        //public static string apiEndpoint = "https://localhost:44333/";
+        public static string apiEndpoint = "https://kip.mybot.su/";
     }
 }

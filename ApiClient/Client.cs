@@ -947,18 +947,18 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public System.Threading.Tasks.Task<string> ImageUploadAsync(FileParameter files)
+        public System.Threading.Tasks.Task<string> ImagesPOSTAsync(FileParameter file)
         {
-            return ImageUploadAsync(files, System.Threading.CancellationToken.None);
+            return ImagesPOSTAsync(file, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public async System.Threading.Tasks.Task<string> ImageUploadAsync(FileParameter files, System.Threading.CancellationToken cancellationToken)
+        public async System.Threading.Tasks.Task<string> ImagesPOSTAsync(FileParameter file, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/ImageUpload");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Images");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -971,12 +971,12 @@ namespace ApiLib
                     content_.Headers.Remove("Content-Type");
                     content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
 
-                    if (files != null)
+                    if (file != null)
                     {
-                        var content_files_ = new System.Net.Http.StreamContent(files.Data);
-                        if (!string.IsNullOrEmpty(files.ContentType))
-                            content_files_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(files.ContentType);
-                        content_.Add(content_files_, "files", files.FileName ?? "files");
+                        var content_file_ = new System.Net.Http.StreamContent(file.Data);
+                        if (!string.IsNullOrEmpty(file.ContentType))
+                            content_file_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(file.ContentType);
+                        content_.Add(content_file_, "file", file.FileName ?? "file");
                     }
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
@@ -1011,6 +1011,79 @@ namespace ApiLib
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public System.Threading.Tasks.Task ImagesGETAsync(string guid)
+        {
+            return ImagesGETAsync(guid, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public async System.Threading.Tasks.Task ImagesGETAsync(string guid, System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Images?");
+            if (guid != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("guid") + "=").Append(System.Uri.EscapeDataString(ConvertToString(guid, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            urlBuilder_.Length--;
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200 || status_ == 201 || status_ == 204)
+                        {
+                            return;
                         }
                         else
                         {
@@ -2863,6 +2936,32 @@ namespace ApiLib
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
 
+    public partial class Image
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("guid")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Guid { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("creatorid")]
+        public int Creatorid { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("originalPath")]
+        public string OriginalPath { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isCopied")]
+        public bool IsCopied { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isUploaded")]
+        public bool IsUploaded { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("localPhotoPath")]
+        public string LocalPhotoPath { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
+
     public partial class Nomenclature
     {
 
@@ -2896,8 +2995,11 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("actualPricePeriod")]
         public int ActualPricePeriod { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("photo")]
-        public string Photo { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("image")]
+        public Image Image { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("images")]
+        public System.Collections.Generic.ICollection<Image> Images { get; set; }
 
     }
 

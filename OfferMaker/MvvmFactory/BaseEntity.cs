@@ -20,7 +20,7 @@ namespace OfferMaker
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
-                L.LW(GetType().Name + " " + prop);
+                Log.Write(GetType().Name + " " + prop);
             }  
         }
 

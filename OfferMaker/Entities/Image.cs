@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
 
 namespace OfferMaker
 {
-    public class Image
+    public class Image : BaseEntity
     {
+        string localPhotoPath;
+
         [Required]
         public string Guid { get; set; }
 
@@ -18,5 +21,43 @@ namespace OfferMaker
         /// Оригинальный путь для того, чтобы если копирование сразу не удалось продолжать пытаться скопировать в фоновом режиме.
         /// </summary>
         public string OriginalPath { get; set; }
+
+        public bool IsCopied { get; set; }
+
+        public bool IsUploaded { get; set; }
+
+        /// <summary>
+        /// Флаг, указывающий, что при сохранении номенклатуры нужно загрузить изображение.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsNew { get; set; }
+
+        /// <summary>
+        /// С помощью этого свойства я пытаюсь добиться, чтобы запросы к картинке шли через кэш.
+        /// </summary>
+        [JsonIgnore]
+        public string LocalPhotoPath
+        {
+            get
+            {
+                if (localPhotoPath == null)
+                    localPhotoPath = Global.ImageManager.GetImagePath(Guid);
+                return localPhotoPath;
+            }
+            set
+            {
+                localPhotoPath = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Image(string guid, int creatorid, string path)
+        {
+            Guid = guid;
+            Creatorid = creatorid;
+            OriginalPath = path;
+        }
+
+        public Image() { }
     }
 }

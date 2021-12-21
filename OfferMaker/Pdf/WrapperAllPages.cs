@@ -809,7 +809,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return null;
             }
         }

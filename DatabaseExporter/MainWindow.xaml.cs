@@ -18,6 +18,8 @@ using System.IO;
 using Newtonsoft.Json.Linq;
 using System.Net;
 using System.Xml.Linq;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace DatabaseExporter
 {
@@ -30,6 +32,10 @@ namespace DatabaseExporter
         WebClient webClient = new WebClient();
         System.Net.Http.HttpClient httpClient;
 
+        private readonly AdsContext _context;
+
+        List<Ad> ads;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -37,6 +43,18 @@ namespace DatabaseExporter
             httpClient = new System.Net.Http.HttpClient();
             string apiEndpoint = "https://localhost:44378/";
             client = new Client(apiEndpoint, httpClient);
+
+            string con = "Server=(localdb)\\mssqllocaldb;Database=AdsStore;Trusted_Connection=True;";
+            var optionsBuilder = new DbContextOptionsBuilder<AdsContext>();
+            optionsBuilder.UseSqlServer(con);
+            _context = new AdsContext(optionsBuilder.Options);
+            ads = _context.Ads.ToList();
+
+            //var files = Directory.GetFiles("avitoimages");
+            //foreach(var file in files)
+            //{
+            //    System.IO.File.Move(file, file+".jpg");
+            //}
         }
 
         async private void button_Click_1(object sender, RoutedEventArgs e)
@@ -76,43 +94,89 @@ namespace DatabaseExporter
             var noms_ = JsonConvert.DeserializeObject(File.ReadAllText("noms.json")).ToString();
             JArray jaNoms = JArray.Parse(noms_.ToString());
 
-            foreach (var nom in jaNoms)
+            //foreach (var nom in jaNoms)
+            //{
+            //    string s = nom.ToString();
+
+            //    string title = nom["Name"].ToString();
+            //    List<Description> descs = new List<Description>();
+            //    foreach (var desc in nom["Descriptions"])
+            //    {
+            //        descs.Add(new Description() { Text = desc["Text"].ToString() });
+            //    }
+            //    decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
+            //    decimal markUp = decimal.Parse(nom["Markup"].ToString());
+            //    //потому-что заебал
+            //    string charCode = "";
+            //    try
+            //    {
+            //        charCode = nom["valute"]["Name"].ToString();
+            //    }
+            //    catch(Exception)
+            //    {
+            //        charCode = "RUB";
+            //    }
+
+            //    Nomenclature nomenclature = new Nomenclature()
+            //    {
+            //        CostPrice = costPrice,
+            //        Descriptions = descs,
+            //        Markup = markUp,
+            //        Title = title,
+            //        CurrencyCharCode = charCode
+            //    };
+
+            //    try
+            //    {
+            //        var res = await client.NomenclaturesPOSTAsync(nomenclature);
+            //    }
+            //    catch(Exception ex)
+            //    {
+            //        Console.Write(ex);
+            //    }
+            //}
+            Random rnd = new Random();
+            foreach (var ad in ads)
             {
-                string s = nom.ToString();
-
-                string title = nom["Name"].ToString();
+                string title = ad.Title;
                 List<Description> descs = new List<Description>();
-                foreach (var desc in nom["Descriptions"])
-                {
-                    descs.Add(new Description() { Text = desc["Text"].ToString() });
-                }
-                decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
-                decimal markUp = decimal.Parse(nom["Markup"].ToString());
-                //потому-что заебал
-                string charCode = "";
-                try
-                {
-                    charCode = nom["valute"]["Name"].ToString();
-                }
-                catch(Exception)
-                {
-                    charCode = "RUB";
-                }
+                descs.Add(new Description() { Text = ad.Title });
+                descs.Add(new Description() { Text = ad.Time.ToLongTimeString() });
+                descs.Add(new Description() { Text = ad.Price.ToString() });
+                decimal costPrice = decimal.Parse(ad.Price.ToString());
+                decimal markUp = 1 + ((decimal)rnd.Next(1,200))/100;
+                string charCode = "RUB";
 
+                ApiLib.Image image=null;
+                ObservableCollection<ApiLib.Image> images = new ObservableCollection<ApiLib.Image>();
+                if(ad.ImgPath!=null)
+                {
+                    image = new ApiLib.Image() { Guid = ad.ImgPath.Split("avitoimages\\")[1] };
+                    images.Add(image);
+                }
+                
                 Nomenclature nomenclature = new Nomenclature()
                 {
+                    Guid=Guid.NewGuid().ToString(),
                     CostPrice = costPrice,
                     Descriptions = descs,
                     Markup = markUp,
                     Title = title,
-                    CurrencyCharCode = charCode
+                    CurrencyCharCode = charCode,
+                    Image=image,
+                    Images=images
                 };
+
+                //string fPath = "avitoimages\\" + image.Guid + ".jpg";
+                //using var stream = new MemoryStream(File.ReadAllBytes(fPath).ToArray());
+                //FileParameter param = new FileParameter(stream, System.IO.Path.GetFileName(fPath));
+                //var wwww = client.ImageUploadAsync(param);
 
                 try
                 {
                     var res = await client.NomenclaturesPOSTAsync(nomenclature);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Console.Write(ex);
                 }

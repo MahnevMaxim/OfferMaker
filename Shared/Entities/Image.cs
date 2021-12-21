@@ -13,5 +13,13 @@ namespace Shared
         public string Guid { get; set; }
 
         public int Creatorid { get; set; }
+
+        public string OriginalPath { get; set; }
+
+        public bool IsCopied { get; set; }
+
+        public bool IsUploaded { get; set; }
+
+        public string LocalPhotoPath { get; set; }
     }
 }

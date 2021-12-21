@@ -94,5 +94,17 @@ namespace OfferMaker {
                 this["MaxInfoblocksCount"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("cache")]
+        public string ImageManagerDir {
+            get {
+                return ((string)(this["ImageManagerDir"]));
+            }
+            set {
+                this["ImageManagerDir"] = value;
+            }
+        }
     }
 }

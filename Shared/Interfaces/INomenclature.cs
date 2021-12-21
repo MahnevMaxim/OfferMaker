@@ -30,8 +30,8 @@ namespace Shared
 
         public int ActualPricePeriod { get; set; }
 
-        public string Photo { get; set; }
+        public Image Image { get; set; }
 
-        public ObservableCollection<Image> Photos { get; set; }
+        public ObservableCollection<Image> Images { get; set; }
     }
 }

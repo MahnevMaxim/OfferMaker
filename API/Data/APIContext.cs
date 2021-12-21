@@ -23,16 +23,18 @@ namespace API.Data
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)
         {
-            
+            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.LogTo(message => L.LW(message));
+            optionsBuilder.LogTo(message => Log.Write(message));
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            #region Etc
+
             builder.Entity<Currency>().Property(p => p.Rate).HasPrecision(18, 6);
 
             builder.Entity<User>().Property(p => p.Permissions).HasConversion(
@@ -43,13 +45,19 @@ namespace API.Data
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Nomenclature>>(v));
 
+            #endregion Etc
+
             #region Nomenclature
+
+            builder.Entity<Nomenclature>().Property(p => p.Image).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Image>(v));
 
             builder.Entity<Nomenclature>().Property(p => p.Descriptions).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Description>>(v));
 
-            builder.Entity<Nomenclature>().Property(p => p.Photos).HasConversion(
+            builder.Entity<Nomenclature>().Property(p => p.Images).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Image>>(v));
 

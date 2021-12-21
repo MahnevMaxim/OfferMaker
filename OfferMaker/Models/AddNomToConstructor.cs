@@ -78,7 +78,7 @@ namespace OfferMaker
                 OnSendMessage("Выберите номенклатуру для добавления");
                 return;
             }
-            Nomenclature nomenclature = Helpers.CloneObject<Nomenclature>(SelectedNomenclature);
+            Nomenclature nomenclature = Utils.CloneNom(SelectedNomenclature);
             offerGroup.NomWrappers.Add(new NomWrapper(offerGroup, nomenclature));
             offerGroup.OnPropertyChanged(string.Empty);
             Close();
@@ -97,7 +97,7 @@ namespace OfferMaker
             List<NomWrapper> list = new List<NomWrapper>();
             foreach(var nomen in SelectedNomGroup.Nomenclatures)
             {
-                var nom = Helpers.CloneObject<Nomenclature>(nomen);
+                var nom = Utils.CloneNom(nomen);
                 list.Add(new NomWrapper(offerGroup, nom));
             }
             offerGroup.AddNomenclaturesSilent(list);

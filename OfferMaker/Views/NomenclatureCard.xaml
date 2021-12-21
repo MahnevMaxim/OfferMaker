@@ -178,10 +178,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition/>
+                    <ColumnDefinition Width="160"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel>
-                    <Button CommandParameter="EditImage"
+                    <Button CommandParameter="AddImage"
                             VerticalAlignment="Top"
                             Command="{Binding Cmd}"
                             Height="35"
@@ -206,9 +207,28 @@
                                                     Height="20"/>
                     </Button>
                 </StackPanel>
-                <Image Source="{Binding Image}"
+                <Image Source="{Binding Nomenclature.Image.LocalPhotoPath}"
                        Grid.Column="1"
                        Margin="5"/>
+
+                <ListBox ItemsSource="{Binding Nomenclature.Images}" 
+                         SelectedItem="{Binding SelectedImage}"
+                         Grid.Column="2"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.CanContentScroll="False"
+                         Margin="5">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="105" Height="105"
+                                    BorderThickness="1"
+                                    Margin="5"
+                                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+                                <Image Source="{Binding Path=LocalPhotoPath}"
+                                       Margin="5"/>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </Border>
 
@@ -225,7 +245,6 @@
                           ItemsSource="{Binding Nomenclature.Descriptions}"
                           AutoGenerateColumns="False"
                           GridLinesVisibility="Horizontal"
-                          BorderThickness="1"
                           CanUserAddRows="False"
                           BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
 

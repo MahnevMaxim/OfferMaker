@@ -16,6 +16,7 @@
                   AutoGenerateColumns="False"
                   GridLinesVisibility="Horizontal"
                   BorderThickness="1"
+                  CanUserAddRows="False"
                   BorderBrush="#cc647687"
                   Margin="10">
             <DataGrid.Columns>

@@ -17,7 +17,7 @@ namespace OfferMaker
     {
         Client client;
         System.Net.Http.HttpClient httpClient;
-        string apiEndpoint = "https://localhost:44378/";
+        string apiEndpoint = Global.apiEndpoint;
 
         public ServerData()
         {
@@ -34,12 +34,12 @@ namespace OfferMaker
             try
             {
                 var response = await client.CurrenciesAllAsync();
-                ObservableCollection<Currency> res = Helpers.CloneObject<ObservableCollection<Currency>>(response); 
+                ObservableCollection<Currency> res = Helpers.CloneObject<ObservableCollection<Currency>>(response);
                 return new CallResult<ObservableCollection<Currency>>() { Data = res };
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult<ObservableCollection<Currency>>() { Error = new Error("Ошибка при попытке получить валюты с сервера.") };
             }
         }
@@ -53,12 +53,12 @@ namespace OfferMaker
             try
             {
                 var response = await client.NomenclaturesAllAsync();
-                ObservableCollection<Nomenclature> res = Helpers.CloneObject<ObservableCollection<Nomenclature>>(response);
+                ObservableCollection<Nomenclature> res = Utils.CloneNomsCollection(response);
                 return new CallResult<ObservableCollection<Nomenclature>>() { Data = res };
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error("Ошибка при попытке получить номенклатуру с сервера.") };
             }
         }
@@ -77,7 +77,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult<ObservableCollection<Category>>() { Error = new Error("Ошибка при попытке получить категории с сервера.") };
             }
         }
@@ -96,7 +96,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult<ObservableCollection<User>>() { Error = new Error("Ошибка при попытке получить пользователей с сервера.") };
             }
         }
@@ -115,7 +115,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult<ObservableCollection<NomenclatureGroup>>() { Error = new Error("Ошибка при попытке получить группы номенклатур с сервера.") };
             }
         }
@@ -134,7 +134,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult<ObservableCollection<Offer>>() { Error = new Error("Ошибка при попытке получить архив КП с сервера.") };
             }
         }
@@ -154,7 +154,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить группы номенклатур на сервере.") };
             }
         }
@@ -180,7 +180,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить КП на сервере.") };
             }
         }
@@ -200,7 +200,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить валюты на сервере.") };
             }
         }
@@ -214,32 +214,21 @@ namespace OfferMaker
         {
             try
             {
-                //var _httpClient = new HttpClient();
-                //var formContent = new MultipartFormDataContent();
-                ////formContent.Headers.Add();
-                var file = nomenclatures[5].Photo;
-                //formContent.Add(new StreamContent(File.OpenRead(FilePath)), "files", Path.GetFileName(FilePath));
+                //var file = nomenclatures[5].Photo;
+                //using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
+                //FileParameter param = new FileParameter(stream, Path.GetFileName(file));
+                //var wwww = client.ImageUploadAsync(param);
 
-                //_httpClient.BaseAddress = new Uri("https://localhost:44378/");
-                //var response = await _httpClient.PostAsync("/api/ImageUpload", formContent);
-
-                using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
-                //var formFile = new FormFile(stream, 0, stream.Length, "streamFile", file.Split(@"\").Last());
-
-
-
-                FileParameter param = new FileParameter(stream, Path.GetFileName(file));
-
-                //fileUploadApi.Files = formContent;
-                var wwww = client.ImageUploadAsync(param);
                 var newNoms = nomenclatures.Where(n => n.Id == 0 || n.GetIsEdit() == true).ToList();
                 IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
                 await client.NomenclaturesPUTAsync(noms);
+                newNoms.ToList().ForEach(n => n.SkipIsEdit());
+                ImageManager.UploadNewImages(newNoms);
                 return new CallResult();
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
             }
         }
@@ -253,13 +242,13 @@ namespace OfferMaker
         {
             try
             {
-                if(offer.Id==0) return new CallResult(); // нельзя удалить то, чего нет
+                if (offer.Id == 0) return new CallResult(); // нельзя удалить то, чего нет
                 await client.OffersDELETEAsync((int)offer.Id);
                 return new CallResult();
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке удалить КП с сервера.") };
             }
         }
@@ -279,7 +268,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
             }
         }

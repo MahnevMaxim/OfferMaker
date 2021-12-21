@@ -83,7 +83,8 @@ namespace OfferMaker
         /// <summary>
         /// Коллекция путей к фото номенклатуры.
         /// </summary>
-        public string Photo { get => Nomenclature.Photo; }
+        [JsonIgnore]
+        public string Photo { get => Nomenclature.Image.LocalPhotoPath; }
 
         /// <summary>
         /// Спрятать цены номенклатур не в опциях.

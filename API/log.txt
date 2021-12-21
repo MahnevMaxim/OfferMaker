@@ -1,1 +1,5 @@
 ﻿
+Debug
+
+Connection complete
+

@@ -28,8 +28,8 @@ namespace OfferMaker
         async internal void Run()
         {
             AppDomain.CurrentDomain.UnhandledException +=
-            new UnhandledExceptionEventHandler(L.AppDomain_CurrentDomain_UnhandledException);
-            System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(L.Application_ThreadException);
+            new UnhandledExceptionEventHandler(Log.AppDomain_CurrentDomain_UnhandledException);
+            System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(Log.Application_ThreadException);
 
             //настройки нужны до авторизации
             main = new Main();
@@ -134,11 +134,11 @@ namespace OfferMaker
             //банеры
             main.BannersManager = BannersManager.GetInstance();
 
-            //менеджер документов
-            main.DocManager = DocManager.GetInstance();
-
             //конструктор
             main.Constructor = Constructor.GetInstance();
+
+            //менеджер документов
+            main.DocManager = DocManager.GetInstance();
 
             //баннеры
             InitBanners();
@@ -182,7 +182,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
             }
             return offer;
         }
@@ -192,7 +192,7 @@ namespace OfferMaker
         /// </summary>
         private void InitAdvertising()
         {
-            string advertisingsPath = AppDomain.CurrentDomain.BaseDirectory + "\\advertisings";
+            string advertisingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\advertisings");
             var files = Directory.GetFiles(advertisingsPath);
             files.ToList().ForEach(f => main.BannersManager.Advertisings.Add(f));
         }
@@ -202,7 +202,7 @@ namespace OfferMaker
         /// </summary>
         private void InitBanners()
         {
-            string bannersPath = AppDomain.CurrentDomain.BaseDirectory + "\\banners";
+            string bannersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\banners");
             var files = Directory.GetFiles(bannersPath);
             files.ToList().ForEach(f => main.BannersManager.Banners.Add(f));
         }

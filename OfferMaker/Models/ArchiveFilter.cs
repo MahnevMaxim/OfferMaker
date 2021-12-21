@@ -53,7 +53,9 @@ namespace OfferMaker
 
         internal ObservableCollection<Offer> GetFilteredOffers()
         {
-            
+            if(offers.Count==0)
+                return new ObservableCollection<Offer>();
+
             DateTime endDatetimeWithDay;
             if (EndDateTime!=null)
             {

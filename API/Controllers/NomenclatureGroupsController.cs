@@ -93,7 +93,7 @@ namespace API.Controllers
                 }
                 catch (Exception ex)
                 {
-                    L.LW("Исключение при попытке сохранить группу " + ng.Id, ex);
+                    Log.Write("Исключение при попытке сохранить группу " + ng.Id, ex);
                 }
             }
             return NoContent();

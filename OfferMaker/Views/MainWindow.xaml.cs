@@ -27,10 +27,6 @@ namespace OfferMaker.Views
     {
         DispatcherTimer timerStartSearch;
 
-        bool isShowAll;
-        bool isShowAllWithoutCat;
-        bool isShowCategory;
-
         public MainWindow()
         {
             InitializeComponent();

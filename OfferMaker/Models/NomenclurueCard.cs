@@ -10,10 +10,21 @@ namespace OfferMaker
     public class NomenclurueCard : BaseModel
     {
         string currencyCharCode;
-        string image;
+        Image photo;
         Catalog catalog;
+        Image selectedImage;
 
         public Nomenclature Nomenclature { get; set; }
+
+        public Image SelectedImage
+        {
+            get { return selectedImage; }
+            set
+            {
+                selectedImage = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string CurrencyCharCode
         {
@@ -30,21 +41,6 @@ namespace OfferMaker
 
         public List<string> Currencies { get; set; }
 
-        public string Image
-        {
-            get
-            {
-                if (image != null)
-                    return image;
-                return Environment.CurrentDirectory + @"\Images\no-image.jpg";
-            }
-            set
-            {
-                image = value;
-                OnPropertyChanged();
-            }
-        }
-
         public NomenclurueCard(Nomenclature nomenclature, Catalog catalog)
         {
             this.catalog = catalog;
@@ -53,26 +49,25 @@ namespace OfferMaker
             Currencies = Global.Main.UsingCurrencies.ToList();
             if (!Currencies.Contains(CurrencyCharCode))
                 Currencies.Add(CurrencyCharCode);
-            if (Nomenclature.Photo != null) Image = Nomenclature.Photo;
         }
 
         /// <summary>
         /// Обновляем дату цены
         /// </summary>
         public void RefreshDate() => Nomenclature.LastChangePriceDate = DateTime.UtcNow;
-        
+
 
         /// <summary>
         /// Заменяем/добавляем фото
         /// </summary>
-        public void EditImage()
+        public void AddImage()
         {
             string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
             if (path != null)
             {
-                Image image = new Image() {Guid = Guid.NewGuid().ToString(), OriginalPath=path };
+                Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
+                Global.ImageManager.Add(image);
                 Nomenclature.SetPhoto(image);
-                Image = path;
             }
         }
 
@@ -81,9 +76,7 @@ namespace OfferMaker
         /// </summary>
         public void RemoveImage()
         {
-            string ph = null;
-            Nomenclature.SetPhoto(ph);
-            Image = null;
+            Nomenclature.SetPhoto(null);
         }
 
         /// <summary>

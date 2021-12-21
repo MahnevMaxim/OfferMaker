@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 using Shared;
+using System.Text.Json;
 
 namespace OfferMaker
 {
@@ -27,7 +28,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
             }
             return path;
         }
@@ -42,7 +43,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
                 return new CallResult() { Error = new Error(ex.Message) };
             }
         }
@@ -60,7 +61,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                L.LW(ex);
+                Log.Write(ex);
             }
             return default(T);
         }
@@ -69,6 +70,8 @@ namespace OfferMaker
         {
             string output = JsonConvert.SerializeObject(obj);
             return JsonConvert.DeserializeObject<T>(output);
+            //string output = System.Text.Json.JsonSerializer.Serialize(obj);
+            //return System.Text.Json.JsonSerializer.Deserialize<T>(output);
         }
     }
 }

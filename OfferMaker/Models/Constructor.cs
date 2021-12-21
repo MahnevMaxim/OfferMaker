@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Media.Imaging;
 using Shared;
 using System.Threading;
+using System.IO;
 
 namespace OfferMaker
 {
@@ -152,13 +153,13 @@ namespace OfferMaker
 
         private Constructor()
         {
-            Uri uri = new Uri(AppDomain.CurrentDomain.BaseDirectory + "common_images\\logosmall.png", UriKind.Absolute);
+            Uri uri = new Uri(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\common_images\\logosmall.png"), UriKind.Absolute);
             smallLogo = new BitmapImage(uri);
-            PhotoLogo = AppDomain.CurrentDomain.BaseDirectory + "common_images\\logo.png";
-            PhotoNumber = AppDomain.CurrentDomain.BaseDirectory + "common_images\\number.png";
-            PhotoCustomer = AppDomain.CurrentDomain.BaseDirectory + "common_images\\customer.png";
-            PhotoAdress = AppDomain.CurrentDomain.BaseDirectory + "common_images\\address.png";
-            PhotoNumberTeh = AppDomain.CurrentDomain.BaseDirectory + "common_images\\telephone.png";
+            PhotoLogo = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\common_images\\logo.png");
+            PhotoNumber = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\common_images\\number.png");
+            PhotoCustomer = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\common_images\\customer.png");
+            PhotoAdress = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\common_images\\address.png");
+            PhotoNumberTeh = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\common_images\\telephone.png");
             InitNewOffer();
         }
 
@@ -236,7 +237,7 @@ namespace OfferMaker
                 catch (Exception ex)
                 {
                     await Task.Delay(4000);
-                    L.LW(ex);
+                    Log.Write(ex);
                 }
             }
             isCreatorBusy = false;
@@ -272,7 +273,7 @@ namespace OfferMaker
             {
                 Title = "Дополнительное описание",
                 Text = "Дополнительное описание",
-                ImagePath = AppDomain.CurrentDomain.BaseDirectory + "informIcons\\Commertial5.png",
+                ImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\informIcons\\Commertial5.png"),
                 IsCustom = true
             };
             Offer.OfferInfoBlocks.Add(block);
@@ -296,24 +297,24 @@ namespace OfferMaker
                 new OfferInfoBlock(){
                     Title = "Срок готовности товара к отгрузке",
                     Text ="до 30 рабочих дней",
-                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "informIcons\\Commertial1.png"
+                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "Images\\informIcons\\Commertial1.png"
                 },
                 new OfferInfoBlock(){
                     Title = "Срок проведения монтажных и пусконаладочных работ",
                     Text ="до 12 рабочих дней",
-                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "informIcons\\Commertial2.png"
+                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "Images\\informIcons\\Commertial2.png"
                 },
                 new OfferInfoBlock(){
                     Title = "Условие оплаты",
                     Text ="50% - аванс, 40% - после извещения о готовности товара к отгрузке, " +
                     "5% - после поступления товара на склад Покупателя, " +
                     "оставшиеся 5 % -в трехдневный срок после подписания акта проведения ШМР и ПНР",
-                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "informIcons\\Commertial3.png"
+                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "Images\\informIcons\\Commertial3.png"
                 },
                 new OfferInfoBlock(){
                     Title = "Условия поставки",
                     Text ="Доставка осуществляется за счет Покупателя",
-                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "informIcons\\Commertial4.png"
+                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "Images\\informIcons\\Commertial4.png"
                 }
             };
         }

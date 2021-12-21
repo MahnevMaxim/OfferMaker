@@ -100,7 +100,7 @@ namespace API.Controllers
                 }
                 catch (Exception ex)
                 {
-                    L.LW("Исключение при попытке сохранить категорию " + category.Id, ex);
+                    Log.Write("Исключение при попытке сохранить категорию " + category.Id, ex);
                 }
             }
             return NoContent();
@@ -152,7 +152,7 @@ namespace API.Controllers
             }
             catch(Exception ex)
             {
-                L.LW("",ex);
+                Log.Write("",ex);
             }
             
             _context.SaveChanges();

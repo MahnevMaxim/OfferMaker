@@ -18,22 +18,23 @@ namespace OfferMaker.ViewModels
 
         #region Properties
 
-        public string Image
-        {
-            get { return nomenclurueCard.Image; }
-            set
-            {
-                nomenclurueCard.Image = value;
-                OnPropertyChanged();
-            }
-        }
-
         public Nomenclature Nomenclature
         {
             get { return nomenclurueCard.Nomenclature; }
             set
             {
                 nomenclurueCard.Nomenclature = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Image SelectedImage
+        {
+            get { return nomenclurueCard.SelectedImage; }
+            set
+            {
+                nomenclurueCard.SelectedImage = value;
+                Nomenclature.Image = value;
                 OnPropertyChanged();
             }
         }

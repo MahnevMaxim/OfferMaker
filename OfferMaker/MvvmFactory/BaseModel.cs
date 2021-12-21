@@ -17,11 +17,6 @@ namespace OfferMaker
 
         public event EventHandler<string> SendMessage;
 
-        internal void SendCommandEditCategory(object parameters)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// События в дочернем классе будут работать только через обёртку
         /// </summary>
@@ -66,7 +61,7 @@ namespace OfferMaker
             if (PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
-                L.LW(GetType().Name + " " + prop);
+                Log.Write(GetType().Name + " " + prop);
             }
             viewModel?.OnPropertyChanged(prop);
         }

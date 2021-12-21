@@ -20,7 +20,8 @@ namespace OfferMaker
         string currencyCharCode = "RUB";
         DateTime? lastChangePriceDate = DateTime.Now;
         int actualPricePeriod = 30;
-        string photo;
+        Image image;
+        ObservableCollection<Image> images = new ObservableCollection<Image>();
 
         public int Id { get; set; }
 
@@ -163,16 +164,33 @@ namespace OfferMaker
         /// <summary>
         /// Колекция, т.к. не понимаю: нужна одна картинка или несколько
         /// </summary>
-        public string Photo
+        public Image Image
         {
-            get => photo;
-            set => photo = value;
+            get
+            {
+                if (image != null)
+                    return image;
+                return new Image() { LocalPhotoPath = Environment.CurrentDirectory + @"\Images\no-image.jpg" };
+            }
+            set
+            {
+                image = value;
+                OnPropertyChanged();
+            }  
         }
 
         /// <summary>
         /// Коллекция фото номенклатуры.
         /// </summary>
-        public ObservableCollection<Image> Photos { get; set; } = new ObservableCollection<Image>();
+        public ObservableCollection<Image> Images 
+        { 
+            get
+            {
+                if (images == null) images = new ObservableCollection<Image>();
+                return images;
+            }  
+            set => images = value;
+        } 
 
         /// <summary>
         /// Указывает, актуальна ли цена у номенклатуры.
@@ -186,27 +204,23 @@ namespace OfferMaker
         bool isEdit;
 
         void SetIsEdit() => isEdit = true;
-        
+
+        public bool GetIsEdit() => isEdit;
+
+        internal void SkipIsEdit() => isEdit = false;
+
         public void SetCategoryGuid(string categoryGuid)
         {
             CategoryGuid = categoryGuid; 
             SetIsEdit();
         }
-            
-        public void SetPhoto(string photo)
-        {
-            Photo = photo;
-            SetIsEdit();
-        }
 
         internal void SetPhoto(Image image)
         {
-            Photo = image.OriginalPath;
-            Photos.Add(image);
+            Image = image;
+            Images.Add(image);
             SetIsEdit();
         }
-
-        public bool GetIsEdit() => isEdit;
 
         public override string ToString() => "Id:" + Id +" "+ Title;
     }
