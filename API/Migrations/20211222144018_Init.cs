@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class init : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -84,7 +84,7 @@ namespace API.Migrations
                     CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Markup = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CurrencyCharCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastChangePriceDate = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValue: new DateTime(2021, 12, 22, 11, 7, 55, 171, DateTimeKind.Utc).AddTicks(3142)),
+                    LastChangePriceDate = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValue: new DateTime(2021, 12, 22, 14, 40, 18, 322, DateTimeKind.Utc).AddTicks(5794)),
                     ActualPricePeriod = table.Column<int>(type: "int", nullable: false, defaultValue: 30),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Images = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -103,7 +103,7 @@ namespace API.Migrations
                     OfferName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OfferCreatorId = table.Column<int>(type: "int", nullable: false),
                     ManagerId = table.Column<int>(type: "int", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2021, 12, 22, 11, 7, 55, 174, DateTimeKind.Utc).AddTicks(3476)),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2021, 12, 22, 14, 40, 18, 325, DateTimeKind.Utc).AddTicks(9339)),
                     Customer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OfferGroups = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OfferInfoBlocks = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -117,7 +117,8 @@ namespace API.Migrations
                     IsCreateByCostPrice = table.Column<bool>(type: "bit", nullable: false),
                     IsHideNomsPrice = table.Column<bool>(type: "bit", nullable: false),
                     IsResultSummInRub = table.Column<bool>(type: "bit", nullable: false),
-                    Discount = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Discount = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsTemplate = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

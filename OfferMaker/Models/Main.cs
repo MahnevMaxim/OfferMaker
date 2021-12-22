@@ -99,6 +99,7 @@ namespace OfferMaker
             set
             {
                 currentMainSelectedTabIndex = value;
+                ShowArchive();
                 OnPropertyChanged();
             }
         }
@@ -369,7 +370,20 @@ namespace OfferMaker
             }
             else
                 OnSendMessage("Выберите КП");
-        } 
+        }
+
+        private void ShowArchive()
+        {
+            if(CurrentMainSelectedTabIndex==3)
+            {
+                ArchiveFilter.SetArchiveMode(ArchiveMode.ShowOffers);
+            }
+            else if(CurrentMainSelectedTabIndex==4)
+            {
+                ArchiveFilter.SetArchiveMode(ArchiveMode.ShowTemplate);
+            }
+            ApplyArchiveFilter();
+        }
 
         public void ApplyArchiveFilter() => ArchiveOffers = ArchiveFilter.GetFilteredOffers();
 

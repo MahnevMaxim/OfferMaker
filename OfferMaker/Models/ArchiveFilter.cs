@@ -4,14 +4,16 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel;
 
 namespace OfferMaker
 {
+    public enum ArchiveMode { ShowOffers, ShowTemplate}
+
     public class ArchiveFilter
     {
         ObservableCollection<Offer> offers;
         User currentUser;
+        ArchiveMode archiveMode;
 
         public int? Id { get; set; }
 
@@ -67,9 +69,21 @@ namespace OfferMaker
                 endDatetimeWithDay = (DateTime)offers?.OrderByDescending(o => o.Id).FirstOrDefault()?.CreateDate;
             }
 
-            if (IsFilterEmpty()) return offers;
             List<Offer> tempOffers = new List<Offer>();
             offers.ToList().ForEach(o => tempOffers.Add(o));
+
+            if (archiveMode == ArchiveMode.ShowOffers)
+            {
+                var res = tempOffers.Where(o => !o.IsTemplate).ToList();
+                tempOffers = res;
+            }
+            else if (archiveMode == ArchiveMode.ShowTemplate)
+            {
+                var res = tempOffers.Where(o => o.IsTemplate).ToList();
+                tempOffers = res;
+            }
+
+            if (IsFilterEmpty()) return new ObservableCollection<Offer>(tempOffers);
 
             if (IsShowOnlyCurrentUser)
             {
@@ -137,6 +151,8 @@ namespace OfferMaker
             return new ObservableCollection<Offer>(tempOffers);
         }
 
+        public void SetArchiveMode(ArchiveMode archiveMode) => this.archiveMode = archiveMode;
+        
         private bool IsFilterEmpty()
         {
             ArchiveFilter emptyFilter = new ArchiveFilter(offers, currentUser);

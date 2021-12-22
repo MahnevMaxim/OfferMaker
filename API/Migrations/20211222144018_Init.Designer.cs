@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    [Migration("20211222110805_init")]
-    partial class init
+    [Migration("20211222144018_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -138,7 +138,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 22, 11, 7, 55, 171, DateTimeKind.Utc).AddTicks(3142));
+                        .HasDefaultValue(new DateTime(2021, 12, 22, 14, 40, 18, 322, DateTimeKind.Utc).AddTicks(5794));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -188,7 +188,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 22, 11, 7, 55, 174, DateTimeKind.Utc).AddTicks(3476));
+                        .HasDefaultValue(new DateTime(2021, 12, 22, 14, 40, 18, 325, DateTimeKind.Utc).AddTicks(9339));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -214,6 +214,9 @@ namespace API.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsShowPriceDetails")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTemplate")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsWithNds")
