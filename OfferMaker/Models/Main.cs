@@ -346,6 +346,8 @@ namespace OfferMaker
 
         public void RemoveInformBlock(OfferInfoBlock offerInfoBlock) => Constructor.RemoveInformBlock(offerInfoBlock);
 
+        public void SendMess(string mess) => OnSendMessage(mess);
+
         #endregion Etc
 
         #endregion Constructor
@@ -404,15 +406,8 @@ namespace OfferMaker
 
         public void OpenOfferFromFile() => DocManager.OpenOfferFromFile();
 
-        async public void SaveOffer()
-        {
-            offers.Add(Constructor.Offer);
-            CallResult cr = await DataRepository.SaveOffer(Constructor.Offer, offers);
-            if (!cr.Success)
-                OnSendMessage(cr.Error.Message);
-            ArchiveOffers = ArchiveFilter.GetFilteredOffers();
-        }
-
+        async public void SaveOffer() => DocManager.SaveOffer();
+        
         #endregion DocManager
 
         #region Settings
