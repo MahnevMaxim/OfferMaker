@@ -11,7 +11,7 @@ namespace OfferMaker
     {
         string propertyName;
         string propertyType;
-        string propertyValue;
+        object propertyValue;
         ObservableCollection<DebugTreeItem> childs = new ObservableCollection<DebugTreeItem>();
 
         public string PropertyType
@@ -34,7 +34,7 @@ namespace OfferMaker
             }
         }
 
-        public string PropertyValue
+        public object PropertyValue
         {
             get => propertyValue;
             set

@@ -367,6 +367,7 @@
                     Grid.Row="0"
                     Margin="0"
                     mah:TabControlHelper.Underlined="TabItems">
+            
             <TabItem Header="Конструктор" 
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
@@ -512,6 +513,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            
             <TabItem Header="Документ"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
@@ -598,6 +600,7 @@
                     </StackPanel>
                 </Grid>
             </TabItem>
+            
             <TabItem Header="Каталог"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
@@ -669,11 +672,11 @@
                             ToolTip="Искать">
                         <iconPacks:PackIconMaterial Kind="Magnify"
                                                     Width="20"
-                                                    Height="20"/>
+                                                    Height="20" />
                     </Button>
-
                 </Grid>
             </TabItem>
+            
             <TabItem Header="Архив"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
@@ -685,7 +688,6 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
                     <TextBox Text="{Binding ArchiveFilter.ArchiveSearchByNameText, UpdateSourceTrigger=PropertyChanged}"
@@ -712,10 +714,9 @@
                                                     Width="20"
                                                     Height="20"/>
                     </Button>
-                    <Button CommandParameter="FindProfile"
+                    <Button Command="{Binding FlyOffersFilter}"
                             Grid.Column="2"
                             Grid.Row="0"
-                            Command="{Binding FlyOffersFilter}"
                             Height="35"
                             Width="35"
                             Margin="5"
@@ -727,8 +728,65 @@
                     </Button>
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Шаблоны"
+                     mah:TabControlHelper.Underlined="TabPanel"
+                     mah:HeaderedControlHelper.HeaderFontSize="16">
+                <Grid Background="{Binding Settings.AdditionalColor}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                    </Grid.RowDefinitions>
+
+                    <TextBox Text="{Binding ArchiveFilter.ArchiveSearchByNameText, UpdateSourceTrigger=PropertyChanged}"
+                             mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
+                             Grid.Column="0"
+                             Grid.Row="0"
+                             Height="30"
+                             mah:TextBoxHelper.ClearTextButton="True"
+                             mah:TextBoxHelper.Watermark="Поиск...">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding Cmd}"
+                                        Key="Enter"
+                                        CommandParameter="FindOfferInArchive" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <Button CommandParameter="FindOfferInArchive"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Command="{Binding Cmd}"
+                            Height="28"
+                            Width="28"
+                            Margin="5"
+                            Style="{DynamicResource MahApps.Styles.Button.Square}"
+                            ToolTip="Искать">
+                        <iconPacks:PackIconMaterial Kind="Magnify"
+                                                    Width="20"
+                                                    Height="20" />
+                    </Button>
+                    <Button Command="{Binding FlyOffersFilter}"
+                            Grid.Column="2"
+                            Grid.Row="0"
+                            Height="35"
+                            Width="35"
+                            Margin="5"
+                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                            ToolTip="Фильтр">
+                        <iconPacks:PackIconMaterial Kind="FilterVariant"
+                                                    Width="20"
+                                                    Height="20" />
+                    </Button>
+                </Grid>
+            </TabItem>
+
         </TabControl>
 
+        <!--#region Конструктор -->
+        
         <Grid Grid.Row="1">
             <Grid.Style>
                 <Style TargetType="Grid">
@@ -903,6 +961,10 @@
             <pdf:PdfControl x:Name="pdfControl" Grid.Column="2"/>
         </Grid>
 
+        <!--#endregion Конструктор -->
+
+        <!--#region Каталог -->
+        
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350" MaxWidth="350" MinWidth="150"/>
@@ -1148,6 +1210,10 @@
             </GroupBox>
         </Grid>
 
+        <!--#endregion Каталог -->
+
+        <!--#region Архив и шаблоны -->
+        
         <Grid Grid.Row="1">
             <Grid.Style>
                 <Style TargetType="Grid">
@@ -1155,6 +1221,9 @@
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="3">
                             <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="4">
+                            <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -1238,6 +1307,8 @@
                 </AdornerDecorator>
             </GroupBox>
         </Grid>
+
+        <!--#endregion Архив и шаблоны -->
 
     </Grid>
     

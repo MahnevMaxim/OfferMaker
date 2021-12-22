@@ -101,14 +101,39 @@ namespace OfferMaker
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Сохранение шаблонов и КП.
+        /// </summary>
+        /// <param name="isTemplate"></param>
         async internal void SaveOffer(bool isTemplate=false)
         {
-            constructor.Offer.IsTemplate = isTemplate;
-            Global.Main.offers.Add(constructor.Offer);
-            CallResult cr = await Global.Main.DataRepository.SaveOffer(constructor.Offer, Global.Main.offers);
+            Offer offer;
+            if(isTemplate)
+            {
+                Offer temp = CreateTemplate(constructor.Offer);
+                Global.Main.offers.Add(temp);
+                offer = temp;
+            }
+            else
+            {
+                Global.Main.offers.Add(constructor.Offer);
+                offer = constructor.Offer;
+            }
+            
+            CallResult cr = await Global.Main.DataRepository.SaveOffer(offer, Global.Main.offers);
             if (!cr.Success)
                 Global.Main.SendMess(cr.Error.Message);
             Global.Main.ArchiveOffers = Global.Main.ArchiveFilter.GetFilteredOffers();
+        }
+
+        private Offer CreateTemplate(Offer offer)
+        {
+            Offer temp_ = Helpers.CloneObject<Offer>(offer);
+            Offer temp = Utils.RestoreOffer(temp_, Global.Main.Users);
+            temp.IsTemplate = true;
+            temp.Id = 0;
+            temp.CreateDate = DateTime.Now;
+            return temp;
         }
     }
 }
