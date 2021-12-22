@@ -34,5 +34,7 @@ namespace Shared
         public bool IsWithNds { get; set; }
 
         public Currency Currency { get; set; }
+
+        public bool IsTemplate { get; set; }
     }
 }

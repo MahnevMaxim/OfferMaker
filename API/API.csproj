@@ -12,12 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="Migrations\20211222110805_init.cs" />
-    <Compile Include="Migrations\20211222110805_init.Designer.cs" />
-    <Compile Include="Migrations\APIContextModelSnapshot.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.12">
       <PrivateAssets>all</PrivateAssets>

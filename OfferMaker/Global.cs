@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace OfferMaker
 {
     class Global
     {
-        static bool IsRealMode;
+        /// <summary>
+        /// Если true - Тогда подключение идёт удалённому серверу.
+        /// </summary>
+        static bool IsRealMode = true;
+
         public static string apiEndpoint { get => IsRealMode ? "https://kip.mybot.su/" : "https://localhost:44333/"; }
 
         public static Main Main;
@@ -22,6 +27,8 @@ namespace OfferMaker
         public static Settings Settings { get => Main.Settings; }
 
         public static User User { get => Main.User; }
+
+        public static ObservableCollection<User> Users { get => Main.Users; }
 
         public static ImageManager ImageManager { get => Main.ImageManager; }
     }

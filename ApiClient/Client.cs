@@ -3177,6 +3177,9 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("discount")]
         public Discount Discount { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("isTemplate")]
+        public bool IsTemplate { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]

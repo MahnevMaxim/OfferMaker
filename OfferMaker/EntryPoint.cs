@@ -162,29 +162,8 @@ namespace OfferMaker
         {
             ObservableCollection<Offer> restoredOffers = new ObservableCollection<Offer>();
             foreach (var offer in offers)
-                restoredOffers.Add(RestoreOffer(offer));
+                restoredOffers.Add(Utils.RestoreOffer(offer, users));
             offers = restoredOffers;
-        }
-
-        /// <summary>
-        /// Восстанавливаем данные и взаимосвязи класса Offer.
-        /// </summary>
-        /// <param name="offer"></param>
-        /// <returns></returns>
-        private Offer RestoreOffer(Offer offer)
-        {
-            try
-            {
-                offer.OfferCreator = users.Where(u => u.Id == offer.OfferCreatorId).FirstOrDefault();
-                offer.Manager = users.Where(u => u.Id == offer.ManagerId).FirstOrDefault();
-                offer.OfferGroups.ToList().ForEach(g => g.NomWrappers.ToList().ForEach(n => n.SetOfferGroup(g)));
-                offer.OfferGroups.ToList().ForEach(g => g.SetOffer(offer));
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex);
-            }
-            return offer;
         }
 
         /// <summary>

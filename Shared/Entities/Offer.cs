@@ -52,5 +52,7 @@ namespace Shared
         public bool IsResultSummInRub { get; set; }
 
         public Discount Discount { get; set; }
+
+        public bool IsTemplate { get; set; }
     }
 }

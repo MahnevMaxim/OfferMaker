@@ -10,44 +10,25 @@ namespace OfferMaker
     class Utils
     {
         /// <summary>
-        /// Объекты Image не клонируются должным образом, метод временный.
+        /// Восстанавливаем данные и взаимосвязи класса Offer.
         /// </summary>
-        /// <param name="response"></param>
+        /// <param name="offer"></param>
+        /// <param name="users"></param>
         /// <returns></returns>
-        //internal static ObservableCollection<Nomenclature> CloneNomsCollection(ICollection<ApiLib.Nomenclature> response)
-        //{
-        //    ObservableCollection<Nomenclature> res = Helpers.CloneObject<ObservableCollection<Nomenclature>>(response);
-        //    foreach (var nom in response)
-        //    {
-        //        var target = res.Where(n => n.Id == nom.Id).First();
-        //        target.Image = new Image(nom.Image.Guid, nom.Image.Creatorid, nom.Image.OriginalPath);
-        //        if (nom.Images != null)
-        //        {
-        //            ObservableCollection<Image> images = new ObservableCollection<Image>();
-        //            foreach (var im in nom.Images)
-        //            {
-        //                images.Add(new Image(im.Guid, im.Creatorid, im.OriginalPath));
-        //            }
-        //            target.Images = images;
-        //        }
-        //    }
-        //    return res;
-        //}
-
-        //internal static Nomenclature CloneNom(Nomenclature selectedNomenclature)
-        //{
-        //    Nomenclature nomenclature = Helpers.CloneObject<Nomenclature>(selectedNomenclature);
-        //    nomenclature.Image = new Image(selectedNomenclature.Image.Guid, selectedNomenclature.Image.Creatorid, selectedNomenclature.Image.OriginalPath);
-        //    ObservableCollection<Image> images = new ObservableCollection<Image>();
-        //    if(selectedNomenclature.Images!=null)
-        //    {
-        //        foreach (var im in selectedNomenclature.Images)
-        //        {
-        //            images.Add(new Image(im.Guid, im.Creatorid, im.OriginalPath));
-        //        }
-        //    }
-        //    nomenclature.Images = images;
-        //    return nomenclature;
-        //}
+        static public Offer RestoreOffer(Offer offer, ObservableCollection<User> users)
+        {
+            try
+            {
+                offer.OfferCreator = users.Where(u => u.Id == offer.OfferCreatorId).FirstOrDefault();
+                offer.Manager = users.Where(u => u.Id == offer.ManagerId).FirstOrDefault();
+                offer.OfferGroups.ToList().ForEach(g => g.NomWrappers.ToList().ForEach(n => n.SetOfferGroup(g)));
+                offer.OfferGroups.ToList().ForEach(g => g.SetOffer(offer));
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
+            return offer;
+        }
     }
 }
