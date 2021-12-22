@@ -7,6 +7,9 @@ using System.Windows.Controls;
 using System.Printing;
 using System.Windows.Xps;
 using System.Windows.Documents;
+using System.Drawing.Printing;
+using System.IO;
+using Shared;
 
 namespace OfferMaker
 {
@@ -29,11 +32,27 @@ namespace OfferMaker
         /// </summary>
         internal void SaveToPdfWithBanner()
         {
-            constructor.CreateDocument();
+            constructor.CreateDocumentWithBanner();
             FixedDocument fixedDoc = constructor.PdfDocument;
-            PrintDialog printDialog = new PrintDialog();
-            printDialog.PrintQueue = new LocalPrintServer().GetPrintQueue("Microsoft Print to PDF");
+            SaveToPdf(fixedDoc);
+        }
 
+        /// <summary>
+        /// Сохранение Pdf без баннеров.
+        /// </summary>
+        internal void SaveToPdfWithoutBanner()
+        {
+            constructor.CreateDocumentWithoutBanner();
+            FixedDocument fixedDoc = constructor.PdfDocumentShort;
+            SaveToPdf(fixedDoc);
+        }
+
+        internal void SaveToPdf(FixedDocument fixedDoc)
+        {
+            PrintDialog printDialog = new PrintDialog();
+            var serv = new LocalPrintServer();
+            printDialog.PrintQueue = serv.GetPrintQueue("Microsoft Print to PDF");
+            
             PrintTicket pt = new PrintTicket()
             {
                 OutputColor = OutputColor.Color,
@@ -65,16 +84,8 @@ namespace OfferMaker
                 writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
         }
 
-        internal void SaveToPdfWithoutBanner()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void SaveTemplateToArchive()
-        {
-            throw new NotImplementedException();
-        }
-
+        internal void SaveTemplateToArchive() => SaveOffer(true);
+        
         internal void LoadTemplate()
         {
             throw new NotImplementedException();
@@ -88,6 +99,16 @@ namespace OfferMaker
         internal void OpenOfferFromFile()
         {
             throw new NotImplementedException();
+        }
+
+        async internal void SaveOffer(bool isTemplate=false)
+        {
+            constructor.Offer.IsTemplate = isTemplate;
+            Global.Main.offers.Add(constructor.Offer);
+            CallResult cr = await Global.Main.DataRepository.SaveOffer(constructor.Offer, Global.Main.offers);
+            if (!cr.Success)
+                Global.Main.SendMess(cr.Error.Message);
+            Global.Main.ArchiveOffers = Global.Main.ArchiveFilter.GetFilteredOffers();
         }
     }
 }

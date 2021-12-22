@@ -231,7 +231,10 @@ namespace OfferMaker
                 isNeedUpdate = false;
                 try
                 {
-                    CreateDocument();
+                    if (pdfControlSelectedIndex == 1)
+                        CreateDocumentWithBanner();
+                    else if (pdfControlSelectedIndex == 2)
+                        CreateDocumentWithoutBanner();
                     await Task.Delay(4000);
                 }
                 catch (Exception ex)
@@ -243,19 +246,17 @@ namespace OfferMaker
             isCreatorBusy = false;
         }
 
-        public void CreateDocument()
+        public void CreateDocumentWithBanner()
         {
-            if (pdfControlSelectedIndex == 1)
-            {
-                FlowDocument flowDocument = ((Views.MainWindow)viewModel.view).pdfControl.flowDocumentAll;
-                WrapperAllPages wrapper = new WrapperAllPages(flowDocument, viewModel, smallLogo);
-                PdfDocument = wrapper.GetPdf(2, 1, 1, 1);
-            }
-            else if (pdfControlSelectedIndex == 2)
-            {
-                WrapperOnePage wrapper = new WrapperOnePage(viewModel, smallLogo);
-                PdfDocumentShort = wrapper.GetPdf(2, 1, 1, 1);
-            }
+            FlowDocument flowDocument = ((Views.MainWindow)viewModel.view).pdfControl.flowDocumentAll;
+            WrapperAllPages wrapper = new WrapperAllPages(flowDocument, viewModel, smallLogo);
+            PdfDocument = wrapper.GetPdf(2, 1, 1, 1);
+        }
+
+        public void CreateDocumentWithoutBanner()
+        {
+            WrapperOnePage wrapper = new WrapperOnePage(viewModel, smallLogo);
+            PdfDocumentShort = wrapper.GetPdf(2, 1, 1, 1);
         }
 
         #endregion Create PDF

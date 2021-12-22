@@ -45,6 +45,7 @@ namespace OfferMaker
         bool isShowPriceDetails;
         bool isCreateByCostPrice;
         bool isHideNomsPrice;
+        bool isTemplate;
 
         public int Id
         {
@@ -314,6 +315,19 @@ namespace OfferMaker
             {
                 isHideNomsPrice = value;
                 OfferGroupsNotOptions.ToList().ForEach(o => o.NomWrappers.ToList().ForEach(n => n.OnPropertyChanged()));
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Если IsTemplate=true, то это шаблон.
+        /// </summary>
+        public bool IsTemplate
+        {
+            get => isTemplate;
+            set
+            {
+                isTemplate = value;
                 OnPropertyChanged();
             }
         }
