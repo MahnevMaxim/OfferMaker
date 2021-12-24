@@ -12,7 +12,8 @@ namespace OfferMaker
         /// <summary>
         /// Если true - Тогда подключение идёт удалённому серверу.
         /// </summary>
-        static bool IsRealMode=true;
+        //static bool IsRealMode = true;
+        static bool IsRealMode;
 
         public static string apiEndpoint { get => IsRealMode ? "https://kip.mybot.su/" : "http://localhost:52016/"; }
 

@@ -105,7 +105,11 @@
 
             <DataTemplate x:Key="DescriptionTextBox">
                 <Grid>
-                    <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
+                    <TextBox Grid.Row="0" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Visibility="{Binding IsComment, Converter={StaticResource VisibleIfTrue}, UpdateSourceTrigger=PropertyChanged}"
                              TextWrapping="Wrap"
                              Width="500"
@@ -113,7 +117,7 @@
                              FontStyle="Italic"
                              FontWeight="Bold"
                              Foreground="Blue"/>
-                    <TextBox Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Grid.Row="1" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Visibility="{Binding IsComment, Converter={StaticResource VisibleIfNotTrue}, UpdateSourceTrigger=PropertyChanged}"
                              TextWrapping="Wrap"
                              Width="500"/>
