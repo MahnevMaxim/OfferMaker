@@ -425,6 +425,7 @@
                                   ItemsSource="{Binding SelectedNomenclatureGroup.Nomenclatures}"
                                   dd:DragDrop.IsDropTarget="True"
                                   dd:DragDrop.IsDragSource="True"
+                                  dd:DragDrop.DropHandler="{Binding NomToNomListOfGroupDropHandler}"
                                   AutoGenerateColumns="False"
                                   GridLinesVisibility="Horizontal"
                                   CanUserAddRows="False"

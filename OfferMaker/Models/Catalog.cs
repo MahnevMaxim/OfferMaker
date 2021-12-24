@@ -140,8 +140,11 @@ namespace OfferMaker
 
         internal override void Run()
         {
-            CreateCategoriesTree();
-            CatalogFilter = new CatalogFilter(this);
+            if(CatalogFilter==null)
+            {
+                CreateCategoriesTree();
+                CatalogFilter = new CatalogFilter(this);
+            }
         }
 
         /// <summary>
@@ -150,7 +153,7 @@ namespace OfferMaker
         public void EditCurrencies()
         {
             new CurrenciesView(new ObservableCollection<Currency>(Global.Currencies)).ShowDialog();
-            OnPropertyChanged(nameof(Global.Main.UsingCurrencies));
+            Global.Main.OnPropertyChanged(nameof(Global.Main.UsingCurrencies));
         }
 
         /// <summary>
