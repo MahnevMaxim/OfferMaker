@@ -140,8 +140,11 @@ namespace OfferMaker
 
         internal override void Run()
         {
-            CreateCategoriesTree();
-            CatalogFilter = new CatalogFilter(this);
+            if(CatalogFilter==null)
+            {
+                CreateCategoriesTree();
+                CatalogFilter = new CatalogFilter(this);
+            }
         }
 
         /// <summary>
