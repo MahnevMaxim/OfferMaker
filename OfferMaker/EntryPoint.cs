@@ -46,6 +46,7 @@ namespace OfferMaker
             }
             else
             {
+                Application.Current.Shutdown();
                 return;
             }
             await Init();

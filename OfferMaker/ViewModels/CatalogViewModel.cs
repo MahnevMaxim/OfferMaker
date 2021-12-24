@@ -17,11 +17,14 @@ namespace OfferMaker.ViewModels
             modelCatalog = (Catalog)model;
             NomToCatDropHandler = new NomToCatDropHandler();
             NomToCatDragHandler = new NomToCatDragHandler();
+            NomToNomListOfGroupDropHandler = new NomToNomListOfGroupDropHandler();
         }
 
         public NomToCatDropHandler NomToCatDropHandler { get; set; }
 
         public NomToCatDragHandler NomToCatDragHandler { get; set; }
+
+        public NomToNomListOfGroupDropHandler NomToNomListOfGroupDropHandler { get; set; }
 
         public ObservableCollection<Nomenclature> Nomenclatures
         {
