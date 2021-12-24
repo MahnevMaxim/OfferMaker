@@ -30,6 +30,22 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             Log.Clear();
+#if DEBUG
+            Log.Write("Debug");
+            services.AddDbContext<APIContext>(options => options.UseSqlServer(Configuration.GetConnectionString("APIContext")));
+#else
+            Log.Write("Release");
+            try
+            {
+                string con = "Server=127.0.0.1,1433;Database=kip;User=sa;Password=dnhdhdsryWW33;";
+                services.AddDbContext<APIContext>(options => options.UseSqlServer(con));
+            }
+            catch(Exception ex)
+            {
+                Log.Write(ex.ToString());
+            }
+
+#endif
             Log.Write("Debug");
             services.AddDbContext<APIContext>(options => options.UseSqlServer(Configuration.GetConnectionString("APIContext")));
 
