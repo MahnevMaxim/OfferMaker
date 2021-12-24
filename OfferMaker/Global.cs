@@ -15,7 +15,6 @@ namespace OfferMaker
         //static bool IsRealMode = true;
         static bool IsRealMode;
 
-
         public static string apiEndpoint { get => IsRealMode ? "https://kip.mybot.su/" : "https://localhost:44333/"; }
 
         public static Main Main;
