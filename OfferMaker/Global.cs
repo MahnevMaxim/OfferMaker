@@ -31,5 +31,9 @@ namespace OfferMaker
         public static ObservableCollection<User> Users { get => Main.Users; }
 
         public static ImageManager ImageManager { get => Main.ImageManager; }
+
+        public static Offer Offer { get => Main.Constructor.Offer; }
+
+        public static Constructor Constructor { get => Main.Constructor; }
     }
 }

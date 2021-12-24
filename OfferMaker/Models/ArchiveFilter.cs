@@ -112,19 +112,19 @@ namespace OfferMaker
                 tempOffers = res;
             }
 
-            if (!string.IsNullOrWhiteSpace(CustomerName?.ToLower()))
+            if (!string.IsNullOrWhiteSpace(CustomerName?.ToLower().Trim()))
             {
                 var res = tempOffers.Where(o => o.Customer.FullName != null && o.Customer.FullName.ToLower().Contains(CustomerName)).ToList();
                 tempOffers = res;
             }
 
-            if (!string.IsNullOrWhiteSpace(CompanyName?.ToLower()))
+            if (!string.IsNullOrWhiteSpace(CompanyName?.ToLower().Trim()))
             {
                 var res = tempOffers.Where(o => o.Customer.Organization != null && o.Customer.Organization.ToLower().Contains(CompanyName)).ToList();
                 tempOffers = res;
             }
 
-            if (!string.IsNullOrWhiteSpace(City?.ToLower()))
+            if (!string.IsNullOrWhiteSpace(City?.ToLower().Trim()))
             {
                 var res = tempOffers.Where(o => o.Customer.Location != null && o.Customer.Location.ToLower().Contains(City)).ToList();
                 tempOffers = res;
@@ -142,9 +142,9 @@ namespace OfferMaker
                 tempOffers = res;
             }
 
-            if (!string.IsNullOrWhiteSpace(ArchiveSearchByNameText?.ToLower()))
+            if (!string.IsNullOrWhiteSpace(ArchiveSearchByNameText?.ToLower().Trim()))
             {
-                var res = tempOffers.Where(o => o.OfferName != null && o.OfferName.ToLower().Contains(ArchiveSearchByNameText.ToLower())).ToList();
+                var res = tempOffers.Where(o => o.OfferName != null && o.OfferName.ToLower().Contains(ArchiveSearchByNameText.ToLower().Trim())).ToList();
                 tempOffers = res;
             }
 

@@ -166,6 +166,7 @@ namespace DatabaseExporter
                     Image=image,
                     Images=images
                 };
+                nomenclature.Descriptions.ToList().ForEach(d=>d.IsEnabled=true);
 
                 //string fPath = "avitoimages\\" + image.Guid + ".jpg";
                 //using var stream = new MemoryStream(File.ReadAllBytes(fPath).ToArray());

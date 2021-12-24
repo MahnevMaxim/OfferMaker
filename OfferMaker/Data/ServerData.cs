@@ -139,6 +139,11 @@ namespace OfferMaker
             }
         }
 
+        internal Task<CallResult<StringCollection>> GetHints()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Пытаемся сохранить группы номенклатур на сервере.
         /// </summary>
@@ -157,11 +162,6 @@ namespace OfferMaker
                 Log.Write(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить группы номенклатур на сервере.") };
             }
-        }
-
-        internal Task<CallResult<StringCollection>> GetHints()
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -215,10 +215,31 @@ namespace OfferMaker
             try
             {
                 var newNoms = nomenclatures.Where(n => n.Id == 0 || n.GetIsEdit() == true).ToList();
+                newNoms.AddRange(Global.Catalog.CatalogFilter.GetDeletedNoms());
                 Global.ImageManager.UploadNewImages(newNoms);
                 IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
                 await client.NomenclaturesPUTAsync(noms);
                 newNoms.ToList().ForEach(n => n.SkipIsEdit());
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
+            }
+        }
+
+        /// <summary>
+        /// Сохранение категорий на сервере.
+        /// </summary>
+        /// <param name="categoriesTree"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveCategories(ObservableCollection<Category> categoriesTree)
+        {
+            try
+            {
+                IEnumerable<ApiLib.Category> categoriesTreeCopy = Helpers.CloneObject<IEnumerable<ApiLib.Category>>(categoriesTree);
+                await client.CategoriesPUTAsync(categoriesTreeCopy);
                 return new CallResult();
             }
             catch (Exception ex)
@@ -248,24 +269,5 @@ namespace OfferMaker
             }
         }
 
-        /// <summary>
-        /// Сохранение категорий на сервере.
-        /// </summary>
-        /// <param name="categoriesTree"></param>
-        /// <returns></returns>
-        async internal Task<CallResult> SaveCategories(ObservableCollection<Category> categoriesTree)
-        {
-            try
-            {
-                IEnumerable<ApiLib.Category> categoriesTreeCopy = Helpers.CloneObject<IEnumerable<ApiLib.Category>>(categoriesTree);
-                await client.CategoriesPUTAsync(categoriesTreeCopy);
-                return new CallResult();
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
-            }
-        }
     }
 }

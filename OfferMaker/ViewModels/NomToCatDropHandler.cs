@@ -81,6 +81,10 @@ namespace OfferMaker.ViewModels
                 var isTreeViewItem = dropInfo.InsertPosition.HasFlag(RelativeInsertPosition.TargetItemCenter) && dropInfo.VisualTargetItem is TreeViewItem;
                 dropInfo.DropTargetAdorner = isTreeViewItem ? DropTargetAdorners.Highlight : DropTargetAdorners.Insert;
             }
+            else
+            {
+                dropInfo.Effects = DragDropEffects.None;
+            }
         }
 
         public virtual void Drop(IDropInfo dropInfo)

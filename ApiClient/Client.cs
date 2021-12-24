@@ -2992,6 +2992,9 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("images")]
         public System.Collections.Generic.ICollection<Image> Images { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("isDelete")]
+        public bool IsDelete { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.6.3.0 (Newtonsoft.Json v12.0.0.0)")]
@@ -3118,6 +3121,9 @@ namespace ApiLib
 
         [System.Text.Json.Serialization.JsonPropertyName("id")]
         public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("guid")]
+        public string Guid { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("offerName")]
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]

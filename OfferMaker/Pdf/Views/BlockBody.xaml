@@ -49,7 +49,7 @@
                               Margin="0.2cm,0.02cm,0.2cm,0.2cm" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid Visibility="{Binding IsEnabled, Converter={StaticResource VisibleIfTrue}}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>

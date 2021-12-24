@@ -33,5 +33,7 @@ namespace Shared
         public Image Image { get; set; }
 
         public ObservableCollection<Image> Images { get; set; }
+
+        public bool IsDelete { get; set; }
     }
 }

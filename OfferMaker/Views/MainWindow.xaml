@@ -21,7 +21,7 @@
     <Window.Resources>
         <root:MultiConverter x:Key="MultiConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <CollectionViewSource x:Key="Nomenclatures" Filter="CollectionViewSource_Filter"  Source="{Binding CatalogFilter.FilteredNomenclatures}" />
+        <!--<CollectionViewSource x:Key="Nomenclatures" Filter="CollectionViewSource_Filter"  Source="{Binding CatalogFilter.FilteredNomenclatures}" />-->
     </Window.Resources>
 
     <mah:MetroWindow.Flyouts>
@@ -350,7 +350,7 @@
                 </Button>
             </DataTemplate>
 
-            <DataTemplate x:Key="GroupName">
+            <!--<DataTemplate x:Key="GroupName">
                 <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
                          Width="250"
                          BorderThickness="0"
@@ -358,7 +358,7 @@
                          MinWidth="100" 
                          TextWrapping="Wrap"
                          PreviewDragOver="TextBox_PreviewDragOver"/>
-            </DataTemplate>
+            </DataTemplate>-->
 
         </Grid.Resources>
 
@@ -373,71 +373,155 @@
                      mah:HeaderedControlHelper.HeaderFontSize="16">
                 <Grid Background="{Binding Settings.AdditionalColor}">
                     <StackPanel Orientation="Horizontal"
-                                Margin="5,5,5,0">
-                        <Button CommandParameter="OpenAdminPanel"
-                                VerticalAlignment="Top"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                ToolTip="Фото юзера, профиль, админка"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconMaterial Kind="CardAccountDetailsOutline"
-                                                        Width="23"
-                                                        Height="23"/>
-                        </Button>
-                        <Button Name="FlyInfoBlocks"
-                                VerticalAlignment="Top"
-                                Command="{Binding FlyInfoBlocks}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                ToolTip="Описание"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconMaterial Kind="Text"
-                                                          Width="23"
-                                                          Height="23"/>
-                        </Button>
-                        <Button Name="EditCustomer"
-                                VerticalAlignment="Top"
-                                Command="{Binding Cmd}"
-                                CommandParameter="EditCustomer"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                ToolTip="Клиент"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconMaterial Kind="AccountCashOutline"
-                                                          Width="23"
-                                                          Height="23"/>
-                        </Button>
-                        <Button Name="FlyDiscount"
-                                VerticalAlignment="Top"
-                                Command="{Binding FlyDiscount}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                ToolTip="Скидка"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconFontAwesome Kind="PercentageSolid"
-                                                          Width="23"
-                                                          Height="23"/>
-                        </Button>
-                        <Button CommandParameter="SkipOffer"
-                                VerticalAlignment="Top"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                ToolTip="Новое КП"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconMaterial Kind="NewBox"
-                                                          Width="23"
-                                                          Height="23"/>
-                        </Button>
-                        <Border Width="62"
-                                Height="62"
-                                Margin="5"
+                                Margin="5">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button CommandParameter="OpenAdminPanel"
+                                        VerticalAlignment="Top"
+                                        Command="{Binding Cmd}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,5,0,5"
+                                        ToolTip="Фото юзера, профиль, админка"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                                    <iconPacks:PackIconMaterial Kind="CardAccountDetailsOutline"
+                                                                Width="18"
+                                                                Height="18" />
+                                </Button>
+                                <Button Name="FlyInfoBlocks"
+                                        VerticalAlignment="Top"
+                                        Command="{Binding FlyInfoBlocks}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,5,0,5"
+                                        ToolTip="Описание"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                                    <iconPacks:PackIconMaterial Kind="Text"
+                                                                Width="18"
+                                                                Height="18" />
+                                </Button>
+                                <Button Name="EditCustomer"
+                                        VerticalAlignment="Top"
+                                        Command="{Binding Cmd}"
+                                        CommandParameter="EditCustomer"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,5,0,5"
+                                        ToolTip="Клиент"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                                    <iconPacks:PackIconMaterial Kind="AccountCashOutline"
+                                                                Width="18"
+                                                                Height="18" />
+                                </Button>
+                                <Button Name="FlyDiscount"
+                                        VerticalAlignment="Top"
+                                        Command="{Binding FlyDiscount}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,5,0,5"
+                                        ToolTip="Скидка"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                                    <iconPacks:PackIconFontAwesome Kind="PercentageSolid"
+                                                                   Width="18"
+                                                                   Height="18" />
+                                </Button>
+                                <Button CommandParameter="SkipOffer"
+                                        VerticalAlignment="Top"
+                                        Command="{Binding Cmd}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,5,0,5"
+                                        ToolTip="Новое КП"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                                    <iconPacks:PackIconMaterial Kind="NewBox"
+                                                                Width="18"
+                                                                Height="18" />
+                                </Button>
+                                <Button CommandParameter="OpenCatalog"
+                                        VerticalAlignment="Top"
+                                        Command="{Binding Cmd}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,5,0,5"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                        ToolTip="Открыть каталог">
+                                    <iconPacks:PackIconPicolIcons Kind="Category"
+                                                                  Width="18"
+                                                                  Height="18" />
+                                </Button>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Button CommandParameter="OpenOfferFromFile"
+                                        Command="{Binding Cmd}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,0,0,0"
+                                        ToolTip="Открыть документ"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
+                                    <iconPacks:PackIconMaterial Kind="FolderOpenOutline"
+                                                                Width="18"
+                                                                Height="18" />
+                                </Button>
+                                <Button CommandParameter="SaveOfferToFile"
+                                        Command="{Binding Cmd}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,0,0,0"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                        ToolTip="Сохранить документ">
+                                    <iconPacks:PackIconMaterial Kind="ContentSaveOutline"
+                                                                Width="18"
+                                                                Height="18" />
+                                </Button>
+                                <Button CommandParameter="SaveTemplateToArchive"
+                                        Command="{Binding Cmd}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,0,0,0"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                        ToolTip="Сохранить шаблон">
+                                    <iconPacks:PackIconMaterial Kind="ContentSaveCogOutline"
+                                                                Width="18"
+                                                                Height="18" />
+                                </Button>
+                                <Button CommandParameter="SaveToPdfWithBanner"
+                                        Command="{Binding Cmd}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,0,0,0"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                        ToolTip="Сохранить в PDF с баннером">
+                                    <iconPacks:PackIconCodicons Kind="FilePdf"
+                                                                Width="18"
+                                                                Height="18" />
+                                </Button>
+                                <Button CommandParameter="SaveToPdfWithoutBanner"
+                                        Command="{Binding Cmd}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,0,0,0"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                        ToolTip="Сохранить в PDF без баннера">
+                                    <iconPacks:PackIconBoxIcons Kind="SolidFilePdf"
+                                                                Width="18"
+                                                                Height="18" />
+                                </Button>
+                                <Button CommandParameter="SaveOffer"
+                                        Command="{Binding Cmd}"
+                                        Height="30"
+                                        Width="30"
+                                        Margin="5,0,0,0"
+                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                        ToolTip="Сохранить в архив">
+                                    <iconPacks:PackIconRemixIcon Kind="ArchiveDrawerLine"
+                                                                 Width="18"
+                                                                 Height="18" />
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                        <Border Width="65"
+                                Height="65"
+                                Margin="10,5"
                                 VerticalAlignment="Top"
                                 BorderThickness="1"
                                 BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
@@ -454,7 +538,7 @@
                         <ComboBox ItemsSource="{Binding Managers}"
                                   SelectedItem="{Binding Manager}"
                                   Width="170"
-                                  Height="62"
+                                  Height="65"
                                   VerticalAlignment="Top"
                                   mah:TextBoxHelper.ClearTextButton="True"
                                   mah:TextBoxHelper.UseFloatingWatermark="True"
@@ -485,19 +569,16 @@
                                       Margin="0,5,0,0"/>
                         </StackPanel>
                         <StackPanel Margin="5">
-                            <CheckBox IsChecked="{Binding IsResultSummInRub}" 
+                            <CheckBox IsChecked="{Binding IsResultSummInRub}"
                                       Content="Итоговая сумма в рублях"
-                                      Margin="0,0,0,5"/>
-                            <ComboBox ItemsSource="{Binding UsingCurrencies}" 
+                                      Margin="0,0,0,5" />
+                            <ComboBox ItemsSource="{Binding UsingCurrencies}"
                                       SelectedItem="{Binding CurrencyCode}"
                                       Width="150"
                                       mah:TextBoxHelper.UseFloatingWatermark="True"
                                       mah:TextBoxHelper.Watermark="Валюта"
                                       SelectedIndex="0"
-                                      HorizontalAlignment="Left"/>
-                        </StackPanel>
-                        <StackPanel Margin="5">
-
+                                      HorizontalAlignment="Left" />
                         </StackPanel>
                         <StackPanel Margin="5">
                             <ComboBox Width="150"
@@ -514,7 +595,7 @@
                 </Grid>
             </TabItem>
             
-            <TabItem Header="Документ"
+            <!--<TabItem Header="Документ"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
                 <Grid Background="{Binding Settings.AdditionalColor}">
@@ -540,18 +621,7 @@
                                 ToolTip="Сохранить документ">
                             <iconPacks:PackIconMaterial Kind="ContentSaveOutline"
                                                         Width="20"
-                                                        Height="20"/>
-                        </Button>
-                        <Button CommandParameter="LoadTemplate"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                ToolTip="Открыть шаблон">
-                            <iconPacks:PackIconMaterial Kind="BookOpenOutline"
-                                                        Width="20"
-                                                        Height="20"/>
+                                                        Height="20" />
                         </Button>
                         <Button CommandParameter="SaveTemplateToArchive"
                                 Command="{Binding Cmd}"
@@ -599,9 +669,9 @@
                         </Button>
                     </StackPanel>
                 </Grid>
-            </TabItem>
+            </TabItem>-->
             
-            <TabItem Header="Каталог"
+            <!--<TabItem Header="Каталог"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
                 <Grid Background="{Binding Settings.AdditionalColor}">
@@ -618,27 +688,17 @@
                                 Grid.Column="0"
                                 Grid.Row="0">
                         <Button CommandParameter="EditCurrencies"
-                            Command="{Binding Cmd}"
-                            Height="35"
-                            Width="35"
-                            Margin="3"
-                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                            ToolTip="Валюты">
-                            <iconPacks:PackIconMaterial Kind="CashMultiple"
-                                                    Width="20"
-                                                    Height="20"/>
-                        </Button>
-                        <Button CommandParameter="EditCategories"
                                 Command="{Binding Cmd}"
                                 Height="35"
                                 Width="35"
                                 Margin="3"
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                ToolTip="Редактор категорий">
-                            <iconPacks:PackIconPicolIcons Kind="Category"
-                                                    Width="20"
-                                                    Height="20"/>
+                                ToolTip="Валюты">
+                            <iconPacks:PackIconMaterial Kind="CashMultiple"
+                                                        Width="20"
+                                                        Height="20" />
                         </Button>
+
                         <Button CommandParameter="SaveCatalog"
                                 Command="{Binding Cmd}"
                                 Height="35"
@@ -647,11 +707,10 @@
                                 Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
                                 ToolTip="Сохранить всё">
                             <iconPacks:PackIconMaterial Kind="ContentSaveAllOutline"
-                                                    Width="20"
-                                                    Height="20"/>
+                                                        Width="20"
+                                                        Height="20" />
                         </Button>
                     </StackPanel>
-
                     <TextBox x:Name="SearchString" Text="{Binding CatalogFilter.KeyString, UpdateSourceTrigger=PropertyChanged}" 
                              mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
                              TextChanged="SearchString_TextChanged"
@@ -675,7 +734,7 @@
                                                     Height="20" />
                     </Button>
                 </Grid>
-            </TabItem>
+            </TabItem>-->
             
             <TabItem Header="Архив"
                      mah:TabControlHelper.Underlined="TabPanel"
@@ -792,11 +851,10 @@
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="0">
-                            <Setter Property="Visibility" Value="Visible"/>
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="1">
-                            <Setter Property="Visibility" Value="Visible"/>
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}"
+                                     Value="0">
+                            <Setter Property="Visibility"
+                                    Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -965,7 +1023,7 @@
 
         <!--#region Каталог -->
         
-        <Grid Grid.Row="1">
+        <!--<Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350" MaxWidth="350" MinWidth="150"/>
                 <ColumnDefinition Width="2"/>
@@ -977,7 +1035,7 @@
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="2">
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="1">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -1081,7 +1139,7 @@
                                   MinWidth="150"
                                   AlternationCount="2"
                                   IsReadOnly="True">
-                            <!--Тут будет зебра, но потом-->
+                            --><!--Тут будет зебра, но потом-->
                             <!--<DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
                                     <Style.Triggers>
@@ -1093,7 +1151,7 @@
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
-                            </DataGrid.RowStyle>-->
+                            </DataGrid.RowStyle>--><!--
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="310" DisplayIndex="0">
                                     <DataGridTextColumn.ElementStyle>
@@ -1145,7 +1203,7 @@
                                   AllowDrop="True"
                                   Drop="DataGrid_Drop">
                             <DataGrid.Columns>
-                                <!--<DataGridTextColumn Header="Название"
+                                --><!--<DataGridTextColumn Header="Название"
                                                     Binding="{Binding Name}"
                                                     DisplayIndex="0"
                                                     Width="250"
@@ -1156,7 +1214,7 @@
                                             <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
-                                </DataGridTextColumn>-->
+                                </DataGridTextColumn>--><!--
                                 <DataGridTemplateColumn Header="Название" DisplayIndex="0" CellTemplate="{StaticResource GroupName}"/>
                                 <DataGridTextColumn Binding="{Binding Nomenclatures.Count}" IsReadOnly="True" DisplayIndex="1"/>
                                 <DataGridTemplateColumn DisplayIndex="2" CellTemplate="{StaticResource DelNomGroupButton}"/>
@@ -1208,7 +1266,7 @@
                     </Grid>
                 </AdornerDecorator>
             </GroupBox>
-        </Grid>
+        </Grid>-->
 
         <!--#endregion Каталог -->
 
@@ -1219,10 +1277,10 @@
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="3">
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="1">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="4">
+                        <DataTrigger Binding="{Binding SelectedIndex, ElementName=tabControl}" Value="2">
                             <Setter Property="Visibility" Value="Visible" />
                         </DataTrigger>
                     </Style.Triggers>

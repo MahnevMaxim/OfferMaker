@@ -22,6 +22,7 @@ namespace OfferMaker
         int actualPricePeriod = 30;
         Image image;
         ObservableCollection<Image> images = new ObservableCollection<Image>();
+        bool isDelete;
 
         public int Id { get; set; }
 
@@ -192,6 +193,19 @@ namespace OfferMaker
         /// </summary>
         [JsonIgnore] 
         public bool IsPriceActual { get; set; }
+
+        /// <summary>
+        /// Помечена как удалённая.
+        /// </summary>
+        public bool IsDelete 
+        { 
+            get => isDelete; 
+            set
+            {
+                isDelete = value;
+                if (value) SetIsEdit();
+            }
+        }
 
         /// <summary>
         /// Была ли номенклатура отредактирована.

@@ -20,6 +20,7 @@ namespace OfferMaker
         string keyString;
         Category selectedCat;
         Catalog catalog;
+        List<Nomenclature> deletedNoms = new List<Nomenclature>();
 
         public int CategoryId { get; set; }
 
@@ -50,9 +51,10 @@ namespace OfferMaker
             get
             {
                 if (FilterMode == FilterMode.WithoutCat)
-                    return new ObservableCollection<Nomenclature>(Nomenclatures.Where(n => n.CategoryGuid == null).ToList());
+                    return new ObservableCollection<Nomenclature>(Nomenclatures.Where(n => n.CategoryGuid == null && !n.IsDelete).ToList());
                 if (FilterMode == FilterMode.Category)
                     return selectedCat.Nomenclatures;
+                //return new ObservableCollection<Nomenclature>(Nomenclatures.Where(n => !n.IsDelete).ToList());
                 return Nomenclatures;
             }
         }
@@ -65,10 +67,14 @@ namespace OfferMaker
 
         internal void Remove(Nomenclature nomenclature)
         {
+            nomenclature.IsDelete=true;
+            deletedNoms.Add(nomenclature);
             Nomenclatures.Remove(nomenclature);
             catalog.RemoveNomFromCat(nomenclature);
-            OnPropertyChanged(nameof(FilteredNomenclatures));
+            //OnPropertyChanged(nameof(FilteredNomenclatures));
         }
+
+        public List<Nomenclature> GetDeletedNoms() => deletedNoms;
 
         internal void Clone(Nomenclature nomenclature)
         {

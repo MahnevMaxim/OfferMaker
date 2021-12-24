@@ -19,13 +19,7 @@ namespace OfferMaker.ViewModels
         public override void InitializeViewModel()
         {
             modelMain = (Main)model;
-            NomToCatDropHandler = new NomToCatDropHandler();
-            NomToCatDragHandler = new NomToCatDragHandler();
         }
-
-        public NomToCatDropHandler NomToCatDropHandler { get; set; }
-
-        public NomToCatDragHandler NomToCatDragHandler { get; set; }
 
         #region Fly menu
 
@@ -66,72 +60,6 @@ namespace OfferMaker.ViewModels
         public RelayCommand FlyOffersFilter { get => new RelayCommand(obj => IsOffersFilterOpen = true); }
 
         #endregion Fly menu
-
-        #region Catalog
-
-        public ObservableCollection<Nomenclature> Nomenclatures
-        {
-            get => modelMain.Catalog.FilteredNomenclatures;
-            set
-            {
-                modelMain.Catalog.FilteredNomenclatures = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<NomenclatureGroup> NomenclatureGroups
-        {
-            get => modelMain.Catalog.NomenclatureGroups;
-            set
-            {
-                modelMain.Catalog.NomenclatureGroups = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public NomenclatureGroup SelectedNomenclatureGroup
-        {
-            get => modelMain.Catalog.SelectedNomenclatureGroup;
-            set
-            {
-                modelMain.Catalog.SelectedNomenclatureGroup = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollection<Category> CategoriesTree
-        {
-            get => modelMain.Catalog.CategoriesTree;
-            set
-            {
-                modelMain.Catalog.CategoriesTree = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public Category SelectedCat
-        {
-            get => modelMain.Catalog.CatalogFilter.SelectedCat;
-            set
-            {
-                modelMain.Catalog.CatalogFilter.SelectedCat = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public CatalogFilter CatalogFilter
-        {
-            get => modelMain.Catalog.CatalogFilter;
-            set
-            {
-                modelMain.Catalog.CatalogFilter = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string SearchStringInCatalog { set => modelMain.Catalog.SearchStringInCatalog = value; }
-
-        #endregion Catalog
 
         #region Settings
 

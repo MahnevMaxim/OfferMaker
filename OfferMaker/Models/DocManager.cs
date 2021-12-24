@@ -10,12 +10,15 @@ using System.Windows.Documents;
 using System.Drawing.Printing;
 using System.IO;
 using Shared;
+using System.Windows.Forms;
 
 namespace OfferMaker
 {
     public class DocManager
     {
         Constructor constructor;
+        string defaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Offer Maker Projects\\";
+        string omfFilter = "Offer Maker file | *.omf";
 
         #region Singleton
 
@@ -49,7 +52,7 @@ namespace OfferMaker
 
         internal void SaveToPdf(FixedDocument fixedDoc)
         {
-            PrintDialog printDialog = new PrintDialog();
+            System.Windows.Controls.PrintDialog printDialog = new System.Windows.Controls.PrintDialog();
             var serv = new LocalPrintServer();
             printDialog.PrintQueue = serv.GetPrintQueue("Microsoft Print to PDF");
             
@@ -85,20 +88,35 @@ namespace OfferMaker
         }
 
         internal void SaveTemplateToArchive() => SaveOffer(true);
-        
-        internal void LoadTemplate()
-        {
-            throw new NotImplementedException();
-        }
 
         internal void SaveOfferToFile()
         {
-            throw new NotImplementedException();
+            if (!Directory.Exists(defaultPath))
+            {
+                Directory.CreateDirectory(defaultPath);
+            }
+
+            var sfd = new SaveFileDialog();
+            sfd.Filter = omfFilter;
+            sfd.FileName = String.Format("Offer from {0}", DateTime.Today.ToShortDateString());
+            sfd.InitialDirectory = defaultPath;
+            if (sfd.ShowDialog()==DialogResult.OK)
+            {
+                Helpers.SaveObject(sfd.FileName,Global.Offer);
+            }
         }
 
         internal void OpenOfferFromFile()
         {
-            throw new NotImplementedException();
+            var ofd = new OpenFileDialog();
+            ofd.Filter = omfFilter;
+            ofd.InitialDirectory = defaultPath;
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                Offer offer = Helpers.InitObject<Offer>(ofd.FileName);
+                Offer offer_ = Utils.RestoreOffer(offer, Global.Users);
+                Global.Constructor.LoadOfferFromArchive(offer_);
+            }
         }
 
         /// <summary>

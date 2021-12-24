@@ -12,10 +12,11 @@ namespace Shared
     {
         public int Id { get; set; }
 
+        public string Guid { get; set; }
+
         [Required]
         public string OfferName { get; set; }
 
-        [Required]
         public int OfferCreatorId { get; set; }
 
         public int ManagerId { get; set; }

@@ -133,10 +133,13 @@ namespace API.Migrations
                     b.Property<string>("Images")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 22, 14, 40, 18, 322, DateTimeKind.Utc).AddTicks(5794));
+                        .HasDefaultValue(new DateTime(2021, 12, 24, 6, 6, 56, 78, DateTimeKind.Utc).AddTicks(2412));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -186,7 +189,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 22, 14, 40, 18, 325, DateTimeKind.Utc).AddTicks(9339));
+                        .HasDefaultValue(new DateTime(2021, 12, 24, 6, 6, 56, 81, DateTimeKind.Utc).AddTicks(4532));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -197,6 +200,9 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Discount")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Guid")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCreateByCostPrice")

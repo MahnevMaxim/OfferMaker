@@ -29,6 +29,7 @@ namespace OfferMaker
         User manager;
 
         int id;
+        string guid;
         User offerCreator;
         Currency currency;
         int currencyId;
@@ -53,6 +54,16 @@ namespace OfferMaker
             set
             {
                 id = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Guid
+        {
+            get => guid;
+            set
+            {
+                guid = value;
                 OnPropertyChanged();
             }
         }

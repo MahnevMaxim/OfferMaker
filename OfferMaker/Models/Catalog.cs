@@ -144,7 +144,70 @@ namespace OfferMaker
             CatalogFilter = new CatalogFilter(this);
         }
 
+        /// <summary>
+        /// Запуск редактора валют.
+        /// </summary>
+        public void EditCurrencies()
+        {
+            new CurrenciesView(new ObservableCollection<Currency>(Global.Currencies)).ShowDialog();
+            OnPropertyChanged(nameof(Global.Main.UsingCurrencies));
+        }
+
+        /// <summary>
+        /// Сохраняем каталог.
+        /// </summary>
+        public void SaveCatalog() => Global.Main.SaveCatalog();
+
+        /// <summary>
+        /// Переустанавливаем родителей у элементов коллекции и распрямляем дерево.
+        /// </summary>
+        /// <returns></returns>
+        private ObservableCollection<Category> GetPreparedCategories()
+        {
+            SetParents(CategoriesTree, null, null);
+            return GetFlattenTree();
+        }
+
+        /// <summary>
+        /// Обходим дерево и устанавливаем родителей, во время редактирования и перетаскиваний всё может перемешаться.
+        /// </summary>
+        /// <param name="categoriesTree"></param>
+        /// <param name="parentId"></param>
+        private void SetParents(ObservableCollection<Category> categoriesTree, int? parentId, string parentGuid)
+        {
+            categoriesTree.ToList().ForEach(c =>
+            {
+                c.ParentId = parentId;
+                c.ParentGuid = parentGuid;
+                SetParents(c.Childs, c.Id, c.Guid);
+            });
+        }
+
+        /// <summary>
+        /// Распрямляем дерево.
+        /// </summary>
+        /// <returns></returns>
+        private ObservableCollection<Category> GetFlattenTree()
+        {
+            List<Category> flattenTree = new List<Category>();
+            foreach (var cat in CategoriesTree)
+            {
+                var subCats = TreeWalker.Walk<Category>(cat, c => c.Childs).ToList();
+                if (subCats.Count > 0)
+                {
+                    flattenTree.AddRange(subCats);
+                }
+            }
+            ObservableCollection<Category> resColl = new ObservableCollection<Category>();
+            flattenTree.ForEach(f => resColl.Add(f));
+            return resColl;
+        }
+
         #region Categories
+
+        public void ShowAllCategory() => CatalogFilter.SetMode(FilterMode.All);
+
+        public void ShowWithoutCategory() => CatalogFilter.SetMode(FilterMode.WithoutCat);
 
         internal void RemoveNomFromCat(Nomenclature nomenclature)
         {
@@ -163,10 +226,6 @@ namespace OfferMaker
             SetChilds(CategoriesTree, roots);
         }
 
-        internal void ShowAllCategory() => CatalogFilter.SetMode(FilterMode.All);
-
-        internal void ShowWithoutCategory() => CatalogFilter.SetMode(FilterMode.WithoutCat);
-
         private void SetNOmenclatureCache(Category ch) => Nomenclatures.Where(n => n.CategoryGuid == ch.Guid).ToList().ForEach(n => ch.Nomenclatures.Add(n));
 
         private void SetChilds(ObservableCollection<Category> targetCollection, List<Category> childs)
@@ -180,20 +239,14 @@ namespace OfferMaker
             }
         }
 
-        internal void AddCategory() => CategoriesTree.Add(new Category(newCatName));
-
-        public void EditCategories()
-        {
-            CategoriesEditor editor = new CategoriesEditor(CategoriesTree);
-            MvvmFactory.CreateWindow(editor, new ViewModels.CategoriesEditorViewModel(), new Views.CategoriesEditor(), ViewMode.ShowDialog);
-        }
+        public void AddCategory() => CategoriesTree.Add(new Category(newCatName));
 
         /// <summary>
         /// Редактирование заголовка категории.
         /// </summary>
         /// <param name="category"></param>
         /// <param name="position"></param>
-        internal void EditCategory(Category category, Point position)
+        public void EditCategory(Category category, Point position)
         {
             SimpleViews.CategoryEditor f = new SimpleViews.CategoryEditor(category);
             f.Top = position.Y + 10;
@@ -205,7 +258,7 @@ namespace OfferMaker
         /// Удаление категории.
         /// </summary>
         /// <param name="category"></param>
-        internal void DelCategory(Category category)
+        public void DelCategory(Category category)
         {
             DeleteCatFromTree(category, CategoriesTree);
             SetCatGuidNull(category);
@@ -254,6 +307,23 @@ namespace OfferMaker
         #region Nomenclature
 
         /// <summary>
+        /// Добавление номенклатуры в группу.
+        /// </summary>
+        /// <param name="nomenclature"></param>
+        /// <returns></returns>
+        public void AddNomenclatureToGroup(Nomenclature nomenclature)
+        {
+            if (SelectedNomenclatureGroup != null)
+            {
+                SelectedNomenclatureGroup.Nomenclatures.Add(nomenclature);
+            }
+            else
+            {
+                OnSendMessage("Не выбрана группа, в которую нужно добавить номенклатуру");
+            }
+        }
+
+        /// <summary>
         /// Все номенклатуры.
         /// </summary>
         /// <returns></returns>
@@ -263,7 +333,7 @@ namespace OfferMaker
         /// Открытие карточки номенклатуры.
         /// </summary>
         /// <param name="nomenclature"></param>
-        internal void OpenNomenclurueCard(Nomenclature nomenclature)
+        public void OpenNomenclurueCard(Nomenclature nomenclature)
         {
             MvvmFactory.CreateWindow(new NomenclurueCard(nomenclature, this), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
         }
@@ -271,7 +341,7 @@ namespace OfferMaker
         /// <summary>
         /// Добавление номенклатуры.
         /// </summary>
-        internal void AddNomenclature()
+        public void AddNomenclature()
         {
             Nomenclature nomenclature = new Nomenclature();
             Nomenclatures.Add(nomenclature);
@@ -282,48 +352,30 @@ namespace OfferMaker
         /// Удаление номенклатуры из каталога.
         /// </summary>
         /// <param name="nomenclature"></param>
-        internal void DeleteNomenclurue(Nomenclature nomenclature) => CatalogFilter.Remove(nomenclature);
+        public void DeleteNomenclurue(Nomenclature nomenclature) => CatalogFilter.Remove(nomenclature);
 
         /// <summary>
         /// Клонирование номенклатуры.
         /// </summary>
         /// <param name="nomenclature"></param>
-        internal void CloneNomenclurue(Nomenclature nomenclature) => CatalogFilter.Clone(nomenclature);
+        public void CloneNomenclurue(Nomenclature nomenclature) => CatalogFilter.Clone(nomenclature);
 
         /// <summary>
         /// Удаление группы номенклатур.
         /// </summary>
         /// <param name="nomenclatureGroup"></param>
-        internal void DelNomGroup(NomenclatureGroup nomenclatureGroup) => NomenclatureGroups.Remove(nomenclatureGroup);
+        public void DelNomGroup(NomenclatureGroup nomenclatureGroup) => NomenclatureGroups.Remove(nomenclatureGroup);
 
         /// <summary>
         /// Добавление группы номенклатур.
         /// </summary>
-        internal void AddNomenclatureGroup() => NomenclatureGroups.Add(new NomenclatureGroup() { Name = "Новая группа" });
+        public void AddNomenclatureGroup() => NomenclatureGroups.Add(new NomenclatureGroup() { Name = "Новая группа" });
 
         /// <summary>
         /// Удаление номенклатуры из группы.
         /// </summary>
         /// <param name="nomenclature"></param>
-        internal void DelNomFromNomenclatureGroup(Nomenclature nomenclature) => SelectedNomenclatureGroup.Nomenclatures.Remove(nomenclature);
-
-        /// <summary>
-        /// Добавление номенклатуры в группу.
-        /// </summary>
-        /// <param name="nomenclature"></param>
-        /// <returns></returns>
-        internal CallResult AddNomenclatureToGroup(Nomenclature nomenclature)
-        {
-            if (SelectedNomenclatureGroup != null)
-            {
-                SelectedNomenclatureGroup.Nomenclatures.Add(nomenclature);
-                return new CallResult();
-            }
-            else
-            {
-                return new CallResult() { Error = new Error("Не выбрана группа, в которую нужно добавить номенклатуру") };
-            }
-        }
+        public void DelNomFromNomenclatureGroup(Nomenclature nomenclature) => SelectedNomenclatureGroup.Nomenclatures.Remove(nomenclature);
 
         #endregion Nomenclature
     }

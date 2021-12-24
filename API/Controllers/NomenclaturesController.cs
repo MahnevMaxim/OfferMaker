@@ -25,7 +25,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Nomenclature>>> GetNomenclatures()
         {
-            return await _context.Nomenclatures.ToListAsync();
+            return await _context.Nomenclatures.Where(n=>!n.IsDelete).ToListAsync();
         }
 
         // GET: api/Nomenclatures/5

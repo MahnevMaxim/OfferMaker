@@ -461,7 +461,7 @@ namespace OfferMaker
         /// <param name="nomWrapper"></param>
         internal void AddDescriptionToNomWrapper(NomWrapper nomWrapper)
         {
-            nomWrapper.Nomenclature.Descriptions.Add(new Description() { Text = "Новое описание" });
+            nomWrapper.Nomenclature.Descriptions.Add(new Description() { Text = "Новое описание", IsEnabled = true });
             OpenDescriptions(nomWrapper);
         }
 

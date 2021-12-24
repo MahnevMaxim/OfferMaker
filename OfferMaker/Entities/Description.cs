@@ -10,7 +10,7 @@ namespace OfferMaker
     public class Description : BaseEntity, IDescription
     {
         string text;
-        bool isEnabled = true;
+        bool isEnabled;
         bool isComment;
 
         public string Text

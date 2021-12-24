@@ -52,8 +52,9 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </Paragraph>
-
-                    <!--краткий-->
+                    
+                    <!--#region краткий -->
+                    
                     <Paragraph Margin="0">
                         <local:ShortCalculateBegin Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}"/>
                     </Paragraph>
@@ -74,8 +75,11 @@
                     <Paragraph Margin="0" x:Name="ShortEnd">
                         <local:ShortCalculateEnd  Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}"/>
                     </Paragraph>
+                    
+                    <!--#endregion-->
 
-                    <!--краткий опции-->
+                    <!--#region краткий опции -->
+                    
                     <Paragraph Margin="0" >
                         <local:ShortCalculateOptionBegin Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}"/>
                     </Paragraph>
@@ -96,8 +100,11 @@
                     <Paragraph Margin="0" x:Name="ShortOptionEnd">
                         <local:ShortCalculateOptionEnd Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}"/>
                     </Paragraph>
+                    
+                   <!--#endregion-->
 
-                    <!--Дополнительная информация-->
+                    <!--#region Дополнительная информация -->
+                    
                     <Paragraph x:Name="InformBlockPDF">
                         <ItemsControl Margin="0" ItemsSource="{Binding OfferInfoBlocks}">
                             <ItemsControl.ItemTemplate>
@@ -107,13 +114,18 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </Paragraph>
+                    
+                    <!--#endregion-->
 
-                    <!--Менеджер-->
+                    <!--#region Менеджер-->
+                    
                     <Paragraph>
                         <local:EmployeePDF/>
                     </Paragraph>
 
-                    <!--Детальный расчёт-->
+                    <!--#endregion-->
+
+                    <!--#region Детальный расчёт-->
                     <Paragraph Margin="0" >
                         <local:DetailCalculateBegin  Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}"/>
                     </Paragraph>
@@ -145,7 +157,9 @@
                         <local:DetailCalculateEnd Visibility="{Binding IsRequiredGroups, Converter={StaticResource BoolToVis}}"/>
                     </Paragraph>
 
-                    <!--детальный опции-->
+                    <!--#endregion-->
+
+                    <!--#region детальный опции-->
                     <Paragraph Margin="0" BreakPageBefore="False">
                         <local:DetailCalculateBeginOption Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}"/>
                     </Paragraph>
@@ -175,8 +189,11 @@
                         <local:DetailCalculateEndOption Visibility="{Binding IsRequiredOptions, Converter={StaticResource BoolToVis}}"/>
                     </Paragraph>
 
-                    <!--Дополнительная информация-->
-                    <Paragraph x:Name="InformBlockPDF2">
+                    <!--#endregion-->
+
+                    <!--#region  Дополнительная информация-->
+                    
+                    <!--<Paragraph x:Name="InformBlockPDF2">
                         <ItemsControl ItemsSource="{Binding OfferInfoBlocks}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -184,12 +201,13 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                    </Paragraph>
+                    </Paragraph>-->
 
-                    <!--Менеджер-->
-                    <Paragraph>
+                    <!--#region Менеджер-->
+                    
+                    <!--<Paragraph>
                         <local:EmployeePDF/>
-                    </Paragraph>
+                    </Paragraph>-->
 
                     <Paragraph Margin="0" x:Name="adv2">
                         <ItemsControl ItemsSource="{Binding AdvertisingsDown}">
@@ -202,6 +220,8 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </Paragraph>
+
+                    <!--#endregion-->
 
                 </FlowDocument>
             </FlowDocumentScrollViewer>

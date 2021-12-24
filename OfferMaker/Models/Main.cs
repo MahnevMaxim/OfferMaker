@@ -154,60 +154,21 @@ namespace OfferMaker
 
         #region Fields
 
-        //ObservableCollection<Category> categories;
-        //ObservableCollection<Nomenclature> nomenclatures;
-        //ObservableCollection<NomenclatureGroup> nomenclatureGroups;
         public ObservableCollection<Offer> offers;
 
         #endregion Fields
 
         #region Initialization Main
 
-        async internal override void Run()
-        {
-            MvvmFactory.RegisterModel(this, Catalog);
-            MvvmFactory.RegisterModel(this, Constructor);
-        }
-
+        async internal override void Run() => MvvmFactory.RegisterModel(this, Constructor);
+        
         #endregion Initialization Main
 
         #region Commands
 
         #region Catalog
 
-        public void ShowAllCategory() => Catalog.ShowAllCategory();
-
-        public void ShowWithoutCategory() => Catalog.ShowWithoutCategory();
-
-        public void AddCategory() => Catalog.AddCategory();
-
-        public void EditCategories() => Catalog.EditCategories();
-
-        public void OpenNomenclurueCard(Nomenclature nomenclature) => Catalog.OpenNomenclurueCard(nomenclature);
-
-        public void DeleteNomenclurue(Nomenclature nomenclature) => Catalog.DeleteNomenclurue(nomenclature);
-
-        public void CloneNomenclurue(Nomenclature nomenclature) => Catalog.CloneNomenclurue(nomenclature);
-
-        public void DelNomGroup(NomenclatureGroup nomenclatureGroup) => Catalog.DelNomGroup(nomenclatureGroup);
-
-        public void DelNomFromNomenclatureGroup(Nomenclature nomenclature) => Catalog.DelNomFromNomenclatureGroup(nomenclature);
-
-        public void AddNomenclature() => Catalog.AddNomenclature();
-
-        public void AddNomenclatureGroup() => Catalog.AddNomenclatureGroup();
-
-        public void AddNomenclatureToGroup(Nomenclature nomenclature)
-        {
-            CallResult cr = Catalog.AddNomenclatureToGroup(nomenclature);
-            if (!cr.Success) OnSendMessage(cr.Error.Message);
-        }
-
-        public void EditCurrencies()
-        {
-            new CurrenciesView(Currencies).ShowDialog();
-            OnPropertyChanged(nameof(UsingCurrencies));
-        }
+        public void OpenCatalog() => MvvmFactory.CreateWindow(Catalog, new ViewModels.CatalogViewModel(), new Views.Catalog(), ViewMode.ShowDialog);
 
         /// <summary>
         /// Сохраняем каталог.
@@ -374,11 +335,11 @@ namespace OfferMaker
 
         private void ShowArchive()
         {
-            if(CurrentMainSelectedTabIndex==3)
+            if(CurrentMainSelectedTabIndex==1)
             {
                 ArchiveFilter.SetArchiveMode(ArchiveMode.ShowOffers);
             }
-            else if(CurrentMainSelectedTabIndex==4)
+            else if(CurrentMainSelectedTabIndex==2)
             {
                 ArchiveFilter.SetArchiveMode(ArchiveMode.ShowTemplate);
             }
@@ -413,8 +374,6 @@ namespace OfferMaker
         public void SaveToPdfWithoutBanner() => DocManager.SaveToPdfWithoutBanner();
 
         public void SaveTemplateToArchive() => DocManager.SaveTemplateToArchive();
-
-        public void LoadTemplate() => DocManager.LoadTemplate();
 
         public void SaveOfferToFile() => DocManager.SaveOfferToFile();
 
