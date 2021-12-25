@@ -11,6 +11,10 @@ namespace Shared
     {
         public int Id { get; set; }
 
+        public string Email { get; set; }
+
+        public string Pwd { get; set; }
+
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -20,8 +24,6 @@ namespace Shared
         public string PhoneNumber1 { get; set; }
 
         public string PhoneNumber2 { get; set; }
-
-        public string Email { get; set; }
 
         public string PhotoPath { get; set; }
     }

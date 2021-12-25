@@ -90,7 +90,7 @@ namespace OfferMaker
         {
             try
             {
-                var response = await client.UsersAllAsync();
+                var response = await client.GetUsersAsync();
                 ObservableCollection<User> res = Helpers.CloneObject<ObservableCollection<User>>(response);
                 return new CallResult<ObservableCollection<User>>() { Data = res };
             }

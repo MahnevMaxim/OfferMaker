@@ -22,14 +22,14 @@ namespace API.Controllers
         }
 
         // GET: api/Users
-        [HttpGet]
+        [HttpGet(Name = nameof(GetUsers))]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }
 
         // GET: api/Users/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(GetUser))]
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -44,8 +44,8 @@ namespace API.Controllers
 
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        [HttpPut("{id}", Name = nameof(EditUser))]
+        public async Task<IActionResult> EditUser(int id, User user)
         {
             if (id != user.Id)
             {
@@ -75,8 +75,8 @@ namespace API.Controllers
 
         // POST: api/Users
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        [HttpPost(Name = nameof(AddUser))]
+        public async Task<ActionResult<User>> AddUser(User user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -85,7 +85,7 @@ namespace API.Controllers
         }
 
         // DELETE: api/Users/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = nameof(DeleteUser))]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);

@@ -84,7 +84,7 @@ namespace DatabaseExporter
                     Email = email,
                     PhotoPath = id + ".png"
                 };
-                var res = await client.UsersPOSTAsync(user_);
+                var res = await client.AddUserAsync(user_);
             }
             MessageBox.Show("пользователи добавлены");
         }

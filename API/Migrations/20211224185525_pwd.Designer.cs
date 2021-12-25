@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20211224185525_pwd")]
+    partial class pwd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,7 +141,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 25, 9, 7, 32, 224, DateTimeKind.Utc).AddTicks(9619));
+                        .HasDefaultValue(new DateTime(2021, 12, 24, 18, 55, 24, 293, DateTimeKind.Utc).AddTicks(3638));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -189,7 +191,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 25, 9, 7, 32, 228, DateTimeKind.Utc).AddTicks(1054));
+                        .HasDefaultValue(new DateTime(2021, 12, 24, 18, 55, 24, 296, DateTimeKind.Utc).AddTicks(4044));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -255,10 +257,10 @@ namespace API.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -277,10 +279,6 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Pwd")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

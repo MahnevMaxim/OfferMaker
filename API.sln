@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseExporter", "Databas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GongSolutions.WPF.DragDrop", "..\gong-wpf-dragdrop\src\GongSolutions.WPF.DragDrop\GongSolutions.WPF.DragDrop.csproj", "{F83B3524-7A73-43CE-A9F8-A6029DFD972E}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApiTests", "ApiTests\ApiTests.csproj", "{5E728A9D-2F0A-40F6-836F-EC3BB10F7F58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiClientCodeGen", "ApiClientCodeGen\ApiClientCodeGen.csproj", "{370C1891-67AD-4F35-95A5-27F560E6269E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{F83B3524-7A73-43CE-A9F8-A6029DFD972E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F83B3524-7A73-43CE-A9F8-A6029DFD972E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F83B3524-7A73-43CE-A9F8-A6029DFD972E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E728A9D-2F0A-40F6-836F-EC3BB10F7F58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E728A9D-2F0A-40F6-836F-EC3BB10F7F58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E728A9D-2F0A-40F6-836F-EC3BB10F7F58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E728A9D-2F0A-40F6-836F-EC3BB10F7F58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{370C1891-67AD-4F35-95A5-27F560E6269E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{370C1891-67AD-4F35-95A5-27F560E6269E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{370C1891-67AD-4F35-95A5-27F560E6269E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{370C1891-67AD-4F35-95A5-27F560E6269E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
