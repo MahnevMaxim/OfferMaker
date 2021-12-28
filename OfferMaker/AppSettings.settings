@@ -23,5 +23,14 @@
     <Setting Name="ImageManagerDir" Type="System.String" Scope="User">
       <Value Profile="(Default)">cache</Value>
     </Setting>
+    <Setting Name="IsRememberMe" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="AccessToken" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Login" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

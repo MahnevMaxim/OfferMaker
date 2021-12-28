@@ -10,18 +10,22 @@ using System.Collections.Specialized;
 using System.Net.Http;
 using System.IO;
 using Microsoft.AspNetCore.Http.Internal;
+using System.Net.Http.Headers;
 
 namespace OfferMaker
 {
     class ServerData
     {
         Client client;
-        System.Net.Http.HttpClient httpClient;
+        HttpClient httpClient;
         string apiEndpoint = Global.apiEndpoint;
 
-        public ServerData()
+
+        public ServerData(string accessToken)
         {
-            httpClient = new System.Net.Http.HttpClient();
+            httpClient = new HttpClient();
+            if(accessToken!=null)
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             client = new Client(apiEndpoint, httpClient);
         }
 
@@ -90,7 +94,7 @@ namespace OfferMaker
         {
             try
             {
-                var response = await client.GetUsersAsync();
+                var response = await client.UsersGetAsync();
                 ObservableCollection<User> res = Helpers.CloneObject<ObservableCollection<User>>(response);
                 return new CallResult<ObservableCollection<User>>() { Data = res };
             }
@@ -246,6 +250,22 @@ namespace OfferMaker
             {
                 Log.Write(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить номенклатуры на сервере.") };
+            }
+        }
+
+        async internal Task<CallResult> SavePosition(Position position)
+        {
+            try
+            {
+                ApiLib.Position positionCopy = Helpers.CloneObject<ApiLib.Position>(position);
+                ApiLib.Position positionRes = await client.AddPositionAsync(positionCopy);
+                position.Id = positionRes.Id;
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить должность на сервере.") };
             }
         }
 

@@ -17,6 +17,8 @@ namespace Shared
         CanSaveTemplate,
         CanUseManager,
         CanExportOfferWithOldPrice,
-        CanMakeOfferWithCostPrice
+        CanMakeOfferWithCostPrice,
+        CanSeeAllOffers,
+        CanAll
     }
 }

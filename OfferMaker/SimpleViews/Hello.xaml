@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
 
         <Image Source="{Binding LogoPath}" Margin="10" Stretch="None" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <TextBox Margin="10"
+        <TextBox x:Name="loginTextBox" Margin="10"
                  Grid.Row="1"
                  FontSize="14"
                  HorizontalContentAlignment="Stretch"
@@ -30,16 +30,17 @@
                  mah:TextBoxHelper.IsWaitingForData="True"
                  mah:TextBoxHelper.Watermark="Логин"
                  mah:TextBoxHelper.WatermarkAlignment="Left"/>
-        <PasswordBox Margin="10"
+        <PasswordBox x:Name="passwordTextBox"
+                     Margin="10"
                      FontSize="14"
                      Grid.Row="2"
                      mah:TextBoxHelper.IsWaitingForData="True"
                      mah:TextBoxHelper.Watermark="Пароль"
                      Password=""
                      Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
-        <StackPanel Orientation="Horizontal" Grid.Row="3">
-            <CheckBox Content="запомнить"
-                  Margin="15,5" FontSize="14"/>
+        <StackPanel Orientation="Horizontal"
+                    Margin="12,0"
+                    Grid.Row="3">
             <Button Style="{StaticResource MahApps.Styles.Button.Square}" 
                     Click="ButtonSettings_Click"
                     Width="26"
@@ -48,6 +49,10 @@
                                                           Width="13"
                                                           Height="13"/>
             </Button>
+            <CheckBox x:Name="isRememberMeCheckBox"
+                      Content="запомнить"
+                      Margin="15,5"
+                      FontSize="14" />
         </StackPanel>
         
         <Button Content="Войти"

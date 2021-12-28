@@ -16,17 +16,17 @@ namespace OfferMaker
         Main main;
         DataRepository dataRepository;
         User user;
-        ObservableCollection<User> managers = new ObservableCollection<User>();
         ObservableCollection<User> users;
-
         ObservableCollection<Category> categories;
         ObservableCollection<Nomenclature> nomenclatures;
         ObservableCollection<NomenclatureGroup> nomenclatureGroups;
         ObservableCollection<Offer> offers;
         ObservableCollection<Currency> currencies;
+        string token;
 
         async internal void Run()
         {
+            //настройка для логирования необработанных исключений
             AppDomain.CurrentDomain.UnhandledException +=
             new UnhandledExceptionEventHandler(Log.AppDomain_CurrentDomain_UnhandledException);
             System.Windows.Forms.Application.ThreadException += new ThreadExceptionEventHandler(Log.Application_ThreadException);
@@ -37,25 +37,36 @@ namespace OfferMaker
             main.Settings = Settings.GetInstance();
             main.Settings.SetSettings();
 
-            SimpleViews.Hello form = new SimpleViews.Hello();
-            var res = form.ShowDialog() ?? false;
-            if (res)
+            if (Settings.GetIsRememberMe())
             {
-                user = SimpleViews.Hello.User;
-                users = SimpleViews.Hello.Users;
+
             }
             else
             {
-                Application.Current.Shutdown();
-                return;
+                SimpleViews.Hello form = new SimpleViews.Hello();
+                var res = form.ShowDialog() ?? false;
+                if (res)
+                {
+                    Settings.SetIsRememberMe(SimpleViews.Hello.IsRememberMe);
+                    token = SimpleViews.Hello.AccessToken;
+                    Settings.SetToken(token);
+                    Settings.SetLogin(SimpleViews.Hello.Login.Trim());
+                }
+                else
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
             }
+
             await Init();
+
             MvvmFactory.CreateWindow(main, new ViewModels.MainViewModel(), new Views.MainWindow(), ViewMode.Show);
         }
 
         async private Task Init()
         {
-            main.DataRepository = DataRepository.GetInstance(); //инициализация хранилища
+            main.DataRepository = DataRepository.GetInstance(token); //инициализация хранилища
             dataRepository = main.DataRepository;
             await ReciveData(); //инициализация данных
             InitModules(); //инициализация модулей на основе данных
@@ -70,6 +81,13 @@ namespace OfferMaker
         async private Task ReciveData()
         {
             string errorMessage = "";
+
+            //получаем пользователей
+            var usersCr = await dataRepository.GetUsers();
+            if (usersCr.Success)
+                users = usersCr.Data;
+            else
+                errorMessage += usersCr.Error.Message + "\n";
 
             //получаем валюты
             var currenciesCr = await dataRepository.GetCurrencies();
@@ -119,13 +137,24 @@ namespace OfferMaker
                 MessageBox.Show("", errorMessage);
         }
 
+        /// <summary>
+        /// Инициализация основных моделей приложения.
+        /// </summary>
         private void InitModules()
         {
             //main
             main.Currencies = currencies;
-            main.User = user;
             main.Users = users;
-            users.ToList().ForEach(u => main.Managers.Add(u));
+            users.ToList().ForEach(u =>
+            {
+                u.PhotoPath = GetFullPath(u.PhotoPath);
+                main.Managers.Add(u);
+                if (u.Email.Trim() == Settings.GetLogin())
+                    main.User = u;
+            });
+
+            //public AdminPanel AdminPanel { get; set; }
+            main.AdminPanel = AdminPanel.GetInstance(users, main.User);
 
             //каталог
             SetNomGroups();
@@ -205,6 +234,12 @@ namespace OfferMaker
                     }
                 }
             }
+        }
+
+        private static string GetFullPath(string photoPath)
+        {
+            if (string.IsNullOrWhiteSpace(photoPath)) return AppDomain.CurrentDomain.BaseDirectory + "Images\\users\\no-profile-picture.png";
+            return AppDomain.CurrentDomain.BaseDirectory + "Images\\users\\" + photoPath;
         }
 
         #endregion Build Main

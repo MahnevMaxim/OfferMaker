@@ -39,8 +39,8 @@ namespace ApiTests.AccountControllerTests
                 var controller = new AccountController(context);
 
                 //Act  
-                var response = await controller.Token(context.Users.First().Email, context.Users.First().Pwd);
-                object res = ((JsonResult)response).Value;
+                var response = await controller.AccountGetToken(context.Users.First().Email, context.Users.First().Pwd);
+                object res = ((OkObjectResult)response).Value;
                 Type type = res.GetType();
                 string access_token = (string)type.GetProperty("access_token")?.GetValue(res, null);
                 string username = (string)type.GetProperty("username")?.GetValue(res, null);
@@ -60,13 +60,13 @@ namespace ApiTests.AccountControllerTests
                 var controller = new AccountController(context);
 
                 //Act  
-                var response1 = await controller.Token("", "");
-                var response2 = await controller.Token(null, null);
-                var response3 = await controller.Token("ww", "");
-                var response4 = await controller.Token("ww", "ee");
-                var response5 = await controller.Token(context.Users.First().Email, "");
-                var response6 = await controller.Token(context.Users.First().Email, null);
-                var response7 = await controller.Token(context.Users.First().Email, "ee");
+                var response1 = await controller.AccountGetToken("", "");
+                var response2 = await controller.AccountGetToken(null, null);
+                var response3 = await controller.AccountGetToken("ww", "");
+                var response4 = await controller.AccountGetToken("ww", "ee");
+                var response5 = await controller.AccountGetToken(context.Users.First().Email, "");
+                var response6 = await controller.AccountGetToken(context.Users.First().Email, null);
+                var response7 = await controller.AccountGetToken(context.Users.First().Email, "ee");
 
                 //Assert 
                 Assert.IsType<BadRequestObjectResult>(response1);

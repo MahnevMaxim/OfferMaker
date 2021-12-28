@@ -32,6 +32,19 @@ namespace ApiTests
             context.SaveChanges();
         }
 
+        internal void SeedPositions(APIContext context)
+        {
+            context.Database.EnsureDeleted();
+            context.Database.EnsureCreated();
+
+            Position p1 = new Position() { PositionName = "11111"};
+            Position p2 = new Position() { PositionName = "22222" };
+            Position p3 = new Position() { PositionName = "3333333" };
+
+            context.Positions.AddRange(p1, p2, p3);
+            context.SaveChanges();
+        }
+
         internal void SeedAccounts(APIContext context)
         {
             context.Database.EnsureDeleted();
@@ -42,6 +55,9 @@ namespace ApiTests
             User u3 = new User() { Email = "3333", Pwd = "yyyyyy", Role = "role" };
             User u4 = new User() { Email = "4444", Pwd = "uu", Role = "role" };
             User u5 = new User() { Email = "555555", Pwd = "jjjjjjjjj", Role = "role" };
+
+            context.Users.AddRange(u1, u2, u3, u4, u5);
+            context.SaveChanges();
         }
     }
 }

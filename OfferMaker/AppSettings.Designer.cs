@@ -106,5 +106,41 @@ namespace OfferMaker {
                 this["ImageManagerDir"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsRememberMe {
+            get {
+                return ((bool)(this["IsRememberMe"]));
+            }
+            set {
+                this["IsRememberMe"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string AccessToken {
+            get {
+                return ((string)(this["AccessToken"]));
+            }
+            set {
+                this["AccessToken"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Login {
+            get {
+                return ((string)(this["Login"]));
+            }
+            set {
+                this["Login"] = value;
+            }
+        }
     }
 }

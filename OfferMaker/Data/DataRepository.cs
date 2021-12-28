@@ -21,7 +21,7 @@ namespace OfferMaker
         /// а смысл DataRepository - упрощение хранения, управления и синхронизации данных,
         /// абстрагирование разработчика и логики приложения от источников данных
         /// </summary>
-        private Proxy Proxy = new Proxy();
+        private Proxy Proxy;
 
         #region Singleton
 
@@ -29,10 +29,15 @@ namespace OfferMaker
 
         private static readonly DataRepository instance = new DataRepository();
 
-        public static DataRepository GetInstance() => instance;
-
+        public static DataRepository GetInstance(string accessToken)
+        {
+            instance.Proxy = new Proxy(accessToken);
+            return instance;
+        }
+            
         internal static DataRepository GetInstance(AppMode appMode)
         {
+            instance.Proxy = new Proxy();
             instance.Proxy.defaultAppMode = appMode;
             return instance;
         }
@@ -43,8 +48,6 @@ namespace OfferMaker
 
         async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups() => await Proxy.GetNomGroups();
 
-        
-
         async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures() => await Proxy.GetNomenclatures();
 
         async internal Task<CallResult<ObservableCollection<Category>>> GetCategories() => await Proxy.GetCategories();
@@ -54,6 +57,8 @@ namespace OfferMaker
         async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers() => await Proxy.GetOffers();
 
         async internal Task<CallResult<StringCollection>> GetHints() => await Proxy.GetHints();
+
+        async internal Task<CallResult> SavePosition(Position position) => await Proxy.SavePosition(position);
 
         async internal Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
 
@@ -66,17 +71,5 @@ namespace OfferMaker
         async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures) => await Proxy.SaveNomenclatures(nomenclatures);
 
         async internal Task<CallResult> DeleteOfferFromArchive(Offer offer, ObservableCollection<Offer> offers) => await Proxy.DeleteOfferFromArchive(offer, offers);
-
-        public void SyncData()
-        {
-
-        }
-
-        public void UpdateData()
-        {
-
-        }
-
-        
     }
 }

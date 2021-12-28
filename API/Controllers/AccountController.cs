@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Shared;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace API.Controllers
 {
@@ -21,10 +22,12 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpPost("/token", Name = nameof(GetToken))]
-        async public Task<IActionResult> GetToken(string username, string password)
+        [HttpPost("/token", Name = nameof(AccountGetToken))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        async public Task<ActionResult> AccountGetToken(string username, string password)
         {
-            var identity = GetIdentity(username, password);
+            var identity = await GetIdentity(username, password);
             if (identity == null)
             {
                 return BadRequest(new { errorText = "Invalid username or password." });
@@ -41,18 +44,23 @@ namespace API.Controllers
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
+            var res = await _context.Users.ToListAsync();
+            User user = res.FirstOrDefault(x => x.Email == username && x.Pwd == password);
+
             var response = new
             {
                 access_token = encodedJwt,
-                username = identity.Name
+                username = identity.Name,
+                user= user
             };
 
-            return Json(response);
+            return Ok(response);
         }
 
-        private ClaimsIdentity GetIdentity(string username, string password)
+        async private Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            User user = _context.Users.ToList().FirstOrDefault(x => x.Email == username && x.Pwd == password);
+            var res = await _context.Users.ToListAsync();
+            User user = res.FirstOrDefault(x => x.Email == username && x.Pwd == password);
             if (user != null)
             {
                 var claims = new List<Claim>

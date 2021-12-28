@@ -127,8 +127,41 @@ namespace OfferMaker
             AppSettings.Default.Save();
         }
 
+        public static void SetIsRememberMe(bool isRememberMe)
+        {
+            AppSettings.Default.IsRememberMe = isRememberMe;
+            AppSettings.Default.Save();
+        }
+
+        public static void SetToken(string accessToken)
+        {
+            if (!AppSettings.Default.IsRememberMe) return;
+            AppSettings.Default.AccessToken = accessToken;
+            AppSettings.Default.Save();
+        }
+
+        internal static void SetLogin(string login)
+        {
+            AppSettings.Default.Login = login;
+            AppSettings.Default.Save();
+        }
+
         public static string GetDefaultBanner() => AppSettings.Default.DefaultBanner;
 
         public static int GetMaxInfoblocksCount() => AppSettings.Default.MaxInfoblocksCount;
+
+        public static bool GetIsRememberMe() => AppSettings.Default.IsRememberMe;
+
+        public static string GetToken() => AppSettings.Default.AccessToken;
+
+        public static string GetLogin() => AppSettings.Default.Login;
+
+        internal void SkipUserSettings()
+        {
+            AppSettings.Default.Login=null;
+            AppSettings.Default.AccessToken = null;
+            AppSettings.Default.IsRememberMe = false;
+            AppSettings.Default.Save();
+        }
     }
 }

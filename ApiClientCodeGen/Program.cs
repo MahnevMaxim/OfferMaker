@@ -18,12 +18,13 @@ namespace ApiClientCodeGen
                 var document = OpenApiDocument.FromJsonAsync(wclient.DownloadString("https://localhost:44313/swagger/v1/swagger.json")).Result;
                 var settings = new CSharpClientGeneratorSettings
                 {
-                    ClassName = "ApiClient",
+                    ClassName = "Client",
                     CSharpGeneratorSettings =
-                {
-                    Namespace = "Client",
-                    JsonLibrary=NJsonSchema.CodeGeneration.CSharp.CSharpJsonLibrary.SystemTextJson
-                }
+                    {
+                        Namespace = "ApiLib",
+                        JsonLibrary=NJsonSchema.CodeGeneration.CSharp.CSharpJsonLibrary.SystemTextJson,
+                        
+                    }
                 };
 
                 var generator = new CSharpClientGenerator(document, settings);

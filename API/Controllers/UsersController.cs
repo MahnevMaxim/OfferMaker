@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using Shared;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly APIContext _context;
@@ -21,16 +23,16 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/Users
-        [HttpGet(Name = nameof(GetUsers))]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        [HttpGet(Name = nameof(UsersGet))]
+        public async Task<ActionResult<IEnumerable<User>>> UsersGet()
         {
+            var u = User.Identity.Name;
+            var res = Request.Headers;
             return await _context.Users.ToListAsync();
         }
 
-        // GET: api/Users/5
-        [HttpGet("{id}", Name = nameof(GetUser))]
-        public async Task<ActionResult<User>> GetUser(int id)
+        [HttpGet("{id}", Name = nameof(UserGet))]
+        public async Task<ActionResult<User>> UserGet(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -42,10 +44,8 @@ namespace API.Controllers
             return user;
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}", Name = nameof(EditUser))]
-        public async Task<IActionResult> EditUser(int id, User user)
+        [HttpPut("{id}", Name = nameof(UserEdit))]
+        public async Task<IActionResult> UserEdit(int id, User user)
         {
             if (id != user.Id)
             {
@@ -73,10 +73,8 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost(Name = nameof(AddUser))]
-        public async Task<ActionResult<User>> AddUser(User user)
+        [HttpPost(Name = nameof(UserAdd))]
+        public async Task<ActionResult<User>> UserAdd(User user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -84,9 +82,8 @@ namespace API.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // DELETE: api/Users/5
-        [HttpDelete("{id}", Name = nameof(DeleteUser))]
-        public async Task<IActionResult> DeleteUser(int id)
+        [HttpDelete("{id}", Name = nameof(UserDelete))]
+        public async Task<IActionResult> UserDelete(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)

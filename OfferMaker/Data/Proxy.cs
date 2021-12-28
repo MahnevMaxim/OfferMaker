@@ -20,18 +20,18 @@ namespace OfferMaker
         private LocalData LocalData;
         public AppMode defaultAppMode;
 
-        AppMode AppMode 
-        { 
+        AppMode AppMode
+        {
             get
             {
                 if (Global.Main == null) return defaultAppMode;
                 return Global.Main.Settings.AppMode;
-            } 
+            }
         }
 
-        public Proxy()
+        public Proxy(string accessToken = null)
         {
-            ServerData = new ServerData();
+            ServerData = new ServerData(accessToken);
             LocalData = new LocalData();
         }
 
@@ -41,7 +41,7 @@ namespace OfferMaker
         /// <returns></returns>
         async internal Task<CallResult<ObservableCollection<Currency>>> GetCurrencies()
         {
-            if(AppMode==AppMode.Online)
+            if (AppMode == AppMode.Online)
                 return await ServerData.GetCurrencies();
             if (AppMode == AppMode.Offline)
                 return await LocalData.GetCache<ObservableCollection<Currency>>(LocalDataConfig.CurrenciesPath);
@@ -153,7 +153,7 @@ namespace OfferMaker
                 return callResult;
             }
             return await LocalData.GetCache<ObservableCollection<User>>(LocalDataConfig.UsersPath);
-         }
+        }
 
         /// <summary>
         /// Пытаемся получить хинты с сервера или из кэша.
@@ -260,6 +260,13 @@ namespace OfferMaker
             return callResult;
         }
 
+        /// <summary>
+        /// Сохраняем должность.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SavePosition(Position position) => await ServerData.SavePosition(position);
+        
         /// <summary>
         /// Удаляем КП из кэша и с сервера.
         /// </summary>

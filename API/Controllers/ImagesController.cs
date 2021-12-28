@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Shared;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ImagesController : ControllerBase
     {
         public static IWebHostEnvironment _environment;

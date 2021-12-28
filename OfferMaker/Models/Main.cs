@@ -148,6 +148,8 @@ namespace OfferMaker
 
         public ImageManager ImageManager { get; set; }
 
+        public AdminPanel AdminPanel { get; set; }
+
         #endregion Modules
 
         #endregion Properties
@@ -387,7 +389,19 @@ namespace OfferMaker
 
         public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
 
+        public void Quit()
+        {
+            Settings.SkipUserSettings();
+            Close();
+        }
+
         #endregion Settings
+
+        #region AdminPanel
+
+        public void OpenAdminPanel() => MvvmFactory.CreateWindow(AdminPanel, new ViewModels.AdminPanelViewModel(), new Views.AdminPanel(), ViewMode.ShowDialog);
+
+        #endregion AdminPanel
 
         #endregion Commands
     }

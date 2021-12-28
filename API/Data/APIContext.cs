@@ -19,6 +19,7 @@ namespace API.Data
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<NomenclatureGroup> NomenclatureGroups { get; set; }
+        public DbSet<Position> Positions { get; set; }
 
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)
@@ -43,6 +44,14 @@ namespace API.Data
             builder.Entity<NomenclatureGroup>().Property(p => p.Nomenclatures).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Nomenclature>>(v));
+
+            builder.Entity<Position>(entity => {
+                entity.HasIndex(e => e.PositionName).IsUnique();
+            });
+
+            builder.Entity<Position>().Property(p => p.Permissions).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Permissions>>(v));
 
             #endregion Etc
 
