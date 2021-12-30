@@ -8,6 +8,7 @@ using Shared;
 using ApiLib;
 using System.Net;
 using System.Net.Mime;
+using System.Net.Http.Headers;
 
 namespace OfferMaker
 {
@@ -22,15 +23,22 @@ namespace OfferMaker
         string apiEndpoint = Global.apiEndpoint;
         System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
         Client client;
+        string token;
 
         #region Singleton
 
-        private ImageManager() => client = new Client(apiEndpoint, httpClient);
-
+        private ImageManager()
+        {
+            token = Settings.GetToken();
+            if (token!=null)
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client = new Client(apiEndpoint, httpClient); 
+        } 
+        
         private static readonly ImageManager instance = new ImageManager();
 
         public static ImageManager GetInstance() => instance;
-
+        
         #endregion Singleton
 
         /// <summary>
@@ -137,6 +145,7 @@ namespace OfferMaker
         void DownloadFile(string url)
         {
             WebClient client = new WebClient();
+            client.Headers[HttpRequestHeader.Authorization] = "Bearer " + token;
             client.OpenRead(new Uri(url));
             string headerContentDisposition = client.ResponseHeaders["content-disposition"];
             string filename = new ContentDisposition(headerContentDisposition).FileName;
