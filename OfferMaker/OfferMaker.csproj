@@ -22,12 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="GongSolutions.WPF.DragDrop">
-      <HintPath>..\..\gong-wpf-dragdrop\src\GongSolutions.WPF.DragDrop\bin\Debug\net5.0-windows\GongSolutions.WPF.DragDrop.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="AppSettings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
@@ -246,6 +240,12 @@
     <Folder Include="Images\advertisings\" />
     <Folder Include="Images\informIcons\" />
     <Folder Include="Images\users\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="GongSolutions.WPF.DragDrop">
+      <HintPath>..\..\net5.0-windows\GongSolutions.WPF.DragDrop.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
