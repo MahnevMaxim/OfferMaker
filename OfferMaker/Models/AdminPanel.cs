@@ -27,11 +27,7 @@ namespace OfferMaker
             }
         }
 
-        public User User 
-        { 
-            get; 
-            set; 
-        }
+        public User User { get; set; }
 
         public string NewPositionName { get; set; }
 

@@ -39,7 +39,7 @@ namespace OfferMaker
 
             if (Settings.GetIsRememberMe())
             {
-
+                token = Settings.GetToken();
             }
             else
             {
