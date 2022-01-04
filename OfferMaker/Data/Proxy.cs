@@ -76,6 +76,14 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Добавление новой должности.
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        async internal Task<CallResult<Position>> PositionAdd(Position pos) => await ServerData.PositionAdd(pos);
+        
+
+        /// <summary>
         /// Пытаемся получить валюты с сервера или из кэша.
         /// </summary>
         /// <returns></returns>
@@ -94,6 +102,28 @@ namespace OfferMaker
             }
             return await LocalData.GetCache<ObservableCollection<Nomenclature>>(LocalDataConfig.NomenclaturesPath);
         }
+
+        /// <summary>
+        /// Обновляем пользователей.
+        /// </summary>
+        /// <param name="users"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> UsersEdit(ObservableCollection<User> users) => await ServerData.UsersEdit(users);
+
+        /// <summary>
+        /// Добавляем нового пользователя.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        async internal Task<CallResult<User>> UserAdd(User user) => await ServerData.UserAdd(user);
+
+        /// <summary>
+        /// Получаем должности.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Position>>> PositionsGet() => await ServerData.PositionsGet();
+
+        async internal Task<CallResult> PositionDelete(Position pos) => await ServerData.PositionDelete(pos);
 
         /// <summary>
         /// Пытаемся получить КП с сервера или из кэша.
@@ -261,11 +291,11 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Сохраняем должность.
+        /// Сохраняем изменения в должностях.
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        async internal Task<CallResult> SavePosition(Position position) => await ServerData.SavePosition(position);
+        async internal Task<CallResult> PositionsSave(ObservableCollection<Position> positions) => await ServerData.PositionsSave(positions);
         
         /// <summary>
         /// Удаляем КП из кэша и с сервера.
@@ -285,5 +315,11 @@ namespace OfferMaker
             return callResult;
         }
 
+        /// <summary>
+        /// Сохранение данных пользователя, работает только онлайн.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> UserSave(User user) => await ServerData.UserSave(user);
     }
 }

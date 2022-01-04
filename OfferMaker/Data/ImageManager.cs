@@ -186,5 +186,20 @@ namespace OfferMaker
                 }
             }
         }
+
+        async internal void UploadImage(User user)
+        {
+            try
+            {
+                var file = TryGetLocalFilePath(user.Image.Guid);
+                using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
+                FileParameter param = new FileParameter(stream, Path.GetFileName(file));
+                var res = await client.ImagesPOSTAsync(param);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
+        }
     }
 }

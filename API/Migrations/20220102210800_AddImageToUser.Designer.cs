@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20220102210800_AddImageToUser")]
+    partial class AddImageToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,7 +141,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 4, 20, 44, 23, 50, DateTimeKind.Utc).AddTicks(486));
+                        .HasDefaultValue(new DateTime(2022, 1, 2, 21, 7, 57, 991, DateTimeKind.Utc).AddTicks(3835));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -189,7 +191,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 4, 20, 44, 23, 53, DateTimeKind.Utc).AddTicks(4747));
+                        .HasDefaultValue(new DateTime(2022, 1, 2, 21, 7, 57, 995, DateTimeKind.Utc).AddTicks(950));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -289,6 +291,9 @@ namespace API.Migrations
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Permissions")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PhoneNumber1")
                         .HasColumnType("nvarchar(max)");
 
@@ -298,27 +303,16 @@ namespace API.Migrations
                     b.Property<string>("PhotoPath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PositionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Pwd")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Role")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("PositionId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Shared.User", b =>
-                {
-                    b.HasOne("Shared.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId");
-
-                    b.Navigation("Position");
                 });
 #pragma warning restore 612, 618
         }

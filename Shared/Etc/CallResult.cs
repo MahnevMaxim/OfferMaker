@@ -12,18 +12,31 @@ namespace Shared
         /// The data returned by the call
         /// </summary>
         public T Data { get; set; }
+
         /// <summary>
         /// An error if the call didn't succeed
         /// </summary>
         public Error Error { get; set; }
+
         /// <summary>
         /// Whether the call was successful
         /// </summary>
         public bool Success => Error == null;
+
         /// <summary>
         /// Raw data
         /// </summary>
         public string RawData { get; set; }
+
+        /// <summary>
+        /// Success message.
+        /// </summary>
+        public string SuccessMessage { get; set; }
+
+        /// <summary>
+        /// Success message.
+        /// </summary>
+        public string Message { get => Error == null ? SuccessMessage : Error.Message; }
     }
 
     public class CallResult
@@ -37,5 +50,15 @@ namespace Shared
         /// Whether the call was successful
         /// </summary>
         public bool Success => Error == null;
+
+        /// <summary>
+        /// Success message.
+        /// </summary>
+        public string SuccessMessage { get; set; }
+
+        /// <summary>
+        /// Success message.
+        /// </summary>
+        public string Message { get => Error == null ? SuccessMessage : Error.Message; } 
     }
 }

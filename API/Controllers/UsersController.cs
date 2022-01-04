@@ -28,7 +28,7 @@ namespace API.Controllers
         {
             var u = User.Identity.Name;
             var res = Request.Headers;
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Include(u => u.Position).ToListAsync();
         }
 
         [HttpGet("{id}", Name = nameof(UserGet))]
@@ -52,8 +52,13 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            if(user.Position!=null)
+            {
+                user.Position = _context.Positions.Where(p => p.Id == user.Position.Id).FirstOrDefault();
+            }
 
+            _context.Entry(user).State = EntityState.Modified;
+            
             try
             {
                 await _context.SaveChangesAsync();
@@ -73,13 +78,32 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpPut(Name = nameof(UsersEdit))]
+        public async Task<ActionResult<IEnumerable<User>>> UsersEdit(IEnumerable<User> users)
+        {
+            List<User> res = new List<User>();
+            foreach (var user in users)
+            {
+                try
+                {
+                    await UserEdit(user.Id, user);
+                    res.Add(user);
+                }
+                catch (Exception ex)
+                {
+                    Log.Write("Исключение при попытке сохранить пользователя " + user.Id, ex);
+                }
+            }
+            return new ActionResult<IEnumerable<User>>(res);
+        }
+
         [HttpPost(Name = nameof(UserAdd))]
         public async Task<ActionResult<User>> UserAdd(User user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.Id }, user);
+            return CreatedAtAction(nameof(UserGet), new { id = user.Id }, user);
         }
 
         [HttpDelete("{id}", Name = nameof(UserDelete))]

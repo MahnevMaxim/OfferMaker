@@ -11,6 +11,7 @@ namespace OfferMaker
     public class User : BaseEntity
     {
         string photoPath;
+        Image image;
 
         public int Id { get; set; }
 
@@ -20,18 +21,34 @@ namespace OfferMaker
 
         public string FullName { get => FirstName + " " + LastName; }
 
-        public ObservableCollection<Permissions> Permissions { get; set; }
-
         public string PhoneNumber1 { get; set; }
 
         public string PhoneNumber2 { get; set; }
 
         public string Email { get; set; }
 
+        public string Pwd { get; set; }
+
         public string PhotoPath 
         { 
             get => photoPath; 
             set => photoPath = value; 
+        }
+
+        public Image Image
+        {
+            get => image;
+            set
+            {
+                image = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Position Position
+        { 
+            get; 
+            set; 
         }
 
         public override string ToString() => FullName;

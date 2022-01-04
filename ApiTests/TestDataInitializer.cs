@@ -50,13 +50,13 @@ namespace ApiTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            User u1 = new User() { Email = "11111", Pwd = "rrrrr", Role = "role" };
-            User u2 = new User() { Email = "2222", Pwd = "tttttt", Role = "role" };
-            User u3 = new User() { Email = "3333", Pwd = "yyyyyy", Role = "role" };
-            User u4 = new User() { Email = "4444", Pwd = "uu", Role = "role" };
-            User u5 = new User() { Email = "555555", Pwd = "jjjjjjjjj", Role = "role" };
+            //User u1 = new User() { Email = "11111", Pwd = "rrrrr", Role = "role" };
+            //User u2 = new User() { Email = "2222", Pwd = "tttttt", Role = "role" };
+            //User u3 = new User() { Email = "3333", Pwd = "yyyyyy", Role = "role" };
+            //User u4 = new User() { Email = "4444", Pwd = "uu", Role = "role" };
+            //User u5 = new User() { Email = "555555", Pwd = "jjjjjjjjj", Role = "role" };
 
-            context.Users.AddRange(u1, u2, u3, u4, u5);
+            //context.Users.AddRange(u1, u2, u3, u4, u5);
             context.SaveChanges();
         }
     }

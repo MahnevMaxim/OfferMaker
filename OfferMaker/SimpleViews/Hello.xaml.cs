@@ -91,7 +91,8 @@ namespace OfferMaker.SimpleViews
         {
             try
             {
-                JsonElement authRes = (JsonElement)await client.AccountGetTokenAsync(login, pwd);
+                var res = await client.AccountGetTokenAsync(login, pwd);
+                JsonElement authRes = (JsonElement)res.Result;
                 AccessToken = authRes.GetProperty("access_token").GetString();
                 Login = login;
                 return new CallResult();

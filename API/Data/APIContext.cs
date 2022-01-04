@@ -37,10 +37,6 @@ namespace API.Data
 
             builder.Entity<Currency>().Property(p => p.Rate).HasPrecision(18, 6);
 
-            builder.Entity<User>().Property(p => p.Permissions).HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<ObservableCollection<Permissions>>(v));
-
             builder.Entity<NomenclatureGroup>().Property(p => p.Nomenclatures).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<Nomenclature>>(v));
@@ -54,6 +50,18 @@ namespace API.Data
                 v => JsonConvert.DeserializeObject<ObservableCollection<Permissions>>(v));
 
             #endregion Etc
+
+            #region User
+
+            //builder.Entity<User>().Property(p => p.Permissions).HasConversion(
+            //    v => JsonConvert.SerializeObject(v),
+            //    v => JsonConvert.DeserializeObject<ObservableCollection<Permissions>>(v));
+
+            builder.Entity<User>().Property(p => p.Image).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Image>(v));
+
+            #endregion
 
             #region Nomenclature
 

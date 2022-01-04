@@ -38,5 +38,15 @@ namespace OfferMaker.Views
                 this.HamburgerMenuControl.IsPaneOpen = false;
             }
         }
+
+        private void accessPasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            ((ViewModels.AdminPanelViewModel)DataContext).User.Pwd = ((PasswordBox)sender).Password; 
+        }
+
+        private void newUserPasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            ((ViewModels.AdminPanelViewModel)DataContext).NewUserPassword = ((PasswordBox)sender).Password;
+        }
     }
 }

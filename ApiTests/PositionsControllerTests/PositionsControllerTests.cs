@@ -37,7 +37,7 @@ namespace ApiTests.PositionsControllerTests
                 var controller = new PositionsController(context);
 
                 //Act  
-                var response = await controller.GetPositions();
+                var response = await controller.PositionsGet();
                 List<Position> res = new List<Position>(((ActionResult<IEnumerable<Position>>)response).Value);
                 int count = res.Count;
 

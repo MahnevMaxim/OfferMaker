@@ -53,7 +53,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<object> AccountGetTokenAsync(string username, string password)
+        public virtual System.Threading.Tasks.Task<ApiResponse<object>> AccountGetTokenAsync(string username, string password)
         {
             return AccountGetTokenAsync(username, password, System.Threading.CancellationToken.None);
         }
@@ -61,7 +61,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<object> AccountGetTokenAsync(string username, string password, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<object>> AccountGetTokenAsync(string username, string password, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/token?");
@@ -113,7 +113,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<object>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 400)
@@ -143,7 +143,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Category>> CategoriesAllAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Category>>> CategoriesAllAsync()
         {
             return CategoriesAllAsync(System.Threading.CancellationToken.None);
         }
@@ -151,7 +151,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Category>> CategoriesAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Category>>> CategoriesAllAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Categories");
@@ -193,7 +193,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<System.Collections.Generic.ICollection<Category>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -217,7 +217,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CategoriesPUTAsync(System.Collections.Generic.IEnumerable<Category> body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> CategoriesPUTAsync(System.Collections.Generic.IEnumerable<Category> body)
         {
             return CategoriesPUTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -225,7 +225,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CategoriesPUTAsync(System.Collections.Generic.IEnumerable<Category> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> CategoriesPUTAsync(System.Collections.Generic.IEnumerable<Category> body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Categories");
@@ -264,7 +264,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -288,7 +288,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Category> CategoriesPOSTAsync(Category body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Category>> CategoriesPOSTAsync(Category body)
         {
             return CategoriesPOSTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -296,7 +296,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Category> CategoriesPOSTAsync(Category body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Category>> CategoriesPOSTAsync(Category body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Categories");
@@ -341,7 +341,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Category>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -365,7 +365,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Category> CategoriesGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Category>> CategoriesGETAsync(int id)
         {
             return CategoriesGETAsync(id, System.Threading.CancellationToken.None);
         }
@@ -373,7 +373,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Category> CategoriesGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Category>> CategoriesGETAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -419,7 +419,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Category>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -443,7 +443,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CategoriesPUT2Async(int id, Category body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> CategoriesPUT2Async(int id, Category body)
         {
             return CategoriesPUT2Async(id, body, System.Threading.CancellationToken.None);
         }
@@ -451,7 +451,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CategoriesPUT2Async(int id, Category body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> CategoriesPUT2Async(int id, Category body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -494,7 +494,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -518,7 +518,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CategoriesDELETEAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> CategoriesDELETEAsync(int id)
         {
             return CategoriesDELETEAsync(id, System.Threading.CancellationToken.None);
         }
@@ -526,7 +526,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CategoriesDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> CategoriesDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -566,7 +566,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -590,7 +590,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Currency>> CurrenciesAllAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Currency>>> CurrenciesAllAsync()
         {
             return CurrenciesAllAsync(System.Threading.CancellationToken.None);
         }
@@ -598,7 +598,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Currency>> CurrenciesAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Currency>>> CurrenciesAllAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Currencies");
@@ -640,7 +640,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<System.Collections.Generic.ICollection<Currency>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -664,7 +664,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CurrenciesPUTAsync(System.Collections.Generic.IEnumerable<Currency> body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesPUTAsync(System.Collections.Generic.IEnumerable<Currency> body)
         {
             return CurrenciesPUTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -672,7 +672,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CurrenciesPUTAsync(System.Collections.Generic.IEnumerable<Currency> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesPUTAsync(System.Collections.Generic.IEnumerable<Currency> body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Currencies");
@@ -711,7 +711,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -735,7 +735,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Currency> CurrenciesPOSTAsync(Currency body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesPOSTAsync(Currency body)
         {
             return CurrenciesPOSTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -743,7 +743,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Currency> CurrenciesPOSTAsync(Currency body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesPOSTAsync(Currency body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Currencies");
@@ -788,7 +788,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Currency>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -812,7 +812,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Currency> CurrenciesGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesGETAsync(int id)
         {
             return CurrenciesGETAsync(id, System.Threading.CancellationToken.None);
         }
@@ -820,7 +820,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Currency> CurrenciesGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesGETAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -866,7 +866,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Currency>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -890,7 +890,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CurrenciesPUT2Async(int id, Currency body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesPUT2Async(int id, Currency body)
         {
             return CurrenciesPUT2Async(id, body, System.Threading.CancellationToken.None);
         }
@@ -898,7 +898,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CurrenciesPUT2Async(int id, Currency body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesPUT2Async(int id, Currency body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -941,7 +941,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -965,7 +965,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task CurrenciesDELETEAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesDELETEAsync(int id)
         {
             return CurrenciesDELETEAsync(id, System.Threading.CancellationToken.None);
         }
@@ -973,7 +973,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task CurrenciesDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -1013,7 +1013,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -1037,7 +1037,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<string> ImagesPOSTAsync(FileParameter file)
+        public virtual System.Threading.Tasks.Task<ApiResponse<string>> ImagesPOSTAsync(FileParameter file)
         {
             return ImagesPOSTAsync(file, System.Threading.CancellationToken.None);
         }
@@ -1045,7 +1045,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<string> ImagesPOSTAsync(FileParameter file, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<string>> ImagesPOSTAsync(FileParameter file, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Images");
@@ -1100,7 +1100,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<string>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -1124,7 +1124,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task ImagesGETAsync(string guid)
+        public virtual System.Threading.Tasks.Task<ApiResponse> ImagesGETAsync(string guid)
         {
             return ImagesGETAsync(guid, System.Threading.CancellationToken.None);
         }
@@ -1132,7 +1132,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task ImagesGETAsync(string guid, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> ImagesGETAsync(string guid, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Images?");
@@ -1173,7 +1173,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -1197,7 +1197,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<NomenclatureGroup>> NomenclatureGroupsAllAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>> NomenclatureGroupsAllAsync()
         {
             return NomenclatureGroupsAllAsync(System.Threading.CancellationToken.None);
         }
@@ -1205,7 +1205,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<NomenclatureGroup>> NomenclatureGroupsAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>> NomenclatureGroupsAllAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/NomenclatureGroups");
@@ -1247,7 +1247,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -1271,7 +1271,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<NomenclatureGroup> NomenclatureGroupsPUTAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPUTAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body)
         {
             return NomenclatureGroupsPUTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1279,7 +1279,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<NomenclatureGroup> NomenclatureGroupsPUTAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPUTAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/NomenclatureGroups");
@@ -1324,7 +1324,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<NomenclatureGroup>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -1348,7 +1348,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<NomenclatureGroup> NomenclatureGroupsPOSTAsync(NomenclatureGroup body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPOSTAsync(NomenclatureGroup body)
         {
             return NomenclatureGroupsPOSTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1356,7 +1356,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<NomenclatureGroup> NomenclatureGroupsPOSTAsync(NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPOSTAsync(NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/NomenclatureGroups");
@@ -1401,7 +1401,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<NomenclatureGroup>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -1425,7 +1425,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<NomenclatureGroup> NomenclatureGroupsGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsGETAsync(int id)
         {
             return NomenclatureGroupsGETAsync(id, System.Threading.CancellationToken.None);
         }
@@ -1433,7 +1433,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<NomenclatureGroup> NomenclatureGroupsGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsGETAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -1479,7 +1479,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<NomenclatureGroup>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -1503,7 +1503,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task NomenclatureGroupsPUT2Async(int id, NomenclatureGroup body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsPUT2Async(int id, NomenclatureGroup body)
         {
             return NomenclatureGroupsPUT2Async(id, body, System.Threading.CancellationToken.None);
         }
@@ -1511,7 +1511,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task NomenclatureGroupsPUT2Async(int id, NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsPUT2Async(int id, NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -1554,7 +1554,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -1578,7 +1578,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task NomenclatureGroupsDELETEAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsDELETEAsync(int id)
         {
             return NomenclatureGroupsDELETEAsync(id, System.Threading.CancellationToken.None);
         }
@@ -1586,7 +1586,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task NomenclatureGroupsDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -1626,7 +1626,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -1650,7 +1650,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Nomenclature>> NomenclaturesAllAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesAllAsync()
         {
             return NomenclaturesAllAsync(System.Threading.CancellationToken.None);
         }
@@ -1658,7 +1658,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Nomenclature>> NomenclaturesAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesAllAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Nomenclatures");
@@ -1700,7 +1700,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -1724,7 +1724,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Nomenclature> NomenclaturesPUTAsync(System.Collections.Generic.IEnumerable<Nomenclature> body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesPUTAsync(System.Collections.Generic.IEnumerable<Nomenclature> body)
         {
             return NomenclaturesPUTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1732,7 +1732,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Nomenclature> NomenclaturesPUTAsync(System.Collections.Generic.IEnumerable<Nomenclature> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesPUTAsync(System.Collections.Generic.IEnumerable<Nomenclature> body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Nomenclatures");
@@ -1777,7 +1777,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Nomenclature>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -1801,7 +1801,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Nomenclature> NomenclaturesPOSTAsync(Nomenclature body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesPOSTAsync(Nomenclature body)
         {
             return NomenclaturesPOSTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -1809,7 +1809,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Nomenclature> NomenclaturesPOSTAsync(Nomenclature body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesPOSTAsync(Nomenclature body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Nomenclatures");
@@ -1854,7 +1854,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Nomenclature>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -1878,7 +1878,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Nomenclature> NomenclaturesGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesGETAsync(int id)
         {
             return NomenclaturesGETAsync(id, System.Threading.CancellationToken.None);
         }
@@ -1886,7 +1886,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Nomenclature> NomenclaturesGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesGETAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -1932,7 +1932,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Nomenclature>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -1956,7 +1956,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task NomenclaturesPUT2Async(int id, Nomenclature body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclaturesPUT2Async(int id, Nomenclature body)
         {
             return NomenclaturesPUT2Async(id, body, System.Threading.CancellationToken.None);
         }
@@ -1964,7 +1964,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task NomenclaturesPUT2Async(int id, Nomenclature body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclaturesPUT2Async(int id, Nomenclature body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2007,7 +2007,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -2031,7 +2031,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task NomenclaturesDELETEAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclaturesDELETEAsync(int id)
         {
             return NomenclaturesDELETEAsync(id, System.Threading.CancellationToken.None);
         }
@@ -2039,7 +2039,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task NomenclaturesDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclaturesDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2079,7 +2079,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -2103,7 +2103,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Offer>> OffersAllAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Offer>>> OffersAllAsync()
         {
             return OffersAllAsync(System.Threading.CancellationToken.None);
         }
@@ -2111,7 +2111,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Offer>> OffersAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Offer>>> OffersAllAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Offers");
@@ -2153,7 +2153,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<System.Collections.Generic.ICollection<Offer>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -2177,7 +2177,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Offer> OffersPOSTAsync(Offer body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Offer>> OffersPOSTAsync(Offer body)
         {
             return OffersPOSTAsync(body, System.Threading.CancellationToken.None);
         }
@@ -2185,7 +2185,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Offer> OffersPOSTAsync(Offer body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Offer>> OffersPOSTAsync(Offer body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Offers");
@@ -2230,7 +2230,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Offer>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -2254,7 +2254,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Offer> OffersGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Offer>> OffersGETAsync(int id)
         {
             return OffersGETAsync(id, System.Threading.CancellationToken.None);
         }
@@ -2262,7 +2262,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Offer> OffersGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Offer>> OffersGETAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2308,7 +2308,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Offer>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -2332,7 +2332,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task OffersPUTAsync(int id, Offer body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> OffersPUTAsync(int id, Offer body)
         {
             return OffersPUTAsync(id, body, System.Threading.CancellationToken.None);
         }
@@ -2340,7 +2340,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task OffersPUTAsync(int id, Offer body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> OffersPUTAsync(int id, Offer body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2383,7 +2383,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -2407,7 +2407,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task OffersDELETEAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> OffersDELETEAsync(int id)
         {
             return OffersDELETEAsync(id, System.Threading.CancellationToken.None);
         }
@@ -2415,7 +2415,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task OffersDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> OffersDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2455,7 +2455,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -2479,15 +2479,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Position>> GetPositionsAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Position>>> PositionsGetAsync()
         {
-            return GetPositionsAsync(System.Threading.CancellationToken.None);
+            return PositionsGetAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<Position>> GetPositionsAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Position>>> PositionsGetAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Positions");
@@ -2529,7 +2529,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<System.Collections.Generic.ICollection<Position>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -2553,15 +2553,92 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Position> AddPositionAsync(Position body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Position>>> PositionsSaveAsync(System.Collections.Generic.IEnumerable<Position> body)
         {
-            return AddPositionAsync(body, System.Threading.CancellationToken.None);
+            return PositionsSaveAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Position> AddPositionAsync(Position body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Position>>> PositionsSaveAsync(System.Collections.Generic.IEnumerable<Position> body, System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Positions");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var content_ = new System.Net.Http.StringContent(System.Text.Json.JsonSerializer.Serialize(body, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200 || status_ == 201 || status_ == 204)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Position>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return new ApiResponse<System.Collections.Generic.ICollection<Position>>(status_, headers_, objectResponse_.Object);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<ApiResponse<Position>> PositionPostAsync(Position body)
+        {
+            return PositionPostAsync(body, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Position>> PositionPostAsync(Position body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Positions");
@@ -2606,7 +2683,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Position>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -2630,15 +2707,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Position> GetPositionAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Position>> PositionGetAsync(int id)
         {
-            return GetPositionAsync(id, System.Threading.CancellationToken.None);
+            return PositionGetAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Position> GetPositionAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Position>> PositionGetAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2684,7 +2761,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<Position>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -2708,15 +2785,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task EditPositionAsync(int id, Position body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> PositionEditAsync(int id, Position body)
         {
-            return EditPositionAsync(id, body, System.Threading.CancellationToken.None);
+            return PositionEditAsync(id, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task EditPositionAsync(int id, Position body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> PositionEditAsync(int id, Position body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2759,7 +2836,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -2783,15 +2860,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task DeletePositionAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> PositionDeleteAsync(int id)
         {
-            return DeletePositionAsync(id, System.Threading.CancellationToken.None);
+            return PositionDeleteAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task DeletePositionAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> PositionDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2831,7 +2908,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -2855,7 +2932,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> UsersGetAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<User>>> UsersGetAsync()
         {
             return UsersGetAsync(System.Threading.CancellationToken.None);
         }
@@ -2863,7 +2940,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<User>> UsersGetAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<User>>> UsersGetAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Users");
@@ -2905,7 +2982,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<System.Collections.Generic.ICollection<User>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -2929,7 +3006,84 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<User> UserAddAsync(User body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<User>>> UsersEditAsync(System.Collections.Generic.IEnumerable<User> body)
+        {
+            return UsersEditAsync(body, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<User>>> UsersEditAsync(System.Collections.Generic.IEnumerable<User> body, System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Users");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var content_ = new System.Net.Http.StringContent(System.Text.Json.JsonSerializer.Serialize(body, _settings.Value));
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200 || status_ == 201 || status_ == 204)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<User>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return new ApiResponse<System.Collections.Generic.ICollection<User>>(status_, headers_, objectResponse_.Object);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<ApiResponse<User>> UserAddAsync(User body)
         {
             return UserAddAsync(body, System.Threading.CancellationToken.None);
         }
@@ -2937,7 +3091,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<User> UserAddAsync(User body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<User>> UserAddAsync(User body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Users");
@@ -2982,7 +3136,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<User>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -3006,7 +3160,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<User> UserGetAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<User>> UserGetAsync(int id)
         {
             return UserGetAsync(id, System.Threading.CancellationToken.None);
         }
@@ -3014,7 +3168,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<User> UserGetAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<User>> UserGetAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -3060,7 +3214,7 @@ namespace ApiLib
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return objectResponse_.Object;
+                            return new ApiResponse<User>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         {
@@ -3084,7 +3238,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task UserEditAsync(int id, User body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> UserEditAsync(int id, User body)
         {
             return UserEditAsync(id, body, System.Threading.CancellationToken.None);
         }
@@ -3092,7 +3246,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task UserEditAsync(int id, User body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> UserEditAsync(int id, User body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -3135,7 +3289,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -3159,7 +3313,7 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task UserDeleteAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> UserDeleteAsync(int id)
         {
             return UserDeleteAsync(id, System.Threading.CancellationToken.None);
         }
@@ -3167,7 +3321,7 @@ namespace ApiLib
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task UserDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> UserDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -3207,7 +3361,7 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            return;
+                            return new ApiResponse(status_, headers_);
                         }
                         else
                         {
@@ -3695,9 +3849,6 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("lastName")]
         public string LastName { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("permissions")]
-        public System.Collections.Generic.ICollection<Permissions> Permissions { get; set; }
-
         [System.Text.Json.Serialization.JsonPropertyName("phoneNumber1")]
         public string PhoneNumber1 { get; set; }
 
@@ -3707,8 +3858,11 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("photoPath")]
         public string PhotoPath { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("role")]
-        public string Role { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("image")]
+        public Image Image { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("position")]
+        public Position Position { get; set; }
 
     }
 
@@ -3739,6 +3893,32 @@ namespace ApiLib
         public string ContentType { get; private set; }
     }
 
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
+    public partial class ApiResponse
+    {
+        public int StatusCode { get; private set; }
+
+        public System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> Headers { get; private set; }
+
+        public ApiResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers)
+        {
+            StatusCode = statusCode;
+            Headers = headers;
+        }
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
+    public partial class ApiResponse<TResult> : ApiResponse
+    {
+        public TResult Result { get; private set; }
+
+        public ApiResponse(int statusCode, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result)
+            : base(statusCode, headers)
+        {
+            Result = result;
+        }
+    }
 
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]

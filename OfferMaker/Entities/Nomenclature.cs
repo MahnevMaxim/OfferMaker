@@ -163,7 +163,7 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Колекция, т.к. не понимаю: нужна одна картинка или несколько
+        /// Главное фото.
         /// </summary>
         public Image Image
         {

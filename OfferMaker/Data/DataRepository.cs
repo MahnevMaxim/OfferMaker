@@ -58,8 +58,6 @@ namespace OfferMaker
 
         async internal Task<CallResult<StringCollection>> GetHints() => await Proxy.GetHints();
 
-        async internal Task<CallResult> SavePosition(Position position) => await Proxy.SavePosition(position);
-
         async internal Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
 
         async internal Task<CallResult> SaveCategories(ObservableCollection<Category> categoriesTree) => await Proxy.SaveCategories(categoriesTree);
@@ -70,6 +68,20 @@ namespace OfferMaker
 
         async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures) => await Proxy.SaveNomenclatures(nomenclatures);
 
+        async internal Task<CallResult> UserSave(User user) => await Proxy.UserSave(user);
+
         async internal Task<CallResult> DeleteOfferFromArchive(Offer offer, ObservableCollection<Offer> offers) => await Proxy.DeleteOfferFromArchive(offer, offers);
+
+        async internal Task<CallResult<Position>> PositionAdd(Position pos) => await Proxy.PositionAdd(pos);
+
+        async internal Task<CallResult> PositionDelete(Position pos) => await Proxy.PositionDelete(pos);
+
+        async internal Task<CallResult<ObservableCollection<Position>>> PositionsGet() => await Proxy.PositionsGet();
+
+        async internal Task<CallResult> PositionsSave(ObservableCollection<Position> positions) => await Proxy.PositionsSave(positions);
+
+        async internal Task<CallResult<User>> UserAdd(User user) => await Proxy.UserAdd(user);
+
+        async internal Task<CallResult> UsersEdit(ObservableCollection<User> users) => await Proxy.UsersEdit(users);
     }
 }

@@ -75,8 +75,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/NomenclatureGroups
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
         public async Task<ActionResult<Nomenclature>> SaveNomenclatures(IEnumerable<Nomenclature> noms)
         {

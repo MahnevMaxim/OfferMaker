@@ -23,14 +23,14 @@ namespace Shared
 
         public string LastName { get; set; }
 
-        public ObservableCollection<Permissions> Permissions { get; set; }
-
         public string PhoneNumber1 { get; set; }
 
         public string PhoneNumber2 { get; set; }
 
         public string PhotoPath { get; set; }
 
-        public string Role { get; set; }
+        public Image Image { get; set; }
+
+        public Position Position { get; set; }
     }
 }

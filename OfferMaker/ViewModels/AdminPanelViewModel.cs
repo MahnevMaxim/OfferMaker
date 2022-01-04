@@ -51,5 +51,45 @@ namespace OfferMaker.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public string NewUserLastName
+        {
+            get => adminPanel.NewUserLastName;
+            set
+            {
+                adminPanel.NewUserLastName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NewUserFirstName
+        {
+            get => adminPanel.NewUserFirstName;
+            set
+            {
+                adminPanel.NewUserFirstName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NewUserPassword
+        {
+            get => adminPanel.NewUserPassword;
+            set
+            {
+                adminPanel.NewUserPassword = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string NewUserEmail
+        {
+            get => adminPanel.NewUserEmail;
+            set
+            {
+                adminPanel.NewUserEmail = value;
+                OnPropertyChanged();
+            }
+        }
     }
 }

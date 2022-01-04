@@ -21,14 +21,14 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet(Name = nameof(GetPositions))]
-        public async Task<ActionResult<IEnumerable<Position>>> GetPositions()
+        [HttpGet(Name = nameof(PositionsGet))]
+        public async Task<ActionResult<IEnumerable<Position>>> PositionsGet()
         {
             return await _context.Positions.ToListAsync();
         }
 
-        [HttpGet("{id}", Name = nameof(GetPosition))]
-        public async Task<ActionResult<Position>> GetPosition(int id)
+        [HttpGet("{id}", Name = nameof(PositionGet))]
+        public async Task<ActionResult<Position>> PositionGet(int id)
         {
             var position = await _context.Positions.FindAsync(id);
 
@@ -40,8 +40,8 @@ namespace API.Controllers
             return position;
         }
 
-        [HttpPut("{id}", Name = nameof(EditPosition))]
-        public async Task<IActionResult> EditPosition(int id, Position position)
+        [HttpPut("{id}", Name = nameof(PositionEdit))]
+        public async Task<IActionResult> PositionEdit(int id, Position position)
         {
             if (id != position.Id)
             {
@@ -69,17 +69,40 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPost(Name = nameof(AddPosition))]
-        public async Task<ActionResult<Position>> AddPosition(Position position)
+        [HttpPut(Name = nameof(PositionsSave))]
+        public async Task<ActionResult<IEnumerable<Position>>> PositionsSave(IEnumerable<Position> positions)
         {
+            List<Position> res = new List<Position>();
+            foreach (var pos in positions)
+            {
+                try
+                {
+                    await PositionEdit(pos.Id, pos);
+                    res.Add(pos);
+                }
+                catch (Exception ex)
+                {
+                    Log.Write("Исключение при попытке сохранить должность " + pos.Id, ex);
+                }
+            }
+            return new ActionResult<IEnumerable<Position>>(res);
+        }
+
+        [HttpPost(Name = nameof(PositionPost))]
+        public async Task<ActionResult<Position>> PositionPost(Position position)
+        {
+            if (_context.Positions.Where(p=>p.PositionName==position.PositionName).Count()>0)
+            {
+                return StatusCode(409);
+            }
             _context.Positions.Add(position);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetPosition", new { id = position.Id }, position);
+            return CreatedAtAction("PositionGet", new { id = position.Id }, position);
         }
 
-        [HttpDelete("{id}", Name = nameof(DeletePosition))]
-        public async Task<IActionResult> DeletePosition(int id)
+        [HttpDelete("{id}", Name = nameof(PositionDelete))]
+        public async Task<IActionResult> PositionDelete(int id)
         {
             var position = await _context.Positions.FindAsync(id);
             if (position == null)

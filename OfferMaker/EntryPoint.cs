@@ -17,6 +17,7 @@ namespace OfferMaker
         DataRepository dataRepository;
         User user;
         ObservableCollection<User> users;
+        ObservableCollection<Position> positions;
         ObservableCollection<Category> categories;
         ObservableCollection<Nomenclature> nomenclatures;
         ObservableCollection<NomenclatureGroup> nomenclatureGroups;
@@ -81,6 +82,13 @@ namespace OfferMaker
         async private Task ReciveData()
         {
             string errorMessage = "";
+
+            //получаем должности
+            var positionsCr = await dataRepository.PositionsGet();
+            if (positionsCr.Success)
+                positions = positionsCr.Data;
+            else
+                errorMessage += positionsCr.Error.Message + "\n";
 
             //получаем пользователей
             var usersCr = await dataRepository.GetUsers();
@@ -151,10 +159,13 @@ namespace OfferMaker
                 main.Managers.Add(u);
                 if (u.Email.Trim() == Settings.GetLogin())
                     main.User = u;
+                if (u.Position != null)
+                    u.Position = positions.Where(p => p.Id == u.Position.Id).FirstOrDefault();
             });
 
             //public AdminPanel AdminPanel { get; set; }
-            main.AdminPanel = AdminPanel.GetInstance(users, main.User);
+            positions.ToList().ForEach(p => p.SetWrapperPermission());
+            main.AdminPanel = AdminPanel.GetInstance(users, main.User, positions);
 
             //каталог
             SetNomGroups();

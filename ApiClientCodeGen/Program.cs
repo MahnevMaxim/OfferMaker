@@ -22,9 +22,10 @@ namespace ApiClientCodeGen
                     CSharpGeneratorSettings =
                     {
                         Namespace = "ApiLib",
-                        JsonLibrary=NJsonSchema.CodeGeneration.CSharp.CSharpJsonLibrary.SystemTextJson,
-                        
-                    }
+                        JsonLibrary=NJsonSchema.CodeGeneration.CSharp.CSharpJsonLibrary.SystemTextJson
+                    },
+                    WrapResponses=true,
+                    ResponseClass="ApiResponse"
                 };
 
                 var generator = new CSharpClientGenerator(document, settings);

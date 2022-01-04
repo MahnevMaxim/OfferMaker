@@ -253,8 +253,6 @@ namespace OfferMaker
 
         #region NomWrapper
 
-        public void DeleteNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => Constructor.DeleteNomWrapper(nomWrapper, offerGroup);
-
         public void DeleteDescriptionFromNomWrapper(Description description, NomWrapper nomWrapper) => Constructor.DeleteDescriptionFromNomWrapper(description, nomWrapper);
 
         public void DescriptionMoveUp(Description description, NomWrapper nomWrapper) => Constructor.DescriptionMoveUp(description, nomWrapper);
@@ -272,6 +270,8 @@ namespace OfferMaker
         public void MoveUpNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => Constructor.MoveUpNomWrapper(nomWrapper, offerGroup);
 
         public void MoveDownNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => Constructor.MoveDownNomWrapper(nomWrapper, offerGroup);
+
+        public void DeleteNomWrapper(NomWrapper nomWrapper, OfferGroup offerGroup) => Constructor.DeleteNomWrapper(nomWrapper, offerGroup);
 
         #endregion NomWrapper
 

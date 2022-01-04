@@ -24,7 +24,7 @@ namespace OfferMaker
         /// Содержит все возможные разрешения и состояние - IsEnabled
         /// </summary>
         public ObservableCollection<PermissionWrapper> PermissionWrappers { get; set; } = new ObservableCollection<PermissionWrapper>();
-        
+
         public Position(string newPositionName)
         {
             PositionName = newPositionName;
@@ -35,7 +35,7 @@ namespace OfferMaker
         {
             foreach (Permissions p in Enum.GetValues(typeof(Permissions)))
             {
-                PermissionWrappers.Add(new PermissionWrapper(p)); 
+                PermissionWrappers.Add(new PermissionWrapper(p));
             }
         }
 
@@ -43,11 +43,22 @@ namespace OfferMaker
 
         internal void SavePermissions()
         {
-            PermissionWrappers.ToList().ForEach(p => 
+            Permissions.Clear();
+            PermissionWrappers.ToList().ForEach(p =>
             {
-                if (p.IsEnabled) 
+                if (p.IsEnabled)
                     Permissions.Add(p.PermissionVal);
             });
+        }
+
+        internal void SetWrapperPermission()
+        {
+            foreach (Permissions perm in Permissions)
+            {
+                var pw = PermissionWrappers.Where(p => p.PermissionVal == perm).FirstOrDefault();
+                if (pw != null)
+                    pw.IsEnabled = true;
+            }
         }
     }
 }

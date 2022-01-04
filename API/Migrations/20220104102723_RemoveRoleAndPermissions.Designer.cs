@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20220104102723_RemoveRoleAndPermissions")]
+    partial class RemoveRoleAndPermissions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,7 +141,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 4, 20, 44, 23, 50, DateTimeKind.Utc).AddTicks(486));
+                        .HasDefaultValue(new DateTime(2022, 1, 4, 10, 27, 19, 683, DateTimeKind.Utc).AddTicks(5531));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -189,7 +191,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 4, 20, 44, 23, 53, DateTimeKind.Utc).AddTicks(4747));
+                        .HasDefaultValue(new DateTime(2022, 1, 4, 10, 27, 19, 686, DateTimeKind.Utc).AddTicks(5337));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -298,27 +300,13 @@ namespace API.Migrations
                     b.Property<string>("PhotoPath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PositionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Pwd")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PositionId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Shared.User", b =>
-                {
-                    b.HasOne("Shared.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId");
-
-                    b.Navigation("Position");
                 });
 #pragma warning restore 612, 618
         }
