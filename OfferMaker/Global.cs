@@ -36,5 +36,10 @@ namespace OfferMaker
         public static Offer Offer { get => Main.Constructor.Offer; }
 
         public static Constructor Constructor { get => Main.Constructor; }
+
+        public static string NoProfilePicturePath { get => AppDomain.CurrentDomain.BaseDirectory + "Images\\no-profile-picture.png"; }
+
+        public static Image NoProfileImage = new Image() { LocalPhotoPath = NoProfilePicturePath, IsNew = false };
+
     }
 }

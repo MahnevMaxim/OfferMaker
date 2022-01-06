@@ -91,7 +91,7 @@ namespace OfferMaker
                 errorMessage += positionsCr.Error.Message + "\n";
 
             //получаем пользователей
-            var usersCr = await dataRepository.GetUsers();
+            var usersCr = await dataRepository.UsersGet();
             if (usersCr.Success)
                 users = usersCr.Data;
             else
@@ -155,7 +155,10 @@ namespace OfferMaker
             main.Users = users;
             users.ToList().ForEach(u =>
             {
-                u.PhotoPath = GetFullPath(u.PhotoPath);
+                if(u.Image==null)
+                {
+                    u.Image = Global.NoProfileImage;
+                }
                 main.Managers.Add(u);
                 if (u.Email.Trim() == Settings.GetLogin())
                     main.User = u;
@@ -163,7 +166,6 @@ namespace OfferMaker
                     u.Position = positions.Where(p => p.Id == u.Position.Id).FirstOrDefault();
             });
 
-            //public AdminPanel AdminPanel { get; set; }
             positions.ToList().ForEach(p => p.SetWrapperPermission());
             main.AdminPanel = AdminPanel.GetInstance(users, main.User, positions);
 
@@ -245,12 +247,6 @@ namespace OfferMaker
                     }
                 }
             }
-        }
-
-        private static string GetFullPath(string photoPath)
-        {
-            if (string.IsNullOrWhiteSpace(photoPath)) return AppDomain.CurrentDomain.BaseDirectory + "Images\\users\\no-profile-picture.png";
-            return AppDomain.CurrentDomain.BaseDirectory + "Images\\users\\" + photoPath;
         }
 
         #endregion Build Main

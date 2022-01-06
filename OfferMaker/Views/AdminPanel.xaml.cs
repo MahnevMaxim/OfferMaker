@@ -21,9 +21,12 @@ namespace OfferMaker.Views
     /// </summary>
     public partial class AdminPanel : MetroWindow, IView
     {
+        public DialogCoordinator dialogCoordinator;
+
         public AdminPanel()
         {
             InitializeComponent();
+            dialogCoordinator = (DialogCoordinator)DialogCoordinator.Instance;
         }
 
         void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);
@@ -39,14 +42,66 @@ namespace OfferMaker.Views
             }
         }
 
+        //с паролями всё неоднозначно, т.к. они в DataTemplate, может стоит сделать по другому, но пока приходится отлавливать
+        //контролы паролей таким уродливым способом
+        PasswordBox accessPasswordTextBox;
+        PasswordBox newUserPasswordTextBox;
+        PasswordBox newPasswordTextBox;
+        PasswordBox newPasswordTextBoxRepeat;
+        PasswordBox oldPasswordTextBox;
+
+        /// <summary>
+        /// Пароль для редактирования текущего аккаунта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void accessPasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             ((ViewModels.AdminPanelViewModel)DataContext).User.Pwd = ((PasswordBox)sender).Password; 
         }
 
+        /// <summary>
+        /// Пароль нового пользователя.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void newUserPasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            ((ViewModels.AdminPanelViewModel)DataContext).NewUserPassword = ((PasswordBox)sender).Password;
+            newUserPasswordTextBox = (PasswordBox)sender;
+            ((ViewModels.AdminPanelViewModel)DataContext).NewUserPassword = newUserPasswordTextBox.Password;
         }
+
+        /// <summary>
+        /// Новый пароль текущего пользователя
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void newPasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            ((ViewModels.AdminPanelViewModel)DataContext).NewAccountPassword = ((PasswordBox)sender).Password;
+        }
+
+        /// <summary>
+        /// Подтверждение пароля текущего пользователя для смены пароля.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void newPasswordTextBoxRepeat_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            ((ViewModels.AdminPanelViewModel)DataContext).NewAccountPasswordRepeat = ((PasswordBox)sender).Password;
+        }
+
+        /// <summary>
+        /// Текущий пароль для смены пароля.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void oldPasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            ((ViewModels.AdminPanelViewModel)DataContext).OldAccountPassword = ((PasswordBox)sender).Password;
+        }
+
+        public void ClearPwdNewUserPasswordTextBox() => newUserPasswordTextBox.Password = null;
+        
     }
 }

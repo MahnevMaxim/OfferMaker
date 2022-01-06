@@ -25,6 +25,8 @@ namespace OfferMaker
         /// </summary>
         public ObservableCollection<PermissionWrapper> PermissionWrappers { get; set; } = new ObservableCollection<PermissionWrapper>();
 
+        public ObservableCollection<PermissionWrapper> ActivePermissionWrappers { get => new ObservableCollection<PermissionWrapper>(PermissionWrappers.Where(p=>p.IsEnabled)); } 
+
         public Position(string newPositionName)
         {
             PositionName = newPositionName;

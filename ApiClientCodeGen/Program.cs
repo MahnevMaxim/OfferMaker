@@ -37,7 +37,7 @@ namespace ApiClientCodeGen
                 code = code.Replace("status_ == 200", "status_ == 200 || status_ == 201 || status_ == 204");
 
                 //replace permissions
-                int indexPermBegin = code.IndexOf("Permissions");
+                int indexPermBegin = code.IndexOf("enum Permissions\n");
                 int indexPermEnd = 0;
                 string forReplace = "";
                 for (int i = indexPermBegin; i < code.Length; i++)
@@ -53,7 +53,7 @@ namespace ApiClientCodeGen
                 //read source
                 string source = File.ReadAllText(@"C:\Users\Maxxx\source\repos\API\Shared\Entities\Permissions.cs");
                 string forWrite = "";
-                for (int i = source.IndexOf("Permissions"); i < source.Length; i++)
+                for (int i = source.IndexOf("enum Permissions"); i < source.Length; i++)
                 {
                     forWrite += source[i];
                     if (source[i] == '}')

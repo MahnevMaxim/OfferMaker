@@ -40,7 +40,7 @@
                             <ColumnDefinition Width="1*"/>
                         </Grid.ColumnDefinitions>
                         <Viewbox Margin="0,0,20,0" Grid.Column="0" HorizontalAlignment="Left" MaxHeight="90" MaxWidth="90"  VerticalAlignment="Top" Stretch="Uniform">
-                            <Image Source="{Binding Manager.PhotoPath}"/>
+                            <Image Source="{Binding Manager.Image.LocalPhotoPath}"/>
                         </Viewbox>
                         <StackPanel Grid.Column="1" Margin="0,0,0,0"
                             Orientation="Vertical" 

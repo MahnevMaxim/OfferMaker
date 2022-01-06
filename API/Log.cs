@@ -9,6 +9,8 @@ namespace API
 {
     public class Log
     {
+        public static void Write(Exception exc) => Write("", exc);
+
         /// <summary>
         /// Log writer
         /// </summary>

@@ -44,33 +44,55 @@ namespace OfferMaker
 
         #endregion Singleton
 
+        #region Currencies
+
         async public Task<CallResult<ObservableCollection<Currency>>> GetCurrencies() => await Proxy.GetCurrencies();
-
-        async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups() => await Proxy.GetNomGroups();
-
-        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures() => await Proxy.GetNomenclatures();
-
-        async internal Task<CallResult<ObservableCollection<Category>>> GetCategories() => await Proxy.GetCategories();
-
-        async internal Task<CallResult<ObservableCollection<User>>> GetUsers() => await Proxy.GetUsers();
-
-        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers() => await Proxy.GetOffers();
-
-        async internal Task<CallResult<StringCollection>> GetHints() => await Proxy.GetHints();
 
         async internal Task<CallResult> SaveCurrencies(ObservableCollection<Currency> currencies) => await Proxy.SaveCurrencies(currencies);
 
-        async internal Task<CallResult> SaveCategories(ObservableCollection<Category> categoriesTree) => await Proxy.SaveCategories(categoriesTree);
+        #endregion Currencies
 
-        async internal Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups) => await Proxy.SaveNomenclatureGroups(nomenclatureGroups);
+        #region Offers
+
+        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers() => await Proxy.GetOffers();
 
         async internal Task<CallResult> SaveOffer(Offer offer, ObservableCollection<Offer> offers) => await Proxy.SaveOffer(offer, offers);
 
+        async internal Task<CallResult> DeleteOfferFromArchive(Offer offer, ObservableCollection<Offer> offers) => await Proxy.DeleteOfferFromArchive(offer, offers);
+
+        #endregion Offers
+
+        #region Categories
+
+        async internal Task<CallResult<ObservableCollection<Category>>> GetCategories() => await Proxy.GetCategories();
+
+        async internal Task<CallResult> SaveCategories(ObservableCollection<Category> categoriesTree) => await Proxy.SaveCategories(categoriesTree);
+
+        #endregion Categories
+
+        #region Nomenclatures
+
+        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures() => await Proxy.GetNomenclatures();
+
         async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures) => await Proxy.SaveNomenclatures(nomenclatures);
 
-        async internal Task<CallResult> UserSave(User user) => await Proxy.UserSave(user);
+        #endregion Nomenclatures
 
-        async internal Task<CallResult> DeleteOfferFromArchive(Offer offer, ObservableCollection<Offer> offers) => await Proxy.DeleteOfferFromArchive(offer, offers);
+        #region Nomenclature groups
+
+        async internal Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups) => await Proxy.SaveNomenclatureGroups(nomenclatureGroups);
+
+        async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups() => await Proxy.GetNomGroups();
+
+        #endregion Nomenclature groups
+
+        #region Hints
+
+        async internal Task<CallResult<StringCollection>> GetHints() => await Proxy.GetHints();
+
+        #endregion Hints
+
+        #region Positions 
 
         async internal Task<CallResult<Position>> PositionAdd(Position pos) => await Proxy.PositionAdd(pos);
 
@@ -80,8 +102,22 @@ namespace OfferMaker
 
         async internal Task<CallResult> PositionsSave(ObservableCollection<Position> positions) => await Proxy.PositionsSave(positions);
 
-        async internal Task<CallResult<User>> UserAdd(User user) => await Proxy.UserAdd(user);
+        #endregion Positions 
+
+        #region Users
+
+        async internal Task<CallResult<User>> UserCreate(User user) => await Proxy.UserCreate(user);
+
+        async internal Task<CallResult<ObservableCollection<User>>> UsersGet() => await Proxy.UsersGet();
+
+        async internal Task<CallResult> UserEdit(User user) => await Proxy.UserEdit(user);
 
         async internal Task<CallResult> UsersEdit(ObservableCollection<User> users) => await Proxy.UsersEdit(users);
+
+        async internal Task<CallResult> UserChangePassword(User user, string oldPwd) => await Proxy.UserChangePassword(user, oldPwd);
+
+        async internal Task<CallResult> UserDelete(User user) => await Proxy.UserDelete(user);
+
+        #endregion Users
     }
 }

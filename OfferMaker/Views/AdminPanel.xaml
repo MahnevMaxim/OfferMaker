@@ -5,6 +5,8 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:root="clr-namespace:OfferMaker"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                 Dialog:DialogParticipation.Register="{Binding}"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:local="clr-namespace:OfferMaker.Views"
                  mc:Ignorable="d"
@@ -68,31 +70,37 @@
                       Margin="5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="UserPhoto">
-            <Image Source="{Binding PhotoPath}"
+            <Image Source="{Binding Image.LocalPhotoPath}"
                    Width="40"
                    Height="40"
-                   Margin="5,2" />
+                   Margin="5,2"
+                   ToolTip="{Binding Position}" />
         </DataTemplate>
-        <DataTemplate x:Key="PositionsCombobox">
-            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Positions}"
-                      SelectedItem="{Binding Position,UpdateSourceTrigger=PropertyChanged}"
-                      Height="30"
-                      Width="140"
-                      Margin="5"/>
-        </DataTemplate>
-        <DataTemplate x:Key="UserSkipPwdButton">
-            <Button Content="Сбросить пароль"
-                    Height="30"
-                    Width="110"
-                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=DataContext.Cmd}"
-                    Style="{StaticResource MahApps.Styles.Button.Square}">
-                <Button.CommandParameter>
-                    <MultiBinding Converter="{StaticResource MultiConverter}">
-                        <Binding Source="SkipSelectUserPassword" />
-                        <Binding Path="." />
-                    </MultiBinding>
-                </Button.CommandParameter>
-            </Button>
+        <DataTemplate x:Key="UserButtons">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Сбросить пароль"
+                        Height="30"
+                        Width="110"
+                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=DataContext.Cmd}"
+                        Style="{StaticResource MahApps.Styles.Button.Square}">
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                            <Binding Source="SkipSelectUserPassword" />
+                            <Binding Path="." />
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button Height="30"
+                        Width="30"
+                        Margin="5,0"
+                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type mah:HamburgerMenu}}, Path=DataContext.UserDeleteCommand}"
+                        CommandParameter="{Binding Path=.}"
+                        Style="{StaticResource MahApps.Styles.Button.Square}">
+                    <iconPacks:PackIconMaterial Kind="Close"
+                                                Width="15"
+                                                Height="15" />
+                </Button>
+            </StackPanel>
         </DataTemplate>
     </Window.Resources>
     <Grid>
@@ -133,18 +141,6 @@
                         </mah:HamburgerMenuIconItem.Icon>
                     </mah:HamburgerMenuIconItem>
 
-                    <mah:HamburgerMenuIconItem x:Name="passwordItem"
-                                               Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.ShowHamburgerAboutCommand}"
-                                               Label="Пароль">
-                        <mah:HamburgerMenuIconItem.Icon>
-                            <iconPacks:PackIconTypicons Width="22"
-                                                        Height="22"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Center"
-                                                        Kind="KeyOutline" />
-                        </mah:HamburgerMenuIconItem.Icon>
-                    </mah:HamburgerMenuIconItem>
-
                     <mah:HamburgerMenuIconItem x:Name="usersItem"
                                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.ShowHamburgerAboutCommand}"
                                                Label="Пользователи">
@@ -154,6 +150,18 @@
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
                                                         Kind="AccountMultipleOutline" />
+                        </mah:HamburgerMenuIconItem.Icon>
+                    </mah:HamburgerMenuIconItem>
+
+                    <mah:HamburgerMenuIconItem x:Name="createUserItem"
+                                               Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.ShowHamburgerAboutCommand}"
+                                               Label="Создание пользователя">
+                        <mah:HamburgerMenuIconItem.Icon>
+                            <iconPacks:PackIconMaterial Width="22"
+                                                        Height="22"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Kind="AccountPlusOutline" />
                         </mah:HamburgerMenuIconItem.Icon>
                     </mah:HamburgerMenuIconItem>
 
@@ -211,11 +219,13 @@
                                                 </Style>
                                             </Grid.Style>
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="0.6*"/>
                                                 <ColumnDefinition />
                                             </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="150" />
+                                                <RowDefinition Height="50" />
+                                                <RowDefinition Height="50" />
+                                                <RowDefinition Height="50" />
                                                 <RowDefinition Height="50" />
                                                 <RowDefinition Height="50" />
                                                 <RowDefinition Height="50" />
@@ -225,6 +235,7 @@
                                                 <RowDefinition Height="50" />
                                             </Grid.RowDefinitions>
                                             <Border BorderThickness="1"
+                                                    Grid.RowSpan="3"
                                                     Margin="0,10,0,5"
                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                                                     Width="200">
@@ -234,7 +245,7 @@
                                                            Height="110"
                                                            Margin="10" />
                                                     <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
-                                                            CommandParameter="EditPhoto"
+                                                            CommandParameter="CurrentUserPhotoEdit"
                                                             Style="{StaticResource MahApps.Styles.Button.Square}"
                                                             Height="35"
                                                             Width="35"
@@ -254,7 +265,7 @@
                                                      mah:TextBoxHelper.Watermark="Email"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="20,5"
-                                                     Grid.Row="1" />
+                                                     Grid.Row="3" />
                                             <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.PhoneNumber1}"
                                                      Width="200"
                                                      mah:TextBoxHelper.ClearTextButton="True"
@@ -262,7 +273,7 @@
                                                      mah:TextBoxHelper.Watermark="Телефон 1"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="20,5"
-                                                     Grid.Row="2" />
+                                                     Grid.Row="4" />
                                             <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.PhoneNumber2}"
                                                      Width="200"
                                                      mah:TextBoxHelper.ClearTextButton="True"
@@ -270,7 +281,7 @@
                                                      mah:TextBoxHelper.Watermark="Телефон 2"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="20,5"
-                                                     Grid.Row="3" />
+                                                     Grid.Row="5" />
                                             <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.FirstName}"
                                                      Width="200"
                                                      mah:TextBoxHelper.ClearTextButton="True"
@@ -278,7 +289,7 @@
                                                      mah:TextBoxHelper.Watermark="Имя"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="20,5"
-                                                     Grid.Row="4" />
+                                                     Grid.Row="6" />
                                             <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.LastName}"
                                                      Width="200"
                                                      mah:TextBoxHelper.ClearTextButton="True"
@@ -286,27 +297,95 @@
                                                      mah:TextBoxHelper.Watermark="Фамилия"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="20,5"
-                                                     Grid.Row="5" />
+                                                     Grid.Row="7" />
                                             <PasswordBox x:Name="accessPasswordTextBox"
                                                          Margin="20,5"
                                                          FontSize="12"
                                                          Width="200"
-                                                         Grid.Row="6"
+                                                         Grid.Row="8"
                                                          PasswordChanged="accessPasswordTextBox_PasswordChanged"
                                                          mah:TextBoxHelper.UseFloatingWatermark="True"
                                                          mah:TextBoxHelper.Watermark="Текущий пароль"
                                                          mah:TextBoxHelper.ClearTextButton="True"
                                                          Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
                                             <Button Content="Сохранить"
-                                                    CommandParameter="SaveUser"
+                                                    CommandParameter="UserEdit"
                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
                                                     Style="{StaticResource MahApps.Styles.Button.Square}"
                                                     Width="200"
                                                     Margin="5"
-                                                    Grid.Row="7"
+                                                    Grid.Row="9"
                                                     ToolTip="Сохранить" />
+                                            <TextBlock Text="Смена пароля" FontSize="16"
+                                                       Grid.Row="0"
+                                                       Grid.Column="1"
+                                                       VerticalAlignment="Center"
+                                                       Margin="60,5" />
+                                            <PasswordBox x:Name="newPasswordTextBox"
+                                                         Margin="20,5"
+                                                         HorizontalAlignment="Left"
+                                                         Width="200"
+                                                         Grid.Row="1"
+                                                         Grid.Column="1"
+                                                         FontSize="12"
+                                                         mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                         mah:TextBoxHelper.Watermark="Новый пароль"
+                                                         Password=""
+                                                         mah:TextBoxHelper.ClearTextButton="True"
+                                                         PasswordChanged="newPasswordTextBox_PasswordChanged"
+                                                         Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
+                                            <PasswordBox x:Name="newPasswordTextBoxRepeat"
+                                                         Margin="20,5"
+                                                         Width="200"
+                                                         Grid.Row="2"
+                                                         Grid.Column="1"
+                                                         HorizontalAlignment="Left"
+                                                         FontSize="12"
+                                                         mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                         mah:TextBoxHelper.Watermark="Подтверждение нового пароля"
+                                                         Password=""
+                                                         PasswordChanged="newPasswordTextBoxRepeat_PasswordChanged"
+                                                         mah:TextBoxHelper.ClearTextButton="True"
+                                                         Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
+                                            <PasswordBox x:Name="oldPasswordTextBox"
+                                                         Margin="20,5"
+                                                         Width="200"
+                                                         Grid.Row="3"
+                                                         Grid.Column="1"
+                                                         HorizontalAlignment="Left"
+                                                         FontSize="12"
+                                                         mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                         mah:TextBoxHelper.Watermark="Старый пароль"
+                                                         Password=""
+                                                         PasswordChanged="oldPasswordTextBox_PasswordChanged"
+                                                         mah:TextBoxHelper.ClearTextButton="True"
+                                                         Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
+                                            <Button CommandParameter="UserChangePassword"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
+                                                    Style="{StaticResource MahApps.Styles.Button.Square}"
+                                                    Width="200"
+                                                    Margin="20,5"
+                                                    Grid.Row="4"
+                                                    Grid.Column="1"
+                                                    HorizontalAlignment="Left"
+                                                    Content="Сохранить пароль"
+                                                    ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}" />
+                                            <TextBlock Text="Права"
+                                                       FontSize="16"
+                                                       Grid.Row="5"
+                                                       Grid.Column="1"
+                                                       VerticalAlignment="Center"
+                                                       Margin="90,5" />
+                                            <ListBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.Position.ActivePermissionWrappers}"
+                                                     DisplayMemberPath="PermissionName"
+                                                     Grid.Row="6"
+                                                     Grid.Column="1" 
+                                                     Grid.RowSpan="4"
+                                                     BorderThickness="1"
+                                                     Margin="20,5,80,5"
+                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"/>
                                         </Grid>
-                                        <Grid>
+                                        <Grid Margin="10,0,0,10">
                                             <Grid.Style>
                                                 <Style TargetType="Grid">
                                                     <Setter Property="Visibility"
@@ -320,56 +399,140 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </Grid.Style>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition />
-                                                <ColumnDefinition />
-                                            </Grid.ColumnDefinitions>
                                             <Grid.RowDefinitions>
+                                                <RowDefinition Height="80" />
+                                                <RowDefinition Height="60" />
+                                                <RowDefinition Height="50" />
+                                                <RowDefinition Height="50" />
                                                 <RowDefinition Height="50" />
                                                 <RowDefinition Height="50" />
                                                 <RowDefinition Height="50" />
                                                 <RowDefinition Height="50" />
                                                 <RowDefinition Height="50" />
                                             </Grid.RowDefinitions>
-                                            <PasswordBox x:Name="newPasswordTextBox"
-                                                         Margin="20,5"
-                                                         Width="200"
-                                                         Grid.Row="1"
-                                                         FontSize="12"
-                                                         mah:TextBoxHelper.UseFloatingWatermark="True"
-                                                         mah:TextBoxHelper.Watermark="Новый пароль"
-                                                         Password=""
-                                                         mah:TextBoxHelper.ClearTextButton="True"
-                                                         Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
-                                            <PasswordBox x:Name="newPasswordTextBoxRepeat"
-                                                         Margin="20,5"
-                                                         Width="200"
-                                                         Grid.Row="2"
-                                                         FontSize="12"
-                                                         mah:TextBoxHelper.UseFloatingWatermark="True"
-                                                         mah:TextBoxHelper.Watermark="Подтверждение нового пароля"
-                                                         Password=""
-                                                         mah:TextBoxHelper.ClearTextButton="True"
-                                                         Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
-                                            <PasswordBox x:Name="oldPasswordTextBox"
-                                                         Margin="20,5"
-                                                         Width="200"
-                                                         Grid.Row="3"
-                                                         FontSize="12"
-                                                         mah:TextBoxHelper.UseFloatingWatermark="True"
-                                                         mah:TextBoxHelper.Watermark="Старый пароль"
-                                                         Password=""
-                                                         mah:TextBoxHelper.ClearTextButton="True"
-                                                         Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
-                                            <Button Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="auto" />
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <DataGrid x:Name="usersDataGrid" ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Users}"
+                                                      SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser}"
+                                                      BorderThickness="2"
+                                                      SelectedIndex="0"
+                                                      BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                                      Grid.RowSpan="9"
+                                                      IsReadOnly="True"
+                                                      Margin="0,10,10,5"
+                                                      Grid.Column="0"
+                                                      GridLinesVisibility="Horizontal"
+                                                      AutoGenerateColumns="False"
+                                                      HeadersVisibility="None">
+                                                <DataGrid.Columns>
+                                                    <DataGridTemplateColumn DisplayIndex="0"
+                                                                            CellTemplate="{StaticResource UserPhoto}" />
+                                                    <DataGridTextColumn Binding="{Binding FullName}"
+                                                                        Width="280"
+                                                                        IsReadOnly="True"
+                                                                        DisplayIndex="1" />
+                                                    <DataGridTemplateColumn CellTemplate="{StaticResource UserButtons}"
+                                                                            DisplayIndex="2" />
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                            
+                                            <Border BorderThickness="1"
+                                                    Grid.RowSpan="2"
+                                                    Grid.Column="1"
+                                                    HorizontalAlignment="Left"
+                                                    Margin="10,10,10,5"
+                                                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                                    Width="200">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.Image.LocalPhotoPath}"
+                                                           Width="100"
+                                                           Height="100"
+                                                           Margin="10" />
+                                                    <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
+                                                            CommandParameter="SelectedUserPhotoEdit"
+                                                            Style="{StaticResource MahApps.Styles.Button.Square}"
+                                                            Height="35"
+                                                            Width="35"
+                                                            Margin="25,10"
+                                                            VerticalAlignment="Top"
+                                                            ToolTip="Редактировать фото">
+                                                        <iconPacks:PackIconRemixIcon Kind="ImageEditLine"
+                                                                                     Width="23"
+                                                                                     Height="23" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                            <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Positions}"
+                                                      SelectedItem="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.Position, UpdateSourceTrigger=PropertyChanged}"
+                                                      Width="200"
+                                                      Margin="10,5"
+                                                      Grid.Row="2"
+                                                      Grid.Column="1"
+                                                      HorizontalAlignment="Left" />
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.Email}"
+                                                     Width="200"
+                                                     IsEnabled="False"
+                                                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                     mah:TextBoxHelper.Watermark="Email"
+                                                     mah:TextBoxHelper.WatermarkAlignment="Right"
+                                                     HorizontalAlignment="Left"
+                                                     Margin="10,5"
+                                                     Grid.Row="3"
+                                                     Grid.Column="1"/>
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.PhoneNumber1}"
+                                                     Width="200"
+                                                     mah:TextBoxHelper.ClearTextButton="True"
+                                                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                     mah:TextBoxHelper.Watermark="Телефон 1"
+                                                     mah:TextBoxHelper.WatermarkAlignment="Right"
+                                                     HorizontalAlignment="Left"
+                                                     Margin="10,5"
+                                                     Grid.Row="4"
+                                                     Grid.Column="1" />
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.PhoneNumber2}"
+                                                     Width="200"
+                                                     mah:TextBoxHelper.ClearTextButton="True"
+                                                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                     mah:TextBoxHelper.Watermark="Телефон 2"
+                                                     mah:TextBoxHelper.WatermarkAlignment="Right"
+                                                     HorizontalAlignment="Left"
+                                                     Margin="10,5"
+                                                     Grid.Row="5"
+                                                     Grid.Column="1" />
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.FirstName}"
+                                                     Width="200"
+                                                     mah:TextBoxHelper.ClearTextButton="True"
+                                                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                     mah:TextBoxHelper.Watermark="Имя"
+                                                     mah:TextBoxHelper.WatermarkAlignment="Right"
+                                                     HorizontalAlignment="Left"
+                                                     Margin="10,5"
+                                                     Grid.Row="6"
+                                                     Grid.Column="1" />
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.LastName}"
+                                                     Width="200"
+                                                     mah:TextBoxHelper.ClearTextButton="True"
+                                                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                     mah:TextBoxHelper.Watermark="Фамилия"
+                                                     mah:TextBoxHelper.WatermarkAlignment="Right"
+                                                     HorizontalAlignment="Left"
+                                                     Margin="10,5"
+                                                     Grid.Row="7"
+                                                     Grid.Column="1" />
+                                            <Button Content="Применить изменения"
+                                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
+                                                    CommandParameter="UsersEdit"
                                                     Style="{StaticResource MahApps.Styles.Button.Square}"
                                                     Width="200"
-                                                    Margin="5"
-                                                    Grid.Row="4"
-                                                    Content="Сохранить"
-                                                    ToolTip="Сохранить" />
+                                                    Margin="10,5"
+                                                    Grid.Row="8"
+                                                    Grid.Column="1"
+                                                    HorizontalAlignment="Left"
+                                                    ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}" />
                                         </Grid>
-                                        <Grid Margin="0,0,0,10">
+                                        <Grid>
                                             <Grid.Style>
                                                 <Style TargetType="Grid">
                                                     <Setter Property="Visibility"
@@ -384,95 +547,97 @@
                                                 </Style>
                                             </Grid.Style>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition Height="60" />
-                                                <RowDefinition Height="60" />
-                                                <RowDefinition Height="60" />
-                                                <RowDefinition Height="60" />
-                                                <RowDefinition Height="60" />
-                                                <RowDefinition Height="60" />
-                                                <RowDefinition Height="*" />
-                                                <RowDefinition Height="60" />
+                                                <RowDefinition Height="150" />
+                                                <RowDefinition Height="50" />
+                                                <RowDefinition Height="50" />
+                                                <RowDefinition Height="50" />
+                                                <RowDefinition Height="50" />
+                                                <RowDefinition Height="50" />
+                                                <RowDefinition Height="50" />
+                                                <RowDefinition Height="50" />
                                             </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto" />
-                                                <ColumnDefinition />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUserLastName}"
+                                            <Border BorderThickness="1"
+                                                    Margin="0,10,0,5"
+                                                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                                    Width="200">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.Image.LocalPhotoPath}"
+                                                           Width="110"
+                                                           Height="110"
+                                                           Margin="10" />
+                                                    <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
+                                                            CommandParameter="NewUserPhotoEdit"
+                                                            Style="{StaticResource MahApps.Styles.Button.Square}"
+                                                            Height="35"
+                                                            Width="35"
+                                                            Margin="25,10"
+                                                            VerticalAlignment="Top"
+                                                            ToolTip="Редактировать фото">
+                                                        <iconPacks:PackIconRemixIcon Kind="ImageEditLine"
+                                                                                     Width="23"
+                                                                                     Height="23" />
+                                                    </Button>
+                                                </StackPanel>
+                                            </Border>
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.PhoneNumber1}"
                                                      Width="200"
-                                                     Grid.Row="0"
+                                                     mah:TextBoxHelper.ClearTextButton="True"
+                                                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                     mah:TextBoxHelper.Watermark="Телефон 1"
+                                                     mah:TextBoxHelper.WatermarkAlignment="Right"
+                                                     Margin="5"
+                                                     Grid.Row="1" />
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.PhoneNumber2}"
+                                                     Width="200"
+                                                     mah:TextBoxHelper.ClearTextButton="True"
+                                                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                                                     mah:TextBoxHelper.Watermark="Телефон 2"
+                                                     mah:TextBoxHelper.WatermarkAlignment="Right"
+                                                     Margin="5"
+                                                     Grid.Row="2" />
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.LastName}"
+                                                     Width="200"
+                                                     Grid.Row="3"
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Фамилия пользователя"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
-                                                     Margin="10" />
-                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUserFirstName}"
+                                                     Margin="5"/>
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.FirstName}"
                                                      Width="200"
-                                                     Grid.Row="1"
+                                                     Grid.Row="4"
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Имя нового пользователя"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
-                                                     Margin="10" />
-                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUserEmail}"
+                                                     Margin="5"/>
+                                            <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.Email}"
                                                      Width="200"
-                                                     Grid.Row="2"
+                                                     Grid.Row="5"
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Email нового пользователя"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
-                                                     Margin="10" />
+                                                     Margin="5"/>
                                             <PasswordBox x:Name="newUserPasswordTextBox"
-                                                         Margin="10"
+                                                         Margin="5"
                                                          Width="200"
-                                                         Grid.Row="3"
+                                                         Grid.Row="6"
                                                          FontSize="12"
                                                          mah:TextBoxHelper.UseFloatingWatermark="True"
                                                          mah:TextBoxHelper.Watermark="Пароль нового пользователя"
                                                          Password=""
                                                          mah:TextBoxHelper.ClearTextButton="True"
-                                                         Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" 
+                                                         Style="{StaticResource MahApps.Styles.PasswordBox.Win8}"
                                                          PasswordChanged="newUserPasswordTextBox_PasswordChanged"/>
                                             <Button Content="Добавить пользователя"
                                                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
-                                                    CommandParameter="UserAdd"
+                                                    CommandParameter="UserCreate"
                                                     Style="{StaticResource MahApps.Styles.Button.Square}"
                                                     Width="200"
-                                                    Margin="10"
-                                                    Grid.Row="4"
-                                                    ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}" />
-                                            <DataGrid ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Users}"
-                                                      BorderThickness="2"
-                                                      BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
-                                                      Grid.RowSpan="7"
-                                                      IsReadOnly="True"
-                                                      Margin="0,10,10,10"
-                                                      Grid.Column="1"
-                                                      GridLinesVisibility="Horizontal"
-                                                      AutoGenerateColumns="False"
-                                                      HeadersVisibility="None">
-                                                <DataGrid.Columns>
-                                                    <DataGridTemplateColumn DisplayIndex="0"
-                                                                            CellTemplate="{StaticResource UserPhoto}" />
-                                                    <DataGridTextColumn Binding="{Binding FullName}"
-                                                                        Width="165"
-                                                                        IsReadOnly="True"
-                                                                        DisplayIndex="1" />
-                                                    <DataGridTemplateColumn CellTemplate="{StaticResource PositionsCombobox}"
-                                                                            DisplayIndex="2" />
-                                                    <DataGridTemplateColumn CellTemplate="{StaticResource UserSkipPwdButton}"
-                                                                            DisplayIndex="3" />
-                                                </DataGrid.Columns>
-                                            </DataGrid>
-                                            <Button Content="Применить настройки пользователей"
-                                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
-                                                    CommandParameter="UsersEdit"
-                                                    Style="{StaticResource MahApps.Styles.Button.Square}"
-                                                    Width="250"
-                                                    Margin="0,10"
+                                                    Margin="5"
                                                     Grid.Row="7"
-                                                    Grid.Column="1"
-                                                    HorizontalAlignment="Left"
-                                                    ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}" />
+                                                    ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}"/>
                                         </Grid>
                                         <Grid>
                                             <Grid.Style>
@@ -572,7 +737,6 @@
                                             </StackPanel>
                                         </Grid>
                                     </Grid>
-
                                 </DataTemplate>
                             </mah:ContentControlEx.Resources>
                         </mah:ContentControlEx>

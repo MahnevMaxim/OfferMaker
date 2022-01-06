@@ -16,7 +16,6 @@ namespace Shared
         [Required]
         public string Email { get; set; }
 
-        [Required]
         public string Pwd { get; set; }
 
         public string FirstName { get; set; }

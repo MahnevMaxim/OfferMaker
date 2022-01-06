@@ -30,6 +30,8 @@ namespace OfferMaker
         static readonly string positionDeleteErrorMess = "Ошибка при попытке удалить должность.";
         static readonly string positionsGetErrorMess = "Ошибка при попытке получить должности.";
         static readonly string userAddErrorMess = "Ошибка при попытке добавить пользователя.";
+        static readonly string userChangePasswordErrorMess = "Ошибка при попытке обновить пароль.";
+        static readonly string userDeleteErrorMess = "Ошибка при попытке удалить пользователя.";
 
         public ServerData(string accessToken)
         {
@@ -39,81 +41,125 @@ namespace OfferMaker
             client = new Client(apiEndpoint, httpClient);
         }
 
+        #region Users
+
         /// <summary>
-        /// Пытаемся получить валюты с сервера.
+        /// Удаление пользователя.
         /// </summary>
+        /// <param name="user"></param>
         /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Currency>>> GetCurrencies()
+        async internal Task<CallResult> UserDelete(User user)
         {
             try
             {
-                var response = await client.CurrenciesAllAsync();
-                if (response.StatusCode == 200)
+                var response = await client.UserDeleteAsync(user.Id);
+                if (response.StatusCode == 204)
                 {
-                    ObservableCollection<Currency> res = Helpers.CloneObject<ObservableCollection<Currency>>(response.Result);
-                    return new CallResult<ObservableCollection<Currency>>() { Data = res };
+                    return new CallResult() { SuccessMessage = "Пользователь удалён" };
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<Currency>>() { Error = new Error(response.StatusCode, getCurrencyErrorMess) };
+                    return new CallResult() { Error = new Error(userDeleteErrorMess) };
+                }
+            }
+            catch (ApiException ex)
+            {
+                Log.Write(ex);
+                if (ex.StatusCode == 404)
+                {
+                    return new CallResult() { Error = new Error(ex.StatusCode, userDeleteErrorMess + " Пользователь не найден.") };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(ex.StatusCode, userDeleteErrorMess) };
                 }
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
-                return new CallResult<ObservableCollection<Currency>>() { Error = new Error(getCurrencyErrorMess) };
+                return new CallResult() { Error = new Error(userDeleteErrorMess) };
             }
         }
 
         /// <summary>
-        /// Пытаемся получить номенклатуру с сервера.
+        /// Добавляем нового пользователя.
         /// </summary>
+        /// <param name="user"></param>
         /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures()
+        async internal Task<CallResult<User>> UserCreate(User user)
         {
             try
             {
-                var response = await client.NomenclaturesAllAsync();
-                if (response.StatusCode == 200)
+                Global.ImageManager.UploadImage(user);
+                ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
+                var response = await client.UserCreateAsync(userCopy);
+                if (response.StatusCode == 201)
                 {
-                    ObservableCollection<Nomenclature> res = Helpers.CloneObject<ObservableCollection<Nomenclature>>(response.Result);
-                    return new CallResult<ObservableCollection<Nomenclature>>() { Data = res };
+                    User res = Helpers.CloneObject<User>(response.Result);
+                    user.Id = res.Id;
+                    return new CallResult<User>() { Data = user, SuccessMessage = "Пользователь добавлен" };
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error(response.StatusCode, getNomenclaturesErrorMess) };
+                    return new CallResult<User>() { Error = new Error(userAddErrorMess) };
                 }
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
-                return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error(getNomenclaturesErrorMess) };
+                return new CallResult<User>() { Error = new Error(userAddErrorMess) };
             }
         }
 
         /// <summary>
-        /// Пытаемся получить категории с сервера.
+        /// Пытаемся получить пользователей с сервера.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Category>>> GetCategories()
+        async internal Task<CallResult<ObservableCollection<User>>> UsersGet()
         {
             try
             {
-                var response = await client.CategoriesAllAsync();
+                var response = await client.UsersGetAsync();
                 if (response.StatusCode == 200)
                 {
-                    ObservableCollection<Category> res = Helpers.CloneObject<ObservableCollection<Category>>(response.Result);
-                    return new CallResult<ObservableCollection<Category>>() { Data = res };
+                    ObservableCollection<User> res = Helpers.CloneObject<ObservableCollection<User>>(response.Result);
+                    return new CallResult<ObservableCollection<User>>() { Data = res };
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<Category>>() { Error = new Error(response.StatusCode, getCategoriesErrorMess) };
+                    return new CallResult<ObservableCollection<User>>() { Error = new Error(getUsersErrorMess) };
                 }
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
-                return new CallResult<ObservableCollection<Category>>() { Error = new Error(getCategoriesErrorMess) };
+                return new CallResult<ObservableCollection<User>>() { Error = new Error(getUsersErrorMess) };
+            }
+        }
+
+        /// <summary>
+        /// Меняем пароль.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult> UserChangePassword(User user, string oldPwd)
+        {
+            try
+            {
+                ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
+                var response = await client.UserChangePasswordAsync(oldPwd, userCopy);
+                if (response.StatusCode == 204)
+                {
+                    return new CallResult() { SuccessMessage = "Пароль обновлён" };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(userChangePasswordErrorMess) };
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult() { Error = new Error(userChangePasswordErrorMess, ex) };
             }
         }
 
@@ -126,7 +172,20 @@ namespace OfferMaker
         {
             try
             {
+                users.ToList().ForEach(u => 
+                { 
+                    if(u.Image != null && u.Image.Guid!=null)
+                        Global.ImageManager.UploadImage(u);
+                });
                 IEnumerable<ApiLib.User> usersCopy = Helpers.CloneObject<IEnumerable<ApiLib.User>>(users);
+                usersCopy.ToList().ForEach(u =>
+                {
+                    if (u.Image != null && u.Image.Guid == null)
+                    {
+                        //обнуляем фото, если стоит фото по умолчанию
+                        u.Image = null;
+                    }
+                });
                 ApiResponse<ICollection<ApiLib.User>> result = await client.UsersEditAsync(usersCopy);
                 string message = "";
                 result.Result.ToList().ForEach(u =>
@@ -141,6 +200,31 @@ namespace OfferMaker
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить пользователей на сервере.") };
             }
         }
+
+        /// <summary>
+        /// Редактирование пользователя.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> UserEdit(User user)
+        {
+            try
+            {
+                Global.ImageManager.UploadImage(user);
+                ApiLib.User us = Helpers.CloneObject<ApiLib.User>(user);
+                await client.UserEditAsync(us.Id, us);
+                return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить пользователя на сервере.") };
+            }
+        }
+
+        #endregion Users
+
+        #region Positions
 
         /// <summary>
         /// Получаем должности.
@@ -169,6 +253,31 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Сохранение изменений в должностях на сервере.
+        /// </summary>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> PositionsSave(ObservableCollection<Position> positions)
+        {
+            try
+            {
+                IEnumerable<ApiLib.Position> positionsCopy = Helpers.CloneObject<IEnumerable<ApiLib.Position>>(positions);
+                ApiResponse<ICollection<ApiLib.Position>> result = await client.PositionsSaveAsync(positionsCopy);
+                string message = "";
+                result.Result.ToList().ForEach(p =>
+                {
+                    message += "Разрешения для должности " + p.PositionName + " сохранены.\n";
+                });
+                return new CallResult() { SuccessMessage = message.Trim() };
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить должность на сервере.") };
+            }
+        }
+
+        /// <summary>
         /// Удаление должности.
         /// </summary>
         /// <param name="pos"></param>
@@ -191,84 +300,6 @@ namespace OfferMaker
             {
                 Log.Write(ex);
                 return new CallResult() { Error = new Error(positionDeleteErrorMess) };
-            }
-        }
-
-        /// <summary>
-        /// Пытаемся получить пользователей с сервера.
-        /// </summary>
-        /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<User>>> GetUsers()
-        {
-            try
-            {
-                var response = await client.UsersGetAsync();
-                if (response.StatusCode == 200)
-                {
-                    ObservableCollection<User> res = Helpers.CloneObject<ObservableCollection<User>>(response.Result);
-                    return new CallResult<ObservableCollection<User>>() { Data = res };
-                }
-                else
-                {
-                    return new CallResult<ObservableCollection<User>>() { Error = new Error(getUsersErrorMess) };
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex);
-                return new CallResult<ObservableCollection<User>>() { Error = new Error(getUsersErrorMess) };
-            }
-        }
-
-        /// <summary>
-        /// Пытаемся получить группы номенклатур с сервера.
-        /// </summary>
-        /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups()
-        {
-            try
-            {
-                var response = await client.NomenclatureGroupsAllAsync();
-                if (response.StatusCode == 200)
-                {
-                    ObservableCollection<NomenclatureGroup> res = Helpers.CloneObject<ObservableCollection<NomenclatureGroup>>(response.Result);
-                    return new CallResult<ObservableCollection<NomenclatureGroup>>() { Data = res };
-                }
-                else
-                {
-                    return new CallResult<ObservableCollection<NomenclatureGroup>>() { Error = new Error(getNomenclatureGroupErrorMess) };
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex);
-                return new CallResult<ObservableCollection<NomenclatureGroup>>() { Error = new Error(getNomenclatureGroupErrorMess) };
-            }
-        }
-
-        /// <summary>
-        /// Пытаемся получить архив КП с сервера.
-        /// </summary>
-        /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers()
-        {
-            try
-            {
-                var response = await client.OffersAllAsync();
-                if (response.StatusCode == 200)
-                {
-                    ObservableCollection<Offer> res = Helpers.CloneObject<ObservableCollection<Offer>>(response.Result);
-                    return new CallResult<ObservableCollection<Offer>>() { Data = res };
-                }
-                else
-                {
-                    return new CallResult<ObservableCollection<Offer>>() { Error = new Error(getOffersErrorMess) };
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex);
-                return new CallResult<ObservableCollection<Offer>>() { Error = new Error(getOffersErrorMess) };
             }
         }
 
@@ -313,75 +344,33 @@ namespace OfferMaker
             }
         }
 
+        #endregion Positions
+
+        #region Currencies
 
         /// <summary>
-        /// Добавляем нового пользователя.
+        /// Пытаемся получить валюты с сервера.
         /// </summary>
-        /// <param name="user"></param>
         /// <returns></returns>
-        async internal Task<CallResult<User>> UserAdd(User user)
+        async internal Task<CallResult<ObservableCollection<Currency>>> GetCurrencies()
         {
             try
             {
-                ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
-                var response = await client.UserAddAsync(userCopy);
-                if (response.StatusCode == 201)
+                var response = await client.CurrenciesAllAsync();
+                if (response.StatusCode == 200)
                 {
-                    User res = Helpers.CloneObject<User>(response.Result);
-                    user.Id = res.Id;
-                    return new CallResult<User>() { Data = user, SuccessMessage = "Пользователь добавлен" };
+                    ObservableCollection<Currency> res = Helpers.CloneObject<ObservableCollection<Currency>>(response.Result);
+                    return new CallResult<ObservableCollection<Currency>>() { Data = res };
                 }
                 else
                 {
-                    return new CallResult<User>() { Error = new Error(userAddErrorMess) };
+                    return new CallResult<ObservableCollection<Currency>>() { Error = new Error(response.StatusCode, getCurrencyErrorMess) };
                 }
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
-                return new CallResult<User>() { Error = new Error(userAddErrorMess) };
-            }
-        }
-
-
-        /// <summary>
-        /// Пытаемся сохранить группы номенклатур на сервере.
-        /// </summary>
-        /// <param name="nomenclatureGroups"></param>
-        /// <returns></returns>
-        async internal Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups)
-        {
-            try
-            {
-                IEnumerable<ApiLib.NomenclatureGroup> nomeGroups = Helpers.CloneObject<IEnumerable<ApiLib.NomenclatureGroup>>(nomenclatureGroups);
-                await client.NomenclatureGroupsPUTAsync(nomeGroups);
-                return new CallResult();
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить группы номенклатур на сервере.") };
-            }
-        }
-
-        /// <summary>
-        /// Пытаемся сохранить КП на сервере.
-        /// </summary>
-        /// <param name="offer"></param>
-        /// <returns></returns>
-        async internal Task<CallResult> SaveOffer(Offer offer)
-        {
-            try
-            {
-                ApiLib.Offer offerCopy = Helpers.CloneObject<ApiLib.Offer>(offer);
-                var res = await client.OffersPOSTAsync(offerCopy);
-                offer.Id = res.Result.Id;
-                return new CallResult();
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить КП на сервере.") };
+                return new CallResult<ObservableCollection<Currency>>() { Error = new Error(getCurrencyErrorMess) };
             }
         }
 
@@ -402,6 +391,36 @@ namespace OfferMaker
             {
                 Log.Write(ex);
                 return new CallResult() { Error = new Error("Ошибка при попытке сохранить валюты на сервере.") };
+            }
+        }
+
+        #endregion Currencies
+
+        #region Nomenclatures
+
+        /// <summary>
+        /// Пытаемся получить номенклатуру с сервера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures()
+        {
+            try
+            {
+                var response = await client.NomenclaturesAllAsync();
+                if (response.StatusCode == 200)
+                {
+                    ObservableCollection<Nomenclature> res = Helpers.CloneObject<ObservableCollection<Nomenclature>>(response.Result);
+                    return new CallResult<ObservableCollection<Nomenclature>>() { Data = res };
+                }
+                else
+                {
+                    return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error(response.StatusCode, getNomenclaturesErrorMess) };
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error(getNomenclaturesErrorMess) };
             }
         }
 
@@ -429,6 +448,36 @@ namespace OfferMaker
             }
         }
 
+        #endregion Nomenclatures
+
+        #region Categories
+
+        /// <summary>
+        /// Пытаемся получить категории с сервера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Category>>> GetCategories()
+        {
+            try
+            {
+                var response = await client.CategoriesAllAsync();
+                if (response.StatusCode == 200)
+                {
+                    ObservableCollection<Category> res = Helpers.CloneObject<ObservableCollection<Category>>(response.Result);
+                    return new CallResult<ObservableCollection<Category>>() { Data = res };
+                }
+                else
+                {
+                    return new CallResult<ObservableCollection<Category>>() { Error = new Error(response.StatusCode, getCategoriesErrorMess) };
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult<ObservableCollection<Category>>() { Error = new Error(getCategoriesErrorMess) };
+            }
+        }
+
         /// <summary>
         /// Сохранение категорий на сервере.
         /// </summary>
@@ -449,28 +498,104 @@ namespace OfferMaker
             }
         }
 
+        #endregion Categories
+
+        #region Nomenclature groups
+
         /// <summary>
-        /// Сохранение изменений в должностях на сервере.
+        /// Пытаемся получить группы номенклатур с сервера.
         /// </summary>
-        /// <param name="position"></param>
         /// <returns></returns>
-        async internal Task<CallResult> PositionsSave(ObservableCollection<Position> positions)
+        async internal Task<CallResult<ObservableCollection<NomenclatureGroup>>> GetNomGroups()
         {
             try
             {
-                IEnumerable<ApiLib.Position> positionsCopy = Helpers.CloneObject<IEnumerable<ApiLib.Position>>(positions);
-                ApiResponse<ICollection<ApiLib.Position>> result = await client.PositionsSaveAsync(positionsCopy);
-                string message = "";
-                result.Result.ToList().ForEach(p =>
+                var response = await client.NomenclatureGroupsAllAsync();
+                if (response.StatusCode == 200)
                 {
-                    message += "Разрешения для должности " + p.PositionName + " сохранены.\n";
-                });
-                return new CallResult() { SuccessMessage = message.Trim() };
+                    ObservableCollection<NomenclatureGroup> res = Helpers.CloneObject<ObservableCollection<NomenclatureGroup>>(response.Result);
+                    return new CallResult<ObservableCollection<NomenclatureGroup>>() { Data = res };
+                }
+                else
+                {
+                    return new CallResult<ObservableCollection<NomenclatureGroup>>() { Error = new Error(getNomenclatureGroupErrorMess) };
+                }
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить должность на сервере.") };
+                return new CallResult<ObservableCollection<NomenclatureGroup>>() { Error = new Error(getNomenclatureGroupErrorMess) };
+            }
+        }
+
+        /// <summary>
+        /// Пытаемся сохранить группы номенклатур на сервере.
+        /// </summary>
+        /// <param name="nomenclatureGroups"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveNomenclatureGroups(ObservableCollection<NomenclatureGroup> nomenclatureGroups)
+        {
+            try
+            {
+                IEnumerable<ApiLib.NomenclatureGroup> nomeGroups = Helpers.CloneObject<IEnumerable<ApiLib.NomenclatureGroup>>(nomenclatureGroups);
+                await client.NomenclatureGroupsPUTAsync(nomeGroups);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить группы номенклатур на сервере.") };
+            }
+        }
+
+        #endregion Nomenclature groups
+
+        #region Offers
+
+        /// <summary>
+        /// Пытаемся получить архив КП с сервера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers()
+        {
+            try
+            {
+                var response = await client.OffersAllAsync();
+                if (response.StatusCode == 200)
+                {
+                    ObservableCollection<Offer> res = Helpers.CloneObject<ObservableCollection<Offer>>(response.Result);
+                    return new CallResult<ObservableCollection<Offer>>() { Data = res };
+                }
+                else
+                {
+                    return new CallResult<ObservableCollection<Offer>>() { Error = new Error(getOffersErrorMess) };
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult<ObservableCollection<Offer>>() { Error = new Error(getOffersErrorMess) };
+            }
+        }
+
+        /// <summary>
+        /// Пытаемся сохранить КП на сервере.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> SaveOffer(Offer offer)
+        {
+            try
+            {
+                ApiLib.Offer offerCopy = Helpers.CloneObject<ApiLib.Offer>(offer);
+                var res = await client.OffersPOSTAsync(offerCopy);
+                offer.Id = res.Result.Id;
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult() { Error = new Error("Ошибка при попытке сохранить КП на сервере.") };
             }
         }
 
@@ -494,27 +619,15 @@ namespace OfferMaker
             }
         }
 
-        async internal Task<CallResult> UserSave(User user)
-        {
-            try
-            {
-                Global.ImageManager.UploadImage(user);
-                ApiLib.User us = Helpers.CloneObject<ApiLib.User>(user);
-                await client.UserEditAsync(us.Id, us);
-                return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить пользователя на сервере.") };
-            }
-        }
+        #endregion Offers
 
+        #region Hints
 
         internal Task<CallResult<StringCollection>> GetHints()
         {
             throw new NotImplementedException();
         }
 
+        #endregion Hints
     }
 }

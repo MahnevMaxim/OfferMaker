@@ -12,6 +12,8 @@ namespace OfferMaker
     {
         int menuSelectedIndex;
         Position selectedPosition;
+        User selectedUser;
+        User newUser = new User() { Image = Global.NoProfileImage };
 
         public ObservableCollection<User> Users { get; set; }
 
@@ -29,13 +31,41 @@ namespace OfferMaker
 
         public User User { get; set; }
 
-        public string NewUserLastName { get; set; }
+        public User SelectedUser
+        {
+            get => selectedUser;
+            set
+            {
+                selectedUser = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string NewUserFirstName { get; set; }
+        #region New user
+
+        public User NewUser
+        {
+            get => newUser;
+            set
+            {
+                newUser = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string NewUserPassword { get; set; }
 
-        public string NewUserEmail { get; set; }
+        #endregion New user
+
+        #region Change password
+
+        public string NewAccountPassword { get; set; }
+
+        public string NewAccountPasswordRepeat { get; set; }
+
+        public string OldAccountPassword { get; set; }
+
+        #endregion Change password
 
         public string NewPositionName { get; set; }
 
@@ -106,42 +136,121 @@ namespace OfferMaker
 
         #endregion Positions
 
-        async public void SaveUser()
+        async public void UserChangePassword()
         {
-            CallResult cr = await Global.Main.DataRepository.UserSave(User);
+            if (string.IsNullOrWhiteSpace(NewAccountPassword))
+            {
+                OnSendMessage("Введите новый пароль");
+                return;
+            }
+            if (NewAccountPassword != NewAccountPasswordRepeat)
+            {
+                OnSendMessage("Подтверждение не совпадает с паролем");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(OldAccountPassword))
+            {
+                OnSendMessage("Введите пароль");
+                return;
+            }
+            User.Pwd = NewAccountPassword;
+            CallResult cr = await Global.Main.DataRepository.UserChangePassword(User, OldAccountPassword);
             OnSendMessage(cr.Message);
         }
 
-        public void EditPhoto()
+        async public void UserEdit()
+        {
+            if (string.IsNullOrWhiteSpace(User.Pwd))
+            {
+                OnSendMessage("Введите пароль");
+                return;
+            }
+            CallResult cr = await Global.Main.DataRepository.UserEdit(User);
+            OnSendMessage(cr.Message);
+        }
+
+        public void CurrentUserPhotoEdit() => UserPhotoEdit(User);
+
+        public void SelectedUserPhotoEdit() => UserPhotoEdit(SelectedUser);
+
+        public void NewUserPhotoEdit() => UserPhotoEdit(NewUser);
+
+        public void UserPhotoEdit(User user)
         {
             string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
             if (path != null)
             {
                 Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
                 Global.ImageManager.Add(image);
-                User.Image = image;
+                user.Image = image;
             }
         }
 
-        async public void UserAdd()
+        async public void UserCreate()
         {
-            if (string.IsNullOrWhiteSpace(NewUserLastName)  || string.IsNullOrWhiteSpace(NewUserFirstName)
-                || string.IsNullOrWhiteSpace(NewUserEmail) || string.IsNullOrWhiteSpace(NewUserPassword))
+            if (string.IsNullOrWhiteSpace(NewUser.LastName) || NewUser.LastName.Length < 2)
             {
-                OnSendMessage("Фамилия, имя, email и пароль должны быть заполнены.");
+                OnSendMessage("Фамилия должна быть заполнена и содержать минимум 2 символа.");
                 return;
             }
 
-            User user = new User() { LastName = NewUserLastName, FirstName = NewUserFirstName, Email = NewUserEmail, Pwd = NewUserPassword };
-            CallResult<User> cr = await Global.Main.DataRepository.UserAdd(user);
+            if (string.IsNullOrWhiteSpace(NewUser.FirstName) || NewUser.FirstName.Length < 2)
+            {
+                OnSendMessage("Имя должно быть заполнено и содержать минимум 2 символа.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(NewUser.Email) || !EmailValidator.IsValidEmail(NewUser.Email))
+            {
+                OnSendMessage("Email должен быть заполнен и валиден.");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(NewUserPassword) || NewUserPassword.Length < 8)
+            {
+                OnSendMessage("Пароль должен быть заполнен и содержать мимнимум 8 символов.");
+                return;
+            }
+
+            NewUser.Pwd = NewUserPassword;
+            CallResult<User> cr = await Global.Main.DataRepository.UserCreate(NewUser);
             if (cr.Success)
-                Users.Add(user);
+            {
+                Users.Add(cr.Data);
+                NewUser = new User() { Image = Global.NoProfileImage };
+                ((ViewModels.AdminPanelViewModel)viewModel).ClearPwdNewUserPasswordTextBox();
+                MenuSelectedIndex = 1;
+            }
             OnSendMessage(cr.Message);
         }
 
         async public void UsersEdit()
         {
             CallResult cr = await Global.Main.DataRepository.UsersEdit(Users);
+            OnSendMessage(cr.Message);
+        }
+
+        async public void SkipSelectUserPassword(User user)
+        {
+            SimpleViews.NewPasswordForm form = new SimpleViews.NewPasswordForm();
+            var res = form.ShowDialog();
+            if (res == true)
+            {
+                user.Pwd = form.passwordTextBox.Password;
+                CallResult cr = await Global.Main.DataRepository.UserChangePassword(user, null);
+                OnSendMessage(cr.Message);
+            }
+        }
+
+        async public void UserDelete(User user)
+        {
+            CallResult cr = await Global.Main.DataRepository.UserDelete(user);
+            if (cr.Success)
+            {
+                Users.Remove(user);
+                if (Users.Count > 0)
+                    SelectedUser = Users[0];
+            }
             OnSendMessage(cr.Message);
         }
     }

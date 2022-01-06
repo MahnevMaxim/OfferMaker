@@ -4,19 +4,46 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace OfferMaker.ViewModels
 {
     public class AdminPanelViewModel : BaseViewModel
     {
         AdminPanel adminPanel;
+        private IDialogCoordinator dialogCoordinator;
 
         public override void InitializeViewModel()
         {
             adminPanel = (AdminPanel)model;
+            dialogCoordinator = ((Views.AdminPanel)view).dialogCoordinator;
+        }
+
+        public RelayCommand UserDeleteCommand { get => new RelayCommand(obj =>
+        {
+            UserDelete((User)obj);
+        }); }
+
+        async void UserDelete(User user)
+        {
+            var dialogSettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "Удалить",
+                NegativeButtonText = "Отмена"
+            };
+            var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "Удаление пользователя","Удалить пользователя из базы данных?", 
+                MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+            if (dialogRes == MessageDialogResult.Affirmative)
+                adminPanel.UserDelete(user);
         }
 
         public User User { get => adminPanel.User; }
+
+        public User SelectedUser 
+        { 
+            get => adminPanel.SelectedUser;
+            set => adminPanel.SelectedUser = value;
+        }
 
         public ObservableCollection<User> Users { get => adminPanel.Users; }
 
@@ -52,25 +79,7 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public string NewUserLastName
-        {
-            get => adminPanel.NewUserLastName;
-            set
-            {
-                adminPanel.NewUserLastName = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string NewUserFirstName
-        {
-            get => adminPanel.NewUserFirstName;
-            set
-            {
-                adminPanel.NewUserFirstName = value;
-                OnPropertyChanged();
-            }
-        }
+        public void ClearPwdNewUserPasswordTextBox() => ((Views.AdminPanel)view).ClearPwdNewUserPasswordTextBox();
 
         public string NewUserPassword
         {
@@ -82,14 +91,24 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public string NewUserEmail
+        public User NewUser
         {
-            get => adminPanel.NewUserEmail;
+            get => adminPanel.NewUser;
             set
             {
-                adminPanel.NewUserEmail = value;
+                adminPanel.NewUser = value;
                 OnPropertyChanged();
             }
         }
+
+        #region Change password
+
+        public string NewAccountPassword {set => adminPanel.NewAccountPassword = value;}
+
+        public string NewAccountPasswordRepeat { set => adminPanel.NewAccountPasswordRepeat = value; }
+
+        public string OldAccountPassword { set => adminPanel.OldAccountPassword = value; }
+
+        #endregion Change password
     }
 }

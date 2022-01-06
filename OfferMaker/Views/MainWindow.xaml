@@ -550,7 +550,7 @@
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding PhotoPath}"
+                                        <Image Source="{Binding Image.LocalPhotoPath}"
                                                Width="38"
                                                Height="38"/>
                                         <StackPanel Margin="5,0,0,0">

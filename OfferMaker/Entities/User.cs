@@ -12,6 +12,7 @@ namespace OfferMaker
     {
         string photoPath;
         Image image;
+        Position position;
 
         public int Id { get; set; }
 
@@ -47,8 +48,12 @@ namespace OfferMaker
 
         public Position Position
         { 
-            get; 
-            set; 
+            get=> position; 
+            set
+            {
+                position = value;
+                OnPropertyChanged();
+            }
         }
 
         public override string ToString() => FullName;

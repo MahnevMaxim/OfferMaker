@@ -10,6 +10,7 @@ using Shared;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNet.Identity;
 
 namespace API.Controllers
 {
@@ -51,7 +52,7 @@ namespace API.Controllers
             {
                 access_token = encodedJwt,
                 username = identity.Name,
-                user= user
+                user = user
             };
 
             return Ok(response);
@@ -59,19 +60,28 @@ namespace API.Controllers
 
         async private Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            var res = await _context.Users.ToListAsync();
-            User user = res.FirstOrDefault(x => x.Email == username && x.Pwd == password);
+            var res = await _context.Users.Include(u=>u.Position).ToListAsync();
+            User user = res.FirstOrDefault(x => x.Email == username);
             if (user != null)
             {
-                var claims = new List<Claim>
+                var ph = new PasswordHasher();
+                var isCurrentHashValid = ph.VerifyHashedPassword(user.Pwd, password);
+                if (isCurrentHashValid == PasswordVerificationResult.Success)
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
-                    //new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role ?? "admin"),
-                };
-                ClaimsIdentity claimsIdentity =
-                new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
-                    ClaimsIdentity.DefaultRoleClaimType);
-                return claimsIdentity;
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                    };
+                    foreach(var p in user.Position.Permissions)
+                    {
+                        claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, p.ToString()));
+                    }
+                    ClaimsIdentity claimsIdentity =
+                    new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                        ClaimsIdentity.DefaultRoleClaimType);
+                    return claimsIdentity;
+                }
+                return null;
             }
 
             // если пользователя не найдено
