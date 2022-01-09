@@ -23,8 +23,6 @@ namespace Shared
 
         public string PhoneNumber2 { get; set; }
 
-        public string PhotoPath { get; set; }
-
         public Image Image { get; set; }
     }
 }

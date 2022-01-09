@@ -201,10 +201,12 @@ namespace OfferMaker
         /// <param name="parentId"></param>
         private void SetParents(ObservableCollection<Category> categoriesTree, int? parentId, string parentGuid)
         {
+            int order=0;
             categoriesTree.ToList().ForEach(c =>
             {
                 c.ParentId = parentId;
                 c.ParentGuid = parentGuid;
+                c.Order = order++;
                 SetParents(c.Childs, c.Id, c.Guid);
             });
         }
@@ -262,6 +264,8 @@ namespace OfferMaker
         public void OpenDescriptions(NomWrapper nomWrapper) => Constructor.OpenDescriptions(nomWrapper);
 
         public void CloseRowDetails(NomWrapper nomWrapper) => Constructor.CloseRowDetails(nomWrapper);
+
+        public void OpenCardNomWrapper(NomWrapper nomWrapper) => Constructor.OpenCardNomWrapper(nomWrapper);
 
         public void AddDescriptionToNomWrapper(NomWrapper nomWrapper) => Constructor.AddDescriptionToNomWrapper(nomWrapper);
 
@@ -387,7 +391,7 @@ namespace OfferMaker
 
         #region Settings
 
-        public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
+        public void OpenSettings() => MvvmFactory.CreateWindow(Settings, new ViewModels.SettingsViewModel(), new Views.Settings(false), ViewMode.ShowDialog);
 
         public void Quit()
         {

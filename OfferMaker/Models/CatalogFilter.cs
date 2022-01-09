@@ -101,11 +101,29 @@ namespace OfferMaker
             OnPropertyChanged(nameof(FilteredNomenclatures));
         }
 
+        /// <summary>
+        /// Обработка события перетаскивания номенклатуры в категорию.
+        /// </summary>
+        /// <param name="nomenclature"></param>
         internal void RemoveDropedNom(Nomenclature nomenclature)
         {
             if (FilterMode == FilterMode.Category)
                 SelectedCat.Nomenclatures.Remove(nomenclature);
             OnPropertyChanged(nameof(FilteredNomenclatures));
+        }
+
+        /// <summary>
+        /// Удаление категории у номенклатуры.
+        /// </summary>
+        /// <param name="nomenclature"></param>
+        internal void RemoveFromCategory(Nomenclature nomenclature)
+        {
+            Category cat = catalog.GetFlattenTree().Where(c => c.Guid == nomenclature.CategoryGuid).FirstOrDefault();
+            if(cat!=null)
+            {
+                cat.Nomenclatures.Remove(nomenclature);
+                nomenclature.CategoryGuid = null;
+            }
         }
     }
 }

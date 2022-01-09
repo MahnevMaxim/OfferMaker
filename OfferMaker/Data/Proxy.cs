@@ -118,7 +118,15 @@ namespace OfferMaker
         /// <param name="user"></param>
         /// <param name="pass"></param>
         /// <returns></returns>
-        async internal Task<CallResult> UserChangePassword(User user, string oldPwd) => await ServerData.UserChangePassword(user, oldPwd);
+        async internal Task<CallResult> UserChangePassword(User user) => await ServerData.UserChangePassword(user);
+
+        /// <summary>
+        /// Меняем пароль текущего аккаунта.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="pass"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> UserSelfChangePassword(User user, string oldPwd) => await ServerData.UserSelfChangePassword(user, oldPwd);
 
         /// <summary>
         /// Сохранение данных пользователя, работает только онлайн.
@@ -163,7 +171,7 @@ namespace OfferMaker
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        async internal Task<CallResult> PositionsSave(ObservableCollection<Position> positions) => await ServerData.PositionsSave(positions);
+        async internal Task<CallResult> PositionsEdit(ObservableCollection<Position> positions) => await ServerData.PositionsEdit(positions);
 
         #endregion Position
 

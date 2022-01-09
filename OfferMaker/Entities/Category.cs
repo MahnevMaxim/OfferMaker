@@ -31,6 +31,8 @@ namespace OfferMaker
 
         public string ParentGuid { get; set; }
 
+        public int Order { get; set; }
+
         [JsonIgnore]
         public ObservableCollection<Nomenclature> Nomenclatures { get; set; } = new ObservableCollection<Nomenclature>();
 

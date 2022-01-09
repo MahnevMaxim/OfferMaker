@@ -21,9 +21,10 @@ namespace OfferMaker.Views
     /// </summary>
     public partial class Settings : MetroWindow, IView
     {
-        public Settings()
+        public Settings(bool isFromAuth)
         {
             InitializeComponent();
+            clearCacheButton.IsEnabled = isFromAuth;
         }
 
         void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);

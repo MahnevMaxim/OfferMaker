@@ -53,6 +53,8 @@ namespace OfferMaker.ViewModels
 
         public string CategoryTitle { get => nomenclurueCard.CategoryTitle; }
 
+        public bool IsEditConstructor { get => nomenclurueCard.IsEditConstructor; }
+
         #endregion Properties
     }
 }

@@ -26,6 +26,7 @@ namespace API.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "CanControlUsers,CanAll,CanUseManager,CanSeeAllOffers")]
         [HttpGet(Name = nameof(UsersGet))]
         public async Task<ActionResult<IEnumerable<User>>> UsersGet()
         {
@@ -36,6 +37,7 @@ namespace API.Controllers
             return users;
         }
 
+        [Authorize(Roles = "CanControlUsers,CanAll,CanUseManager,CanSeeAllOffers")]
         [HttpGet("{id}", Name = nameof(UserGet))]
         public async Task<ActionResult<User>> UserGet(int id)
         {
@@ -49,24 +51,58 @@ namespace API.Controllers
             return user;
         }
 
+        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPut("{id}", Name = nameof(UserEdit))]
         public async Task<IActionResult> UserEdit(int id, User user)
         {
+            User user_ = _context.Users.AsNoTracking().FirstOrDefault(x => x.Email == user.Email);
+
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            if (user.Position != null)
+            {
+                user.Position = _context.Positions.Where(p => p.Id == user.Position.Id).FirstOrDefault();
+            }
+
+            user.Pwd = user_.Pwd;
+            _context.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        [Authorize(Roles = "CanControlUsers,CanAll")]
+        [HttpPut("{id}/self", Name = nameof(UserSelfEdit))]
+        public async Task<IActionResult> UserSelfEdit(int id, User user)
+        {
             var uName = User.Identity.Name;
-            var claimCanAll = User.Claims.ToList().Where(c=>c.Value==Permissions.CanAll.ToString() || c.Value == Permissions.CanEditUsers.ToString()).FirstOrDefault();
-            if(claimCanAll!=null || uName==user.Email)
+            if (uName == user.Email)
             {
                 User user_ = _context.Users.AsNoTracking().FirstOrDefault(x => x.Email == user.Email);
 
-                //проверяем пароль, если пользователь редактирует себя
-                if (uName == user.Email)
+                var ph = new PasswordHasher();
+                var isCurrentHashValid = ph.VerifyHashedPassword(user_.Pwd, user.Pwd);
+                if (isCurrentHashValid != Microsoft.AspNet.Identity.PasswordVerificationResult.Success)
                 {
-                    var ph = new PasswordHasher();
-                    var isCurrentHashValid = ph.VerifyHashedPassword(user_.Pwd, user.Pwd);
-                    if (isCurrentHashValid != Microsoft.AspNet.Identity.PasswordVerificationResult.Success)
-                    {
-                        return BadRequest(new { errorText = "Invalid username or password." });
-                    }
+                    return BadRequest(new { errorText = "Invalid username or password." });
                 }
 
                 if (id != user.Id)
@@ -103,11 +139,37 @@ namespace API.Controllers
             return BadRequest();
         }
 
+        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPut("password", Name = nameof(UserChangePassword))]
-        public async Task<IActionResult> UserChangePassword(User user, string oldPassword)
+        public async Task<IActionResult> UserChangePassword(User user)
+        {
+            User user_ = _context.Users.Where(u => u.Email == user.Email).FirstOrDefault();
+
+            if (user_ != null)
+            {
+                try
+                {
+                    var ph = new PasswordHasher();
+                    user_.Pwd = ph.HashPassword(user.Pwd);
+                    await _context.SaveChangesAsync();
+                    return NoContent();
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(ex);
+                    throw;
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpPut("self_password", Name = nameof(UserSelfChangePassword))]
+        public async Task<IActionResult> UserSelfChangePassword(User user, string oldPassword)
         {
             var uName = User.Identity.Name;
-            var claimCanEdit = User.Claims.ToList().Where(c => c.Value == Permissions.CanAll.ToString() || c.Value == Permissions.CanEditUsers.ToString()).FirstOrDefault();
             User user_ = _context.Users.Where(u => u.Email == user.Email).FirstOrDefault();
 
             //проверяем старый пароль, если пользователь редактирует себя
@@ -120,6 +182,10 @@ namespace API.Controllers
                 {
                     return BadRequest(new { errorText = "Invalid username or password." });
                 }
+            }
+            else
+            {
+                return BadRequest(new { errorText = "You can't." });
             }
 
             if (user_ != null)
@@ -143,6 +209,7 @@ namespace API.Controllers
             }
         }
 
+        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPut(Name = nameof(UsersEdit))]
         public async Task<ActionResult<IEnumerable<User>>> UsersEdit(IEnumerable<User> users)
         {
@@ -162,6 +229,7 @@ namespace API.Controllers
             return new ActionResult<IEnumerable<User>>(res);
         }
 
+        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPost(Name = nameof(UserCreate))]
         public async Task<ActionResult<User>> UserCreate(User user)
         {
@@ -171,9 +239,20 @@ namespace API.Controllers
             return CreatedAtAction(nameof(UserGet), new { id = user.Id }, user);
         }
 
+        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpDelete("{id}", Name = nameof(UserDelete))]
         public async Task<IActionResult> UserDelete(int id)
         {
+            var uName = User.Identity.Name;
+            User user_ = _context.Users.Where(u => u.Id==id).FirstOrDefault();
+
+            if (uName == user_.Email)
+            {
+                {
+                    return BadRequest(new { errorText = "Can't delete self." });
+                }
+            }
+
             var user = await _context.Users.FindAsync(id);
             if (user == null)
             {

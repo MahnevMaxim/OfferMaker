@@ -29,6 +29,7 @@ namespace OfferMaker
         static readonly string positionAddErrorMess = "Ошибка при попытке добавить должность.";
         static readonly string positionDeleteErrorMess = "Ошибка при попытке удалить должность.";
         static readonly string positionsGetErrorMess = "Ошибка при попытке получить должности.";
+        static readonly string positionsEditErrorMess = "Ошибка при попытке изменить разрешения.";
         static readonly string userAddErrorMess = "Ошибка при попытке добавить пользователя.";
         static readonly string userChangePasswordErrorMess = "Ошибка при попытке обновить пароль.";
         static readonly string userDeleteErrorMess = "Ошибка при попытке удалить пользователя.";
@@ -68,6 +69,10 @@ namespace OfferMaker
                 if (ex.StatusCode == 404)
                 {
                     return new CallResult() { Error = new Error(ex.StatusCode, userDeleteErrorMess + " Пользователь не найден.") };
+                }
+                if (ex.StatusCode == 403)
+                {
+                    return new CallResult() { Error = new Error(ex.StatusCode, userDeleteErrorMess + " Нет прав.") };
                 }
                 else
                 {
@@ -141,12 +146,50 @@ namespace OfferMaker
         /// Меняем пароль.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult> UserChangePassword(User user, string oldPwd)
+        async internal Task<CallResult> UserChangePassword(User user)
         {
             try
             {
                 ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
-                var response = await client.UserChangePasswordAsync(oldPwd, userCopy);
+                var response = await client.UserChangePasswordAsync(userCopy);
+                if (response.StatusCode == 204)
+                {
+                    return new CallResult() { SuccessMessage = "Пароль обновлён" };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(userChangePasswordErrorMess) };
+                }
+            }
+            catch (ApiException ex)
+            {
+                Log.Write(ex);
+                if (ex.StatusCode == 403)
+                {
+                    return new CallResult() { Error = new Error(userChangePasswordErrorMess + " Нет прав.") };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(userChangePasswordErrorMess) };
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult() { Error = new Error(userChangePasswordErrorMess, ex) };
+            }
+        }
+
+        /// <summary>
+        /// Меняем пароль текущего аккаунта.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult> UserSelfChangePassword(User user, string oldPwd)
+        {
+            try
+            {
+                ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
+                var response = await client.UserSelfChangePasswordAsync(oldPwd, userCopy);
                 if (response.StatusCode == 204)
                 {
                     return new CallResult() { SuccessMessage = "Пароль обновлён" };
@@ -162,7 +205,6 @@ namespace OfferMaker
                 return new CallResult() { Error = new Error(userChangePasswordErrorMess, ex) };
             }
         }
-
         /// <summary>
         /// Обновляем пользователей.
         /// </summary>
@@ -172,9 +214,9 @@ namespace OfferMaker
         {
             try
             {
-                users.ToList().ForEach(u => 
-                { 
-                    if(u.Image != null && u.Image.Guid!=null)
+                users.ToList().ForEach(u =>
+                {
+                    if (u.Image != null && u.Image.Guid != null)
                         Global.ImageManager.UploadImage(u);
                 });
                 IEnumerable<ApiLib.User> usersCopy = Helpers.CloneObject<IEnumerable<ApiLib.User>>(users);
@@ -245,6 +287,18 @@ namespace OfferMaker
                     return new CallResult<ObservableCollection<Position>>() { Error = new Error(response.StatusCode, positionsGetErrorMess) };
                 }
             }
+            catch (ApiException ex)
+            {
+                Log.Write(ex);
+                if (ex.StatusCode == 403)
+                {
+                    return new CallResult<ObservableCollection<Position>>() { Error = new Error(positionsGetErrorMess + " Нет прав.") };
+                }
+                else
+                {
+                    return new CallResult<ObservableCollection<Position>>() { Error = new Error(positionsGetErrorMess) };
+                }
+            }
             catch (Exception ex)
             {
                 Log.Write(ex);
@@ -257,12 +311,12 @@ namespace OfferMaker
         /// </summary>
         /// <param name="position"></param>
         /// <returns></returns>
-        async internal Task<CallResult> PositionsSave(ObservableCollection<Position> positions)
+        async internal Task<CallResult> PositionsEdit(ObservableCollection<Position> positions)
         {
             try
             {
                 IEnumerable<ApiLib.Position> positionsCopy = Helpers.CloneObject<IEnumerable<ApiLib.Position>>(positions);
-                ApiResponse<ICollection<ApiLib.Position>> result = await client.PositionsSaveAsync(positionsCopy);
+                ApiResponse<ICollection<ApiLib.Position>> result = await client.PositionsEditAsync(positionsCopy);
                 string message = "";
                 result.Result.ToList().ForEach(p =>
                 {
@@ -270,10 +324,22 @@ namespace OfferMaker
                 });
                 return new CallResult() { SuccessMessage = message.Trim() };
             }
+            catch (ApiException ex)
+            {
+                Log.Write(ex);
+                if (ex.StatusCode == 403)
+                {
+                    return new CallResult() { Error = new Error(positionsEditErrorMess + " Нет прав.") };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(positionsEditErrorMess) };
+                }
+            }
             catch (Exception ex)
             {
                 Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить должность на сервере.") };
+                return new CallResult() { Error = new Error(positionsEditErrorMess) };
             }
         }
 
@@ -294,6 +360,18 @@ namespace OfferMaker
                 else
                 {
                     return new CallResult() { Error = new Error(response.StatusCode, positionDeleteErrorMess) };
+                }
+            }
+            catch (ApiException ex)
+            {
+                Log.Write(ex);
+                if (ex.StatusCode == 403)
+                {
+                    return new CallResult() { Error = new Error(positionDeleteErrorMess + " Нет прав.") };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(positionDeleteErrorMess) };
                 }
             }
             catch (Exception ex)
@@ -325,12 +403,16 @@ namespace OfferMaker
                     return new CallResult<Position>() { Error = new Error(positionAddErrorMess) };
                 }
             }
-            catch (ApiException aex)
+            catch (ApiException ex)
             {
-                Log.Write(aex);
-                if (aex.StatusCode == 409)
+                Log.Write(ex);
+                if (ex.StatusCode == 409)
                 {
                     return new CallResult<Position>() { Error = new Error(positionAddErrorMess + " Должность с таким названием уже существует.") };
+                }
+                if (ex.StatusCode == 403)
+                {
+                    return new CallResult<Position>() { Error = new Error(positionAddErrorMess + " Нет прав.") };
                 }
                 else
                 {

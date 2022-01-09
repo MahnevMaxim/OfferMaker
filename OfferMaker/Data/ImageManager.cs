@@ -9,6 +9,9 @@ using ApiLib;
 using System.Net;
 using System.Net.Mime;
 using System.Net.Http.Headers;
+using System.Windows.Media.Imaging;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace OfferMaker
 {
@@ -24,21 +27,22 @@ namespace OfferMaker
         System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
         Client client;
         string token;
+        int maxImageWidth = 500;
 
         #region Singleton
 
         private ImageManager()
         {
             token = Settings.GetToken();
-            if (token!=null)
+            if (token != null)
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            client = new Client(apiEndpoint, httpClient); 
-        } 
-        
+            client = new Client(apiEndpoint, httpClient);
+        }
+
         private static readonly ImageManager instance = new ImageManager();
 
         public static ImageManager GetInstance() => instance;
-        
+
         #endregion Singleton
 
         /// <summary>
@@ -66,13 +70,74 @@ namespace OfferMaker
 
                 string ext = Path.GetExtension(image.OriginalPath);
                 string filePath = Path.Combine(AppSettings.Default.ImageManagerDir, image.Guid + ext);
-                File.Copy(image.OriginalPath, filePath);
+                FileCopy(image.OriginalPath, filePath);
                 image.IsCopied = true;
             }
             catch (Exception ex)
             {
                 Log.Write("исключение при попытке скорировать изображение в кэш", ex);
             }
+        }
+
+        /// <summary>
+        /// Копирование с возможным изменением.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destinationPath"></param>
+        private void FileCopy(string source, string destinationPath)
+        {
+            Bitmap img = new Bitmap(source);
+            int width = img.Width;
+            int height = img.Height;
+            if (width > maxImageWidth)
+            {
+                int newHeight = height * maxImageWidth / width;
+                Bitmap result = ResizeBitmap(img, maxImageWidth, newHeight);
+                result.Save(destinationPath, GetImageFormatFromPath(destinationPath));
+            }
+            else
+            {
+                File.Copy(source, destinationPath);
+            }
+        }
+
+        /// <summary>
+        /// Получаем формат из пути файла.
+        /// </summary>
+        /// <param name="destinationPath"></param>
+        /// <returns></returns>
+        private ImageFormat GetImageFormatFromPath(string destinationPath)
+        {
+            string format = Path.GetExtension(destinationPath).ToLower();
+            return format switch 
+            {
+                ".jpg" => ImageFormat.Jpeg,
+                ".bmp" => ImageFormat.Bmp,
+                ".gif" => ImageFormat.Gif,
+                ".jpeg" => ImageFormat.Jpeg,
+                ".ico" => ImageFormat.Icon,
+                ".png" => ImageFormat.Png,
+                ".tiff" => ImageFormat.Tiff,
+                _ => throw new NotImplementedException()
+            };
+        }
+
+        /// <summary>
+        /// Изменение размеров изображения.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <returns></returns>
+        private Bitmap ResizeBitmap(Bitmap source, int width, int height)
+        {
+            Bitmap result = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(result))
+            {
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                g.DrawImage(source, 0, 0, width, height);
+            }
+            return result;
         }
 
         /// <summary>
@@ -165,11 +230,11 @@ namespace OfferMaker
 
         async internal void UploadNewImages(List<Nomenclature> newNoms)
         {
-            foreach(var nom in newNoms)
+            foreach (var nom in newNoms)
             {
-                foreach(var image in nom.Images)
+                foreach (var image in nom.Images)
                 {
-                    if(image.IsNew)
+                    if (image.IsNew)
                     {
                         try
                         {
@@ -178,7 +243,7 @@ namespace OfferMaker
                             FileParameter param = new FileParameter(stream, Path.GetFileName(file));
                             var res = await client.ImagesPOSTAsync(param);
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             Log.Write(ex);
                         }

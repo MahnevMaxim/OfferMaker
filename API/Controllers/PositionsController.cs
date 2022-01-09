@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Data;
 using Shared;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PositionsController : ControllerBase
     {
         private readonly APIContext _context;
@@ -40,6 +42,7 @@ namespace API.Controllers
             return position;
         }
 
+        [Authorize(Roles = "CanControlPositions,CanAll")]
         [HttpPut("{id}", Name = nameof(PositionEdit))]
         public async Task<IActionResult> PositionEdit(int id, Position position)
         {
@@ -69,8 +72,9 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPut(Name = nameof(PositionsSave))]
-        public async Task<ActionResult<IEnumerable<Position>>> PositionsSave(IEnumerable<Position> positions)
+        [Authorize(Roles = "CanControlPositions,CanAll")]
+        [HttpPut(Name = nameof(PositionsEdit))]
+        public async Task<ActionResult<IEnumerable<Position>>> PositionsEdit(IEnumerable<Position> positions)
         {
             List<Position> res = new List<Position>();
             foreach (var pos in positions)
@@ -88,6 +92,7 @@ namespace API.Controllers
             return new ActionResult<IEnumerable<Position>>(res);
         }
 
+        [Authorize(Roles = "CanControlPositions,CanAll")]
         [HttpPost(Name = nameof(PositionPost))]
         public async Task<ActionResult<Position>> PositionPost(Position position)
         {
@@ -101,6 +106,7 @@ namespace API.Controllers
             return CreatedAtAction("PositionGet", new { id = position.Id }, position);
         }
 
+        [Authorize(Roles = "CanControlPositions,CanAll")]
         [HttpDelete("{id}", Name = nameof(PositionDelete))]
         public async Task<IActionResult> PositionDelete(int id)
         {

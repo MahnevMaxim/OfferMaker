@@ -37,6 +37,10 @@ namespace OfferMaker
         {
             try
             {
+                if(!Directory.Exists(LocalDataConfig.DataCacheDir))
+                {
+                    Directory.CreateDirectory(LocalDataConfig.DataCacheDir);
+                }
                 string output = JsonConvert.SerializeObject(obj);
                 File.WriteAllText(filePath, output);
                 return new CallResult();

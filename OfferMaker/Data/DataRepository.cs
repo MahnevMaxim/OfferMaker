@@ -100,7 +100,7 @@ namespace OfferMaker
 
         async internal Task<CallResult<ObservableCollection<Position>>> PositionsGet() => await Proxy.PositionsGet();
 
-        async internal Task<CallResult> PositionsSave(ObservableCollection<Position> positions) => await Proxy.PositionsSave(positions);
+        async internal Task<CallResult> PositionsEdit(ObservableCollection<Position> positions) => await Proxy.PositionsEdit(positions);
 
         #endregion Positions 
 
@@ -114,7 +114,9 @@ namespace OfferMaker
 
         async internal Task<CallResult> UsersEdit(ObservableCollection<User> users) => await Proxy.UsersEdit(users);
 
-        async internal Task<CallResult> UserChangePassword(User user, string oldPwd) => await Proxy.UserChangePassword(user, oldPwd);
+        async internal Task<CallResult> UserChangePassword(User user) => await Proxy.UserChangePassword(user);
+
+        async internal Task<CallResult> UserSelfChangePassword(User user, string oldPwd) => await Proxy.UserSelfChangePassword(user, oldPwd);
 
         async internal Task<CallResult> UserDelete(User user) => await Proxy.UserDelete(user);
 

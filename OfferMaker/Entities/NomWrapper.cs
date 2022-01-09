@@ -292,7 +292,7 @@ namespace OfferMaker
         /// <summary>
         /// Обновление валюты.
         /// </summary>
-        private void UpdateCurrency()
+        public void UpdateCurrency()
         {
             OnPropertyChanged(nameof(Sum));
             OnPropertyChanged(nameof(CostSum));

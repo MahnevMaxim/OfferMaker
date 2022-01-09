@@ -8,6 +8,7 @@ using System.Collections.Specialized;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
+using System.IO;
 
 namespace OfferMaker
 {
@@ -162,6 +163,44 @@ namespace OfferMaker
             AppSettings.Default.AccessToken = null;
             AppSettings.Default.IsRememberMe = false;
             AppSettings.Default.Save();
+        }
+
+        public void ClearCache()
+        {
+            string res = "";
+            try
+            {
+                if(Directory.Exists("cache"))
+                {
+                    Directory.Delete("cache", true);
+                    res += "Изображения удалены\n";
+                }
+                else
+                    res += "Изображения не найдены\n";
+            }
+            catch(Exception ex)
+            {
+                Log.Write(ex);
+                res += "Не удалось удалить изображения\n";
+            }
+
+            try
+            {
+                if (Directory.Exists(LocalDataConfig.DataCacheDir))
+                {
+                    Directory.Delete(LocalDataConfig.DataCacheDir, true);
+                    res += "Данные удалены"; 
+                }
+                else
+                    res += "Данные не найдены";
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                res += "Не удалось удалить данные";
+            }
+
+            OnSendMessage(res);
         }
     }
 }

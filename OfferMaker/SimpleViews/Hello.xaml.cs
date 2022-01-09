@@ -109,6 +109,6 @@ namespace OfferMaker.SimpleViews
 
         #endregion Auth
 
-        private void ButtonSettings_Click(object sender, RoutedEventArgs e) => MvvmFactory.CreateWindow(Global.Settings, new ViewModels.SettingsViewModel(), new Views.Settings(), ViewMode.ShowDialog);
+        private void ButtonSettings_Click(object sender, RoutedEventArgs e) => MvvmFactory.CreateWindow(Global.Settings, new ViewModels.SettingsViewModel(), new Views.Settings(true), ViewMode.ShowDialog);
     }
 }

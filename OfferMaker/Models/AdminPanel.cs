@@ -126,35 +126,38 @@ namespace OfferMaker
             OnSendMessage(cr.Message);
         }
 
-        async public void PositionsSave()
+        async public void PositionsEdit()
         {
             foreach (var position in Positions)
                 position.SavePermissions();
-            CallResult cr = await Global.Main.DataRepository.PositionsSave(Positions);
+            CallResult cr = await Global.Main.DataRepository.PositionsEdit(Positions);
             OnSendMessage(cr.Message);
         }
 
         #endregion Positions
 
-        async public void UserChangePassword()
+        async public void UserSelfChangePassword()
         {
             if (string.IsNullOrWhiteSpace(NewAccountPassword))
             {
                 OnSendMessage("Введите новый пароль");
                 return;
             }
+
             if (NewAccountPassword != NewAccountPasswordRepeat)
             {
                 OnSendMessage("Подтверждение не совпадает с паролем");
                 return;
             }
+
             if (string.IsNullOrWhiteSpace(OldAccountPassword))
             {
                 OnSendMessage("Введите пароль");
                 return;
             }
+
             User.Pwd = NewAccountPassword;
-            CallResult cr = await Global.Main.DataRepository.UserChangePassword(User, OldAccountPassword);
+            CallResult cr = await Global.Main.DataRepository.UserSelfChangePassword(User, OldAccountPassword);
             OnSendMessage(cr.Message);
         }
 
@@ -237,7 +240,7 @@ namespace OfferMaker
             if (res == true)
             {
                 user.Pwd = form.passwordTextBox.Password;
-                CallResult cr = await Global.Main.DataRepository.UserChangePassword(user, null);
+                CallResult cr = await Global.Main.DataRepository.UserChangePassword(user);
                 OnSendMessage(cr.Message);
             }
         }

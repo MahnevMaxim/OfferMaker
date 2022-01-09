@@ -12,8 +12,11 @@ namespace OfferMaker
         string currencyCharCode;
         Catalog catalog;
         Image selectedImage;
+        string categoryTitle;
 
         public Nomenclature Nomenclature { get; set; }
+
+        public bool IsEditConstructor { get; set; }
 
         public Image SelectedImage
         {
@@ -36,7 +39,15 @@ namespace OfferMaker
             }
         }
 
-        public string CategoryTitle { get => catalog.Categories.Where(c => c.Guid == Nomenclature.CategoryGuid).FirstOrDefault()?.Title; }
+        public string CategoryTitle 
+        { 
+            get => catalog?.Categories.Where(c => c.Guid == Nomenclature.CategoryGuid).FirstOrDefault()?.Title;
+            set
+            {
+                categoryTitle = value;
+                OnPropertyChanged();
+            }
+        }
 
         public List<string> Currencies { get; set; }
 
@@ -51,11 +62,33 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Конструктор для редактирования копии номенклатуры из конструктора КП.
+        /// </summary>
+        /// <param name="nomWrapper"></param>
+        public NomenclurueCard(NomWrapper nomWrapper)
+        {
+            Nomenclature = nomWrapper.Nomenclature;
+            CurrencyCharCode = nomWrapper.Nomenclature.CurrencyCharCode;
+            Currencies = Global.Main.UsingCurrencies.ToList();
+            if (!Currencies.Contains(CurrencyCharCode))
+                Currencies.Add(CurrencyCharCode);
+            IsEditConstructor = true;
+        }
+
+        /// <summary>
         /// Обновляем дату цены
         /// </summary>
         public void RefreshDate() => Nomenclature.LastChangePriceDate = DateTime.UtcNow;
 
-
+        /// <summary>
+        /// Удаляем через фильтр, т.к. там происходит согласование данных.
+        /// </summary>
+        public void RemoveFromCategory()
+        {
+            catalog.CatalogFilter.RemoveFromCategory(Nomenclature);
+            CategoryTitle = null;
+        }
+           
         /// <summary>
         /// Заменяем/добавляем фото
         /// </summary>

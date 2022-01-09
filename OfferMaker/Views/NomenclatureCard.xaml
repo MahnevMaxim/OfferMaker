@@ -15,6 +15,10 @@
 
     <Window.Resources>
         <root:MultiConverter x:Key="MultiConverter"/>
+        <root:EmptyStringToBoolConverter x:Key="TrueIfStringNotEmpty" />
+        <root:VisToBoolConverter x:Key="VisibleIfNotTrue"
+                                 Inverted="True"
+                                 Not="True" />
     </Window.Resources>
 
     <Grid Margin="10,10">
@@ -51,7 +55,7 @@
 
         <Border Grid.ColumnSpan="2"
                 Margin="0,0,0,10"
-                BorderThickness="1"
+                BorderThickness="2"
                 VerticalAlignment="Stretch"
                 BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
             <TextBox Text="{Binding Nomenclature.Title, UpdateSourceTrigger=PropertyChanged}" 
@@ -66,7 +70,7 @@
         </Border>
 
         <Border Grid.Row="1" Grid.Column="0"
-                BorderThickness="1"
+                BorderThickness="2"
                 BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
             <Grid Margin="5,10">
                 <Grid.RowDefinitions>
@@ -95,10 +99,12 @@
                 <TextBlock Text="Прибыль" Grid.Row="3" Grid.Column="0"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Right"/>
-                <TextBlock Text="Категория:" Grid.Row="4" Grid.Column="0"
+                <TextBlock Text="Категория:"
+                           Grid.Row="4"
+                           Grid.Column="0"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Right"/>
-
+                           HorizontalAlignment="Right"
+                           Visibility="{Binding IsEditConstructor, Converter={StaticResource VisibleIfNotTrue}}"/>
                 <TextBox Grid.Row="0" Grid.Column="1"
                          Text="{Binding Nomenclature.CostPrice, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
                          Margin="10,0"
@@ -115,31 +121,78 @@
                          Text="{Binding Nomenclature.Profit, UpdateSourceTrigger=PropertyChanged, StringFormat=F2}"
                          Margin="10,0"
                          Height="30"/>
-                <TextBlock Text="{Binding CategoryTitle}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Left"
-                           Margin="10,0"/>
-
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="4"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="3"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Margin="10,0">
+                    <TextBlock Text="{Binding CategoryTitle}"
+                               MaxWidth="255"
+                               TextWrapping="NoWrap"
+                               ToolTip="{Binding CategoryTitle}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left" 
+                               Margin="0,0,10,0"/>
+                    <Grid>
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Style.Setters>
+                                    <Setter Property="Visibility"
+                                            Value="Visible"/>
+                                </Style.Setters>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CategoryTitle, Converter={StaticResource TrueIfStringNotEmpty}}"
+                                                 Value="False">
+                                        <Setter Property="Visibility"
+                                                Value="Hidden"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Button Style="{DynamicResource MahApps.Styles.Button.Square}"
+                                Command="{Binding Cmd}"
+                                CommandParameter="RemoveFromCategory"
+                                Height="30"
+                                Width="30"
+                                Margin="5"
+                                ToolTip="Без категории">
+                            <iconPacks:PackIconPicolIcons Kind="CategoryRemove"
+                                                          Width="18"
+                                                          Height="18"/>
+                        </Button>
+                    </Grid>
+                    
+                </StackPanel>
+                
                 <TextBlock Text="Валюта" Grid.Row="0" Grid.Column="2"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Right"/>
+                           HorizontalAlignment="Right"
+                           Visibility="{Binding IsEditConstructor, Converter={StaticResource VisibleIfNotTrue}}"/>
                 <TextBlock Text="Дата" 
                            Grid.Row="1" Grid.Column="2"
                            ToolTip="Дата актуализации цены"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Right"/>
+                           HorizontalAlignment="Right"
+                           Visibility="{Binding IsEditConstructor, Converter={StaticResource VisibleIfNotTrue}}"/>
                 <TextBlock Text="Период" 
                            Grid.Row="2" Grid.Column="2"
                            ToolTip="Период актуальности цены"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Right"/>
+                           HorizontalAlignment="Right"
+                           Visibility="{Binding IsEditConstructor, Converter={StaticResource VisibleIfNotTrue}}" />
 
                 <ComboBox Grid.Row="0" Grid.Column="3"
                           ItemsSource="{Binding Currencies}" 
                           SelectedItem="{Binding CurrencyCharCode}"
                           Margin="10,0"
-                          Height="30"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="3">
+                          Height="30"
+                          Visibility="{Binding IsEditConstructor, Converter={StaticResource VisibleIfNotTrue}}" />
+                <StackPanel Orientation="Horizontal"
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            Visibility="{Binding IsEditConstructor, Converter={StaticResource VisibleIfNotTrue}}">
                     <TextBlock Text="{Binding Nomenclature.LastChangePriceDate, StringFormat={}{0:dd.MM.yyyy}}" 
                                VerticalAlignment="Center"
                                HorizontalAlignment="Right"
@@ -166,21 +219,21 @@
                                    Height="30"
                                    ToolTip="Период актуальности даты в днях"
                                    Minimum = "0"
-                                   Maximum = "365"/>
+                                   Maximum="365"
+                                   Visibility="{Binding IsEditConstructor, Converter={StaticResource VisibleIfNotTrue}}" />
             </Grid>
         </Border>
 
         <Border Grid.Row="1" Grid.Column="1"
                 Margin="10,0,0,0"
-                BorderThickness="1"
+                BorderThickness="2"
                 BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="160"/>
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="160" />
                 </Grid.ColumnDefinitions>
-
                 <StackPanel>
                     <Button CommandParameter="AddImage"
                             VerticalAlignment="Top"
@@ -197,8 +250,7 @@
                 </StackPanel>
                 <Image Source="{Binding Nomenclature.Image.LocalPhotoPath}"
                        Grid.Column="1"
-                       Margin="5"/>
-
+                       Margin="5" />
                 <ListBox ItemsSource="{Binding Nomenclature.Images}" 
                          SelectedItem="{Binding SelectedImage}"
                          Grid.Column="2"
@@ -258,7 +310,7 @@
 
         <Border Grid.Row="2" Grid.ColumnSpan="2"
                 Margin="0,10,0,0"
-                BorderThickness="1"
+                BorderThickness="2"
                 BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
             <Grid>
                 <Grid.RowDefinitions>

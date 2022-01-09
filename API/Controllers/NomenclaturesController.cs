@@ -23,14 +23,12 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/Nomenclatures
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Nomenclature>>> GetNomenclatures()
         {
             return await _context.Nomenclatures.Where(n=>!n.IsDelete).ToListAsync();
         }
 
-        // GET: api/Nomenclatures/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Nomenclature>> GetNomenclature(int id)
         {
@@ -44,8 +42,6 @@ namespace API.Controllers
             return nomenclature;
         }
 
-        // PUT: api/Nomenclatures/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutNomenclature(int id, Nomenclature nomenclature)
         {
@@ -99,8 +95,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/Nomenclatures
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Nomenclature>> PostNomenclature(Nomenclature nomenclature)
         {
@@ -110,7 +104,6 @@ namespace API.Controllers
             return CreatedAtAction("GetNomenclature", new { id = nomenclature.Id }, nomenclature);
         }
 
-        // DELETE: api/Nomenclatures/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNomenclature(int id)
         {

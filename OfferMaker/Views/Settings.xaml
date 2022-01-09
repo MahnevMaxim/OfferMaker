@@ -11,7 +11,7 @@
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="1"
                  ResizeMode="NoResize"
-                 Title="Настройки" Height="150" Width="260">
+                 Title="Настройки" Height="250" Width="280">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -22,22 +22,23 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Label Content="Тема" 
                Grid.Row="0"
                HorizontalAlignment="Right"
-               Margin="5"/>
+               Margin="10"/>
         <Label Content="Цвет"
                Grid.Row="1"
                HorizontalAlignment="Right"
-               Margin="5"/>
+               Margin="10"/>
         <Label Content="Режим"
                Grid.Row="2" 
                HorizontalAlignment="Right"
-               Margin="5"/>
+               Margin="10"/>
         <ComboBox Grid.Row="0"
                   Grid.Column="1"
-                  Margin="5"
+                  Margin="10"
                   ItemsSource="{Binding LightOrDarkList}"
                   SelectedItem="{Binding LightOrDark}">
         </ComboBox>
@@ -46,14 +47,22 @@
                   SelectedIndex="0"
                   Grid.Row="1" 
                   Grid.Column="1"
-                  Margin="5"/>
+                  Margin="10"/>
         <ComboBox SelectedIndex="{Binding AppMode}"
                   Grid.Row="2" 
                   Grid.Column="1"
-                  Margin="5">
+                  Margin="10">
             <ComboBoxItem Content="Auto"/>
             <ComboBoxItem Content="Offline"/>
             <ComboBoxItem Content="Online"/>
         </ComboBox>
+        <Button Content="Очистить кэш"
+                Name="clearCacheButton"
+                Command="{Binding Cmd}"
+                CommandParameter="ClearCache"
+                Grid.Column="1" 
+                Grid.Row="3"
+                Margin="10"
+                Style="{StaticResource MahApps.Styles.Button.Square}"/>
     </Grid>
 </mah:MetroWindow>

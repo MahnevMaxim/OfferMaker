@@ -78,8 +78,19 @@ namespace OfferMaker
                 OnSendMessage("Выберите номенклатуру для добавления");
                 return;
             }
-            Nomenclature nomenclature = Helpers.CloneObject<Nomenclature>(SelectedNomenclature); 
-            offerGroup.NomWrappers.Add(new NomWrapper(offerGroup, nomenclature));
+
+            //проверяем, есть ли такая же номенклатура в группе
+            var res = offerGroup.NomWrappers.Where(n=>n.Nomenclature.Guid==SelectedNomenclature.Guid).FirstOrDefault();
+            if(res==null)
+            {
+                Nomenclature nomenclature = Helpers.CloneObject<Nomenclature>(SelectedNomenclature);
+                offerGroup.NomWrappers.Add(new NomWrapper(offerGroup, nomenclature));
+            }
+            else
+            {
+                res.Amount++;
+            }
+
             offerGroup.OnPropertyChanged(string.Empty);
             Close();
         }

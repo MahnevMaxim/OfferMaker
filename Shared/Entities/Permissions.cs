@@ -8,8 +8,8 @@ namespace Shared
 {
     public enum Permissions
     {
-        CanChangePermissions,
-        CanEditUsers,
+        CanControlPositions,
+        CanControlUsers,
         CanEditPhotos,
         CanEditCurrencies,
         CanEditProducts,

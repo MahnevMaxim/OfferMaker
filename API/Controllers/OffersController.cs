@@ -23,14 +23,12 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/Offers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Offer>>> GetOffers()
         {
             return await _context.Offers.ToListAsync();
         }
 
-        // GET: api/Offers/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Offer>> GetOffer(int id)
         {
@@ -44,8 +42,6 @@ namespace API.Controllers
             return offer;
         }
 
-        // PUT: api/Offers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutOffer(int id, Offer offer)
         {
@@ -75,8 +71,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/Offers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Offer>> PostOffer(Offer offer)
         {
@@ -86,7 +80,6 @@ namespace API.Controllers
             return CreatedAtAction("GetOffer", new { id = offer.Id }, offer);
         }
 
-        // DELETE: api/Offers/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOffer(int id)
         {

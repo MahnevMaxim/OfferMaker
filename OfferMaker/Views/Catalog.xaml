@@ -127,7 +127,6 @@
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
-
                 </StackPanel>
             </DataTemplate>
         </Grid.Resources>

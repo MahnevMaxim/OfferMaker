@@ -282,6 +282,17 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Редактирование копии номенклатуры.
+        /// </summary>
+        /// <param name="nomWrapper"></param>
+        internal void OpenCardNomWrapper(NomWrapper nomWrapper)
+        {
+            MvvmFactory.CreateWindow(new NomenclurueCard(nomWrapper), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
+            nomWrapper.UpdateCurrency();
+            nomWrapper.OnPropertyChanged(string.Empty);
+        }
+
+        /// <summary>
         /// Удалить кастомный информ блок.
         /// </summary>
         /// <param name="offerInfoBlock"></param>

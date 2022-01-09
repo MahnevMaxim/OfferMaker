@@ -482,6 +482,23 @@
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
+                                    <Button Name="OpenCardNomWrapper"
+                                            Style="{StaticResource MahApps.Styles.Button.Square}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
+                                            Height="28"
+                                            Width="28"
+                                            Margin="3"
+                                            ToolTip="Карточка">
+                                        <iconPacks:PackIconMaterial Kind="CardsVariant"
+                                                                    Width="15"
+                                                                    Height="15" />
+                                        <Button.CommandParameter>
+                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                <Binding Source="OpenCardNomWrapper" />
+                                                <Binding Path="." />
+                                            </MultiBinding>
+                                        </Button.CommandParameter>
+                                    </Button>
                                     <Button Name="DeleteNomWrapper" 
                                             Style="{StaticResource MahApps.Styles.Button.Square}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"

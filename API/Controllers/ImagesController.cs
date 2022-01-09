@@ -13,7 +13,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class ImagesController : ControllerBase
     {
         public static IWebHostEnvironment _environment;

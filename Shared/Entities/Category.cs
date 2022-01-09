@@ -20,5 +20,7 @@ namespace Shared
         public string ParentGuid { get; set; }
 
         public int? ParentId { get; set; }
+
+        public int Order { get; set; }
     }
 }

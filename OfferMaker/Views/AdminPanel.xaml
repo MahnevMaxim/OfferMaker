@@ -320,7 +320,7 @@
                                                        Grid.Row="0"
                                                        Grid.Column="1"
                                                        VerticalAlignment="Center"
-                                                       Margin="60,5" />
+                                                       Margin="20,5"/>
                                             <PasswordBox x:Name="newPasswordTextBox"
                                                          Margin="20,5"
                                                          HorizontalAlignment="Left"
@@ -360,7 +360,7 @@
                                                          PasswordChanged="oldPasswordTextBox_PasswordChanged"
                                                          mah:TextBoxHelper.ClearTextButton="True"
                                                          Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
-                                            <Button CommandParameter="UserChangePassword"
+                                            <Button CommandParameter="UserSelfChangePassword"
                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
                                                     Style="{StaticResource MahApps.Styles.Button.Square}"
                                                     Width="200"
@@ -370,17 +370,30 @@
                                                     HorizontalAlignment="Left"
                                                     Content="Сохранить пароль"
                                                     ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}" />
+                                            <StackPanel Grid.Row="5"
+                                                        Grid.Column="1"
+                                                        Orientation="Horizontal"
+                                                        Margin="20,5">
+                                                <TextBlock Text="Должность:"
+                                                           FontSize="16"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.Position.PositionName}"
+                                                           Margin="10,0"
+                                                           FontSize="16"
+                                                           VerticalAlignment="Center" />
+                                            </StackPanel>
                                             <TextBlock Text="Права"
                                                        FontSize="16"
-                                                       Grid.Row="5"
+                                                       Grid.Row="6"
                                                        Grid.Column="1"
                                                        VerticalAlignment="Center"
-                                                       Margin="90,5" />
+                                                       Margin="20,5"/>
+                                            
                                             <ListBox ItemsSource="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.Position.ActivePermissionWrappers}"
                                                      DisplayMemberPath="PermissionName"
-                                                     Grid.Row="6"
+                                                     Grid.Row="7"
                                                      Grid.Column="1" 
-                                                     Grid.RowSpan="4"
+                                                     Grid.RowSpan="3"
                                                      BorderThickness="1"
                                                      Margin="20,5,80,5"
                                                      BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"/>
@@ -728,7 +741,7 @@
                                                         Content="Добавить должность"
                                                         ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}" />
                                                 <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
-                                                        CommandParameter="PositionsSave"
+                                                        CommandParameter="PositionsEdit"
                                                         Style="{StaticResource MahApps.Styles.Button.Square}"
                                                         Width="200"
                                                         Margin="5"

@@ -23,14 +23,12 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/NomenclatureGroups
         [HttpGet]
         public async Task<ActionResult<IEnumerable<NomenclatureGroup>>> GetNomenclatureGroups()
         {
             return await _context.NomenclatureGroups.ToListAsync();
         }
 
-        // GET: api/NomenclatureGroups/5
         [HttpGet("{id}")]
         public async Task<ActionResult<NomenclatureGroup>> GetNomenclatureGroup(int id)
         {
@@ -44,8 +42,6 @@ namespace API.Controllers
             return nomenclatureGroup;
         }
 
-        // PUT: api/NomenclatureGroups/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutNomenclatureGroup(int id, NomenclatureGroup nomenclatureGroup)
         {
@@ -75,8 +71,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/NomenclatureGroups
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
         public async Task<ActionResult<NomenclatureGroup>> SaveNomenclatureGroups(IEnumerable<NomenclatureGroup> nomenclatureGroups)
         {
@@ -101,8 +95,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/NomenclatureGroups
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<NomenclatureGroup>> PostNomenclatureGroup(NomenclatureGroup nomenclatureGroup)
         {
@@ -112,7 +104,6 @@ namespace API.Controllers
             return CreatedAtAction("GetNomenclatureGroup", new { id = nomenclatureGroup.Id }, nomenclatureGroup);
         }
 
-        // DELETE: api/NomenclatureGroups/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNomenclatureGroup(int id)
         {

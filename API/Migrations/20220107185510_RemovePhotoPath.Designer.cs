@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20220107185510_RemovePhotoPath")]
+    partial class RemovePhotoPath
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +31,6 @@ namespace API.Migrations
                     b.Property<string>("Guid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
 
                     b.Property<string>("ParentGuid")
                         .HasColumnType("nvarchar(max)");
@@ -142,7 +141,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 8, 12, 14, 44, 363, DateTimeKind.Utc).AddTicks(4956));
+                        .HasDefaultValue(new DateTime(2022, 1, 7, 18, 55, 8, 373, DateTimeKind.Utc).AddTicks(1872));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -192,7 +191,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 8, 12, 14, 44, 366, DateTimeKind.Utc).AddTicks(5954));
+                        .HasDefaultValue(new DateTime(2022, 1, 7, 18, 55, 8, 379, DateTimeKind.Utc).AddTicks(3283));
 
                     b.Property<string>("Currency")
                         .IsRequired()

@@ -23,14 +23,12 @@ namespace API.Controllers
             _context = context;
         }
 
-        // GET: api/Currencies
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Currency>>> GetCurrencies()
         {
             return await _context.Currencies.ToListAsync();
         }
 
-        // GET: api/Currencies/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Currency>> GetCurrency(int id)
         {
@@ -44,8 +42,6 @@ namespace API.Controllers
             return currency;
         }
 
-        // PUT: api/Currencies/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCurrency(int id, Currency currency)
         {
@@ -75,8 +71,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // PUT: api/Currencies/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
         public async Task<IActionResult> PutCurrencies(IEnumerable<Currency> currencies)
         {
@@ -104,8 +98,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        // POST: api/Currencies
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Currency>> PostCurrency(Currency currency)
         {
@@ -115,7 +107,6 @@ namespace API.Controllers
             return CreatedAtAction("GetCurrency", new { id = currency.Id }, currency);
         }
 
-        // DELETE: api/Currencies/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCurrency(int id)
         {

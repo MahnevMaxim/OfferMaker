@@ -20,7 +20,6 @@ namespace OfferMaker
         ObservableCollection<NomenclatureGroup> nomenclatureGroups = new ObservableCollection<NomenclatureGroup>();
         NomenclatureGroup selectedNomenclatureGroup;
         ObservableCollection<Category> categoriesTree;
-        Category selectedCat;
         string searchStringInCatalog;
         CatalogFilter catalogFilter;
         ObservableCollection<Category> categories;
@@ -82,15 +81,7 @@ namespace OfferMaker
             }
         }
 
-
-
-        public string SearchStringInCatalog
-        {
-            set
-            {
-                searchStringInCatalog = value;
-            }
-        }
+        public string SearchStringInCatalog { set => searchStringInCatalog = value; }
 
         public CatalogFilter CatalogFilter
         {
@@ -161,15 +152,17 @@ namespace OfferMaker
         /// </summary>
         public void SaveCatalog() => Global.Main.SaveCatalog();
 
+        #region Categories
+
         /// <summary>
         /// Переустанавливаем родителей у элементов коллекции и распрямляем дерево.
         /// </summary>
         /// <returns></returns>
-        private ObservableCollection<Category> GetPreparedCategories()
-        {
-            SetParents(CategoriesTree, null, null);
-            return GetFlattenTree();
-        }
+        //private ObservableCollection<Category> GetPreparedCategories()
+        //{
+        //    SetParents(CategoriesTree, null, null);
+        //    return GetFlattenTree();
+        //}
 
         /// <summary>
         /// Обходим дерево и устанавливаем родителей, во время редактирования и перетаскиваний всё может перемешаться.
@@ -190,7 +183,7 @@ namespace OfferMaker
         /// Распрямляем дерево.
         /// </summary>
         /// <returns></returns>
-        private ObservableCollection<Category> GetFlattenTree()
+        public ObservableCollection<Category> GetFlattenTree()
         {
             List<Category> flattenTree = new List<Category>();
             foreach (var cat in CategoriesTree)
@@ -205,8 +198,6 @@ namespace OfferMaker
             flattenTree.ForEach(f => resColl.Add(f));
             return resColl;
         }
-
-        #region Categories
 
         public void ShowAllCategory() => CatalogFilter.SetMode(FilterMode.All);
 
@@ -225,25 +216,33 @@ namespace OfferMaker
         {
             CategoriesTree = new ObservableCollection<Category>();
             //не установленный ParentGuid даёт гарантию, что родитель отсутствует
-            var roots = categories.Where(c => c.ParentGuid == null).ToList();
+            var roots = categories.Where(c => c.ParentGuid == null).OrderBy(c => c.Order).ToList();
             SetChilds(CategoriesTree, roots);
         }
 
-        private void SetNOmenclatureCache(Category ch) => Nomenclatures.Where(n => n.CategoryGuid == ch.Guid).ToList().ForEach(n => ch.Nomenclatures.Add(n));
+        private void SetNomenclatureCache(Category ch) => Nomenclatures.Where(n => n.CategoryGuid == ch.Guid).ToList().ForEach(n => ch.Nomenclatures.Add(n));
 
         private void SetChilds(ObservableCollection<Category> targetCollection, List<Category> childs)
         {
             foreach (var ch in childs)
             {
-                SetNOmenclatureCache(ch);
+                SetNomenclatureCache(ch);
                 targetCollection.Add(ch);
-                var childs_ = categories.Where(c => c.ParentGuid != null && c.ParentGuid == ch.Guid).ToList();
+                var childs_ = categories.Where(c => c.ParentGuid != null && c.ParentGuid == ch.Guid).OrderBy(c => c.Order).ToList();
                 SetChilds(ch.Childs, childs_);
             }
         }
 
-        public void AddCategory() => CategoriesTree.Add(new Category(newCatName));
-
+        /// <summary>
+        /// Добавление категории.
+        /// </summary>
+        public void AddCategory()
+        {
+            Category cat = new Category(newCatName);
+            CategoriesTree.Add(cat);
+            Categories.Add(cat);
+        }
+            
         /// <summary>
         /// Редактирование заголовка категории.
         /// </summary>
