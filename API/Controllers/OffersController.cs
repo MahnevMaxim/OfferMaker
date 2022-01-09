@@ -23,14 +23,14 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Offer>>> GetOffers()
+        [HttpGet(Name = nameof(OffersGet))]
+        public async Task<ActionResult<IEnumerable<Offer>>> OffersGet()
         {
             return await _context.Offers.ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Offer>> GetOffer(int id)
+        [HttpGet("{id}", Name = nameof(OfferGet))]
+        public async Task<ActionResult<Offer>> OfferGet(int id)
         {
             var offer = await _context.Offers.FindAsync(id);
 
@@ -42,8 +42,8 @@ namespace API.Controllers
             return offer;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutOffer(int id, Offer offer)
+        [HttpPut("{id}", Name = nameof(OfferEdit))]
+        public async Task<IActionResult> OfferEdit(int id, Offer offer)
         {
             if (id != offer.Id)
             {
@@ -71,17 +71,19 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Offer>> PostOffer(Offer offer)
+        [HttpPost(Name = nameof(OfferPost))]
+        public async Task<ActionResult<Offer>> OfferPost(Offer offer)
         {
             _context.Offers.Add(offer);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOffer", new { id = offer.Id }, offer);
+            TryAddHints(offer);
+
+            return CreatedAtAction("OfferGet", new { id = offer.Id }, offer);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteOffer(int id)
+        [HttpDelete("{id}", Name = nameof(OfferDelete))]
+        public async Task<IActionResult> OfferDelete(int id)
         {
             var offer = await _context.Offers.FindAsync(id);
             if (offer == null)
@@ -98,6 +100,17 @@ namespace API.Controllers
         private bool OfferExists(int id)
         {
             return _context.Offers.Any(e => e.Id == id);
+        }
+
+        private void TryAddHints(Offer offer)
+        {
+            var newHintsStrings = offer.OfferGroups.Select(o => o.GroupTitle);
+            var oldHintsStrings = _context.Hints.Select(h => h.HintString);
+            var result = newHintsStrings.Except(oldHintsStrings);
+            List<Hint> hints = new List<Hint>();
+            result.ToList().ForEach(h => hints.Add(new Hint() { HintString = h.ToUpper() }));
+            _context.Hints.AddRange(hints);
+            _context.SaveChanges();
         }
     }
 }

@@ -41,5 +41,7 @@ namespace OfferMaker
 
         public static Image NoProfileImage = new Image() { LocalPhotoPath = NoProfilePicturePath, IsNew = false };
 
-    }
+        public static List<Hint> Hints { get => Main.hints; }
+
+}
 }

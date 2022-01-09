@@ -25,8 +25,7 @@ namespace OfferMaker.Controls
         public OfferGroupItemControl()
         {
             InitializeComponent();
-            //AllHints = Global.Main.GetHints();
-            AllHints = new List<string>() { "111","222","333","444","555","666","777", "888", "999", "11", "22", "33", "44", "55", "66", "77", "88", "99", "1111", "2222", "3333", };
+            AllHints = Global.Hints.Select(h=>h.HintString).ToList();
         }
 
         private void TextBox_KeyUp(object sender, KeyEventArgs e)

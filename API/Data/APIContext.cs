@@ -20,6 +20,7 @@ namespace API.Data
         public DbSet<Offer> Offers { get; set; }
         public DbSet<NomenclatureGroup> NomenclatureGroups { get; set; }
         public DbSet<Position> Positions { get; set; }
+        public DbSet<Hint> Hints { get; set; }
 
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)

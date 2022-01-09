@@ -157,6 +157,7 @@ namespace OfferMaker
         #region Fields
 
         public ObservableCollection<Offer> offers;
+        public static List<Hint> hints;
 
         #endregion Fields
 

@@ -88,7 +88,7 @@ namespace OfferMaker
 
         #region Hints
 
-        async internal Task<CallResult<StringCollection>> GetHints() => await Proxy.GetHints();
+        async internal Task<CallResult<List<Hint>>> GetHints() => await Proxy.GetHints();
 
         #endregion Hints
 

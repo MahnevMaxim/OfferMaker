@@ -33,6 +33,7 @@ namespace OfferMaker
         static readonly string userAddErrorMess = "Ошибка при попытке добавить пользователя.";
         static readonly string userChangePasswordErrorMess = "Ошибка при попытке обновить пароль.";
         static readonly string userDeleteErrorMess = "Ошибка при попытке удалить пользователя.";
+        static readonly string getHintsErrorMess = "Ошибка при попытке получить хинты.";
 
         public ServerData(string accessToken)
         {
@@ -642,7 +643,7 @@ namespace OfferMaker
         {
             try
             {
-                var response = await client.OffersAllAsync();
+                var response = await client.OffersGetAsync();
                 if (response.StatusCode == 200)
                 {
                     ObservableCollection<Offer> res = Helpers.CloneObject<ObservableCollection<Offer>>(response.Result);
@@ -670,7 +671,7 @@ namespace OfferMaker
             try
             {
                 ApiLib.Offer offerCopy = Helpers.CloneObject<ApiLib.Offer>(offer);
-                var res = await client.OffersPOSTAsync(offerCopy);
+                var res = await client.OfferPostAsync(offerCopy);
                 offer.Id = res.Result.Id;
                 return new CallResult();
             }
@@ -691,7 +692,7 @@ namespace OfferMaker
             try
             {
                 if (offer.Id == 0) return new CallResult(); // нельзя удалить то, чего нет
-                await client.OffersDELETEAsync((int)offer.Id);
+                await client.OfferDeleteAsync(offer.Id);
                 return new CallResult();
             }
             catch (Exception ex)
@@ -705,9 +706,26 @@ namespace OfferMaker
 
         #region Hints
 
-        internal Task<CallResult<StringCollection>> GetHints()
+        async internal Task<CallResult<List<Hint>>> GetHints()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await client.HintsGetAsync();
+                if (response.StatusCode == 200)
+                {
+                    List<Hint> res = Helpers.CloneObject<List<Hint>>(response.Result);
+                    return new CallResult<List<Hint>>() { Data = res };
+                }
+                else
+                {
+                    return new CallResult<List<Hint>>() { Error = new Error(getHintsErrorMess) };
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                return new CallResult<List<Hint>>() { Error = new Error(getHintsErrorMess) };
+            }
         }
 
         #endregion Hints

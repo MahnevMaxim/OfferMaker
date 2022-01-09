@@ -23,6 +23,7 @@ namespace OfferMaker
         ObservableCollection<NomenclatureGroup> nomenclatureGroups;
         ObservableCollection<Offer> offers;
         ObservableCollection<Currency> currencies;
+        List<Hint> hints;
         string token;
 
         async internal void Run()
@@ -133,13 +134,13 @@ namespace OfferMaker
                 errorMessage += offersCr.Error.Message + "\n";
 
             //получаем хинты
-            //var hintsCr = await DataRepository.GetHints();
-            //if (hintsCr.Success)
-            //{
-            //    Hints = hintsCr.Data;
-            //}
-            //else
-            //    errorMessage += hintsCr.Error.Message + "\n";
+            var hintsCr = await dataRepository.GetHints();
+            if (hintsCr.Success)
+            {
+                hints = hintsCr.Data;
+            }
+            else
+                errorMessage += hintsCr.Error.Message + "\n";
 
             if (!string.IsNullOrWhiteSpace(errorMessage))
                 MessageBox.Show("", errorMessage);
@@ -165,7 +166,7 @@ namespace OfferMaker
                 if (u.Position != null)
                     u.Position = positions.Where(p => p.Id == u.Position.Id).FirstOrDefault();
             });
-
+            Main.hints = hints;
             positions.ToList().ForEach(p => p.SetWrapperPermission());
             main.AdminPanel = AdminPanel.GetInstance(users, main.User, positions);
 

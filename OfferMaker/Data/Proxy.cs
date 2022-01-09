@@ -363,20 +363,20 @@ namespace OfferMaker
         /// Пытаемся получить хинты с сервера или из кэша.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<StringCollection>> GetHints()
+        async internal Task<CallResult<List<Hint>>> GetHints()
         {
             if (AppMode == AppMode.Online)
                 return await ServerData.GetHints();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<StringCollection>(LocalDataConfig.HintsPath);
+                return await LocalData.GetCache<List<Hint>>(LocalDataConfig.HintsPath);
 
-            CallResult<StringCollection> callResult = await ServerData.GetHints();
+            CallResult<List<Hint>> callResult = await ServerData.GetHints();
             if (callResult.Success)
             {
                 LocalData.UpdateCache(callResult.Data, LocalDataConfig.HintsPath);
                 return callResult;
             }
-            return await LocalData.GetCache<StringCollection>(LocalDataConfig.HintsPath);
+            return await LocalData.GetCache<List<Hint>>(LocalDataConfig.HintsPath);
         }
 
         #endregion Hints
