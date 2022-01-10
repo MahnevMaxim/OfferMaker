@@ -13,8 +13,6 @@ namespace OfferMaker.ViewModels
 {
     public class NomToCatDropHandler : DefaultDropHandler, IDropTarget
     {
-        bool isList;
-
         /// <summary>
         /// Test the specified drop information for the right data.
         /// </summary>
