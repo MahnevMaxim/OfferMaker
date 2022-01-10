@@ -178,6 +178,28 @@ namespace OfferMaker
         public Currency Currency { get => offer.Currency; }
 
         /// <summary>
+        /// Обёртка для отображения символа валюты в зависимости от того, в какой валюте номенклатуры, 
+        /// если все в одной валюте, отличной от валюты КП, то изменяем валюту.
+        /// </summary>
+        [JsonIgnore]
+        public Currency CurrencyWrapper 
+        { 
+            get
+            {
+                if (NomWrappers.Count > 0)
+                {
+                    string firstCurrencyCode = NomWrappers[0].CurrencyCharCode;
+                    bool isOneCurrency = NomWrappers.All(n => n.Currency.CharCode == firstCurrencyCode);
+                    if (isOneCurrency && firstCurrencyCode != Currency.CharCode)
+                    {
+                        return Global.GetCurrencyByCode(firstCurrencyCode);
+                    }
+                }
+                return offer.Currency;
+            } 
+        }
+
+        /// <summary>
         /// Для прокидывания свойства IsWithNds от Offer к NomWrapper
         /// </summary>
         [JsonIgnore]

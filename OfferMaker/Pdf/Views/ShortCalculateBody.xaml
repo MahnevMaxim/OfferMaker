@@ -76,8 +76,8 @@
 
         <TextBlock Name="TextBlockDescription" 
                    Grid.Column="3" 
-                   FontSize="12pt" 
-                   Text="{Binding Currency.Symbol}"
+                   FontSize="12pt"
+                   Text="{Binding CurrencyWrapper.Symbol}"
                    FontFamily="Segoe UI"
                    Margin="0,2,13,10"/>
 

@@ -853,8 +853,8 @@
                                    FontFamily="Arial"
                                    FontSize="12"
                                    FontWeight="Bold"/>
-                        <TextBlock Grid.Column="7" 
-                                   Margin="5"
+                        <TextBlock Grid.Column="6" 
+                                   Margin="10,5"
                                    VerticalAlignment="Center"
                                    Text="Сумма"
                                    FontFamily="Arial"
@@ -897,8 +897,8 @@
                                    FontFamily="Arial"
                                    FontSize="12"
                                    FontWeight="Bold"/>
-                        <TextBlock Grid.Column="7"
-                                   Margin="5"
+                        <TextBlock Grid.Column="6"
+                                   Margin="10,5"
                                    Grid.Row="1" 
                                    VerticalAlignment="Center"
                                    Text="{Binding TotalSum, StringFormat=F2}"
