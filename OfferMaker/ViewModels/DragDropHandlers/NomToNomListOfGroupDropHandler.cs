@@ -8,6 +8,7 @@ using GongSolutions.Wpf.DragDrop.Utilities;
 using System.Windows.Controls;
 using System.Windows;
 using System.Collections.ObjectModel;
+using System.Collections;
 
 namespace OfferMaker.ViewModels
 {
@@ -100,6 +101,22 @@ namespace OfferMaker.ViewModels
                 var res = ((ObservableCollection<Nomenclature>)dropInfo.TargetCollection).Where(n=>n.Id==nomenclature.Id).FirstOrDefault();
                 if (res != null)
                     return;
+            }
+
+            if (dropInfo.Data.GetType().GetInterfaces().Contains(typeof(IList)))
+            {
+                if (((IList)dropInfo.Data)[0].GetType() == typeof(Nomenclature))
+                {
+                    List<Nomenclature> noms = new List<Nomenclature>(); //это номенклатуры, которые надо будет удалить
+                    foreach (var nom in (IList)dropInfo.Data)
+                    {
+                        var nomenclature = (Nomenclature)nom;
+                        var res = ((ObservableCollection<Nomenclature>)dropInfo.TargetCollection).Where(n => n.Id == nomenclature.Id).FirstOrDefault();
+                        if (res != null)
+                            noms.Add(nomenclature);
+                    }
+                    noms.ForEach(n => ((IList)dropInfo.Data).Remove(n));
+                }
             }
 
             var insertIndex = GetInsertIndex(dropInfo);
