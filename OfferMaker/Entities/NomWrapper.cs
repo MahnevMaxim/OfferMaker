@@ -301,6 +301,7 @@ namespace OfferMaker
             OnPropertyChanged(nameof(CostPrice));
             OnPropertyChanged(nameof(Currency));
             offerGroup?.OnPropertyChanged("PriceSumWrapper");
+            offerGroup?.OnPropertyChanged("CurrencyWrapper");
         }
 
         /// <summary>
