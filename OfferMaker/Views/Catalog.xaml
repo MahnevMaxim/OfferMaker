@@ -245,6 +245,7 @@
                                                dd:DragDrop.DropHandler="{Binding NomToCatDropHandler}"
                                                AllowDrop="True"
                                                Margin="5"
+                                               SelectedItemChanged="catalogExtendedTreeView_SelectedItemChanged"
                                                BorderThickness="1"
                                                Style="{StaticResource MahApps.Styles.TreeView.Virtualized}">
                             <TreeView.ItemTemplate>

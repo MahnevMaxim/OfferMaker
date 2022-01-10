@@ -35,6 +35,8 @@ namespace OfferMaker.Views
 
         #region Catalog searching
 
+        private void catalogExtendedTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) => SearchString_TextChanged(null, null);
+
         private void SetTimer()
         {
             timerStartSearch = new DispatcherTimer();
