@@ -22,33 +22,39 @@ namespace OfferMaker.SimpleViews
     {
         public Offer Offer { get; set; }
 
+        bool isClickConfirm;
+
         Offer offerBackup;
 
         public EditCustomer(Offer offer)
         {
             InitializeComponent();
             Offer = offer;
-
-            //для тестов, чтоб не ебаться каждый раз с заполнением
-            Offer.OfferName = "для ООО Монолитстрой";
-            Offer.Customer.FullName = "Иванов Иван Сергеевич";
-            Offer.Customer.Organization = "Монолитстрой";
-            Offer.Customer.Location = "Красноярск, ул. Молокова, 1/2";
-            Offer.Customer.Position = "Не увидел, где привязывается должность клиента";
-
             offerBackup = Helpers.CloneObject<Offer>(offer);
             DataContext = Offer;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e) => Close();
+        private void Button_Click(object sender, RoutedEventArgs e) 
+        {
+            isClickConfirm = true;
+            Close();
+        }
 
-        private void Button_Click_Cancel(object sender, RoutedEventArgs e)
+        private void Button_Click_Cancel(object sender, RoutedEventArgs e) => CancelChanges();
+
+        private void CancelChanges()
         {
             Offer.OfferName = offerBackup.OfferName;
             Offer.Customer.FullName = offerBackup.Customer.FullName;
             Offer.Customer.Position = offerBackup.Customer.Position;
             Offer.Customer.Organization = offerBackup.Customer.Organization;
             Offer.Customer.Location = offerBackup.Customer.Location;
+        }
+
+        private void cust_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!isClickConfirm)
+                CancelChanges();
         }
     }
 }

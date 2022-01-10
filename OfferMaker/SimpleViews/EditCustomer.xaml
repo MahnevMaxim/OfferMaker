@@ -12,7 +12,8 @@
                  ResizeMode="NoResize"
                  Title="Название КП и данные клиента"
                  x:Name="cust"
-                 Height="350" Width="400">
+                 Height="350" Width="400"
+                 Closing="cust_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="50"/>

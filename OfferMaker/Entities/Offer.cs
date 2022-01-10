@@ -272,6 +272,7 @@ namespace OfferMaker
             set
             {
                 offerName = value;
+                OnPropertyChanged();
                 constructor?.viewModel.OnPropertyChanged(nameof(OfferName));
             }
         }
