@@ -50,8 +50,11 @@ namespace ApiClientCodeGen
                     }
                 }
 
+                string appPath = Directory.GetCurrentDirectory();
+
                 //read source
-                string source = File.ReadAllText(@"C:\Users\Maxxx\source\repos\API\Shared\Entities\Permissions.cs");
+                string sourcePath = Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\..\Shared\Entities\Permissions.cs");
+                string source = File.ReadAllText(sourcePath);
                 string forWrite = "";
                 for (int i = source.IndexOf("enum Permissions"); i < source.Length; i++)
                 {
@@ -65,9 +68,8 @@ namespace ApiClientCodeGen
 
                 //replace
                 code = code.Replace(forReplace, forWrite);
-
-                string pathToClassFole = @"C:\Users\Maxxx\source\repos\API\ApiClient\Client.cs";
-                File.WriteAllText(pathToClassFole, code);
+                string pathToClassFile = Path.GetFullPath(Directory.GetCurrentDirectory() + @"\..\..\..\..\ApiClient\Client.cs");
+                File.WriteAllText(pathToClassFile, code);
             }
             catch (Exception ex)
             {

@@ -69,8 +69,8 @@
 
         <TextBlock Name="TextBlockValue" 
                    FontSize="12pt" 
-                   Grid.Column="2" 
-                   Text="{Binding PriceSum, Converter={StaticResource numConvertors}}" 
+                   Grid.Column="2"
+                   Text="{Binding PriceSumWrapper, Converter={StaticResource numConvertors}}" 
                    FontFamily="Segoe UI"
                    Margin="0,2,5,10"/>
 

@@ -15,7 +15,7 @@ namespace OfferMaker
         ObservableCollection<NomWrapper> nomWrappers = new ObservableCollection<NomWrapper>();
         string groupTitle;
         bool isOption;
-        bool isEnabled=true;
+        bool isEnabled = true;
 
         public int Id { get; set; }
 
@@ -111,6 +111,36 @@ namespace OfferMaker
             {
                 decimal sum = 0;
                 NomWrappers.ToList().ForEach(n => { if (n.IsIncludeIntoOffer) sum += n.SumInOfferCurrency; });
+                return sum;
+            }
+        }
+
+        /// <summary>
+        /// Суммарная цена группы КП. Обёртка для отображения суммы группы, предназначена для того, чтобы не ломать логику
+        /// подсчёта суммы.
+        /// </summary>
+        [JsonIgnore]
+        public decimal PriceSumWrapper
+        {
+            get
+            {
+                decimal sum = 0;
+                if (NomWrappers.Count > 0)
+                {
+                    string firstCurrencyCode = NomWrappers[0].CurrencyCharCode;
+                    bool isOneCurrency = NomWrappers.All(n => n.Currency.CharCode == firstCurrencyCode);
+                    if (isOneCurrency && firstCurrencyCode!=Currency.CharCode)
+                    {
+                        //подсчёт суммы, если вся группа в одной валюте, отличной от валюты КП
+                        decimal tempSum = 0;
+                        NomWrappers.ToList().ForEach(n => { if (n.IsIncludeIntoOffer) tempSum += n.SumInOfferCurrency; });
+                        sum = tempSum *(Currency.Rate/ NomWrappers[0].Currency.Rate);
+                    }
+                    else
+                    {
+                        NomWrappers.ToList().ForEach(n => { if (n.IsIncludeIntoOffer) sum += n.SumInOfferCurrency; });
+                    }
+                }
                 return sum;
             }
         }
