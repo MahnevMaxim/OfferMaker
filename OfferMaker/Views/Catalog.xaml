@@ -7,6 +7,7 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:root="clr-namespace:OfferMaker"
+                 xmlns:customControls="clr-namespace:OfferMaker"
                  xmlns:dd="urn:gong-wpf-dragdrop"
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
@@ -300,15 +301,18 @@
                             <RowDefinition Height="*" />
                             <RowDefinition Height="auto" />
                         </Grid.RowDefinitions>
-                        <DataGrid ItemsSource="{Binding Source={StaticResource Nomenclatures}}"
-                                  dd:DragDrop.IsDragSource="True"
-                                  dd:DragDrop.DragDropCopyKeyState="LeftMouseButton"
-                                  dd:DragDrop.DragHandler="{Binding NomToCatDragHandler}"
-                                  AutoGenerateColumns="False"
-                                  GridLinesVisibility="Horizontal"
-                                  MinWidth="150"
-                                  AlternationCount="2"
-                                  IsReadOnly="True">
+                        <customControls:CustomDataGrid ItemsSource="{Binding Source={StaticResource Nomenclatures}}"
+                                                       dd:DragDrop.IsDragSource="True"
+                                                       dd:DragDrop.DragDropCopyKeyState="LeftMouseButton"
+                                                       dd:DragDrop.DragHandler="{Binding NomToCatDragHandler}"
+                                                       AutoGenerateColumns="False"
+                                                       GridLinesVisibility="Horizontal"
+                                                       MinWidth="150"
+                                                       Style="{StaticResource MahApps.Styles.DataGrid}"
+                                                       SelectedItemsList="{Binding SelectedNomenclatures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                       SelectionMode="Extended"
+                                                       AlternationCount="2"
+                                                       IsReadOnly="True">
                             <!--Тут будет зебра, но потом-->
                             <!--<DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}">
@@ -353,13 +357,25 @@
                                                         DisplayIndex="6"
                                                         CellTemplate="{StaticResource CatalogButtons}" />
                             </DataGrid.Columns>
-                        </DataGrid>
-                        <Button Content="Добавить номенклатуру"
-                                Grid.Row="1"
-                                CommandParameter="AddNomenclature"
-                                Command="{Binding Cmd}"
-                                Style="{DynamicResource MahApps.Styles.Button.Square}"
-                                Margin="5" />
+                        </customControls:CustomDataGrid>
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Button Content="Добавить номенклатуру"
+                                    CommandParameter="AddNomenclature"
+                                    Command="{Binding Cmd}"
+                                    Style="{DynamicResource MahApps.Styles.Button.Square}"
+                                    Margin="5" />
+                            <Button Content="Удалить номенклатуры"
+                                    Grid.Column="1"
+                                    CommandParameter="DeleteNomenclatures"
+                                    Command="{Binding Cmd}"
+                                    Style="{DynamicResource MahApps.Styles.Button.Square}"
+                                    Margin="5" />
+                        </Grid>
+
                     </Grid>
 
                 </AdornerDecorator>

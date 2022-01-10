@@ -55,7 +55,7 @@ namespace OfferMaker
             System.Windows.Controls.PrintDialog printDialog = new System.Windows.Controls.PrintDialog();
             var serv = new LocalPrintServer();
             printDialog.PrintQueue = serv.GetPrintQueue("Microsoft Print to PDF");
-            
+
             PrintTicket pt = new PrintTicket()
             {
                 OutputColor = OutputColor.Color,
@@ -100,9 +100,9 @@ namespace OfferMaker
             sfd.Filter = omfFilter;
             sfd.FileName = String.Format("Offer from {0}", DateTime.Today.ToShortDateString());
             sfd.InitialDirectory = defaultPath;
-            if (sfd.ShowDialog()==DialogResult.OK)
+            if (sfd.ShowDialog() == DialogResult.OK)
             {
-                Helpers.SaveObject(sfd.FileName,Global.Offer);
+                Helpers.SaveObject(sfd.FileName, Global.Offer);
             }
         }
 
@@ -123,10 +123,10 @@ namespace OfferMaker
         /// Сохранение шаблонов и КП.
         /// </summary>
         /// <param name="isTemplate"></param>
-        async internal void SaveOffer(bool isTemplate=false)
+        async internal void SaveOffer(bool isTemplate = false)
         {
             Offer offer;
-            if(isTemplate)
+            if (isTemplate)
             {
                 Offer temp = CreateTemplate(constructor.Offer);
                 Global.Main.offers.Add(temp);
@@ -137,7 +137,7 @@ namespace OfferMaker
                 Global.Main.offers.Add(constructor.Offer);
                 offer = constructor.Offer;
             }
-            
+
             CallResult cr = await Global.Main.DataRepository.SaveOffer(offer, Global.Main.offers);
             if (!cr.Success)
                 Global.Main.SendMess(cr.Error.Message);

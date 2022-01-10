@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Shared;
 using System.Windows;
+using System.Collections;
 
 namespace OfferMaker
 {
@@ -23,6 +24,7 @@ namespace OfferMaker
         string searchStringInCatalog;
         CatalogFilter catalogFilter;
         ObservableCollection<Category> categories;
+        IList selectedNomenclatures = new ArrayList();
 
         #endregion Fields
 
@@ -50,6 +52,8 @@ namespace OfferMaker
                 OnPropertyChanged();
             }
         }
+
+        public IList SelectedNomenclatures { set => selectedNomenclatures = value; }
 
         public ObservableCollection<NomenclatureGroup> NomenclatureGroups
         {
@@ -356,6 +360,18 @@ namespace OfferMaker
         /// <param name="nomenclature"></param>
         public void DeleteNomenclurue(Nomenclature nomenclature) => CatalogFilter.Remove(nomenclature);
 
+        /// <summary>
+        /// Удаление номенклатур из каталога.
+        /// </summary>
+        /// <param name="nomenclature"></param>
+        public void DeleteNomenclatures()
+        {
+            List<Nomenclature> noms = new List<Nomenclature>();
+            foreach (var nom in selectedNomenclatures)
+                noms.Add((Nomenclature)nom);
+            noms.ForEach(n => CatalogFilter.Remove(n));
+        }
+            
         /// <summary>
         /// Клонирование номенклатуры.
         /// </summary>
