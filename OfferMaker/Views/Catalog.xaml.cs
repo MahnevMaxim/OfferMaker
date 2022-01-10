@@ -14,6 +14,7 @@ using System.Windows.Shapes;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using System.Windows.Threading;
+using System.Collections;
 
 namespace OfferMaker.Views
 {
@@ -101,6 +102,7 @@ namespace OfferMaker.Views
             {
                 var formats = e.Data.GetFormats();
                 Nomenclature nomenclature = e.Data.GetData(formats[0]) as Nomenclature;
+                IList list = e.Data.GetData(formats[0]) as IList;
                 if (nomenclature != null)
                 {
                     #region Model
@@ -109,6 +111,26 @@ namespace OfferMaker.Views
                         await this.ShowMessageAsync("", "Эта номенклатура уже есть в группе.");
                     else
                         group.Nomenclatures.Add(nomenclature);
+
+                    #endregion Model
+
+                    dataGrid.SelectedIndex = dataGrid.Items.IndexOf(group);
+                }
+
+                if (list != null)
+                {
+                    #region Model
+
+                    string message = "";
+                    foreach (Nomenclature nom in list)
+                    {
+                        if (group.Nomenclatures.Contains(nom))
+                            message+=nom.Title + " уже есть в группе.\n";
+                        else
+                            group.Nomenclatures.Add(nom);
+                    }
+                    if(!string.IsNullOrWhiteSpace(message))
+                        await this.ShowMessageAsync("", message.Trim());
 
                     #endregion Model
 
