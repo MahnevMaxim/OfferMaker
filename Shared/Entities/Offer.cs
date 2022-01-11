@@ -12,6 +12,8 @@ namespace Shared
     {
         public int Id { get; set; }
 
+        public string AltId { get; set; }
+
         [Required]
         public string Guid { get; set; }
 
