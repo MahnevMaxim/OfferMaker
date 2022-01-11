@@ -29,6 +29,7 @@ namespace OfferMaker
         User manager;
 
         int id;
+        string altId;
         string guid;
         User offerCreator;
         Currency currency;
@@ -54,6 +55,19 @@ namespace OfferMaker
             set
             {
                 id = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Альтернативный человекочитаемый идентификатор - дата и порядковый номер КП в течение дня.
+        /// </summary>
+        public string AltId
+        {
+            get => altId;
+            set
+            {
+                altId = value;
                 OnPropertyChanged();
             }
         }

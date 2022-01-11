@@ -30,7 +30,6 @@
     </UserControl.Resources>
 
     <Grid>
-
         <Grid.Resources>
 
             <DataTemplate x:Key="NomTitle">
@@ -188,28 +187,28 @@
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-
-        <Grid Grid.ColumnSpan="4"
-              Grid.Row="0" 
+        <Grid Grid.Row="0" 
               Background="{DynamicResource MahApps.Brushes.Accent2}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="290"/>
             </Grid.ColumnDefinitions>
-            <ComboBox x:Name="groupComboBox" Grid.Column="0"
+            <ComboBox x:Name="groupComboBox" 
                       SelectionChanged="groupComboBox_SelectionChanged"
                       Margin="10"
+                      MaxWidth="800"
                       Height="30"/>
-            <TextBox Text="{Binding GroupTitle, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0"
+            <TextBox Text="{Binding GroupTitle, UpdateSourceTrigger=PropertyChanged}"
                      IsEnabled="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}"
                      Name="groupTitleTextBox"
                      Margin="10"
                      Height="30"
+                     MaxWidth="800"
                      KeyUp="TextBox_KeyUp"/>
-            <StackPanel Grid.Row="0"  Grid.Column="3"
+            <StackPanel Grid.Row="0"  Grid.Column="1"
                         Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal"
                             IsEnabled="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}">
