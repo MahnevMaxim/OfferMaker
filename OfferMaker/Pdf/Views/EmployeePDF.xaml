@@ -23,7 +23,9 @@
 
                 <Border Grid.Row="1" Margin="11,0,0,0">
                     <TextBlock FontSize="16pt" FontFamily="Segoi UI" VerticalAlignment="Center">
-                    <TextBlock FontSize="16pt" FontFamily="Segoi UI" Text="Должность" Margin="2,1,0,1"/><Run FontSize="16pt" >: </Run>
+                    <TextBlock FontSize="16pt"
+                               FontFamily="Segoi UI"
+                               Text="{Binding Manager.Position.PositionName}" Margin="2,1,0,1"/><Run FontSize="16pt" >: </Run>
                     <TextBlock FontSize="16pt" Text="{Binding Manager.FullName}" Margin="0,1"/>
                 </TextBlock>
             </Border>
