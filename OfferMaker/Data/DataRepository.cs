@@ -54,11 +54,11 @@ namespace OfferMaker
 
         #region Offers
 
-        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers() => await Proxy.GetOffers();
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersGet() => await Proxy.OffersGet();
 
-        async internal Task<CallResult> SaveOffer(Offer offer, ObservableCollection<Offer> offers) => await Proxy.SaveOffer(offer, offers);
+        async internal Task<CallResult> OfferCreate(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferCreate(offer, offers);
 
-        async internal Task<CallResult> DeleteOfferFromArchive(Offer offer, ObservableCollection<Offer> offers) => await Proxy.DeleteOfferFromArchive(offer, offers);
+        async internal Task<CallResult> OfferDelete(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferDelete(offer, offers);
 
         #endregion Offers
 
@@ -88,7 +88,7 @@ namespace OfferMaker
 
         #region Hints
 
-        async internal Task<CallResult<List<Hint>>> GetHints() => await Proxy.GetHints();
+        async internal Task<CallResult<List<Hint>>> HintsGet() => await Proxy.HintsGet();
 
         #endregion Hints
 

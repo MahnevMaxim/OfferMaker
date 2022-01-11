@@ -34,6 +34,8 @@ namespace OfferMaker
         static readonly string userChangePasswordErrorMess = "Ошибка при попытке обновить пароль.";
         static readonly string userDeleteErrorMess = "Ошибка при попытке удалить пользователя.";
         static readonly string getHintsErrorMess = "Ошибка при попытке получить хинты.";
+        static readonly string offerCreateErrorMess = "Ошибка при попытке сохранить КП на сервере.";
+        static readonly string offerDeleteErrorMess = "Ошибка при попытке удалить КП с сервера.";
 
         public ServerData(string accessToken)
         {
@@ -639,7 +641,7 @@ namespace OfferMaker
         /// Пытаемся получить архив КП с сервера.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers()
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersGet()
         {
             try
             {
@@ -651,13 +653,12 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<Offer>>() { Error = new Error(getOffersErrorMess) };
+                    return GetApiError<ObservableCollection<Offer>>(getOffersErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult<ObservableCollection<Offer>>() { Error = new Error(getOffersErrorMess) };
+                return GetApiError<ObservableCollection<Offer>>(getOffersErrorMess, ex);
             }
         }
 
@@ -666,7 +667,7 @@ namespace OfferMaker
         /// </summary>
         /// <param name="offer"></param>
         /// <returns></returns>
-        async internal Task<CallResult> SaveOffer(Offer offer)
+        async internal Task<CallResult> OfferCreate(Offer offer)
         {
             try
             {
@@ -677,8 +678,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить КП на сервере.") };
+                return GetApiError(offerCreateErrorMess, ex);
             }
         }
 
@@ -687,7 +687,7 @@ namespace OfferMaker
         /// </summary>
         /// <param name="offer"></param>
         /// <returns></returns>
-        async internal Task<CallResult> DeleteOfferFromArchive(Offer offer)
+        async internal Task<CallResult> OfferDelete(Offer offer)
         {
             try
             {
@@ -697,8 +697,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке удалить КП с сервера.") };
+                return GetApiError(offerDeleteErrorMess, ex);
             }
         }
 
@@ -706,7 +705,7 @@ namespace OfferMaker
 
         #region Hints
 
-        async internal Task<CallResult<List<Hint>>> GetHints()
+        async internal Task<CallResult<List<Hint>>> HintsGet()
         {
             try
             {
@@ -718,16 +717,46 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<List<Hint>>() { Error = new Error(getHintsErrorMess) };
+                    return GetApiError<List<Hint>>(getHintsErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult<List<Hint>>() { Error = new Error(getHintsErrorMess) };
+                return GetApiError<List<Hint>>(getHintsErrorMess, ex);
             }
         }
 
         #endregion Hints
+
+        #region Errors
+
+        private CallResult<T> GetApiError<T>(string errorMess, int statusCode) => new CallResult<T>() { Error = GetApiError(errorMess, statusCode).Error };
+
+        private CallResult GetApiError(string errorMess, int statusCode) => new CallResult() { Error = new Error(statusCode, errorMess + "Код ошибки " + statusCode) };
+
+        private CallResult<T> GetApiError<T>(string errorMess, Exception ex) => new CallResult<T>() { Error = GetApiError(errorMess, ex).Error };
+
+        private CallResult GetApiError(string errorMess, Exception ex)
+        {
+            Log.Write(ex);
+            if (ex is ApiException)
+            {
+                ApiException apiEx = ex as ApiException;
+                if (apiEx.StatusCode == 403)
+                {
+                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMess + " Нет прав.") };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMess + "Код ошибки " + apiEx.StatusCode) };
+                }
+            }
+            else
+            {
+                return new CallResult() { Error = new Error(errorMess) };
+            }
+        }
+
+        #endregion
     }
 }

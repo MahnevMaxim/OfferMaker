@@ -127,14 +127,14 @@ namespace OfferMaker
                 errorMessage += nomGroupsCr.Error.Message + "\n";
 
             //получаем архив КП
-            var offersCr = await dataRepository.GetOffers();
+            var offersCr = await dataRepository.OffersGet();
             if (offersCr.Success)
                 offers = offersCr.Data;
             else
                 errorMessage += offersCr.Error.Message + "\n";
 
             //получаем хинты
-            var hintsCr = await dataRepository.GetHints();
+            var hintsCr = await dataRepository.HintsGet();
             if (hintsCr.Success)
             {
                 hints = hintsCr.Data;
