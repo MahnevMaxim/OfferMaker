@@ -50,6 +50,36 @@ namespace API.Controllers
                 return BadRequest();
             }
 
+            //это для планировщика
+            if (id == 0)
+            {
+                var res = _context.Currencies.Where(c => c.CharCode == currency.CharCode).FirstOrDefault();
+                if (res != null)
+                {
+                    res.Rate = currency.Rate;
+                    res.RateDatetime = DateTime.UtcNow;
+                    _context.Currencies.Where(c => c.CharCode == "RUB").FirstOrDefault().RateDatetime = DateTime.UtcNow;
+                }
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CurrencyExists(currency.CharCode))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return NoContent();
+            }
+
             _context.Entry(currency).State = EntityState.Modified;
 
             try
@@ -125,6 +155,11 @@ namespace API.Controllers
         private bool CurrencyExists(int id)
         {
             return _context.Currencies.Any(e => e.Id == id);
+        }
+
+        private bool CurrencyExists(string charCode)
+        {
+            return _context.Currencies.Any(e => e.CharCode == charCode);
         }
     }
 }

@@ -123,6 +123,8 @@ namespace OfferMaker.ViewModels
 
         public decimal TotalSumOptions { get => modelMain.Constructor.Offer.TotalSumOptions; }
 
+        public string AltId { get => modelMain.Constructor.Offer.AltId; }
+
         public string CreateDateString
         {
             get => modelMain.Constructor.Offer.CreateDateString;

@@ -29,7 +29,6 @@ namespace OfferMaker
         User manager;
 
         int id;
-        string altId;
         string guid;
         User offerCreator;
         Currency currency;
@@ -56,21 +55,11 @@ namespace OfferMaker
             {
                 id = value;
                 OnPropertyChanged();
+                constructor?.viewModel.OnPropertyChanged(nameof(AltId));
             }
         }
 
-        /// <summary>
-        /// Альтернативный человекочитаемый идентификатор - дата и порядковый номер КП в течение дня.
-        /// </summary>
-        public string AltId
-        {
-            get => altId;
-            set
-            {
-                altId = value;
-                OnPropertyChanged();
-            }
-        }
+        public string AltId { get => Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + Id; }
 
         public string Guid
         {
@@ -151,7 +140,7 @@ namespace OfferMaker
             set
             {
                 offerCreator = value;
-                if(value!=null)
+                if (value != null)
                     offerCreatorId = offerCreator.Id;
                 OnPropertyChanged();
             }
@@ -382,7 +371,7 @@ namespace OfferMaker
             get
             {
                 decimal totalSum = 0;
-                OfferGroups.ToList().ForEach(o => { if(o.IsEnabled) totalSum += o.PriceSum; });
+                OfferGroups.ToList().ForEach(o => { if (o.IsEnabled) totalSum += o.PriceSum; });
                 if (IsNeedCalculateInRub) totalSum = totalSum * Currency.Rate;
                 return totalSum;
             }
@@ -429,7 +418,7 @@ namespace OfferMaker
             get
             {
                 decimal totalSum = 0;
-                OfferGroups.ToList().ForEach(o => { if(o.IsEnabled) totalSum += o.CostPriceSum; });
+                OfferGroups.ToList().ForEach(o => { if (o.IsEnabled) totalSum += o.CostPriceSum; });
                 if (IsNeedCalculateInRub) totalSum = totalSum * Currency.Rate;
                 return totalSum;
             }
@@ -450,7 +439,7 @@ namespace OfferMaker
             get
             {
                 decimal totalSum = 0;
-                OfferGroups.ToList().ForEach(o => { if(o.IsEnabled)totalSum += o.ProfitSum; });
+                OfferGroups.ToList().ForEach(o => { if (o.IsEnabled) totalSum += o.ProfitSum; });
                 if (IsNeedCalculateInRub) totalSum = totalSum * Currency.Rate;
                 return totalSum;
             }
@@ -494,7 +483,7 @@ namespace OfferMaker
 
         #endregion Money
 
-        private Offer() { }
+        public Offer() { }
 
         /// <summary>
         /// Конструктор первой инициализации объекта.
@@ -509,6 +498,7 @@ namespace OfferMaker
             Banner = banner;
             OfferInfoBlocks.CollectionChanged += OfferInfoBlocks_CollectionChanged;
             OfferGroups.CollectionChanged += OfferGroups_CollectionChanged;
+            Guid = System.Guid.NewGuid().ToString();
             discount = new Discount(this);
         }
 
