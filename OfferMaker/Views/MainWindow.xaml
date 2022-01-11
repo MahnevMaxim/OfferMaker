@@ -509,7 +509,7 @@
                                                                 Width="18"
                                                                 Height="18" />
                                 </Button>
-                                <Button CommandParameter="SaveOffer"
+                                <Button CommandParameter="OfferCreate"
                                         Command="{Binding Cmd}"
                                         Height="30"
                                         Width="30"
