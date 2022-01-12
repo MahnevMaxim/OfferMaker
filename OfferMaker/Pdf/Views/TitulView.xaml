@@ -56,7 +56,11 @@
                                     </Viewbox>
                                 </Border>
                                 <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="0,2,0,5" TextWrapping="Wrap" FontFamily="Segoe UI Light" FontSize="10pt" >
-                               <TextBlock TextWrapping="Wrap"  FontSize="10pt" FontFamily="Segoe UI Light" Margin="14,0,0,0" Text="{Binding KpNumber}"/>
+                               <TextBlock TextWrapping="Wrap"
+                                          FontSize="10pt"
+                                          FontFamily="Segoe UI Light"
+                                          Margin="14,0,0,0"
+                                          Text="{Binding AltId}"/>
                                <TextBlock>
                                    <TextBlock TextWrapping="Wrap" Margin="10,0,0,0" Text=" от " FontSize="10pt" FontFamily="Segoe UI Light"/>
                                    <TextBlock TextWrapping="Wrap" Text="{Binding CreateDateString}" FontFamily="Segoe UI Light" FontSize="10pt"/>

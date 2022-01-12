@@ -367,7 +367,7 @@ namespace OfferMaker
         {
             offers.Remove(offer);
             ArchiveOffers = ArchiveFilter.GetFilteredOffers();
-            var cr = await DataRepository.DeleteOfferFromArchive(offer, offers);
+            var cr = await DataRepository.OfferDelete(offer, offers);
             if (!cr.Success)
                 OnSendMessage(cr.Error.Message);
         }
@@ -380,13 +380,13 @@ namespace OfferMaker
 
         public void SaveToPdfWithoutBanner() => DocManager.SaveToPdfWithoutBanner();
 
-        public void SaveTemplateToArchive() => DocManager.SaveTemplateToArchive();
+        public void SaveTemplateToArchive() => DocManager.CreateTemplate();
 
         public void SaveOfferToFile() => DocManager.SaveOfferToFile();
 
         public void OpenOfferFromFile() => DocManager.OpenOfferFromFile();
 
-        async public void SaveOffer() => DocManager.SaveOffer();
+        async public void OfferCreate() => DocManager.OfferCreate();
         
         #endregion DocManager
 

@@ -19,6 +19,7 @@ using System.IO;
 using ApiLib;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace OfferMaker.SimpleViews
 {
@@ -94,6 +95,8 @@ namespace OfferMaker.SimpleViews
                 var res = await client.AccountGetTokenAsync(login, pwd);
                 JsonElement authRes = (JsonElement)res.Result;
                 AccessToken = authRes.GetProperty("access_token").GetString();
+                var userString = authRes.GetProperty("user").ToString();
+                User = JsonConvert.DeserializeObject<User>(userString);
                 Login = login;
                 return new CallResult();
             }
@@ -110,5 +113,12 @@ namespace OfferMaker.SimpleViews
         #endregion Auth
 
         private void ButtonSettings_Click(object sender, RoutedEventArgs e) => MvvmFactory.CreateWindow(Global.Settings, new ViewModels.SettingsViewModel(), new Views.Settings(true), ViewMode.ShowDialog);
+
+        private void passwordTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Return && e.Key != Key.Enter)
+                return;
+            Button_Click(null, null);
+        }
     }
 }

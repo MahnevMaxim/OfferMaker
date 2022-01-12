@@ -109,6 +109,28 @@ namespace OfferMaker.ViewModels
 
         public string OldAccountPassword { set => adminPanel.OldAccountPassword = value; }
 
+        public bool IsCanControlPositions
+        {
+            get
+            {
+                if (User.Position.Permissions.Contains(Shared.Permissions.CanAll)
+                    || User.Position.Permissions.Contains(Shared.Permissions.CanControlPositions))
+                    return true;
+                return false;
+            }
+        }
+
+        public bool IsCanControlUsers
+        {
+            get
+            {
+                if (User.Position.Permissions.Contains(Shared.Permissions.CanAll)
+                    || User.Position.Permissions.Contains(Shared.Permissions.CanControlUsers))
+                    return true;
+                return false;
+            }
+        }
+
         #endregion Change password
     }
 }

@@ -72,15 +72,10 @@ namespace OfferMaker.Views
             {
                 if (nomenclature.Title != null)
                 {
-                    if (!(nomenclature.Title.ToLower().IndexOf(SearchString.Text.ToLower().Trim()) > -1) ||
-                        LevenshteinDistance.Calculate(nomenclature.Title.ToLower(), SearchString.Text.ToLower().Trim()) < 5)
-                    {
-                        e.Accepted = false;
-                    }
-                    else
-                    {
+                    if (nomenclature.Title.ToLower().IndexOf(SearchString.Text.ToLower().Trim()) > -1)
                         e.Accepted = true;
-                    }
+                    else
+                        e.Accepted = false;
                 }
             }
         }

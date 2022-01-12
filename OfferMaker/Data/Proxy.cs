@@ -263,14 +263,34 @@ namespace OfferMaker
         /// Пытаемся получить КП с сервера или из кэша.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers()
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersGet()
         {
             if (AppMode == AppMode.Online)
-                return await ServerData.GetOffers();
+                return await ServerData.OffersGet();
             if (AppMode == AppMode.Offline)
                 return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OffersPath);
 
-            CallResult<ObservableCollection<Offer>> callResult = await ServerData.GetOffers();
+            CallResult<ObservableCollection<Offer>> callResult = await ServerData.OffersGet();
+            if (callResult.Success)
+            {
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.OffersPath);
+                return callResult;
+            }
+            return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OffersPath);
+        }
+
+        /// <summary>
+        /// Пытаемся получить КП текущего пользователя с сервера или из кэша.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersSelfGet()
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.OffersSelfGet();
+            if (AppMode == AppMode.Offline)
+                return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OffersPath);
+
+            CallResult<ObservableCollection<Offer>> callResult = await ServerData.OffersSelfGet();
             if (callResult.Success)
             {
                 LocalData.UpdateCache(callResult.Data, LocalDataConfig.OffersPath);
@@ -284,14 +304,14 @@ namespace OfferMaker
         /// </summary>
         /// <param name="offer"></param>
         /// <returns></returns>
-        async internal Task<CallResult> SaveOffer(Offer offer, ObservableCollection<Offer> offers)
+        async internal Task<CallResult> OfferCreate(Offer offer, ObservableCollection<Offer> offers)
         {
             if (AppMode == AppMode.Online)
-                return await ServerData.SaveOffer(offer);
+                return await ServerData.OfferCreate(offer);
             if (AppMode == AppMode.Offline)
                 return LocalData.UpdateCache(offers, LocalDataConfig.OffersPath);
 
-            var callResult = await ServerData.SaveOffer(offer);
+            var callResult = await ServerData.OfferCreate(offer);
             LocalData.UpdateCache(offers, LocalDataConfig.OffersPath);
             return callResult;
         }
@@ -302,14 +322,14 @@ namespace OfferMaker
         /// <param name="offer"></param>
         /// <param name="offers"></param>
         /// <returns></returns>
-        async internal Task<CallResult> DeleteOfferFromArchive(Offer offer, ObservableCollection<Offer> offers)
+        async internal Task<CallResult> OfferDelete(Offer offer, ObservableCollection<Offer> offers)
         {
             if (AppMode == AppMode.Online)
-                return await ServerData.DeleteOfferFromArchive(offer);
+                return await ServerData.OfferDelete(offer);
             if (AppMode == AppMode.Offline)
                 return LocalData.UpdateCache(offers, LocalDataConfig.OffersPath);
 
-            var callResult = await ServerData.DeleteOfferFromArchive(offer);
+            var callResult = await ServerData.OfferDelete(offer);
             LocalData.UpdateCache(offers, LocalDataConfig.OffersPath);
             return callResult;
         }
@@ -363,14 +383,14 @@ namespace OfferMaker
         /// Пытаемся получить хинты с сервера или из кэша.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<List<Hint>>> GetHints()
+        async internal Task<CallResult<List<Hint>>> HintsGet()
         {
             if (AppMode == AppMode.Online)
-                return await ServerData.GetHints();
+                return await ServerData.HintsGet();
             if (AppMode == AppMode.Offline)
                 return await LocalData.GetCache<List<Hint>>(LocalDataConfig.HintsPath);
 
-            CallResult<List<Hint>> callResult = await ServerData.GetHints();
+            CallResult<List<Hint>> callResult = await ServerData.HintsGet();
             if (callResult.Success)
             {
                 LocalData.UpdateCache(callResult.Data, LocalDataConfig.HintsPath);

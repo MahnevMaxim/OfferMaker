@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shared
 {
@@ -29,5 +30,7 @@ namespace Shared
         public Image Image { get; set; }
 
         public Position Position { get; set; }
+
+        public Account Account { get; set; }
     }
 }
