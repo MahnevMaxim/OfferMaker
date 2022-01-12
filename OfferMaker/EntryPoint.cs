@@ -17,6 +17,7 @@ namespace OfferMaker
     class EntryPoint
     {
         readonly string apiEndpoint = Global.apiEndpoint;
+        string token;
 
         User user;
         Main main;
@@ -67,6 +68,7 @@ namespace OfferMaker
                 {
                     Settings.SetIsRememberMe(SimpleViews.Hello.IsRememberMe);
                     Settings.SetToken(SimpleViews.Hello.AccessToken);
+                    token = SimpleViews.Hello.AccessToken;
                     Settings.SetLogin(SimpleViews.Hello.Login.Trim());
                     user = SimpleViews.Hello.User;
                 }
@@ -112,7 +114,7 @@ namespace OfferMaker
         /// <returns></returns>
         async private Task Init()
         {
-            main.DataRepository = DataRepository.GetInstance(Settings.GetToken()); //инициализация хранилища
+            main.DataRepository = DataRepository.GetInstance(token); //инициализация хранилища
             dataRepository = main.DataRepository;
             await ReciveData(); //инициализация данных
             InitModules(); //инициализация модулей на основе данных
