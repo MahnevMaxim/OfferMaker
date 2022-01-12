@@ -32,7 +32,6 @@ namespace OfferMaker
         string guid;
         User offerCreator;
         Currency currency;
-        int currencyId;
         Customer customer = new Customer();
         int offerCreatorId;
         int managerId;

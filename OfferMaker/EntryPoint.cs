@@ -8,14 +8,19 @@ using Shared;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.IO;
+using ApiLib;
+using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace OfferMaker
 {
     class EntryPoint
     {
+        readonly string apiEndpoint = Global.apiEndpoint;
+
+        User user;
         Main main;
         DataRepository dataRepository;
-        User user;
         ObservableCollection<User> users;
         ObservableCollection<Position> positions;
         ObservableCollection<Category> categories;
@@ -24,7 +29,6 @@ namespace OfferMaker
         ObservableCollection<Offer> offers;
         ObservableCollection<Currency> currencies;
         List<Hint> hints;
-        string token;
 
         async internal void Run()
         {
@@ -39,20 +43,32 @@ namespace OfferMaker
             main.Settings = Settings.GetInstance();
             main.Settings.SetSettings();
 
+            //Если есть токен, то  пытаемся войти по нему.
+            //Если авторизация удастся, то токен обновится и обновятся права.
             if (Settings.GetIsRememberMe())
             {
-                token = Settings.GetToken();
+                CallResult<User> userCr = await Auth(Settings.GetToken());
+                if (userCr.Success)
+                {
+                    user = userCr.Data;
+                    Settings.SetToken(user.Account.Token);
+                }
             }
-            else
+
+            //Если авторизация по токену не удалась, то открываем окно авторизации.
+            if (user == null)
             {
                 SimpleViews.Hello form = new SimpleViews.Hello();
+                if (Settings.GetIsRememberMe())
+                    form.loginTextBox.Text = Settings.GetLogin();
+
                 var res = form.ShowDialog() ?? false;
                 if (res)
                 {
                     Settings.SetIsRememberMe(SimpleViews.Hello.IsRememberMe);
-                    token = SimpleViews.Hello.AccessToken;
-                    Settings.SetToken(token);
+                    Settings.SetToken(SimpleViews.Hello.AccessToken);
                     Settings.SetLogin(SimpleViews.Hello.Login.Trim());
+                    user = SimpleViews.Hello.User;
                 }
                 else
                 {
@@ -62,13 +78,41 @@ namespace OfferMaker
             }
 
             await Init();
-
             MvvmFactory.CreateWindow(main, new ViewModels.MainViewModel(), new Views.MainWindow(), ViewMode.Show);
         }
 
+        /// <summary>
+        /// Авторизация по токену.
+        /// </summary>
+        /// <returns></returns>
+        async private Task<CallResult<User>> Auth(string token)
+        {
+            try
+            {
+                var res = await new Client(apiEndpoint, new System.Net.Http.HttpClient()).AccountUpdateTokenAsync(token);
+                JsonElement authRes = (JsonElement)res.Result;
+                string accessToken = authRes.GetProperty("access_token").GetString();
+                var userString = authRes.GetProperty("user").ToString();
+                User user = JsonConvert.DeserializeObject<User>(userString);
+                return new CallResult<User>() { Data=user};
+            }
+            catch (ApiException ex)
+            {
+                return new CallResult<User>() { Error = new Error(ex.Response.ToString()) };
+            }
+            catch (Exception ex)
+            {
+                return new CallResult<User>() { Error = new Error(ex) };
+            }
+        }
+
+        /// <summary>
+        /// Инициализация модели.
+        /// </summary>
+        /// <returns></returns>
         async private Task Init()
         {
-            main.DataRepository = DataRepository.GetInstance(token); //инициализация хранилища
+            main.DataRepository = DataRepository.GetInstance(Settings.GetToken()); //инициализация хранилища
             dataRepository = main.DataRepository;
             await ReciveData(); //инициализация данных
             InitModules(); //инициализация модулей на основе данных
@@ -92,11 +136,18 @@ namespace OfferMaker
                 errorMessage += positionsCr.Error.Message + "\n";
 
             //получаем пользователей
-            var usersCr = await dataRepository.UsersGet();
-            if (usersCr.Success)
-                users = usersCr.Data;
-            else
-                errorMessage += usersCr.Error.Message + "\n";
+            if (user.Position.Permissions.Contains(Shared.Permissions.CanAll)
+                || user.Position.Permissions.Contains(Shared.Permissions.CanControlUsers)
+                || user.Position.Permissions.Contains(Shared.Permissions.CanUseManager)
+                || user.Position.Permissions.Contains(Shared.Permissions.CanSeeAllOffers))
+            {
+                var usersCr = await dataRepository.UsersGet();
+                if (usersCr.Success)
+                    users = usersCr.Data;
+                else
+                    errorMessage += usersCr.Error.Message + "\n";
+            }
+
 
             //получаем валюты
             var currenciesCr = await dataRepository.GetCurrencies();
@@ -127,11 +178,23 @@ namespace OfferMaker
                 errorMessage += nomGroupsCr.Error.Message + "\n";
 
             //получаем архив КП
-            var offersCr = await dataRepository.OffersGet();
-            if (offersCr.Success)
-                offers = offersCr.Data;
+            if (user.Position.Permissions.Contains(Shared.Permissions.CanAll)
+                || user.Position.Permissions.Contains(Shared.Permissions.CanSeeAllOffers))
+            {
+                var offersCr = await dataRepository.OffersGet();
+                if (offersCr.Success)
+                    offers = offersCr.Data;
+                else
+                    errorMessage += offersCr.Error.Message + "\n";
+            }
             else
-                errorMessage += offersCr.Error.Message + "\n";
+            {
+                var offersCr = await dataRepository.OffersSelfGet();
+                if (offersCr.Success)
+                    offers = offersCr.Data;
+                else
+                    errorMessage += offersCr.Error.Message + "\n";
+            }
 
             //получаем хинты
             var hintsCr = await dataRepository.HintsGet();
@@ -153,16 +216,15 @@ namespace OfferMaker
         {
             //main
             main.Currencies = currencies;
-            main.Users = users;
-            users.ToList().ForEach(u =>
+            main.User = users == null ? user : users.Where(u=>u.Id==user.Id).FirstOrDefault();
+            main.Users = users == null ? new ObservableCollection<User>() { user } : users;
+            main.Users.ToList().ForEach(u =>
             {
-                if(u.Image==null)
+                if (u.Image == null)
                 {
                     u.Image = Global.NoProfileImage;
                 }
                 main.Managers.Add(u);
-                if (u.Email.Trim() == Settings.GetLogin())
-                    main.User = u;
                 if (u.Position != null)
                     u.Position = positions.Where(p => p.Id == u.Position.Id).FirstOrDefault();
             });
@@ -190,7 +252,7 @@ namespace OfferMaker
 
             //архив
             SetOffers(offers);
-            main.ArchiveFilter = new ArchiveFilter(offers, user);
+            main.ArchiveFilter = new ArchiveFilter(offers, main.User);
             main.ArchiveOffers = main.ArchiveFilter.GetFilteredOffers();
             main.offers = offers;
 

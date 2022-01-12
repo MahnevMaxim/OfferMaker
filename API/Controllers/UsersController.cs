@@ -244,7 +244,7 @@ namespace API.Controllers
         public async Task<IActionResult> UserDelete(int id)
         {
             var uName = User.Identity.Name;
-            User user_ = _context.Users.Where(u => u.Id==id).FirstOrDefault();
+            User user_ = _context.Users.Where(u => u.Id == id).FirstOrDefault();
 
             if (uName == user_.Email)
             {

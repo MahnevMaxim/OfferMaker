@@ -56,6 +56,8 @@ namespace OfferMaker
             }
         }
 
+        public Account Account { get; set; }
+
         public override string ToString() => FullName;
     }
 }

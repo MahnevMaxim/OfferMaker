@@ -280,6 +280,26 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Пытаемся получить КП текущего пользователя с сервера или из кэша.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersSelfGet()
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.OffersSelfGet();
+            if (AppMode == AppMode.Offline)
+                return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OffersPath);
+
+            CallResult<ObservableCollection<Offer>> callResult = await ServerData.OffersSelfGet();
+            if (callResult.Success)
+            {
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.OffersPath);
+                return callResult;
+            }
+            return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OffersPath);
+        }
+
+        /// <summary>
         /// Пытаемся сохранить КП на сервере или в кэше.
         /// </summary>
         /// <param name="offer"></param>

@@ -131,6 +131,18 @@ namespace OfferMaker
                 return;
             }
 
+            //если создаётся архивное КП
+            if (constructor.Offer.Id == 0 && !constructor.Offer.IsTemplate)
+            {
+                if(string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
+                    || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
+                    || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
+                {
+                    Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
+                    return;
+                }    
+            }
+
             Offer offer;
             if (isTemplate)
             {

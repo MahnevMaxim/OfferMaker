@@ -23,10 +23,18 @@ namespace API.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "CanAll,CanSeeAllOffers")]
         [HttpGet(Name = nameof(OffersGet))]
         public async Task<ActionResult<IEnumerable<Offer>>> OffersGet()
         {
             return await _context.Offers.ToListAsync();
+        }
+
+        [HttpGet("/self", Name = nameof(OffersSelfGet))]
+        public async Task<ActionResult<IEnumerable<Offer>>> OffersSelfGet()
+        {
+            User user = _context.Users.AsNoTracking().FirstOrDefault(x => x.Email == User.Identity.Name);
+            return await _context.Offers.Where(o => o.OfferCreatorId == user.Id).ToListAsync();
         }
 
         [HttpGet("{id}", Name = nameof(OfferGet))]
@@ -42,34 +50,34 @@ namespace API.Controllers
             return offer;
         }
 
-        [HttpPut("{id}", Name = nameof(OfferEdit))]
-        public async Task<IActionResult> OfferEdit(int id, Offer offer)
-        {
-            if (id != offer.Id)
-            {
-                return BadRequest();
-            }
+        //[HttpPut("{id}", Name = nameof(OfferEdit))]
+        //public async Task<IActionResult> OfferEdit(int id, Offer offer)
+        //{
+        //    if (id != offer.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(offer).State = EntityState.Modified;
+        //    _context.Entry(offer).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OfferExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!OfferExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         [HttpPost(Name = nameof(OfferPost))]
         public async Task<ActionResult<Offer>> OfferPost(Offer offer)
