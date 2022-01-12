@@ -59,8 +59,7 @@ namespace OfferMaker
                 if (File.Exists(filePath))
                 {
                     string jsonText = File.ReadAllText(filePath);
-                    var res = JsonConvert.DeserializeObject<T>(jsonText);
-                    return res;
+                    return JsonConvert.DeserializeObject<T>(jsonText);
                 }
             }
             catch (Exception ex)
@@ -70,10 +69,6 @@ namespace OfferMaker
             return default(T);
         }
 
-        public static T CloneObject<T>(object obj)
-        {
-            string output = JsonConvert.SerializeObject(obj);
-            return JsonConvert.DeserializeObject<T>(output);
-        }
+        public static T CloneObject<T>(object obj) => JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
     }
 }

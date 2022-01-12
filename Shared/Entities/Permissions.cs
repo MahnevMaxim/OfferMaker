@@ -10,7 +10,6 @@ namespace Shared
     {
         CanControlPositions,
         CanControlUsers,
-        CanEditPhotos,
         CanEditCurrencies,
         CanEditProducts,
         CanEditTemplates,

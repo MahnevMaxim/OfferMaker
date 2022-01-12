@@ -34,6 +34,11 @@ namespace OfferMaker
         static readonly string userChangePasswordErrorMess = "Ошибка при попытке обновить пароль.";
         static readonly string userDeleteErrorMess = "Ошибка при попытке удалить пользователя.";
         static readonly string getHintsErrorMess = "Ошибка при попытке получить хинты.";
+        static readonly string offerCreateErrorMess = "Ошибка при попытке сохранить КП на сервере.";
+        static readonly string offerDeleteErrorMess = "Ошибка при попытке удалить КП с сервера.";
+        static readonly string usersEditErrorMess = "Ошибка при попытке сохранить пользователей на сервере.";
+        static readonly string userEditErrorMess = "Ошибка при попытке сохранить пользователя на сервере.";
+        static readonly string offersSelfGetErrorMess = "Ошибка при попытке получить свои КП с сервера.";
 
         public ServerData(string accessToken)
         {
@@ -61,29 +66,12 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult() { Error = new Error(userDeleteErrorMess) };
-                }
-            }
-            catch (ApiException ex)
-            {
-                Log.Write(ex);
-                if (ex.StatusCode == 404)
-                {
-                    return new CallResult() { Error = new Error(ex.StatusCode, userDeleteErrorMess + " Пользователь не найден.") };
-                }
-                if (ex.StatusCode == 403)
-                {
-                    return new CallResult() { Error = new Error(ex.StatusCode, userDeleteErrorMess + " Нет прав.") };
-                }
-                else
-                {
-                    return new CallResult() { Error = new Error(ex.StatusCode, userDeleteErrorMess) };
+                    return GetApiError(userDeleteErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error(userDeleteErrorMess) };
+                return GetApiError(userDeleteErrorMess, ex);
             }
         }
 
@@ -98,6 +86,8 @@ namespace OfferMaker
             {
                 Global.ImageManager.UploadImage(user);
                 ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
+                if (userCopy.Image?.Guid == null)
+                    userCopy.Image = null;
                 var response = await client.UserCreateAsync(userCopy);
                 if (response.StatusCode == 201)
                 {
@@ -107,13 +97,12 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<User>() { Error = new Error(userAddErrorMess) };
+                    return GetApiError<User>(userAddErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult<User>() { Error = new Error(userAddErrorMess) };
+                return GetApiError<User>(userAddErrorMess, ex);
             }
         }
 
@@ -133,13 +122,12 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<User>>() { Error = new Error(getUsersErrorMess) };
+                    return GetApiError<ObservableCollection<User>>(getUsersErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult<ObservableCollection<User>>() { Error = new Error(getUsersErrorMess) };
+                return GetApiError<ObservableCollection<User>>(getUsersErrorMess, ex);
             }
         }
 
@@ -159,25 +147,12 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult() { Error = new Error(userChangePasswordErrorMess) };
-                }
-            }
-            catch (ApiException ex)
-            {
-                Log.Write(ex);
-                if (ex.StatusCode == 403)
-                {
-                    return new CallResult() { Error = new Error(userChangePasswordErrorMess + " Нет прав.") };
-                }
-                else
-                {
-                    return new CallResult() { Error = new Error(userChangePasswordErrorMess) };
+                    return GetApiError(userChangePasswordErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error(userChangePasswordErrorMess, ex) };
+                return GetApiError(userChangePasswordErrorMess, ex);
             }
         }
 
@@ -197,13 +172,12 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult() { Error = new Error(userChangePasswordErrorMess) };
+                    return GetApiError(userChangePasswordErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error(userChangePasswordErrorMess, ex) };
+                return GetApiError(userChangePasswordErrorMess, ex);
             }
         }
         /// <summary>
@@ -239,8 +213,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить пользователей на сервере.") };
+                return GetApiError(usersEditErrorMess, ex);
             }
         }
 
@@ -260,8 +233,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить пользователя на сервере.") };
+                return GetApiError(userEditErrorMess, ex);
             }
         }
 
@@ -285,25 +257,12 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<Position>>() { Error = new Error(response.StatusCode, positionsGetErrorMess) };
-                }
-            }
-            catch (ApiException ex)
-            {
-                Log.Write(ex);
-                if (ex.StatusCode == 403)
-                {
-                    return new CallResult<ObservableCollection<Position>>() { Error = new Error(positionsGetErrorMess + " Нет прав.") };
-                }
-                else
-                {
-                    return new CallResult<ObservableCollection<Position>>() { Error = new Error(positionsGetErrorMess) };
+                    return GetApiError<ObservableCollection<Position>>(positionsGetErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult<ObservableCollection<Position>>() { Error = new Error(positionsGetErrorMess) };
+                return GetApiError<ObservableCollection<Position>>(positionsGetErrorMess, ex);
             }
         }
 
@@ -325,22 +284,9 @@ namespace OfferMaker
                 });
                 return new CallResult() { SuccessMessage = message.Trim() };
             }
-            catch (ApiException ex)
-            {
-                Log.Write(ex);
-                if (ex.StatusCode == 403)
-                {
-                    return new CallResult() { Error = new Error(positionsEditErrorMess + " Нет прав.") };
-                }
-                else
-                {
-                    return new CallResult() { Error = new Error(positionsEditErrorMess) };
-                }
-            }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error(positionsEditErrorMess) };
+                return GetApiError(positionsEditErrorMess, ex);
             }
         }
 
@@ -360,25 +306,12 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult() { Error = new Error(response.StatusCode, positionDeleteErrorMess) };
-                }
-            }
-            catch (ApiException ex)
-            {
-                Log.Write(ex);
-                if (ex.StatusCode == 403)
-                {
-                    return new CallResult() { Error = new Error(positionDeleteErrorMess + " Нет прав.") };
-                }
-                else
-                {
-                    return new CallResult() { Error = new Error(positionDeleteErrorMess) };
+                    return GetApiError(positionDeleteErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error(positionDeleteErrorMess) };
+                return GetApiError(positionDeleteErrorMess, ex);
             }
         }
 
@@ -401,7 +334,7 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<Position>() { Error = new Error(positionAddErrorMess) };
+                    return GetApiError<Position>(positionAddErrorMess, response.StatusCode);
                 }
             }
             catch (ApiException ex)
@@ -411,19 +344,11 @@ namespace OfferMaker
                 {
                     return new CallResult<Position>() { Error = new Error(positionAddErrorMess + " Должность с таким названием уже существует.") };
                 }
-                if (ex.StatusCode == 403)
-                {
-                    return new CallResult<Position>() { Error = new Error(positionAddErrorMess + " Нет прав.") };
-                }
-                else
-                {
-                    return new CallResult<Position>() { Error = new Error(positionAddErrorMess) };
-                }
+                return GetApiError<Position>(positionAddErrorMess, ex);
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult<Position>() { Error = new Error(positionAddErrorMess) };
+                return GetApiError<Position>(positionAddErrorMess, ex);
             }
         }
 
@@ -639,7 +564,7 @@ namespace OfferMaker
         /// Пытаемся получить архив КП с сервера.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Offer>>> GetOffers()
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersGet()
         {
             try
             {
@@ -651,13 +576,37 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<Offer>>() { Error = new Error(getOffersErrorMess) };
+                    return GetApiError<ObservableCollection<Offer>>(getOffersErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult<ObservableCollection<Offer>>() { Error = new Error(getOffersErrorMess) };
+                return GetApiError<ObservableCollection<Offer>>(getOffersErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// Пытаемся получить архив КП текущего пользователя с сервера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersSelfGet()
+        {
+            try
+            {
+                var response = await client.OffersSelfGetAsync();
+                if (response.StatusCode == 200)
+                {
+                    ObservableCollection<Offer> res = Helpers.CloneObject<ObservableCollection<Offer>>(response.Result);
+                    return new CallResult<ObservableCollection<Offer>>() { Data = res };
+                }
+                else
+                {
+                    return GetApiError<ObservableCollection<Offer>>(offersSelfGetErrorMess, response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return GetApiError<ObservableCollection<Offer>>(offersSelfGetErrorMess, ex);
             }
         }
 
@@ -666,7 +615,7 @@ namespace OfferMaker
         /// </summary>
         /// <param name="offer"></param>
         /// <returns></returns>
-        async internal Task<CallResult> SaveOffer(Offer offer)
+        async internal Task<CallResult> OfferCreate(Offer offer)
         {
             try
             {
@@ -677,8 +626,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке сохранить КП на сервере.") };
+                return GetApiError(offerCreateErrorMess, ex);
             }
         }
 
@@ -687,7 +635,7 @@ namespace OfferMaker
         /// </summary>
         /// <param name="offer"></param>
         /// <returns></returns>
-        async internal Task<CallResult> DeleteOfferFromArchive(Offer offer)
+        async internal Task<CallResult> OfferDelete(Offer offer)
         {
             try
             {
@@ -697,8 +645,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult() { Error = new Error("Ошибка при попытке удалить КП с сервера.") };
+                return GetApiError(offerDeleteErrorMess, ex);
             }
         }
 
@@ -706,7 +653,7 @@ namespace OfferMaker
 
         #region Hints
 
-        async internal Task<CallResult<List<Hint>>> GetHints()
+        async internal Task<CallResult<List<Hint>>> HintsGet()
         {
             try
             {
@@ -718,16 +665,50 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<List<Hint>>() { Error = new Error(getHintsErrorMess) };
+                    return GetApiError<List<Hint>>(getHintsErrorMess, response.StatusCode);
                 }
             }
             catch (Exception ex)
             {
-                Log.Write(ex);
-                return new CallResult<List<Hint>>() { Error = new Error(getHintsErrorMess) };
+                return GetApiError<List<Hint>>(getHintsErrorMess, ex);
             }
         }
 
         #endregion Hints
+
+        #region Errors
+
+        private CallResult<T> GetApiError<T>(string errorMess, int statusCode) => new CallResult<T>() { Error = GetApiError(errorMess, statusCode).Error };
+
+        private CallResult GetApiError(string errorMess, int statusCode) => new CallResult() { Error = new Error(statusCode, errorMess + "Код ошибки " + statusCode) };
+
+        private CallResult<T> GetApiError<T>(string errorMess, Exception ex) => new CallResult<T>() { Error = GetApiError(errorMess, ex).Error };
+
+        private CallResult GetApiError(string errorMess, Exception ex)
+        {
+            Log.Write(ex);
+            if (ex is ApiException)
+            {
+                ApiException apiEx = ex as ApiException;
+                if (apiEx.StatusCode == 403)
+                {
+                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMess + " Нет прав.") };
+                }
+                else if (apiEx.StatusCode == 404)
+                {
+                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMess + " Объект не найден.") };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMess + "Код ошибки " + apiEx.StatusCode) };
+                }
+            }
+            else
+            {
+                return new CallResult() { Error = new Error(errorMess) };
+            }
+        }
+
+        #endregion
     }
 }

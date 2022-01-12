@@ -1,0 +1,45 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Net;
+using System.Xml.Linq;
+using API.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using API.Controllers;
+using Microsoft.AspNetCore.Mvc;
+using Shared;
+
+namespace API
+{
+    public class CurrenciesUpdater
+    {
+        async public static void Update()
+        {
+            WebClient client = new WebClient();
+            var xml = client.DownloadString("https://www.cbr-xml-daily.ru/daily.xml");
+            XDocument xdoc = XDocument.Parse(xml);
+            var el = xdoc.Element("ValCurs").Elements("Valute").ToList();
+#if DEBUG
+            string con = "Server=(localdb)\\mssqllocaldb;Database=APIContext;Trusted_Connection=True;MultipleActiveResultSets=true";
+#else
+            string con = "Server=127.0.0.1,1433;Database=kip;User=sa;Password=dnhdhdsryWW33;";
+#endif
+            DbContextOptions<APIContext> dbContextOptions = new DbContextOptionsBuilder<APIContext>()
+                .UseSqlServer(con)
+                .Options;
+            APIContext context = new APIContext(dbContextOptions);
+            var controller = new CurrenciesController(context);
+
+            var date = xdoc.Element("ValCurs").Attribute("Date").Value;
+            foreach (var item in el)
+            {
+                var code = item.Element("CharCode").Value;
+                var rate = item.Element("Value").Value;
+                Currency curr = new Currency() { CharCode = code, Rate = decimal.Parse(rate) };
+                var res = await controller.PutCurrency(0,curr);
+            }
+        }
+    }
+}

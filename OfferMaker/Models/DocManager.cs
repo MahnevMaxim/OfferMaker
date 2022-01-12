@@ -87,7 +87,7 @@ namespace OfferMaker
                 writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
         }
 
-        internal void SaveTemplateToArchive() => SaveOffer(true);
+        internal void CreateTemplate() => OfferCreate(true);
 
         internal void SaveOfferToFile()
         {
@@ -120,11 +120,29 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Сохранение шаблонов и КП.
+        /// Сохранение(создание) шаблонов и КП на сервер/локально.
         /// </summary>
         /// <param name="isTemplate"></param>
-        async internal void SaveOffer(bool isTemplate = false)
+        async internal void OfferCreate(bool isTemplate = false)
         {
+            if (constructor.Offer.Id != 0 && !constructor.Offer.IsTemplate)
+            {
+                Global.Main.SendMess("Нельзя перезаписать архив.");
+                return;
+            }
+
+            //если создаётся архивное КП
+            if (constructor.Offer.Id == 0 && !constructor.Offer.IsTemplate)
+            {
+                if(string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
+                    || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
+                    || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
+                {
+                    Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
+                    return;
+                }    
+            }
+
             Offer offer;
             if (isTemplate)
             {
@@ -138,7 +156,7 @@ namespace OfferMaker
                 offer = constructor.Offer;
             }
 
-            CallResult cr = await Global.Main.DataRepository.SaveOffer(offer, Global.Main.offers);
+            CallResult cr = await Global.Main.DataRepository.OfferCreate(offer, Global.Main.offers);
             if (!cr.Success)
                 Global.Main.SendMess(cr.Error.Message);
             Global.Main.ArchiveOffers = Global.Main.ArchiveFilter.GetFilteredOffers();

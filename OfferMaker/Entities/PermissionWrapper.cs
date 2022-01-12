@@ -29,7 +29,7 @@ namespace OfferMaker
             Permissions.CanAll => "Админ",
             Permissions.CanControlPositions => "Управление должностями",
             Permissions.CanControlUsers => "Управление пользователями",
-            Permissions.CanEditPhotos => "Разрешение изменять и загружать фотографии",
+            //Permissions.CanEditPhotos => "Разрешение изменять и загружать фотографии",
             Permissions.CanEditCurrencies => "Разрешение изменять валюты",
             Permissions.CanEditProducts => "Разрешение изменять номенклатуру",
             Permissions.CanEditTemplates => "Разрешение изменять шаблоны",
