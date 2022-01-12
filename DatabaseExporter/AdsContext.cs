@@ -7,13 +7,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DatabaseExporter
 {
+    /// <summary>
+    /// Взаимодействие с базой данных в Entity Framework Core происходит посредством специального класса - контекста данных
+    /// </summary>
+    /// DbContext: определяет контекст данных, используемый для взаимодействия с базой данных
     public class AdsContext : DbContext
     {
+        //DbSet/DbSet<TEntity>: представляет набор объектов, которые хранятся в базе данных
+       
         public DbSet<Ad> Ads { get; set; }
 
         public AdsContext(DbContextOptions<AdsContext> options)
             : base(options)
         {
+            // по умолчанию у нас нет базы данных.
+            // Поэтому в конструкторе класса контекста определен вызов метода Database.EnsureCreated(),
+            // который при создании контекста автоматически проверит наличие базы данных и, если она отсуствует, создаст ее.
             Database.EnsureCreated();
         }
 

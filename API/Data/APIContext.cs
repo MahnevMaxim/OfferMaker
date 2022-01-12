@@ -29,6 +29,7 @@ namespace API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //логирование
             optionsBuilder.LogTo(message => Log.Write(message));
         }
 

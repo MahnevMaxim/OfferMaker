@@ -45,6 +45,7 @@ namespace DatabaseExporter
             client = new Client(apiEndpoint, httpClient);
 
             string con = "Server=(localdb)\\mssqllocaldb;Database=AdsStore;Trusted_Connection=True;";
+            //DbContextOptionsBuilder: устанавливает параметры подключения
             var optionsBuilder = new DbContextOptionsBuilder<AdsContext>();
             optionsBuilder.UseSqlServer(con);
             _context = new AdsContext(optionsBuilder.Options);
@@ -94,47 +95,57 @@ namespace DatabaseExporter
             var noms_ = JsonConvert.DeserializeObject(File.ReadAllText("noms.json")).ToString();
             JArray jaNoms = JArray.Parse(noms_.ToString());
 
-            //foreach (var nom in jaNoms)
-            //{
-            //    string s = nom.ToString();
+            foreach (var nom in jaNoms)
+            {
+                string title = nom["Name"].ToString();
+                decimal costPrice = (decimal)nom["CostPrice"];
+                double markup = (double)nom["Markup"];
+                int selectedImageId = (int)nom["SelectedImageId"];
+                int valueteID = (int)nom["ValueteID"];
+                DateTime lastChangePriceDate = (DateTime)nom["LastChangePriceDate"];
+                int actualPricePeriod = (int)nom["ActualPricePeriod"];
 
-            //    string title = nom["Name"].ToString();
-            //    List<Description> descs = new List<Description>();
-            //    foreach (var desc in nom["Descriptions"])
-            //    {
-            //        descs.Add(new Description() { Text = desc["Text"].ToString() });
-            //    }
-            //    decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
-            //    decimal markUp = decimal.Parse(nom["Markup"].ToString());
-            //    //потому-что заебал
-            //    string charCode = "";
-            //    try
-            //    {
-            //        charCode = nom["valute"]["Name"].ToString();
-            //    }
-            //    catch(Exception)
-            //    {
-            //        charCode = "RUB";
-            //    }
+                List<Description> descs = new List<Description>();
+                //foreach (var desc in nom["Descriptions"])
+                //{
+                //    descs.Add(new Description() { Text = desc["Text"].ToString() });
+                //}
+                //decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
+                //decimal markUp = decimal.Parse(nom["Markup"].ToString());
+                ////потому-что заебал
+                //string charCode = "";
+                //try
+                //{
+                //    charCode = nom["valute"]["Name"].ToString();
+                //}
+                //catch (Exception)
+                //{
+                //    charCode = "RUB";
+                //}
 
-            //    Nomenclature nomenclature = new Nomenclature()
-            //    {
-            //        CostPrice = costPrice,
-            //        Descriptions = descs,
-            //        Markup = markUp,
-            //        Title = title,
-            //        CurrencyCharCode = charCode
-            //    };
+                //Nomenclature nomenclature = new Nomenclature()
+                //{
+                //    CostPrice = costPrice,
+                //    Descriptions = descs,
+                //    Markup = markUp,
+                //    Title = title,
+                //    CurrencyCharCode = charCode
+                //};
 
-            //    try
-            //    {
-            //        var res = await client.NomenclaturesPOSTAsync(nomenclature);
-            //    }
-            //    catch(Exception ex)
-            //    {
-            //        Console.Write(ex);
-            //    }
-            //}
+                //try
+                //{
+                //    var res = await client.NomenclaturesPOSTAsync(nomenclature);
+                //}
+                //catch (Exception ex)
+                //{
+                //    Console.Write(ex);
+                //}
+            }
+
+
+
+
+
             Random rnd = new Random();
             foreach (var ad in ads)
             {

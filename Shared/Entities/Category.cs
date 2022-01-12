@@ -10,7 +10,7 @@ namespace Shared
     public class Category : ICategory
     {
         public int Id { get; set ; }
-
+        //трибут Required представляет аннотацию, которая указывает, что свойство обязательно должно иметь значение
         [Required]
         public string Title { get; set; }
 
