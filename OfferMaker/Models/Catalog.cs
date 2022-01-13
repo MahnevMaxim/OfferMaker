@@ -10,7 +10,7 @@ using System.Collections;
 
 namespace OfferMaker
 {
-    public class Catalog : BaseModel
+    public class Catalog : BaseModel, ICatalog
     {
         #region MVVVM 
 

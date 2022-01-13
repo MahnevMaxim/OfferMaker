@@ -180,6 +180,7 @@ namespace OfferMaker
                 return GetApiError(userChangePasswordErrorMess, ex);
             }
         }
+
         /// <summary>
         /// Обновляем пользователей.
         /// </summary>
@@ -229,6 +230,26 @@ namespace OfferMaker
                 Global.ImageManager.UploadImage(user);
                 ApiLib.User us = Helpers.CloneObject<ApiLib.User>(user);
                 await client.UserEditAsync(us.Id, us);
+                return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(userEditErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// Редактирование текущего пользователя.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> UserSelfEdit(User user)
+        {
+            try
+            {
+                Global.ImageManager.UploadImage(user);
+                ApiLib.User us = Helpers.CloneObject<ApiLib.User>(user);
+                await client.UserSelfEditAsync(us.Id, us);
                 return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
             }
             catch (Exception ex)
@@ -410,11 +431,11 @@ namespace OfferMaker
         /// Пытаемся получить номенклатуру с сервера.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures()
+        async internal Task<CallResult<ObservableCollection<Nomenclature>>> NomenclaturesGet()
         {
             try
             {
-                var response = await client.NomenclaturesAllAsync();
+                var response = await client.NomenclaturesGetAsync();
                 if (response.StatusCode == 200)
                 {
                     ObservableCollection<Nomenclature> res = Helpers.CloneObject<ObservableCollection<Nomenclature>>(response.Result);
@@ -445,7 +466,7 @@ namespace OfferMaker
                 newNoms.AddRange(Global.Catalog.CatalogFilter.GetDeletedNoms()); //также добавляем помеченные на удаление
                 Global.ImageManager.UploadNewImages(newNoms);
                 IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
-                await client.NomenclaturesPUTAsync(noms);
+                await client.NomenclaturesEditAsync(noms);
                 newNoms.ToList().ForEach(n => n.SkipIsEdit());
                 return new CallResult();
             }

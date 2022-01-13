@@ -170,7 +170,6 @@
                 </Button>
             </StackPanel>
             <TextBox x:Name="SearchString"
-                     Text="{Binding CatalogFilter.KeyString, UpdateSourceTrigger=PropertyChanged}"
                      mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
                      TextChanged="SearchString_TextChanged"
                      Grid.Column="1"

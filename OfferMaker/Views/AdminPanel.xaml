@@ -312,7 +312,7 @@
                                                          mah:TextBoxHelper.ClearTextButton="True"
                                                          Style="{StaticResource MahApps.Styles.PasswordBox.Win8}" />
                                             <Button Content="Сохранить"
-                                                    CommandParameter="UserEdit"
+                                                    CommandParameter="UserSelfEdit"
                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
                                                     Style="{StaticResource MahApps.Styles.Button.Square}"
                                                     Width="200"

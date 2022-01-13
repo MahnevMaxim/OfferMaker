@@ -53,6 +53,7 @@ namespace OfferMaker
                 {
                     user = userCr.Data;
                     Settings.SetToken(user.Account.Token);
+                    token= user.Account.Token;
                 }
             }
 
@@ -166,7 +167,7 @@ namespace OfferMaker
                 errorMessage += categoriesCr.Error.Message + "\n";
 
             //получаем номенклатуры
-            var nomenclaturesCr = await dataRepository.GetNomenclatures();
+            var nomenclaturesCr = await dataRepository.NomenclaturesGet();
             if (nomenclaturesCr.Success)
                 nomenclatures = nomenclaturesCr.Data;
             else

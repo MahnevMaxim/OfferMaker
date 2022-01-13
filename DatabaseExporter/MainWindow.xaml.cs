@@ -175,7 +175,7 @@ namespace DatabaseExporter
 
                 try
                 {
-                    var res = await client.NomenclaturesPOSTAsync(nomenclature);
+                    var res = await client.NomenclaturePostAsync(nomenclature);
                 }
                 catch (Exception ex)
                 {
@@ -250,6 +250,69 @@ namespace DatabaseExporter
             button_Click_1(null, null);
             button1_Click(null, null);
             button2_Click(null, null);
+        }
+
+        private void button4_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void button4_Click_1(object sender, RoutedEventArgs e)
+        {
+            var noms_ = JsonConvert.DeserializeObject(File.ReadAllText("noms.json")).ToString();
+            JArray jaNoms = JArray.Parse(noms_.ToString());
+
+            foreach (var nom in jaNoms)
+            {
+                string s = nom.ToString();
+
+                string title = nom["Name"].ToString();
+                List<Description> descs = new List<Description>();
+                foreach (var desc in nom["Descriptions"]["$values"])
+                {
+                    var vv = desc.Children()[0];
+                    var v = desc.ToString();
+                    var v2 = desc.GetType();
+                    var v3 = desc.Value<string>("Text");
+                    Console.WriteLine(desc.ToString());
+                    Console.WriteLine(desc.GetType());
+                    foreach (var ee in desc)
+                    {
+
+                    }
+                    descs.Add(new Description() { Text = desc["Text"].ToString() });
+                }
+                decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
+                decimal markUp = decimal.Parse(nom["Markup"].ToString());
+                //потому-что заебал
+                string charCode = "";
+                try
+                {
+                    charCode = nom["valute"]["Name"].ToString();
+                }
+                catch (Exception)
+                {
+                    charCode = "RUB";
+                }
+
+                Nomenclature nomenclature = new Nomenclature()
+                {
+                    CostPrice = costPrice,
+                    Descriptions = descs,
+                    Markup = markUp,
+                    Title = title,
+                    CurrencyCharCode = charCode
+                };
+
+                try
+                {
+                    //var res = await client.NomenclaturesPOSTAsync(nomenclature);
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex);
+                }
+            }
         }
     }
 }
