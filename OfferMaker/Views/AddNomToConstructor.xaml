@@ -12,25 +12,27 @@
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="0"
-                 WindowState = "Maximized"
-                 Height="650" Width="1200">
+                 WindowState="Maximized"
+                 Height="650"
+                 Width="1200">
     <Window.Resources>
         <CollectionViewSource x:Key="Nomenclatures"
                               Filter="CollectionViewSource_Filter"
-                              Source="{Binding CatalogFilter.FilteredNomenclatures}"/>
+                              Source="{Binding CatalogFilter.FilteredNomenclatures}" />
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" MaxWidth="350"/>
-            <ColumnDefinition Width="2"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="2"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="250"
+                              MaxWidth="350" />
+            <ColumnDefinition Width="2" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="2" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
         <Grid Grid.ColumnSpan="5">
@@ -43,24 +45,27 @@
                      mah:TextBoxHelper.Watermark="Поиск..." />
         </Grid>
 
-        <GroupBox Header="Категории" 
-                  Grid.Row="1" 
+        <GroupBox Header="Категории"
+                  Grid.Row="1"
                   Grid.Column="0"
                   Margin="5,5,2,5"
                   VerticalAlignment="Stretch"
                   MinWidth="150">
             <AdornerDecorator>
                 <root:ExtendedTreeView ItemsSource="{Binding CategoriesTree}"
-                                           SelectedItem_="{Binding SelectedCat, Mode=TwoWay}"
-                                           HorizontalAlignment="Stretch" 
-                                           VerticalAlignment="Stretch"
-                                           Margin="10" >
+                                       SelectedItem_="{Binding SelectedCat, Mode=TwoWay}"
+                                       x:Name="catalogExtendedTreeView"
+                                       SelectedItemChanged="catalogExtendedTreeView_SelectedItemChanged"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       Margin="10">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
-                            <TextBlock Text="{Binding Title}" FontSize="16">
+                            <TextBlock Text="{Binding Title}"
+                                       FontSize="16">
                                 <TextBlock.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Это не каталог, редактирование в каталоге"/>
+                                        <MenuItem Header="Это не каталог, редактирование в каталоге" />
                                     </ContextMenu>
                                 </TextBlock.ContextMenu>
                             </TextBlock>
@@ -68,23 +73,28 @@
                     </TreeView.ItemTemplate>
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="{x:Type TreeViewItem}">
-                            <Setter Property="IsExpanded" Value="True"/>
+                            <Setter Property="IsExpanded"
+                                    Value="True" />
                         </Style>
                     </TreeView.ItemContainerStyle>
                 </root:ExtendedTreeView>
             </AdornerDecorator>
         </GroupBox>
-        <GridSplitter Width="2" Grid.Column="1" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />
-        <GroupBox Header="Номенклатура" 
-                      Grid.Row="1" 
-                      Grid.Column="2"
-                      Margin="2,5"
-                      VerticalAlignment="Stretch">
+        <GridSplitter Width="2"
+                      Grid.Column="1"
+                      Grid.Row="1"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Center" />
+        <GroupBox Header="Номенклатура"
+                  Grid.Row="1"
+                  Grid.Column="2"
+                  Margin="2,5"
+                  VerticalAlignment="Stretch">
             <AdornerDecorator>
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <DataGrid ItemsSource="{Binding Source={StaticResource Nomenclatures}}"
                               SelectedItem="{Binding SelectedNomenclature}"
@@ -96,49 +106,67 @@
                         <DataGrid.InputBindings>
                             <MouseBinding MouseAction="LeftDoubleClick"
                                           Command="{Binding Cmd}"
-                                          CommandParameter="AddNomenclature"/>
+                                          CommandParameter="AddNomenclature" />
                         </DataGrid.InputBindings>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Название" Binding="{Binding Title}" Width="310" DisplayIndex="0">
+                            <DataGridTextColumn Header="Название"
+                                                Binding="{Binding Title}"
+                                                Width="310"
+                                                DisplayIndex="0">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        <Setter Property="TextBlock.TextWrapping"
+                                                Value="Wrap" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Header="Затраты" Binding="{Binding CostPrice, StringFormat=F2}" DisplayIndex="1"/>
-                            <DataGridTextColumn Header="Наценка" Binding="{Binding Markup, StringFormat=F2}" DisplayIndex="2"/>
-                            <DataGridTextColumn Header="Цена" Binding="{Binding Price, StringFormat=F2}" DisplayIndex="3"/>
-                            <DataGridTextColumn Header="Прибыль" Binding="{Binding Profit, StringFormat=F2}" DisplayIndex="4"/>
-                            <DataGridTextColumn Header="Валюта" Binding="{Binding CurrencyCharCode}" DisplayIndex="5"/>
+                            <DataGridTextColumn Header="Затраты"
+                                                Binding="{Binding CostPrice, StringFormat=F2}"
+                                                DisplayIndex="1" />
+                            <DataGridTextColumn Header="Наценка"
+                                                Binding="{Binding Markup, StringFormat=F2}"
+                                                DisplayIndex="2" />
+                            <DataGridTextColumn Header="Цена"
+                                                Binding="{Binding Price, StringFormat=F2}"
+                                                DisplayIndex="3" />
+                            <DataGridTextColumn Header="Прибыль"
+                                                Binding="{Binding Profit, StringFormat=F2}"
+                                                DisplayIndex="4" />
+                            <DataGridTextColumn Header="Валюта"
+                                                Binding="{Binding CurrencyCharCode}"
+                                                DisplayIndex="5" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Grid.Row="1" 
+                    <Button Grid.Row="1"
                             CommandParameter="AddNomenclature"
                             Command="{Binding Cmd}"
                             Content="Добавить"
                             Style="{DynamicResource MahApps.Styles.Button.Square}"
-                            Margin="5"/>
+                            Margin="5" />
                 </Grid>
 
             </AdornerDecorator>
         </GroupBox>
-        <GridSplitter Width="2" Grid.Column="3" Grid.Row="1"  VerticalAlignment="Stretch" HorizontalAlignment="Center" />
-        <GroupBox Header="Группы" 
-                      Grid.Row="1" 
-                      Grid.Column="4"
-                      Margin="2,5,5,5"
-                      VerticalAlignment="Stretch">
+        <GridSplitter Width="2"
+                      Grid.Column="3"
+                      Grid.Row="1"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Center" />
+        <GroupBox Header="Группы"
+                  Grid.Row="1"
+                  Grid.Column="4"
+                  Margin="2,5,5,5"
+                  VerticalAlignment="Stretch">
             <AdornerDecorator>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="2"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="2" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
                     <DataGrid ItemsSource="{Binding NomenclatureGroups}"
@@ -151,29 +179,39 @@
                         <DataGrid.InputBindings>
                             <MouseBinding MouseAction="LeftDoubleClick"
                                           Command="{Binding Cmd}"
-                                          CommandParameter="AddNomenclatureGroup"/>
+                                          CommandParameter="AddNomenclatureGroup" />
                         </DataGrid.InputBindings>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Название" Binding="{Binding Name}" DisplayIndex="0">
+                            <DataGridTextColumn Header="Название"
+                                                Binding="{Binding Name}"
+                                                DisplayIndex="0">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        <Setter Property="TextBlock.TextWrapping"
+                                                Value="Wrap" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>
-                            <DataGridTextColumn Binding="{Binding Nomenclatures.Count}" IsReadOnly="True" DisplayIndex="1"/>
+                            <DataGridTextColumn Binding="{Binding Nomenclatures.Count}"
+                                                IsReadOnly="True"
+                                                DisplayIndex="1" />
                         </DataGrid.Columns>
                     </DataGrid>
 
-                    <Button Grid.Row="1" 
+                    <Button Grid.Row="1"
                             CommandParameter="AddNomenclatureGroup"
                             Command="{Binding Cmd}"
                             Content="Добавить"
                             Style="{DynamicResource MahApps.Styles.Button.Square}"
-                            Margin="5"/>
-                    <GridSplitter Width="2" Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Center" />
+                            Margin="5" />
+                    <GridSplitter Width="2"
+                                  Grid.Column="1"
+                                  Grid.RowSpan="2"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Center" />
 
-                    <DataGrid Grid.Column="2" Grid.RowSpan="2" 
+                    <DataGrid Grid.Column="2"
+                              Grid.RowSpan="2"
                               MinWidth="100"
                               ItemsSource="{Binding SelectedItem.Nomenclatures, ElementName=nomGroupsDataGrid}"
                               GridLinesVisibility="Horizontal"
@@ -181,10 +219,13 @@
                               CanUserAddRows="False"
                               IsReadOnly="True">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Название" Binding="{Binding Title}" DisplayIndex="0">
+                            <DataGridTextColumn Header="Название"
+                                                Binding="{Binding Title}"
+                                                DisplayIndex="0">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style>
-                                        <Setter Property="TextBlock.TextWrapping" Value="Wrap"/>
+                                        <Setter Property="TextBlock.TextWrapping"
+                                                Value="Wrap" />
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
                             </DataGridTextColumn>

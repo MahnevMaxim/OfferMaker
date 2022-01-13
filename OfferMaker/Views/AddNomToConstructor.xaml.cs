@@ -81,5 +81,9 @@ namespace OfferMaker.Views
 
         #endregion Catalog searching
 
+        private void catalogExtendedTreeView_SelectedItemChanged_1(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+
+        }
     }
 }

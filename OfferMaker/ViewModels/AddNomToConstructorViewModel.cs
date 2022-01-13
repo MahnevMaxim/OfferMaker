@@ -55,6 +55,15 @@ namespace OfferMaker.ViewModels
                 OnPropertyChanged();
             }
         }
+        public Category SelectedCat
+        {
+            get => addNom.CatalogFilter.SelectedCat;
+            set
+            {
+                addNom.CatalogFilter.SelectedCat = value;
+                OnPropertyChanged();
+            }
+        }
 
         public NomenclatureGroup SelectedNomGroup { set => addNom.SelectedNomGroup = value; }
 
