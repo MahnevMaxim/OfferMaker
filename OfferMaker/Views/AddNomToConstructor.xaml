@@ -14,6 +14,11 @@
                  BorderThickness="0"
                  WindowState = "Maximized"
                  Height="650" Width="1200">
+    <Window.Resources>
+        <CollectionViewSource x:Key="Nomenclatures"
+                              Filter="CollectionViewSource_Filter"
+                              Source="{Binding CatalogFilter.FilteredNomenclatures}"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250" MaxWidth="350"/>
@@ -29,27 +34,13 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.ColumnSpan="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBox mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
+            <TextBox x:Name="SearchString"
+                     mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
                      Height="30"
                      Margin="5"
+                     TextChanged="SearchString_TextChanged"
                      mah:TextBoxHelper.ClearTextButton="True"
-                     mah:TextBoxHelper.Watermark="Поиск..."/>
-            <Button CommandParameter="FindNoms"
-                    Grid.Column="1"
-                    Command="{Binding Cmd}"
-                    Height="30"
-                    Width="30"
-                    Margin="5"
-                    Style="{DynamicResource MahApps.Styles.Button.Square}"
-                    ToolTip="Искать">
-                <iconPacks:PackIconMaterial Kind="Magnify"
-                                            Width="20"
-                                            Height="20"/>
-            </Button>
+                     mah:TextBoxHelper.Watermark="Поиск..." />
         </Grid>
 
         <GroupBox Header="Категории" 
@@ -95,7 +86,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
-                    <DataGrid ItemsSource="{Binding Nomenclatures}"
+                    <DataGrid ItemsSource="{Binding Source={StaticResource Nomenclatures}}"
                               SelectedItem="{Binding SelectedNomenclature}"
                               GridLinesVisibility="Horizontal"
                               AutoGenerateColumns="False"

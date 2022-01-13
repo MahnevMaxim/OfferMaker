@@ -74,7 +74,7 @@ namespace OfferMaker
 
         #region Nomenclatures
 
-        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures() => await Proxy.GetNomenclatures();
+        async internal Task<CallResult<ObservableCollection<Nomenclature>>> NomenclaturesGet() => await Proxy.NomenclaturesGet();
 
         async internal Task<CallResult> SaveNomenclatures(ObservableCollection<Nomenclature> nomenclatures) => await Proxy.SaveNomenclatures(nomenclatures);
 

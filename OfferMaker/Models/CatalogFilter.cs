@@ -17,23 +17,13 @@ namespace OfferMaker
     {
         private ObservableCollection<Nomenclature> Nomenclatures { get => catalog.Nomenclatures; }
         private ObservableCollection<Nomenclature> nomenclaturesWithoutCat = new ObservableCollection<Nomenclature>();
-        string keyString;
         Category selectedCat;
-        Catalog catalog;
+        ICatalog catalog;
         List<Nomenclature> deletedNoms = new List<Nomenclature>();
 
         public int CategoryId { get; set; }
 
         public FilterMode FilterMode { get; set; }
-
-        public string KeyString
-        {
-            get => keyString;
-            set
-            {
-                keyString = value;
-            }
-        }
 
         public Category SelectedCat
         {
@@ -54,12 +44,11 @@ namespace OfferMaker
                     return new ObservableCollection<Nomenclature>(Nomenclatures.Where(n => n.CategoryGuid == null && !n.IsDelete).ToList());
                 if (FilterMode == FilterMode.Category)
                     return selectedCat.Nomenclatures;
-                //return new ObservableCollection<Nomenclature>(Nomenclatures.Where(n => !n.IsDelete).ToList());
                 return Nomenclatures;
             }
         }
 
-        public CatalogFilter(Catalog catalog)
+        public CatalogFilter(ICatalog catalog)
         {
             this.catalog = catalog;
             Nomenclatures.ToList().ForEach(n => { if (n.CategoryGuid == null) nomenclaturesWithoutCat.Add(n); });
@@ -70,8 +59,7 @@ namespace OfferMaker
             nomenclature.IsDelete=true;
             deletedNoms.Add(nomenclature);
             Nomenclatures.Remove(nomenclature);
-            catalog.RemoveNomFromCat(nomenclature);
-            //OnPropertyChanged(nameof(FilteredNomenclatures));
+            ((Catalog)catalog).RemoveNomFromCat(nomenclature);
         }
 
         public List<Nomenclature> GetDeletedNoms() => deletedNoms;
@@ -118,7 +106,7 @@ namespace OfferMaker
         /// <param name="nomenclature"></param>
         internal void RemoveFromCategory(Nomenclature nomenclature)
         {
-            Category cat = catalog.GetFlattenTree().Where(c => c.Guid == nomenclature.CategoryGuid).FirstOrDefault();
+            Category cat = ((Catalog)catalog).GetFlattenTree().Where(c => c.Guid == nomenclature.CategoryGuid).FirstOrDefault();
             if(cat!=null)
             {
                 cat.Nomenclatures.Remove(nomenclature);

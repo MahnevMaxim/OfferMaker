@@ -7,18 +7,28 @@ using System.Collections.ObjectModel;
 
 namespace OfferMaker
 {
-    public class AddNomToConstructor : BaseModel
+    public class AddNomToConstructor : BaseModel, ICatalog
     {
         #region MVVVM 
 
         #region Fields
 
+        CatalogFilter catalogFilter;
         ObservableCollection<Category> categoriesTree;
         Category selectedCat;
 
         #endregion Fields
 
         #region Propetries
+
+        public CatalogFilter CatalogFilter
+        {
+            get => catalogFilter;
+            set
+            {
+                catalogFilter = value;
+            }
+        }
 
         public Nomenclature SelectedNomenclature { get; set; }
 
@@ -64,6 +74,7 @@ namespace OfferMaker
             CategoriesTree = Global.Main.Catalog.CategoriesTree;
             NomenclatureGroups = Global.Main.Catalog.NomenclatureGroups;
             this.offerGroup = offerGroup;
+            CatalogFilter = new CatalogFilter(this);
         }
 
         /// <summary>

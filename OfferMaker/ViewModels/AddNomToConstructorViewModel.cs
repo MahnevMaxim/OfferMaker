@@ -46,6 +46,16 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public CatalogFilter CatalogFilter
+        {
+            get => addNom.CatalogFilter;
+            set
+            {
+                addNom.CatalogFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
         public NomenclatureGroup SelectedNomGroup { set => addNom.SelectedNomGroup = value; }
 
         public Nomenclature SelectedNomenclature { set => addNom.SelectedNomenclature = value; }

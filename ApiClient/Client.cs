@@ -1810,15 +1810,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesAllAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesGetAsync()
         {
-            return NomenclaturesAllAsync(System.Threading.CancellationToken.None);
+            return NomenclaturesGetAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesGetAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Nomenclatures");
@@ -1884,15 +1884,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesPUTAsync(System.Collections.Generic.IEnumerable<Nomenclature> body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesEditAsync(System.Collections.Generic.IEnumerable<Nomenclature> body)
         {
-            return NomenclaturesPUTAsync(body, System.Threading.CancellationToken.None);
+            return NomenclaturesEditAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesPUTAsync(System.Collections.Generic.IEnumerable<Nomenclature> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesEditAsync(System.Collections.Generic.IEnumerable<Nomenclature> body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Nomenclatures");
@@ -1961,15 +1961,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesPOSTAsync(Nomenclature body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturePostAsync(Nomenclature body)
         {
-            return NomenclaturesPOSTAsync(body, System.Threading.CancellationToken.None);
+            return NomenclaturePostAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesPOSTAsync(Nomenclature body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturePostAsync(Nomenclature body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Nomenclatures");
@@ -2038,15 +2038,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclatureGetAsync(int id)
         {
-            return NomenclaturesGETAsync(id, System.Threading.CancellationToken.None);
+            return NomenclatureGetAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclatureGetAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2116,15 +2116,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclaturesPUT2Async(int id, Nomenclature body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureEditAsync(int id, Nomenclature body)
         {
-            return NomenclaturesPUT2Async(id, body, System.Threading.CancellationToken.None);
+            return NomenclatureEditAsync(id, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclaturesPUT2Async(int id, Nomenclature body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureEditAsync(int id, Nomenclature body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2191,15 +2191,15 @@ namespace ApiLib
 
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclaturesDELETEAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> DeleteNomenclatureAsync(int id)
         {
-            return NomenclaturesDELETEAsync(id, System.Threading.CancellationToken.None);
+            return DeleteNomenclatureAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclaturesDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> DeleteNomenclatureAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");

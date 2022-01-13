@@ -41,14 +41,14 @@ namespace OfferMaker
         /// Пытаемся получить валюты с сервера или из кэша.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Nomenclature>>> GetNomenclatures()
+        async internal Task<CallResult<ObservableCollection<Nomenclature>>> NomenclaturesGet()
         {
             if (AppMode == AppMode.Online)
-                return await ServerData.GetNomenclatures();
+                return await ServerData.NomenclaturesGet();
             if (AppMode == AppMode.Offline)
                 return await LocalData.GetCache<ObservableCollection<Nomenclature>>(LocalDataConfig.NomenclaturesPath);
 
-            CallResult<ObservableCollection<Nomenclature>> callResult = await ServerData.GetNomenclatures();
+            CallResult<ObservableCollection<Nomenclature>> callResult = await ServerData.NomenclaturesGet();
             if (callResult.Success)
             {
                 LocalData.UpdateCache(callResult.Data, LocalDataConfig.NomenclaturesPath);
