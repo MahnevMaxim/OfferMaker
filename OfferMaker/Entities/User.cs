@@ -10,31 +10,62 @@ namespace OfferMaker
 {
     public class User : BaseEntity
     {
-        string photoPath;
+        string firstName;
+        string lastName;
+        string phoneNumber1;
+        string phoneNumber2;
         Image image;
         Position position;
 
         public int Id { get; set; }
 
-        public string FirstName { get; set; }
+        public string FirstName
+        {
+            get => firstName;
+            set
+            {
+                firstName = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(FullName));
+            }
+        }
 
-        public string LastName { get; set; }
+        public string LastName
+        {
+            get => lastName;
+            set
+            {
+                lastName = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(FullName));
+            }
+        }
 
         public string FullName { get => FirstName + " " + LastName; }
 
-        public string PhoneNumber1 { get; set; }
+        public string PhoneNumber1
+        {
+            get => phoneNumber1;
+            set
+            {
+                phoneNumber1 = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public string PhoneNumber2 { get; set; }
+        public string PhoneNumber2
+        {
+            get => phoneNumber2;
+            set
+            {
+                phoneNumber2 = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string Email { get; set; }
 
         public string Pwd { get; set; }
-
-        public string PhotoPath 
-        { 
-            get => photoPath; 
-            set => photoPath = value; 
-        }
 
         public Image Image
         {

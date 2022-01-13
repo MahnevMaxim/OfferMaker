@@ -89,7 +89,6 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPut("{id}/self", Name = nameof(UserSelfEdit))]
         public async Task<IActionResult> UserSelfEdit(int id, User user)
         {

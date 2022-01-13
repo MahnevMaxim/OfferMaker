@@ -136,6 +136,13 @@ namespace OfferMaker
         async internal Task<CallResult> UserEdit(User user) => await ServerData.UserEdit(user);
 
         /// <summary>
+        /// Сохранение данных текущего пользователя, работает только онлайн.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> UserSelfEdit(User user) => await ServerData.UserSelfEdit(user);
+
+        /// <summary>
         /// Добавляем нового пользователя.
         /// </summary>
         /// <param name="user"></param>

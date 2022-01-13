@@ -180,6 +180,7 @@ namespace OfferMaker
                 return GetApiError(userChangePasswordErrorMess, ex);
             }
         }
+
         /// <summary>
         /// Обновляем пользователей.
         /// </summary>
@@ -229,6 +230,26 @@ namespace OfferMaker
                 Global.ImageManager.UploadImage(user);
                 ApiLib.User us = Helpers.CloneObject<ApiLib.User>(user);
                 await client.UserEditAsync(us.Id, us);
+                return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(userEditErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// Редактирование текущего пользователя.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> UserSelfEdit(User user)
+        {
+            try
+            {
+                Global.ImageManager.UploadImage(user);
+                ApiLib.User us = Helpers.CloneObject<ApiLib.User>(user);
+                await client.UserSelfEditAsync(us.Id, us);
                 return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
             }
             catch (Exception ex)

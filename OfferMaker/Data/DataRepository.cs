@@ -114,6 +114,8 @@ namespace OfferMaker
 
         async internal Task<CallResult> UserEdit(User user) => await Proxy.UserEdit(user);
 
+        async internal Task<CallResult> UserSelfEdit(User user) => await Proxy.UserSelfEdit(user);
+
         async internal Task<CallResult> UsersEdit(ObservableCollection<User> users) => await Proxy.UsersEdit(users);
 
         async internal Task<CallResult> UserChangePassword(User user) => await Proxy.UserChangePassword(user);
