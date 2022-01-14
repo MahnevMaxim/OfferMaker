@@ -28,7 +28,6 @@ namespace API
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             Log.Clear();
@@ -39,17 +38,14 @@ namespace API
             Log.Write("Release");
             try
             {
-                string con = "Server=127.0.0.1,1433;Database=kip;User=sa;Password=dnhdhdsryWW33;";
+                string con = "Server=127.0.0.1,1433;Database=APIContext;User=sa;Password=dnhdhdsryWW33;";
                 services.AddDbContext<APIContext>(options => options.UseSqlServer(con));
             }
             catch(Exception ex)
             {
                 Log.Write(ex.ToString());
             }
-
 #endif
-            Log.Write("Debug");
-            services.AddDbContext<APIContext>(options => options.UseSqlServer(Configuration.GetConnectionString("APIContext")));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
@@ -82,16 +78,14 @@ namespace API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
             });
 
-
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, APIContext сontext)
         {
             app.UseForwardedHeaders();
 
