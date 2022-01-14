@@ -349,8 +349,7 @@ namespace DatabaseExporter
 
                 string title = nom["Name"].ToString();
                 List<Description> descs = new List<Description>();
-                //не у всех описаний есть значения
-                if (nom["Descriptions"].ToString() != "") 
+                if (nom["Descriptions"].ToString() != "")
                 {
                     foreach (var desc in nom["Descriptions"]["$values"])
                     {
@@ -358,19 +357,19 @@ namespace DatabaseExporter
                         descs.Add(new Description() { Text = text, IsComment = false, IsEnabled = true });
                     }
                 }
-                else 
+                else
                 {
                     descs = null;
                 }
-               
+
                 decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
                 decimal markUp = decimal.Parse(nom["Markup"].ToString());
                 string charCode;
                 if (nom["ValuteName"] != null)
                 {
-                     charCode = nom["ValuteName"].ToString();
+                    charCode = nom["ValuteName"].ToString();
                 }
-                else 
+                else
                 {
                     charCode = "RUB";
                 }
@@ -403,6 +402,53 @@ namespace DatabaseExporter
                     Console.Write(ex);
                 }
             }
+        }
+
+        async private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            var сategories = JsonConvert.DeserializeObject(File.ReadAllText("Categories.json")).ToString();
+            JArray jaNoms = JArray.Parse(сategories.ToString());
+
+            ObservableCollection<Category> categories = new ObservableCollection<Category>();
+
+            foreach (var сateg in jaNoms)
+            {
+                string title = сateg["Name"].ToString();
+                int parentId = int.Parse(сateg["ParentId"].ToString());
+
+                Category category = new Category()
+                {
+                    Title = title,
+                    Guid = Guid.NewGuid().ToString(),
+                    ParentId = parentId
+                };
+                categories.Add(category);
+            }
+            foreach (var category in categories)
+            {
+                if (category.ParentId != null)
+                {
+                    //найти категорию, Id которой = category.ParentId
+                    Category tempCategory = categories.FirstOrDefault(i => i.Id == category.ParentId);
+                    if (tempCategory != null)
+                    {
+                        //взять у нее Guid
+                        //записать его в category.ParentGuid
+                        category.ParentGuid = tempCategory.Guid;
+                    }
+                }
+
+                try
+                {
+                    var res = await client.CategoriesPOSTAsync(category);
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex);
+                }
+            }
+
+
         }
     }
 }

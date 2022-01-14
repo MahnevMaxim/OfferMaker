@@ -414,7 +414,7 @@ namespace OfferMaker
         {
             try
             {
-                var response = await client.NomenclaturesAllAsync();
+                var response = await client.NomenclaturesGetAsync();
                 if (response.StatusCode == 200)
                 {
                     ObservableCollection<Nomenclature> res = Helpers.CloneObject<ObservableCollection<Nomenclature>>(response.Result);
@@ -445,7 +445,7 @@ namespace OfferMaker
                 newNoms.AddRange(Global.Catalog.CatalogFilter.GetDeletedNoms()); //также добавляем помеченные на удаление
                 Global.ImageManager.UploadNewImages(newNoms);
                 IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
-                await client.NomenclaturesPUTAsync(noms);
+                await client.NomenclaturesEditAsync(noms);
                 newNoms.ToList().ForEach(n => n.SkipIsEdit());
                 return new CallResult();
             }

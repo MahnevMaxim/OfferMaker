@@ -11,6 +11,7 @@
         <Button x:Name="button1" Content="Export nomenclature" HorizontalAlignment="Left" Margin="10,43,0,0" VerticalAlignment="Top" Width="196" Click="button1_Click"/>
         <Button x:Name="button2" Content="Export currency" HorizontalAlignment="Left" Margin="10,77,0,0" VerticalAlignment="Top" Width="196" Click="button2_Click"/>
         <Button x:Name="button3" Content="Export all" HorizontalAlignment="Left" Margin="10,114,0,0" VerticalAlignment="Top" Width="196" Click="button3_Click"/>
-        <Button Content="New export" HorizontalAlignment="Left" Margin="10,184,0,0" VerticalAlignment="Top" Width="196" Click="Button_Click"/>
+        <Button Content="Номенклатуры" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top" Width="196" Click="Button_Click"/>
+        <Button Content="Категории номенклатур" HorizontalAlignment="Left" Margin="10,217,0,0" VerticalAlignment="Top" Width="196" Click="Button_Click_2"/>
     </Grid>
 </Window>
