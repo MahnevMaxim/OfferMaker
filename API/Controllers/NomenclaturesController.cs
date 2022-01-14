@@ -13,7 +13,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class NomenclaturesController : ControllerBase
     {
         private readonly APIContext _context;
@@ -23,14 +23,14 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Nomenclature>>> GetNomenclatures()
+        [HttpGet(Name = nameof(NomenclaturesGet))]
+        public async Task<ActionResult<IEnumerable<Nomenclature>>> NomenclaturesGet()
         {
             return await _context.Nomenclatures.Where(n=>!n.IsDelete).ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Nomenclature>> GetNomenclature(int id)
+        [HttpGet("{id}", Name = nameof(NomenclatureGet))]
+        public async Task<ActionResult<Nomenclature>> NomenclatureGet(int id)
         {
             var nomenclature = await _context.Nomenclatures.FindAsync(id);
 
@@ -42,8 +42,8 @@ namespace API.Controllers
             return nomenclature;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutNomenclature(int id, Nomenclature nomenclature)
+        [HttpPut("{id}", Name = nameof(NomenclatureEdit))]
+        public async Task<IActionResult> NomenclatureEdit(int id, Nomenclature nomenclature)
         {
             if (id != nomenclature.Id)
             {
@@ -71,8 +71,8 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPut]
-        public async Task<ActionResult<Nomenclature>> SaveNomenclatures(IEnumerable<Nomenclature> noms)
+        [HttpPut(Name = nameof(NomenclaturesEdit))]
+        public async Task<ActionResult<Nomenclature>> NomenclaturesEdit(IEnumerable<Nomenclature> noms)
         {
             foreach (var nom in noms)
             {
@@ -80,11 +80,11 @@ namespace API.Controllers
                 {
                     if (nom.Id == 0)
                     {
-                        await PostNomenclature(nom);
+                        await NomenclaturePost(nom);
                     }
                     else
                     {
-                        await PutNomenclature(nom.Id, nom);
+                        await NomenclatureEdit(nom.Id, nom);
                     }
                 }
                 catch (Exception ex)
@@ -95,16 +95,23 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Nomenclature>> PostNomenclature(Nomenclature nomenclature)
+        [HttpPost(Name = nameof(NomenclaturePost))]
+        public async Task<ActionResult<Nomenclature>> NomenclaturePost(Nomenclature nomenclature)
         {
-            _context.Nomenclatures.Add(nomenclature);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetNomenclature", new { id = nomenclature.Id }, nomenclature);
+            try
+            {
+                _context.Nomenclatures.Add(nomenclature);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                Log.Write(ex);
+            }
+            
+            return CreatedAtAction("NomenclaturesGet", new { id = nomenclature.Id }, nomenclature);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}", Name = nameof(DeleteNomenclature))]
         public async Task<IActionResult> DeleteNomenclature(int id)
         {
             var nomenclature = await _context.Nomenclatures.FindAsync(id);

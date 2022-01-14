@@ -16,7 +16,8 @@ namespace API.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ParentGuid = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ParentId = table.Column<int>(type: "int", nullable: true)
+                    ParentId = table.Column<int>(type: "int", nullable: true),
+                    Order = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -58,6 +59,19 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Hints",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HintString = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Hints", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "NomenclatureGroups",
                 columns: table => new
                 {
@@ -84,7 +98,7 @@ namespace API.Migrations
                     CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Markup = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CurrencyCharCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastChangePriceDate = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValue: new DateTime(2021, 12, 24, 6, 6, 56, 78, DateTimeKind.Utc).AddTicks(2412)),
+                    LastChangePriceDate = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValue: new DateTime(2022, 1, 14, 7, 2, 18, 264, DateTimeKind.Utc).AddTicks(2118)),
                     ActualPricePeriod = table.Column<int>(type: "int", nullable: false, defaultValue: 30),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Images = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -101,11 +115,11 @@ namespace API.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Guid = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OfferName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OfferCreatorId = table.Column<int>(type: "int", nullable: false),
                     ManagerId = table.Column<int>(type: "int", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2021, 12, 24, 6, 6, 56, 81, DateTimeKind.Utc).AddTicks(4532)),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 1, 14, 7, 2, 18, 266, DateTimeKind.Utc).AddTicks(6250)),
                     Customer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OfferGroups = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     OfferInfoBlocks = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -128,27 +142,90 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Positions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PositionName = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Permissions = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Positions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Pwd = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Permissions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhotoPath = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PositionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Positions_PositionId",
+                        column: x => x.PositionId,
+                        principalTable: "Positions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "Account",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Account", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Account_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Account_UserId",
+                table: "Account",
+                column: "UserId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Positions_PositionName",
+                table: "Positions",
+                column: "PositionName",
+                unique: true,
+                filter: "[PositionName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_PositionId",
+                table: "Users",
+                column: "PositionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Account");
+
             migrationBuilder.DropTable(
                 name: "Categories");
 
@@ -157,6 +234,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Customers");
+
+            migrationBuilder.DropTable(
+                name: "Hints");
 
             migrationBuilder.DropTable(
                 name: "NomenclatureGroups");
@@ -169,6 +249,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Positions");
         }
     }
 }

@@ -10,16 +10,40 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    [Migration("20211224193927_role")]
-    partial class role
+    [Migration("20220114070218_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.12")
+                .HasAnnotation("ProductVersion", "5.0.13")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Shared.Account", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Account");
+                });
 
             modelBuilder.Entity("Shared.Category", b =>
                 {
@@ -31,6 +55,9 @@ namespace API.Migrations
                     b.Property<string>("Guid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
 
                     b.Property<string>("ParentGuid")
                         .HasColumnType("nvarchar(max)");
@@ -102,6 +129,21 @@ namespace API.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("Shared.Hint", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("HintString")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Hints");
+                });
+
             modelBuilder.Entity("Shared.Nomenclature", b =>
                 {
                     b.Property<int>("Id")
@@ -141,7 +183,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 24, 19, 39, 26, 540, DateTimeKind.Utc).AddTicks(1874));
+                        .HasDefaultValue(new DateTime(2022, 1, 14, 7, 2, 18, 264, DateTimeKind.Utc).AddTicks(2118));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -191,7 +233,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2021, 12, 24, 19, 39, 26, 543, DateTimeKind.Utc).AddTicks(2350));
+                        .HasDefaultValue(new DateTime(2022, 1, 14, 7, 2, 18, 266, DateTimeKind.Utc).AddTicks(6250));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -205,6 +247,7 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Guid")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCreateByCostPrice")
@@ -249,6 +292,28 @@ namespace API.Migrations
                     b.ToTable("Offers");
                 });
 
+            modelBuilder.Entity("Shared.Position", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Permissions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PositionName")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PositionName")
+                        .IsUnique()
+                        .HasFilter("[PositionName] IS NOT NULL");
+
+                    b.ToTable("Positions");
+                });
+
             modelBuilder.Entity("Shared.User", b =>
                 {
                     b.Property<int>("Id")
@@ -257,16 +322,16 @@ namespace API.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("LastName")
+                    b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Permissions")
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber1")
@@ -275,18 +340,42 @@ namespace API.Migrations
                     b.Property<string>("PhoneNumber2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PhotoPath")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("PositionId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Pwd")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
+                    b.HasIndex("PositionId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Shared.Account", b =>
+                {
+                    b.HasOne("Shared.User", "User")
+                        .WithOne("Account")
+                        .HasForeignKey("Shared.Account", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Shared.User", b =>
+                {
+                    b.HasOne("Shared.Position", "Position")
+                        .WithMany()
+                        .HasForeignKey("PositionId");
+
+                    b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("Shared.User", b =>
+                {
+                    b.Navigation("Account");
                 });
 #pragma warning restore 612, 618
         }

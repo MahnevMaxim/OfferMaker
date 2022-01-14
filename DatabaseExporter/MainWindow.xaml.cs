@@ -20,6 +20,8 @@ using System.Net;
 using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.Dynamic;
+using Newtonsoft.Json.Converters;
 
 namespace DatabaseExporter
 {
@@ -41,7 +43,7 @@ namespace DatabaseExporter
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             httpClient = new System.Net.Http.HttpClient();
-            string apiEndpoint = "https://localhost:44333/";
+            string apiEndpoint = "https://localhost:44313/";
             client = new Client(apiEndpoint, httpClient);
 
             string con = "Server=(localdb)\\mssqllocaldb;Database=AdsStore;Trusted_Connection=True;";
@@ -144,29 +146,29 @@ namespace DatabaseExporter
                 descs.Add(new Description() { Text = ad.Time.ToLongTimeString() });
                 descs.Add(new Description() { Text = ad.Price.ToString() });
                 decimal costPrice = decimal.Parse(ad.Price.ToString());
-                decimal markUp = 1 + ((decimal)rnd.Next(1,200))/100;
+                decimal markUp = 1 + ((decimal)rnd.Next(1, 200)) / 100;
                 string charCode = "RUB";
 
-                ApiLib.Image image=null;
+                ApiLib.Image image = null;
                 ObservableCollection<ApiLib.Image> images = new ObservableCollection<ApiLib.Image>();
-                if(ad.ImgPath!=null)
+                if (ad.ImgPath != null)
                 {
                     image = new ApiLib.Image() { Guid = ad.ImgPath.Split("avitoimages\\")[1] };
                     images.Add(image);
                 }
-                
+
                 Nomenclature nomenclature = new Nomenclature()
                 {
-                    Guid=Guid.NewGuid().ToString(),
+                    Guid = Guid.NewGuid().ToString(),
                     CostPrice = costPrice,
                     Descriptions = descs,
                     Markup = markUp,
                     Title = title,
                     CurrencyCharCode = charCode,
-                    Image=image,
-                    Images=images
+                    Image = image,
+                    Images = images
                 };
-                nomenclature.Descriptions.ToList().ForEach(d=>d.IsEnabled=true);
+                nomenclature.Descriptions.ToList().ForEach(d => d.IsEnabled = true);
 
                 //string fPath = "avitoimages\\" + image.Guid + ".jpg";
                 //using var stream = new MemoryStream(File.ReadAllBytes(fPath).ToArray());
@@ -175,7 +177,7 @@ namespace DatabaseExporter
 
                 try
                 {
-                    var res = await client.NomenclaturesPOSTAsync(nomenclature);
+                    var res = await client.NomenclaturePostAsync(nomenclature);
                 }
                 catch (Exception ex)
                 {
@@ -250,6 +252,157 @@ namespace DatabaseExporter
             button_Click_1(null, null);
             button1_Click(null, null);
             button2_Click(null, null);
+        }
+
+        public class Fdsgsdgdswe
+        {
+            object type { get; set; }
+            object values { get; set; }
+        }
+
+        public class NomenclatureTemp
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+            public decimal CostPrice { get; set; }
+            public double Markup { get; set; }
+            public int SelectedImageId { get; set; }
+            public int ValueteID { get; set; }
+            public DateTime LastChangePriceDate { get; set; }
+            public int ActualPricePeriod { get; set; }
+            public ObservableCollection<Description> Descriptions { get; set; }
+            public string DescriptionsText { get; set; }
+        }
+
+        public class DescriptionTemp
+        {
+            public string Text { get; set; }
+            public bool IsEnabled { get; set; }
+            public bool IsComment { get; set; }
+        }
+        async private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            //var noms_ = JsonConvert.DeserializeObject(File.ReadAllText("noms.json")).ToString();
+            //JArray jaNoms = JArray.Parse(noms_.ToString());
+
+            //foreach (var nom in jaNoms)
+            //{
+            //    string s = nom.ToString();
+
+            //    foreach (var desc in nom["Descriptions"]["$values"])
+            //    {
+            //        var v3 = desc.Value<string>("Text");
+            //        foreach (var ee in desc)
+            //        {
+
+            //        }
+            //        //descs.Add(new Description() { Text = desc["Text"].T/*oString() });*/
+            //    }
+
+            //    string title = nom["Name"].ToString();
+            //    string desctriptionsText = nom["Name"].ToString();
+
+
+            //    List<Description> descs = new List<Description>();
+            //    foreach (var desc in nom["Descriptions"].Values())
+            //    {
+            //        Console.WriteLine(desc.Value<string>("Text"));
+            //        descs.Add(new Description() { Text = desc.Value<string>("Text") });
+            //    }
+            //    decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
+            //    decimal markUp = decimal.Parse(nom["Markup"].ToString());
+            //    //потому-что заебал
+            //    string charCode = "";
+            //    try
+            //    {
+            //        charCode = nom["valute"]["Name"].ToString();
+            //    }
+            //    catch (Exception)
+            //    {
+            //        charCode = "RUB";
+            //    }
+
+            //    Nomenclature nomenclature = new Nomenclature()
+            //    {
+            //        CostPrice = costPrice,
+            //        Descriptions = descs,
+            //        Markup = markUp,
+            //        Title = title,
+            //        CurrencyCharCode = charCode
+            //    };
+
+            //    try
+            //    {
+            //        var res = await client.NomenclaturePostAsync(nomenclature);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.Write(ex);
+            //    }
+            //}
+            var noms_ = JsonConvert.DeserializeObject(File.ReadAllText("noms.json")).ToString();
+            JArray jaNoms = JArray.Parse(noms_.ToString());
+
+            foreach (var nom in jaNoms)
+            {
+                string s = nom.ToString();
+
+                string title = nom["Name"].ToString();
+                List<Description> descs = new List<Description>();
+                //не у всех описаний есть значения
+                if (nom["Descriptions"].ToString() != "") 
+                {
+                    foreach (var desc in nom["Descriptions"]["$values"])
+                    {
+                        var text = desc.Value<string>("Text");
+                        descs.Add(new Description() { Text = text, IsComment = false, IsEnabled = true });
+                    }
+                }
+                else 
+                {
+                    descs = null;
+                }
+               
+                decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
+                decimal markUp = decimal.Parse(nom["Markup"].ToString());
+                string charCode;
+                if (nom["ValuteName"] != null)
+                {
+                     charCode = nom["ValuteName"].ToString();
+                }
+                else 
+                {
+                    charCode = "RUB";
+                }
+                //try
+                //{
+                //    //charCode = nom["valute"]["Name"].ToString();
+                //    charCode = "RUB";
+                //}
+                //catch (Exception)
+                //{
+                //    charCode = "RUB";
+                //}
+
+                Nomenclature nomenclature = new Nomenclature()
+                {
+                    CostPrice = costPrice,
+                    Descriptions = descs,
+                    Markup = markUp,
+                    Title = title,
+                    CurrencyCharCode = charCode,
+                    Guid = Guid.NewGuid().ToString()
+                };
+
+                try
+                {
+                    var res = await client.NomenclaturePostAsync(nomenclature);
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex);
+                }
+            }
         }
     }
 }

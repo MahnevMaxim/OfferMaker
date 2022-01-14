@@ -181,7 +181,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 12, 2, 56, 45, 148, DateTimeKind.Utc).AddTicks(5966));
+                        .HasDefaultValue(new DateTime(2022, 1, 14, 7, 2, 18, 264, DateTimeKind.Utc).AddTicks(2118));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -231,7 +231,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 12, 2, 56, 45, 153, DateTimeKind.Utc).AddTicks(7994));
+                        .HasDefaultValue(new DateTime(2022, 1, 14, 7, 2, 18, 266, DateTimeKind.Utc).AddTicks(6250));
 
                     b.Property<string>("Currency")
                         .IsRequired()
