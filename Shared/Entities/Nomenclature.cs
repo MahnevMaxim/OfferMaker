@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shared
 {
@@ -18,6 +19,7 @@ namespace Shared
 
         public string CategoryGuid { get; set; }
 
+        [Required]
         public ObservableCollection<Description> Descriptions { get; set; }
 
         public decimal CostPrice { get; set; }

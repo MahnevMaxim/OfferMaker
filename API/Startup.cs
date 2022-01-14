@@ -84,8 +84,7 @@ namespace API
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, APIContext сontext)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, APIContext apiContext)
         {
             app.UseForwardedHeaders();
 
@@ -101,6 +100,8 @@ namespace API
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();
+
+            app.UseMiddleware<TokenMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
