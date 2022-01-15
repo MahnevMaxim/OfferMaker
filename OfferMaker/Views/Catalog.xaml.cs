@@ -24,11 +24,13 @@ namespace OfferMaker.Views
     public partial class Catalog : MetroWindow, IView
     {
         DispatcherTimer timerStartSearch;
+        public DialogCoordinator dialogCoordinator;
 
         public Catalog()
         {
             InitializeComponent();
             SetTimer();
+            dialogCoordinator = (DialogCoordinator)DialogCoordinator.Instance;
         }
 
         void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);

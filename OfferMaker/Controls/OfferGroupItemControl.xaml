@@ -42,7 +42,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="NomCostPriceTextBlock">
-                <TextBlock Text="{Binding CostPrice, StringFormat=F2}"
+                <TextBlock Text="{Binding CostPrice, StringFormat={}{0:### ### ### ### ###}}"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            Width="80"
                            TextWrapping="Wrap"
@@ -60,7 +60,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="NomPrice">
-                <TextBlock Text="{Binding Price, StringFormat=F2}"
+                <TextBlock Text="{Binding Price, StringFormat={}{0:### ### ### ### ###}}"
                            TextWrapping="Wrap"
                            Width="{StaticResource Width80}"
                            FontWeight="Bold"
@@ -68,7 +68,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="NomProfit">
-                <TextBlock Text="{Binding ProfitSum, StringFormat=F2}"
+                <TextBlock Text="{Binding ProfitSum, StringFormat={}{0:### ### ### ### ###}}"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            TextWrapping="Wrap"
                            Width="{StaticResource Width80}"
@@ -85,7 +85,7 @@
             </DataTemplate>
 
             <DataTemplate x:Key="NomSum">
-                <TextBlock Text="{Binding Sum, StringFormat=F2}"
+                <TextBlock Text="{Binding Sum, StringFormat={}{0:### ### ### ### ###}}"
                            TextWrapping="Wrap"
                            Width="{StaticResource Width80}"
                            FontWeight="Bold"
@@ -620,7 +620,7 @@
                            Margin="30,0"
                            TextAlignment="Right"
                            FontWeight="Bold"/>
-                <TextBlock Text="{Binding CostPriceSum, StringFormat=F2}" Grid.Column="1"
+                <TextBlock Text="{Binding CostPriceSum, StringFormat={}{0:### ### ### ### ###}}" Grid.Column="1"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            Margin="5"
                            Grid.Row="1" 
@@ -642,7 +642,7 @@
                            Margin="5"
                            Grid.Row="1" 
                            VerticalAlignment="Center"
-                           Text="{Binding ProfitSum, StringFormat=F2}"
+                           Text="{Binding ProfitSum, StringFormat={}{0:### ### ### ### ###}}"
                            FontFamily="Arial"
                            FontSize="12"
                            FontWeight="Bold"/>
@@ -650,7 +650,7 @@
                            Margin="5"
                            Grid.Row="1" 
                            VerticalAlignment="Center"
-                           Text="{Binding PriceSum, StringFormat=F2}"
+                           Text="{Binding PriceSum, StringFormat={}{0:### ### ### ### ###}}"
                            FontFamily="Arial"
                            FontSize="12"
                            FontWeight="Bold"/>

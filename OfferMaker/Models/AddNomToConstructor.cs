@@ -125,5 +125,9 @@ namespace OfferMaker
             offerGroup.AddNomenclaturesSilent(list);
             Close();
         }
+
+        public void ShowAllCategory() => CatalogFilter.SetMode(FilterMode.All);
+
+        public void ShowWithoutCategory() => CatalogFilter.SetMode(FilterMode.WithoutCat);
     }
 }

@@ -875,7 +875,7 @@
                                    Margin="5"
                                     Grid.Row="1" 
                                    VerticalAlignment="Center"
-                                   Text="{Binding TotalCostPriceSum, StringFormat=F2}"
+                                   Text="{Binding TotalCostPriceSum, StringFormat={}{0:### ### ### ### ###}}"
                                    FontFamily="Arial"
                                    FontSize="12"
                                    FontWeight="Bold"/>
@@ -893,7 +893,7 @@
                                    Margin="5"
                                    Grid.Row="1" 
                                    VerticalAlignment="Center"
-                                   Text="{Binding ProfitSum, StringFormat=F2}"
+                                   Text="{Binding ProfitSum, StringFormat={}{0:### ### ### ### ###}}"
                                    FontFamily="Arial"
                                    FontSize="12"
                                    FontWeight="Bold"/>
@@ -901,7 +901,7 @@
                                    Margin="10,5"
                                    Grid.Row="1" 
                                    VerticalAlignment="Center"
-                                   Text="{Binding TotalSum, StringFormat=F2}"
+                                   Text="{Binding TotalSum, StringFormat={}{0:### ### ### ### ###}}"
                                    FontFamily="Arial"
                                    FontSize="12"
                                    FontWeight="Bold"/>
