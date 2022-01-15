@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20220114161721_IsTokenActive")]
+    partial class IsTokenActive
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,7 +187,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 14, 19, 6, 4, 146, DateTimeKind.Utc).AddTicks(3199));
+                        .HasDefaultValue(new DateTime(2022, 1, 14, 16, 17, 19, 579, DateTimeKind.Utc).AddTicks(4489));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -235,7 +237,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 14, 19, 6, 4, 149, DateTimeKind.Utc).AddTicks(7018));
+                        .HasDefaultValue(new DateTime(2022, 1, 14, 16, 17, 19, 583, DateTimeKind.Utc).AddTicks(6328));
 
                     b.Property<string>("Currency")
                         .IsRequired()

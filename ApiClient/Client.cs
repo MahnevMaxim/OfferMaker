@@ -3980,7 +3980,8 @@ namespace ApiLib
         public string CategoryGuid { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("descriptions")]
-        public System.Collections.Generic.ICollection<Description> Descriptions { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Description> Descriptions { get; set; } = new System.Collections.ObjectModel.Collection<Description>();
 
         [System.Text.Json.Serialization.JsonPropertyName("costPrice")]
         public decimal CostPrice { get; set; }
@@ -4233,6 +4234,9 @@ namespace ApiLib
 
         [System.Text.Json.Serialization.JsonPropertyName("token")]
         public string Token { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isTokenActive")]
+        public bool IsTokenActive { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("password")]
         public string Password { get; set; }

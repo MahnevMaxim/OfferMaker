@@ -51,14 +51,16 @@ namespace API.Controllers
             User user = res.FirstOrDefault(x => x.Email == identity.Name);
             if (user.Account == null)
             {
-                user.Account = new Account() { Token = encodedJwt, Password = password }; //пароль на первое время остаётся в 2-х местах, это чтобы ничего не ломалось
+                user.Account = new Account() { Token = encodedJwt, IsTokenActive = true }; //пароль на первое время остаётся в 2-х местах, это чтобы ничего не ломалось
             }
             else
             {
-                var ph = new PasswordHasher();
-                user.Account.Password = ph.HashPassword(password);
                 user.Account.Token = encodedJwt;
+                user.Account.IsTokenActive = true;
             }
+
+            var ph = new PasswordHasher();
+            user.Account.Password = ph.HashPassword(password);
 
             try
             {
@@ -111,11 +113,12 @@ namespace API.Controllers
 
             if (user.Account == null)
             {
-                user.Account = new Account() { Token = encodedJwt}; 
+                user.Account = new Account() { Token = encodedJwt, IsTokenActive=true}; 
             }
             else
             {
                 user.Account.Token = encodedJwt;
+                user.Account.IsTokenActive = true;
             }
 
             try
@@ -142,7 +145,8 @@ namespace API.Controllers
         async private Task<ClaimsIdentity> GetIdentity(string token)
         {
             var users = await _context.Users.Include(u => u.Position).Include(u=>u.Account).ToListAsync();
-            User user = users.FirstOrDefault(x => x.Account?.Token == token);
+            User user = users.FirstOrDefault(x => x.Account?.Token == token && x.Account.IsTokenActive);
+
             if (user != null)
             {
                 var claims = new List<Claim>
@@ -167,6 +171,7 @@ namespace API.Controllers
         {
             var res = await _context.Users.Include(u => u.Position).ToListAsync();
             User user = res.FirstOrDefault(x => x.Email == username);
+
             if (user != null)
             {
                 var ph = new PasswordHasher();

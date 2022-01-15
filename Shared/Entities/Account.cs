@@ -13,6 +13,8 @@ namespace Shared
 
         public string Token { get; set; }
 
+        public bool IsTokenActive { get; set; }
+
         public string Password { get; set; }
 
         [JsonIgnore]

@@ -29,7 +29,7 @@ namespace API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.LogTo(message => Log.Write(message));
+            optionsBuilder.LogTo(message => Log.EfWrite(message));
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

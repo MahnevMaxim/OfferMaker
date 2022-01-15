@@ -81,8 +81,7 @@ namespace DatabaseExporter
                     LastName = secondName,
                     PhoneNumber1 = phone1,
                     PhoneNumber2 = phone2,
-                    Email = email,
-                    //PhotoPath = id + ".png"
+                    Email = email
                 };
                 var res = await client.UserCreateAsync(user_);
             }

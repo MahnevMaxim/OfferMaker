@@ -31,9 +31,10 @@ namespace API
         public void ConfigureServices(IServiceCollection services)
         {
             Log.Clear();
+            Log.Clear("ef_log.txt");
 #if DEBUG
             Log.Write("Debug");
-            services.AddDbContext<APIContext>(options => options.UseSqlServer(Configuration.GetConnectionString("APIContext")));
+            services.AddDbContext<APIContext>(options => options.UseSqlServer(Configuration.GetConnectionString("APIContext")).EnableSensitiveDataLogging());
 #else
             Log.Write("Release");
             try

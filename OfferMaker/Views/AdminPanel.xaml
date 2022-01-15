@@ -539,7 +539,7 @@
                                                      Grid.Column="1" />
                                             <Button Content="Применить изменения"
                                                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
-                                                    CommandParameter="UsersEdit"
+                                                    CommandParameter="UserEdit"
                                                     Style="{StaticResource MahApps.Styles.Button.Square}"
                                                     Width="200"
                                                     Margin="10,5"

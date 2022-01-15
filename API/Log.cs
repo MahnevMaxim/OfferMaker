@@ -9,6 +9,8 @@ namespace API
 {
     public class Log
     {
+        static string defaultLogPath = "log.txt";
+
         public static void Write(Exception exc) => Write("", exc);
 
         /// <summary>
@@ -16,8 +18,11 @@ namespace API
         /// </summary>
         /// <param name="log_string"></param>
         /// <param name="exc"></param>
-        public static void Write(string log_string, Exception exc = null)
+        public static void Write(string log_string, Exception exc = null, string logPath = null)
         {
+            if (logPath == null)
+                logPath = defaultLogPath;
+
             DateTime date = DateTime.UtcNow;
             string text = "";
             if (exc != null)
@@ -31,7 +36,7 @@ namespace API
 
             try
             {
-                using (StreamWriter sw = File.AppendText(@"log.txt"))
+                using (StreamWriter sw = File.AppendText(logPath))
                 {
                     sw.WriteLine(text);
                     Console.WriteLine(text);
@@ -44,15 +49,22 @@ namespace API
             }
         }
 
+        internal static void Write(string message, string logPath) => Write("", null, logPath);
+
+        internal static void EfWrite(string message) => Write(message, null, "ef_log.txt");
+
         /// <summary>
         /// Clear log
         /// </summary>
-        public static void Clear()
+        internal static void Clear(string logPath = null)
         {
             try
             {
+                if (logPath == null)
+                    logPath = defaultLogPath;
+
                 //стираем лог
-                StreamWriter sw = new StreamWriter(@"log.txt", false, Encoding.UTF8);
+                StreamWriter sw = new StreamWriter(logPath, false, Encoding.UTF8);
                 sw.WriteLine("");
                 sw.Close();
             }

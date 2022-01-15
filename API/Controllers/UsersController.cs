@@ -55,7 +55,7 @@ namespace API.Controllers
         [HttpPut("{id}", Name = nameof(UserEdit))]
         public async Task<IActionResult> UserEdit(int id, User user)
         {
-            User user_ = _context.Users.AsNoTracking().FirstOrDefault(x => x.Email == user.Email);
+            User user_ = _context.Users.Include(u => u.Account).Include(u => u.Position).AsNoTracking().FirstOrDefault(x => x.Email == user.Email);
 
             if (id != user.Id)
             {
@@ -65,10 +65,22 @@ namespace API.Controllers
             if (user.Position != null)
             {
                 user.Position = _context.Positions.Where(p => p.Id == user.Position.Id).FirstOrDefault();
+                //если должность была изменена, то отзываем токен
+                var posId = user_.Position.Id;
+                if (posId != user.Position.Id)
+                {
+                    if (user_.Account != null)
+                    {
+                        user_.Account.IsTokenActive = false;
+                        user.Account = user_.Account;
+                    }
+                }
             }
 
             user.Pwd = user_.Pwd;
             _context.Entry(user).State = EntityState.Modified;
+            if(user.Account!=null)
+                _context.Entry(user.Account).State = EntityState.Modified;
 
             try
             {
