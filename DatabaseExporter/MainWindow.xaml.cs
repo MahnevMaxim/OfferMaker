@@ -357,10 +357,10 @@ namespace DatabaseExporter
                         descs.Add(new Description() { Text = text, IsComment = false, IsEnabled = true });
                     }
                 }
-                else
-                {
-                    descs = null;
-                }
+                //else
+                //{
+                //    descs = null;
+                //}
 
                 decimal costPrice = decimal.Parse(nom["CostPrice"].ToString());
                 decimal markUp = decimal.Parse(nom["Markup"].ToString());
