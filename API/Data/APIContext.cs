@@ -18,6 +18,7 @@ namespace API.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Offer> Offers { get; set; }
+        public DbSet<OfferTemplate> OfferTemplates { get; set; }
         public DbSet<NomenclatureGroup> NomenclatureGroups { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Hint> Hints { get; set; }
@@ -53,10 +54,6 @@ namespace API.Data
             #endregion Etc
 
             #region User
-
-            //builder.Entity<User>().Property(p => p.Permissions).HasConversion(
-            //    v => JsonConvert.SerializeObject(v),
-            //    v => JsonConvert.DeserializeObject<ObservableCollection<Permissions>>(v));
 
             builder.Entity<User>().Property(p => p.Image).HasConversion(
                 v => JsonConvert.SerializeObject(v),
@@ -116,7 +113,45 @@ namespace API.Data
 
             builder.Entity<Offer>().Property(n => n.CreateDate).HasDefaultValue(DateTime.UtcNow);
 
+            builder.Entity<Offer>().Property(p => p.Currencies).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Currency>>(v));
+
             #endregion Offer
+
+            #region OfferTemplate 
+
+            builder.Entity<OfferTemplate>().Property(p => p.Customer).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Customer>(v));
+
+            builder.Entity<OfferTemplate>().Property(p => p.OfferGroups).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<OfferGroup>>(v));
+
+            builder.Entity<OfferTemplate>().Property(p => p.OfferInfoBlocks).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<OfferInfoBlock>>(v));
+
+            builder.Entity<OfferTemplate>().Property(p => p.AdvertisingsUp).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
+
+            builder.Entity<OfferTemplate>().Property(p => p.AdvertisingsDown).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
+
+            builder.Entity<OfferTemplate>().Property(p => p.Discount).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Discount>(v));
+
+            builder.Entity<OfferTemplate>().Property(p => p.Currency).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Currency>(v));
+
+            builder.Entity<OfferTemplate>().Property(n => n.CreateDate).HasDefaultValue(DateTime.UtcNow);
+
+            #endregion OfferTemplate 
         }
     }
 }

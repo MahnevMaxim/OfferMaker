@@ -28,6 +28,7 @@ namespace OfferMaker
         ObservableCollection<Nomenclature> nomenclatures;
         ObservableCollection<NomenclatureGroup> nomenclatureGroups;
         ObservableCollection<Offer> offers;
+        ObservableCollection<Offer> offerTemplates;
         ObservableCollection<Currency> currencies;
         List<Hint> hints;
 
@@ -151,7 +152,6 @@ namespace OfferMaker
                     errorMessage += usersCr.Error.Message + "\n";
             }
 
-
             //получаем валюты
             var currenciesCr = await dataRepository.GetCurrencies();
             if (currenciesCr.Success)
@@ -198,6 +198,13 @@ namespace OfferMaker
                 else
                     errorMessage += offersCr.Error.Message + "\n";
             }
+
+            //получаем шаблоны
+            var offerTemplatesCr = await dataRepository.OfferTemplatesGet();
+            if (offerTemplatesCr.Success)
+                offerTemplates = offerTemplatesCr.Data;
+            else
+                errorMessage += offerTemplatesCr.Error.Message + "\n";
 
             //получаем хинты
             var hintsCr = await dataRepository.HintsGet();
@@ -258,6 +265,12 @@ namespace OfferMaker
             main.ArchiveFilter = new ArchiveFilter(offers, main.User);
             main.ArchiveOffers = main.ArchiveFilter.GetFilteredOffers();
             main.offers = offers;
+
+            //шаблоны
+            SetOffers(offerTemplates);
+            //main.TemplatesFilter = new ArchiveFilter(offerTemplates, main.User);
+            //main.OfferTemplates = main.TemplatesFilter.GetFilteredOffers();
+            main.offerTemplates = offerTemplates;
 
             //менеджер картинок
             main.ImageManager = ImageManager.GetInstance();

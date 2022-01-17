@@ -19,6 +19,7 @@ namespace OfferMaker
         Currency currency;
         Currency defaultCurrency;
         string currencyCharCode;
+        string currencyCharCode_;
         bool isShowPrice = true;
         bool isIncludeIntoOffer = true;
 
@@ -251,6 +252,15 @@ namespace OfferMaker
                 OnPropertyChanged();
                 UpdateCurrency();
             }
+        }
+
+        /// <summary>
+        /// Для сериализации без побочных эффектов.
+        /// </summary>
+        public string CurrencyCharCode_
+        {
+            get => currencyCharCode_;
+            set => currencyCharCode_ = value;
         }
 
         /// <summary>

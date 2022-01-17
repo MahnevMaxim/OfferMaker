@@ -87,7 +87,7 @@ namespace OfferMaker
                 writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
         }
 
-        internal void CreateTemplate() => OfferCreate(true);
+        internal void OfferTemplateCreate() => OfferCreate(true);
 
         internal void SaveOfferToFile()
         {
@@ -125,14 +125,14 @@ namespace OfferMaker
         /// <param name="isTemplate"></param>
         async internal void OfferCreate(bool isTemplate = false)
         {
-            if (constructor.Offer.Id != 0 && !constructor.Offer.IsTemplate)
+            if (constructor.Offer.Id != 0)
             {
                 Global.Main.SendMess("Нельзя перезаписать архив.");
                 return;
             }
 
             //если создаётся архивное КП
-            if (constructor.Offer.Id == 0 && !constructor.Offer.IsTemplate)
+            if (constructor.Offer.Id == 0 && !isTemplate)
             {
                 if(string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
                     || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
@@ -143,21 +143,22 @@ namespace OfferMaker
                 }    
             }
 
-            Offer offer;
+            CallResult cr;
             if (isTemplate)
             {
                 Offer temp = CreateTemplate(constructor.Offer);
-                Global.Main.offers.Add(temp);
-                offer = temp;
+                Global.OfferTemplates.Add(temp);
+                cr = await Global.Main.DataRepository.OfferTemplateCreate(temp, Global.OfferTemplates);
             }
             else
             {
-                Global.Main.offers.Add(constructor.Offer);
-                offer = constructor.Offer;
+                Global.Offers.Add(constructor.Offer.SetCurrency());
+                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer, Global.Offers);
             }
 
-            CallResult cr = await Global.Main.DataRepository.OfferCreate(offer, Global.Main.offers);
-            if (!cr.Success)
+            if (cr.Success)
+                Global.Main.SendMess(cr.SuccessMessage);
+            else
                 Global.Main.SendMess(cr.Error.Message);
             Global.Main.ArchiveOffers = Global.Main.ArchiveFilter.GetFilteredOffers();
         }

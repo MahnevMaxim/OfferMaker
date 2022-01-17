@@ -18,5 +18,7 @@ namespace Shared
         public bool IsIncludeIntoOffer { get; set; }
 
         public bool IsShowPrice { get; set; }
+
+        public string CurrencyCharCode_ { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20220116181106_ObservableCollectionCurrency")]
+    partial class ObservableCollectionCurrency
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,7 +187,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 17, 6, 29, 0, 358, DateTimeKind.Utc).AddTicks(5089));
+                        .HasDefaultValue(new DateTime(2022, 1, 16, 18, 11, 3, 167, DateTimeKind.Utc).AddTicks(8953));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -235,7 +237,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 17, 6, 29, 0, 363, DateTimeKind.Utc).AddTicks(4384));
+                        .HasDefaultValue(new DateTime(2022, 1, 16, 18, 11, 3, 172, DateTimeKind.Utc).AddTicks(1952));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -317,7 +319,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 17, 6, 29, 0, 366, DateTimeKind.Utc).AddTicks(4405));
+                        .HasDefaultValue(new DateTime(2022, 1, 16, 18, 11, 3, 175, DateTimeKind.Utc).AddTicks(405));
 
                     b.Property<string>("Currency")
                         .IsRequired()

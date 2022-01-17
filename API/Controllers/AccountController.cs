@@ -72,7 +72,6 @@ namespace API.Controllers
                 return BadRequest(new { errorText = ex.StackTrace });
             }
 
-            user.Pwd = null;
             var response = new
             {
                 access_token = encodedJwt,
@@ -131,7 +130,6 @@ namespace API.Controllers
                 return BadRequest(new { errorText = ex.StackTrace });
             }
 
-            user.Pwd = null;
             var response = new
             {
                 access_token = encodedJwt,
@@ -169,13 +167,13 @@ namespace API.Controllers
 
         async private Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            var res = await _context.Users.Include(u => u.Position).ToListAsync();
+            var res = await _context.Users.Include(u => u.Position).Include(u=>u.Account).ToListAsync();
             User user = res.FirstOrDefault(x => x.Email == username);
 
             if (user != null)
             {
                 var ph = new PasswordHasher();
-                var isCurrentHashValid = ph.VerifyHashedPassword(user.Pwd, password);
+                var isCurrentHashValid = ph.VerifyHashedPassword(user.Account.Password, password);
                 if (isCurrentHashValid == PasswordVerificationResult.Success)
                 {
                     var claims = new List<Claim>

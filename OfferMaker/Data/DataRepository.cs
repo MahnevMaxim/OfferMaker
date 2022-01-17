@@ -64,6 +64,14 @@ namespace OfferMaker
 
         #endregion Offers
 
+        #region Offer templates
+
+        async internal Task<CallResult> OfferTemplateCreate(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferTemplateCreate(offer, offers);
+
+        async internal Task<CallResult<ObservableCollection<Offer>>> OfferTemplatesGet() => await Proxy.OfferTemplatesGet();
+
+        #endregion Offer templates
+
         #region Categories
 
         async internal Task<CallResult<ObservableCollection<Category>>> GetCategories() => await Proxy.GetCategories();

@@ -39,6 +39,7 @@ namespace OfferMaker
         static readonly string usersEditErrorMess = "Ошибка при попытке сохранить пользователей на сервере.";
         static readonly string userEditErrorMess = "Ошибка при попытке сохранить пользователя на сервере.";
         static readonly string offersSelfGetErrorMess = "Ошибка при попытке получить свои КП с сервера.";
+        static readonly string offerTemplatesGetErrorMess = "Ошибка при попытке получить шаблоны с сервера.";
 
         public ServerData(string accessToken)
         {
@@ -88,7 +89,7 @@ namespace OfferMaker
                 ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
                 if (userCopy.Image?.Guid == null)
                     userCopy.Image = null;
-                var response = await client.UserCreateAsync(userCopy);
+                var response = await client.UserCreateAsync(user.Pwd, userCopy);
                 if (response.StatusCode == 201)
                 {
                     User res = Helpers.CloneObject<User>(response.Result);
@@ -140,7 +141,7 @@ namespace OfferMaker
             try
             {
                 ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
-                var response = await client.UserChangePasswordAsync(userCopy);
+                var response = await client.UserChangePasswordAsync(user.Pwd, userCopy);
                 if (response.StatusCode == 204)
                 {
                     return new CallResult() { SuccessMessage = "Пароль обновлён" };
@@ -248,8 +249,8 @@ namespace OfferMaker
             try
             {
                 Global.ImageManager.UploadImage(user);
-                ApiLib.User us = Helpers.CloneObject<ApiLib.User>(user);
-                await client.UserSelfEditAsync(us.Id, us);
+                ApiLib.User user_ = Helpers.CloneObject<ApiLib.User>(user);
+                await client.UserSelfEditAsync(user.Id, user.Pwd, user_);
                 return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
             }
             catch (Exception ex)
@@ -643,7 +644,7 @@ namespace OfferMaker
                 ApiLib.Offer offerCopy = Helpers.CloneObject<ApiLib.Offer>(offer);
                 var res = await client.OfferPostAsync(offerCopy);
                 offer.Id = res.Result.Id;
-                return new CallResult();
+                return new CallResult() { SuccessMessage = "КП сохранено в архив" };
             }
             catch (Exception ex)
             {
@@ -671,6 +672,46 @@ namespace OfferMaker
         }
 
         #endregion Offers
+
+        #region Offer templates
+
+        async internal Task<CallResult<ObservableCollection<Offer>>> OfferTemplatesGet()
+        {
+            try
+            {
+                var response = await client.OfferTemplatesGetAsync();
+                if (response.StatusCode == 200)
+                {
+                    ObservableCollection<Offer> res = Helpers.CloneObject<ObservableCollection<Offer>>(response.Result);
+                    return new CallResult<ObservableCollection<Offer>>() { Data = res };
+                }
+                else
+                {
+                    return GetApiError<ObservableCollection<Offer>>(offerTemplatesGetErrorMess, response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return GetApiError<ObservableCollection<Offer>>(offerTemplatesGetErrorMess, ex);
+            }
+        }
+
+        async internal Task<CallResult> OfferTemplateCreate(Offer offer)
+        {
+            try
+            {
+                ApiLib.OfferTemplate offerCopy = Helpers.CloneObject<ApiLib.OfferTemplate>(offer);
+                var res = await client.OfferTemplatePostAsync(offerCopy);
+                offer.Id = res.Result.Id;
+                return new CallResult() { SuccessMessage="Шаблон сохранён."};
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(offerCreateErrorMess, ex);
+            }
+        }
+
+        #endregion Offer templates
 
         #region Hints
 
