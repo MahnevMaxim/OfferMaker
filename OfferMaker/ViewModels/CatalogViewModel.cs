@@ -8,20 +8,64 @@ using System.Collections;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace OfferMaker.ViewModels
 {
     public class CatalogViewModel : BaseViewModel
     {
         Catalog modelCatalog;
-        
+        private IDialogCoordinator dialogCoordinator;
 
         public override void InitializeViewModel()
         {
             modelCatalog = (Catalog)model;
+            dialogCoordinator = ((Views.Catalog)view).dialogCoordinator;
             NomToCatDropHandler = new NomToCatDropHandler();
             NomToCatDragHandler = new NomToCatDragHandler();
             NomToNomListOfGroupDropHandler = new NomToNomListOfGroupDropHandler();
+        }
+
+        public RelayCommand NomenclatureDeleteCommand
+        {
+            get => new RelayCommand(obj =>
+            {
+                NomenclatureDelete((Nomenclature)obj);
+            });
+        }
+
+        async void NomenclatureDelete(Nomenclature nomenclature)
+        {
+            var dialogSettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "Удалить",
+                NegativeButtonText = "Отмена"
+            };
+            var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "Удаление номенклатуры", "Вы точно уверены, что хотите удалить номенклатуру?",
+                MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+            if (dialogRes == MessageDialogResult.Affirmative)
+                modelCatalog.DeleteNomenclature(nomenclature);
+        }
+
+        public RelayCommand DeleteNomenclaturesCommand
+        {
+            get => new RelayCommand(obj =>
+            {
+                DeleteNomenclatures();
+            });
+        }
+
+        async void DeleteNomenclatures()
+        {
+            var dialogSettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "Удалить",
+                NegativeButtonText = "Отмена"
+            };
+            var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "Удаление номенклатур", "Вы точно уверены, что хотите удалить номенклатуры?",
+                MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+            if (dialogRes == MessageDialogResult.Affirmative)
+                modelCatalog.DeleteNomenclatures();
         }
 
         public NomToCatDropHandler NomToCatDropHandler { get; set; }

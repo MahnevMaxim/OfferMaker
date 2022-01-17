@@ -50,35 +50,6 @@ namespace API.Controllers
             return offer;
         }
 
-        //[HttpPut("{id}", Name = nameof(OfferEdit))]
-        //public async Task<IActionResult> OfferEdit(int id, Offer offer)
-        //{
-        //    if (id != offer.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(offer).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!OfferExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
         [HttpPost(Name = nameof(OfferPost))]
         public async Task<ActionResult<Offer>> OfferPost(Offer offer)
         {

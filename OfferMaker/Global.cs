@@ -43,5 +43,8 @@ namespace OfferMaker
 
         public static List<Hint> Hints { get => Main.hints; }
 
-}
+        public static ObservableCollection<Offer> OfferTemplates { get => Main.offerTemplates; }
+
+        public static ObservableCollection<Offer> Offers { get => Main.offers; }
+    }
 }

@@ -51,11 +51,26 @@ namespace API.Controllers
                 return BadRequest();
             }
 
+            //проверяем, изменились ли права, если изменились, то отзываем токены
+            var permissions = _context.Positions.AsNoTracking().First(p => p.Id == id).Permissions;
+            var except1 = permissions.Except(position.Permissions);
+            var except2 = position.Permissions.Except(permissions);
+
             _context.Entry(position).State = EntityState.Modified;
 
             try
             {
                 await _context.SaveChangesAsync();
+                if (except1.Count() != 0 || except2.Count() != 0)
+                {
+                    await _context.Users.Include(u => u.Account).Include(u => u.Position)
+                       .Where(u => u.Position != null && u.Position.Id == id && u.Account != null).ForEachAsync(u =>
+                       {
+                           if (u.Account != null)
+                               u.Account.IsTokenActive = false;
+                       });
+                    await _context.SaveChangesAsync();
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -96,7 +111,7 @@ namespace API.Controllers
         [HttpPost(Name = nameof(PositionPost))]
         public async Task<ActionResult<Position>> PositionPost(Position position)
         {
-            if (_context.Positions.Where(p=>p.PositionName==position.PositionName).Count()>0)
+            if (_context.Positions.Where(p => p.PositionName == position.PositionName).Count() > 0)
             {
                 return StatusCode(409);
             }

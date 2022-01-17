@@ -81,9 +81,32 @@ namespace OfferMaker.Views
 
         #endregion Catalog searching
 
-        private void catalogExtendedTreeView_SelectedItemChanged_1(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
+        #region Categories filter
 
+        private void ShowAllCategoryButton_Click(object sender, RoutedEventArgs e) => UnselectTreeItem();
+
+        private void UnselectTreeItem()
+        {
+            if (catalogExtendedTreeView.SelectedItem == null)
+                return;
+
+            if (catalogExtendedTreeView.SelectedItem is TreeViewItem)
+            {
+                (catalogExtendedTreeView.SelectedItem as TreeViewItem).IsSelected = false;
+            }
+            else
+            {
+                TreeViewItem item = catalogExtendedTreeView.ItemContainerGenerator.ContainerFromIndex(0) as TreeViewItem;
+                if (item != null)
+                {
+                    item.IsSelected = true;
+                    item.IsSelected = false;
+                }
+            }
         }
+
+        private void ShowWithoutCategoryButton_Click(object sender, RoutedEventArgs e) => UnselectTreeItem();
+
+        #endregion Categories filter
     }
 }

@@ -264,6 +264,38 @@ namespace OfferMaker
 
         #endregion Nomenclature groups
 
+        #region Offer templates
+
+        async internal Task<CallResult> OfferTemplateCreate(Offer offer, ObservableCollection<Offer> offers)
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.OfferTemplateCreate(offer);
+            if (AppMode == AppMode.Offline)
+                return LocalData.UpdateCache(offers, LocalDataConfig.OfferTemplates);
+
+            var callResult = await ServerData.OfferTemplateCreate(offer);
+            LocalData.UpdateCache(offers, LocalDataConfig.OfferTemplates);
+            return callResult;
+        }
+
+        async internal Task<CallResult<ObservableCollection<Offer>>> OfferTemplatesGet()
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.OfferTemplatesGet();
+            if (AppMode == AppMode.Offline)
+                return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OfferTemplates);
+
+            CallResult<ObservableCollection<Offer>> callResult = await ServerData.OfferTemplatesGet();
+            if (callResult.Success)
+            {
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.OfferTemplates);
+                return callResult;
+            }
+            return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OfferTemplates);
+        }
+
+        #endregion Offer templates
+
         #region Offers
 
         /// <summary>

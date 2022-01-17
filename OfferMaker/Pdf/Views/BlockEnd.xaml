@@ -30,12 +30,12 @@
                             </Style>
                         </TextBlock.Style>
                     </TextBlock>
-                    <TextBlock Text="{Binding PriceSum, Converter={StaticResource numConvertors}}"
+                    <TextBlock Text="{Binding PriceSumWrapper, Converter={StaticResource numConvertors}}"
                                FontSize="16pt" 
                                HorizontalAlignment="Right"
                                Margin="0,10,0,0"  
                                FontFamily="Segoe UI Semibold"/>
-                    <TextBlock Text="{Binding Currency.Symbol}"
+                    <TextBlock Text="{Binding CurrencyWrapper.Symbol}"
                                FontSize="16pt" 
                                Margin="5,10,0,0" 
                                HorizontalAlignment="Left" 

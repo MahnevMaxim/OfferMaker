@@ -5,6 +5,8 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:local="clr-namespace:OfferMaker.Views"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                 Dialog:DialogParticipation.Register="{Binding}"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:root="clr-namespace:OfferMaker"
                  xmlns:customControls="clr-namespace:OfferMaker"
@@ -113,7 +115,8 @@
                         </Button.CommandParameter>
                     </Button>
                     <Button Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.NomenclatureDeleteCommand}"
+                            CommandParameter="{Binding Path=.}"
                             Height="35"
                             Width="35"
                             Margin="5"
@@ -121,12 +124,6 @@
                         <iconPacks:PackIconMaterial Kind="Close"
                                                     Width="20"
                                                     Height="20" />
-                        <Button.CommandParameter>
-                            <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="DeleteNomenclurue" />
-                                <Binding Path="." />
-                            </MultiBinding>
-                        </Button.CommandParameter>
                     </Button>
                 </StackPanel>
             </DataTemplate>
@@ -357,8 +354,7 @@
                                     Margin="5" />
                             <Button Content="Удалить номенклатуры"
                                     Grid.Column="1"
-                                    CommandParameter="DeleteNomenclatures"
-                                    Command="{Binding Cmd}"
+                                    Command="{Binding DeleteNomenclaturesCommand}"
                                     Style="{DynamicResource MahApps.Styles.Button.Square}"
                                     Margin="5" />
                         </Grid>

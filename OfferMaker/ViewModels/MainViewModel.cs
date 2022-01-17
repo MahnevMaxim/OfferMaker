@@ -85,6 +85,8 @@ namespace OfferMaker.ViewModels
 
         public ObservableCollection<Offer> ArchiveOffers { get => modelMain.ArchiveOffers; }
 
+        public ObservableCollection<Offer> OfferTemplates { get => modelMain.OfferTemplates; }
+
         public Offer SelectedOfferInArchive 
         { 
             get => modelMain.SelectedOfferInArchive;

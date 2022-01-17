@@ -480,6 +480,11 @@ namespace OfferMaker
         /// </summary>
         public bool IsNeedCalculateInRub { get => isResultSummInRub && Currency.CharCode != "RUB" ? true : false; }
 
+        /// <summary>
+        /// Список валют для архива.
+        /// </summary>
+        public ObservableCollection<Currency> Currencies { get; set; }
+
         #endregion Money
 
         public Offer() { }
@@ -520,6 +525,28 @@ namespace OfferMaker
         }
 
         public int GetAddGroupsCounter() => ++addGroupsCounter;
+
+        internal Offer SetCurrency()
+        {
+            Currencies = new ObservableCollection<Currency>();
+            Currencies.Add(Currency);
+            foreach(OfferGroup offerGroup in OfferGroups)
+            {
+                foreach(NomWrapper nw in offerGroup.NomWrappers)
+                {
+                    if(!Currencies.Contains(nw.Currency))
+                    {
+                        Currencies.Add(nw.Currency);
+                    }
+
+                    if(!Currencies.Contains(nw.DefaultCurrency))
+                    {
+                        Currencies.Add(nw.DefaultCurrency);
+                    }
+                }
+            }
+            return this;
+        }
 
         #region InterfaceUpdaters
 

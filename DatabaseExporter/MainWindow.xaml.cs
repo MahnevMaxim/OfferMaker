@@ -41,7 +41,7 @@ namespace DatabaseExporter
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             httpClient = new System.Net.Http.HttpClient();
-            string apiEndpoint = "https://localhost:44333/";
+            string apiEndpoint = "https://localhost:44313/";
             client = new Client(apiEndpoint, httpClient);
 
             string con = "Server=(localdb)\\mssqllocaldb;Database=AdsStore;Trusted_Connection=True;";
@@ -81,10 +81,9 @@ namespace DatabaseExporter
                     LastName = secondName,
                     PhoneNumber1 = phone1,
                     PhoneNumber2 = phone2,
-                    Email = email,
-                    //PhotoPath = id + ".png"
+                    Email = email
                 };
-                var res = await client.UserCreateAsync(user_);
+                var res = await client.UserCreateAsync(null, user_);
             }
             MessageBox.Show("пользователи добавлены");
         }
@@ -168,10 +167,10 @@ namespace DatabaseExporter
                 };
                 nomenclature.Descriptions.ToList().ForEach(d=>d.IsEnabled=true);
 
-                //string fPath = "avitoimages\\" + image.Guid + ".jpg";
-                //using var stream = new MemoryStream(File.ReadAllBytes(fPath).ToArray());
-                //FileParameter param = new FileParameter(stream, System.IO.Path.GetFileName(fPath));
-                //var wwww = client.ImageUploadAsync(param);
+                string fPath = "avitoimages\\" + image.Guid + ".jpg";
+                using var stream = new MemoryStream(File.ReadAllBytes(fPath).ToArray());
+                FileParameter param = new FileParameter(stream, System.IO.Path.GetFileName(fPath));
+                var wwww = client.ImagesPOSTAsync(param);
 
                 try
                 {

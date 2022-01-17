@@ -24,7 +24,9 @@ namespace OfferMaker
         int currentMainSelectedTabIndex;
         ObservableCollection<User> users;
         ArchiveFilter archiveFilter;
+        ArchiveFilter templatesFilter;
         ObservableCollection<Offer> archiveOffers = new ObservableCollection<Offer>();
+        public ObservableCollection<Offer> offerTemplates = new ObservableCollection<Offer>();
 
         #endregion Fields
 
@@ -91,6 +93,19 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Все КП получаем строго через ArchiveFilter.
+        /// </summary>
+        public ObservableCollection<Offer> OfferTemplates
+        {
+            get => offerTemplates;
+            set
+            {
+                offerTemplates = value;
+                OnPropertyChanged();
+            }
+        }
+
         public Offer SelectedOfferInArchive { get; set; }
 
         public int CurrentMainSelectedTabIndex
@@ -120,6 +135,16 @@ namespace OfferMaker
             set
             {
                 archiveFilter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ArchiveFilter TemplatesFilter
+        {
+            get => templatesFilter;
+            set
+            {
+                templatesFilter = value;
                 OnPropertyChanged();
             }
         }
@@ -157,6 +182,7 @@ namespace OfferMaker
         #region Fields
 
         public ObservableCollection<Offer> offers;
+
         public static List<Hint> hints;
 
         #endregion Fields
@@ -380,7 +406,7 @@ namespace OfferMaker
 
         public void SaveToPdfWithoutBanner() => DocManager.SaveToPdfWithoutBanner();
 
-        public void SaveTemplateToArchive() => DocManager.CreateTemplate();
+        public void OfferTemplateCreate() => DocManager.OfferTemplateCreate();
 
         public void SaveOfferToFile() => DocManager.SaveOfferToFile();
 

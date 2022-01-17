@@ -17,8 +17,6 @@ namespace Shared
         [Required]
         public string Email { get; set; }
 
-        public string Pwd { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
@@ -31,6 +29,7 @@ namespace Shared
 
         public Position Position { get; set; }
 
+        [Required]
         public Account Account { get; set; }
     }
 }

@@ -227,9 +227,9 @@ namespace OfferMaker
             OnSendMessage(cr.Message);
         }
 
-        async public void UsersEdit()
+        async public void UserEdit()
         {
-            CallResult cr = await Global.Main.DataRepository.UsersEdit(Users);
+            CallResult cr = await Global.Main.DataRepository.UserEdit(SelectedUser);
             OnSendMessage(cr.Message);
         }
 

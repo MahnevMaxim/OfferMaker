@@ -16,7 +16,7 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class UsersController : ControllerBase
     {
         private readonly APIContext _context;
@@ -33,7 +33,6 @@ namespace API.Controllers
             var u = User.Identity.Name;
             var res = Request.Headers;
             var users = await _context.Users.Include(u => u.Position).ToListAsync();
-            users.ForEach(u => u.Pwd = null);
             return users;
         }
 
@@ -47,7 +46,6 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            user.Pwd = null;
             return user;
         }
 
@@ -55,7 +53,7 @@ namespace API.Controllers
         [HttpPut("{id}", Name = nameof(UserEdit))]
         public async Task<IActionResult> UserEdit(int id, User user)
         {
-            User user_ = _context.Users.AsNoTracking().FirstOrDefault(x => x.Email == user.Email);
+            User user_ = _context.Users.Include(u => u.Account).Include(u => u.Position).FirstOrDefault(x => x.Email == user.Email);
 
             if (id != user.Id)
             {
@@ -65,10 +63,17 @@ namespace API.Controllers
             if (user.Position != null)
             {
                 user.Position = _context.Positions.Where(p => p.Id == user.Position.Id).FirstOrDefault();
+                //если должность была изменена, то отзываем токен
+                var posId = user_.Position?.Id;
+                if (posId != user.Position.Id)
+                {
+                    user_.Position = user.Position;
+                    user_.Account.IsTokenActive = false;
+                    user.Account = user_.Account;
+                }
             }
 
-            user.Pwd = user_.Pwd;
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(user_).CurrentValues.SetValues(user);
 
             try
             {
@@ -90,15 +95,15 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}/self", Name = nameof(UserSelfEdit))]
-        public async Task<IActionResult> UserSelfEdit(int id, User user)
+        public async Task<IActionResult> UserSelfEdit(int id, User user, string password)
         {
             var uName = User.Identity.Name;
             if (uName == user.Email)
             {
-                User user_ = _context.Users.AsNoTracking().FirstOrDefault(x => x.Email == user.Email);
+                User user_ = _context.Users.Include(u => u.Account).FirstOrDefault(u => u.Email == user.Email);
 
                 var ph = new PasswordHasher();
-                var isCurrentHashValid = ph.VerifyHashedPassword(user_.Pwd, user.Pwd);
+                var isCurrentHashValid = ph.VerifyHashedPassword(user_.Account.Password, password);
                 if (isCurrentHashValid != Microsoft.AspNet.Identity.PasswordVerificationResult.Success)
                 {
                     return BadRequest(new { errorText = "Invalid username or password." });
@@ -109,13 +114,7 @@ namespace API.Controllers
                     return BadRequest();
                 }
 
-                if (user.Position != null)
-                {
-                    user.Position = _context.Positions.Where(p => p.Id == user.Position.Id).FirstOrDefault();
-                }
-
-                user.Pwd = user_.Pwd;
-                _context.Entry(user).State = EntityState.Modified;
+                _context.Entry(user_).CurrentValues.SetValues(user);
 
                 try
                 {
@@ -140,16 +139,16 @@ namespace API.Controllers
 
         [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPut("password", Name = nameof(UserChangePassword))]
-        public async Task<IActionResult> UserChangePassword(User user)
+        public async Task<IActionResult> UserChangePassword(User user, string password)
         {
-            User user_ = _context.Users.Where(u => u.Email == user.Email).FirstOrDefault();
+            User user_ = _context.Users.Include(u => u.Account).Where(u => u.Email == user.Email).FirstOrDefault();
 
             if (user_ != null)
             {
                 try
                 {
                     var ph = new PasswordHasher();
-                    user_.Pwd = ph.HashPassword(user.Pwd);
+                    user_.Account.Password = ph.HashPassword(password);
                     await _context.SaveChangesAsync();
                     return NoContent();
                 }
@@ -169,14 +168,14 @@ namespace API.Controllers
         public async Task<IActionResult> UserSelfChangePassword(User user, string oldPassword)
         {
             var uName = User.Identity.Name;
-            User user_ = _context.Users.Where(u => u.Email == user.Email).FirstOrDefault();
+            User user_ = _context.Users.Include(u => u.Account).Where(u => u.Email == user.Email).FirstOrDefault();
 
             //проверяем старый пароль, если пользователь редактирует себя
             //вот хуй знает, почему для себя надо пароль, а для сброса всех остальных пользователей не надо
             if (uName == user.Email)
             {
                 var ph = new PasswordHasher();
-                var isCurrentHashValid = ph.VerifyHashedPassword(user_.Pwd, oldPassword);
+                var isCurrentHashValid = ph.VerifyHashedPassword(user_.Account.Password, oldPassword);
                 if (isCurrentHashValid != Microsoft.AspNet.Identity.PasswordVerificationResult.Success)
                 {
                     return BadRequest(new { errorText = "Invalid username or password." });
@@ -192,7 +191,7 @@ namespace API.Controllers
                 try
                 {
                     var ph = new PasswordHasher();
-                    user_.Pwd = ph.HashPassword(user.Pwd);
+                    user_.Account.Password = ph.HashPassword(oldPassword);
                     await _context.SaveChangesAsync();
                     return NoContent();
                 }
@@ -230,10 +229,14 @@ namespace API.Controllers
 
         [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPost(Name = nameof(UserCreate))]
-        public async Task<ActionResult<User>> UserCreate(User user)
+        public async Task<ActionResult<User>> UserCreate(User user, string password)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            if (string.IsNullOrWhiteSpace(password))
+                password = "88888888";
+            await UserChangePassword(user, password);
 
             return CreatedAtAction(nameof(UserGet), new { id = user.Id }, user);
         }

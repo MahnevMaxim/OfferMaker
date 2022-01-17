@@ -358,7 +358,7 @@ namespace OfferMaker
         /// Удаление номенклатуры из каталога.
         /// </summary>
         /// <param name="nomenclature"></param>
-        public void DeleteNomenclurue(Nomenclature nomenclature) => CatalogFilter.Remove(nomenclature);
+        public void DeleteNomenclature(Nomenclature nomenclature) => CatalogFilter.Remove(nomenclature);
 
         /// <summary>
         /// Удаление номенклатур из каталога.

@@ -52,32 +52,53 @@
                   VerticalAlignment="Stretch"
                   MinWidth="150">
             <AdornerDecorator>
-                <root:ExtendedTreeView ItemsSource="{Binding CategoriesTree}"
-                                       SelectedItem_="{Binding SelectedCat, Mode=TwoWay}"
-                                       x:Name="catalogExtendedTreeView"
-                                       SelectedItemChanged="catalogExtendedTreeView_SelectedItemChanged"
-                                       HorizontalAlignment="Stretch"
-                                       VerticalAlignment="Stretch"
-                                       Margin="10">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
-                            <TextBlock Text="{Binding Title}"
-                                       FontSize="16">
-                                <TextBlock.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Это не каталог, редактирование в каталоге" />
-                                    </ContextMenu>
-                                </TextBlock.ContextMenu>
-                            </TextBlock>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                    <TreeView.ItemContainerStyle>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <Setter Property="IsExpanded"
-                                    Value="True" />
-                        </Style>
-                    </TreeView.ItemContainerStyle>
-                </root:ExtendedTreeView>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Button CommandParameter="ShowAllCategory"
+                            Command="{Binding Cmd}"
+                            Content="Все категории"
+                            Style="{DynamicResource MahApps.Styles.Button.Square}"
+                            Margin="5"
+                            Click="ShowAllCategoryButton_Click" />
+                    <Button CommandParameter="ShowWithoutCategory"
+                            Command="{Binding Cmd}"
+                            Grid.Row="1"
+                            Content="Без категории"
+                            Style="{DynamicResource MahApps.Styles.Button.Square}"
+                            Margin="5"
+                            Click="ShowWithoutCategoryButton_Click" />
+                    <root:ExtendedTreeView ItemsSource="{Binding CategoriesTree}"
+                                           SelectedItem_="{Binding SelectedCat, Mode=TwoWay}"
+                                           x:Name="catalogExtendedTreeView"
+                                           Grid.Row="2"
+                                           SelectedItemChanged="catalogExtendedTreeView_SelectedItemChanged"
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch"
+                                           Margin="10">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Childs}">
+                                <TextBlock Text="{Binding Title}"
+                                           FontSize="16">
+                                    <TextBlock.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Это не каталог, редактирование в каталоге" />
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                </TextBlock>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="IsExpanded"
+                                        Value="True" />
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+                    </root:ExtendedTreeView>
+                </Grid>
             </AdornerDecorator>
         </GroupBox>
         <GridSplitter Width="2"
