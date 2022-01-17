@@ -215,7 +215,7 @@ namespace OfferMaker
                 return;
             }
 
-            NewUser.Pwd = NewUserPassword;
+            NewUser.Account = new Account() { Password=NewUserPassword};
             CallResult<User> cr = await Global.Main.DataRepository.UserCreate(NewUser);
             if (cr.Success)
             {

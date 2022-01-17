@@ -180,10 +180,19 @@ namespace API.Controllers
                     {
                         new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                     };
-                    foreach (var p in user.Position.Permissions)
+
+                    if(user.Position!=null)
                     {
-                        claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, p.ToString()));
+                        foreach (var p in user.Position.Permissions)
+                        {
+                            claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, p.ToString()));
+                        }
                     }
+                    else
+                    {
+                        user.Position = new Position() { Permissions = new System.Collections.ObjectModel.ObservableCollection<Permissions>()};
+                    }
+                    
                     ClaimsIdentity claimsIdentity =
                     new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                         ClaimsIdentity.DefaultRoleClaimType);

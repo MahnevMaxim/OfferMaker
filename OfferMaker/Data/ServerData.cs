@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.IO;
 using Microsoft.AspNetCore.Http.Internal;
 using System.Net.Http.Headers;
+using Newtonsoft.Json.Linq;
 
 namespace OfferMaker
 {
@@ -89,7 +90,7 @@ namespace OfferMaker
                 ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
                 if (userCopy.Image?.Guid == null)
                     userCopy.Image = null;
-                var response = await client.UserCreateAsync(user.Pwd, userCopy);
+                var response = await client.UserCreateAsync(userCopy);
                 if (response.StatusCode == 201)
                 {
                     User res = Helpers.CloneObject<User>(response.Result);
@@ -762,13 +763,34 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMess + "Код ошибки " + apiEx.StatusCode) };
+                    string errorDetails = "";
+                    if(apiEx.Response!=null)
+                        errorDetails = TryGetErrorDetails(apiEx.Response);
+                    string errorMessage = errorMess + "Код ошибки " + apiEx.StatusCode;
+                    if (!string.IsNullOrWhiteSpace(errorDetails))
+                        errorMessage += "\n" + errorDetails;
+                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMessage) };
                 }
             }
             else
             {
                 return new CallResult() { Error = new Error(errorMess) };
             }
+        }
+
+        private string TryGetErrorDetails(string response)
+        {
+            string errorDetails = "";
+            try
+            {
+                JObject jo = JObject.Parse(response);
+                errorDetails = jo["errors"].ToString();
+            }
+            catch(Exception ex)
+            {
+                Log.Write(ex);
+            }
+            return errorDetails;
         }
 
         #endregion

@@ -83,7 +83,8 @@ namespace DatabaseExporter
                     PhoneNumber2 = phone2,
                     Email = email
                 };
-                var res = await client.UserCreateAsync(null, user_);
+                user_.Account = new Account();
+                var res = await client.UserCreateAsync(user_);
             }
             MessageBox.Show("пользователи добавлены");
         }
