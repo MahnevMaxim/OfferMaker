@@ -214,7 +214,7 @@ namespace OfferMaker
             get
             {
                 if (currency == null)
-                    currency = Global.GetCurrencyByCode(CurrencyCharCode); 
+                    currency = Global.GetConstructorCurrencyByCode(CurrencyCharCode); 
                 return currency;
             }
             set
@@ -233,7 +233,7 @@ namespace OfferMaker
             get
             {
                 if (defaultCurrency == null)
-                    defaultCurrency = Global.GetCurrencyByCode(Nomenclature.CurrencyCharCode); 
+                    defaultCurrency = Global.GetConstructorCurrencyByCode(Nomenclature.CurrencyCharCode); 
                 return defaultCurrency;
             }
         }
@@ -248,7 +248,7 @@ namespace OfferMaker
             set
             {
                 currencyCharCode = value;
-                currency = Global.GetCurrencyByCode(currencyCharCode); 
+                currency = Global.GetConstructorCurrencyByCode(currencyCharCode); 
                 OnPropertyChanged();
                 UpdateCurrency();
             }
@@ -298,6 +298,10 @@ namespace OfferMaker
         #endregion Init
 
         #region Methods
+
+        internal void SetCurrencyCharCode() => CurrencyCharCode_ = CurrencyCharCode;
+
+        internal void RestoreCurrencyCharCode() => CurrencyCharCode = CurrencyCharCode_;
 
         /// <summary>
         /// Обновление валюты.

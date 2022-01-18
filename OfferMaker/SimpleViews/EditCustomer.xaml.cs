@@ -30,6 +30,12 @@ namespace OfferMaker.SimpleViews
         {
             InitializeComponent();
             Offer = offer;
+
+            Offer.OfferName = "Название КП";
+            Offer.Customer.FullName = "Сергей Иванович";
+            Offer.Customer.Organization = "Монолит";
+            Offer.Customer.Location = "Красноярск";
+
             offerBackup = Helpers.CloneObject<Offer>(offer);
             DataContext = Offer;
         }
@@ -46,7 +52,6 @@ namespace OfferMaker.SimpleViews
         {
             Offer.OfferName = offerBackup.OfferName;
             Offer.Customer.FullName = offerBackup.Customer.FullName;
-            Offer.Customer.Position = offerBackup.Customer.Position;
             Offer.Customer.Organization = offerBackup.Customer.Organization;
             Offer.Customer.Location = offerBackup.Customer.Location;
         }

@@ -142,7 +142,7 @@
                 </StackPanel>
             </mah:Flyout>
 
-            <mah:Flyout Header="Фильтр"
+            <mah:Flyout Header="Фильтр архива"
                         IsModal="True"
                         Position="Right"
                         IsOpen="{Binding IsOffersFilterOpen}">
@@ -163,7 +163,7 @@
                             <RowDefinition Height="50"/>
                             <RowDefinition Height="50"/>
                         </Grid.RowDefinitions>
-                        <CheckBox IsChecked="{Binding ArchiveFilter.IsShowOnlyCurrentUser}" Content="показывать только свои КП"
+                        <CheckBox IsChecked="{Binding ArchiveStore.IsShowOnlyCurrentUser}" Content="показывать только свои КП"
                                   Grid.Column="1"
                                   Margin="10"/>
                         <TextBlock Text="№" 
@@ -177,20 +177,20 @@
                         <TextBlock Text="город" Grid.Row="5" HorizontalAlignment="Right"  Margin="10" VerticalAlignment="Center"/>
                         <TextBlock Text="создатель" Grid.Row="6" HorizontalAlignment="Right"  Margin="10" VerticalAlignment="Center"/>
                         <TextBlock Text="менеджер" Grid.Row="7" HorizontalAlignment="Right"  Margin="10" VerticalAlignment="Center"/>
-                        <TextBox Text="{Binding ArchiveFilter.Id}"
+                        <TextBox Text="{Binding ArchiveStore.Id}"
                                  mah:TextBoxHelper.ClearTextButton="True"
                                  Grid.Row="1" Grid.Column="1" Margin="10" 
                                  ToolTip="Если это поле заполнено, то работает поиск по Id и остальные поля игнорируются"
                                  VerticalAlignment="Center"/>
                         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Margin="10">
-                            <DatePicker SelectedDate="{Binding ArchiveFilter.BeginDateTime}"
+                            <DatePicker SelectedDate="{Binding ArchiveStore.BeginDateTime}"
                                         Width="150"
                                         HorizontalContentAlignment="Stretch"
                                         mah:TextBoxHelper.ClearTextButton="True"
                                         mah:TextBoxHelper.UseFloatingWatermark="True"
                                         mah:TextBoxHelper.Watermark="от"
                                         mah:TextBoxHelper.WatermarkAlignment="Right" />
-                            <DatePicker SelectedDate="{Binding ArchiveFilter.EndDateTime}"
+                            <DatePicker SelectedDate="{Binding ArchiveStore.EndDateTime}"
                                         Width="150"
                                         Margin="10,0"
                                         HorizontalContentAlignment="Stretch"
@@ -199,22 +199,22 @@
                                         mah:TextBoxHelper.Watermark="до"
                                         mah:TextBoxHelper.WatermarkAlignment="Right" />
                         </StackPanel>
-                        <TextBox Text="{Binding ArchiveFilter.CustomerName}"
+                        <TextBox Text="{Binding ArchiveStore.CustomerName}"
                                  mah:TextBoxHelper.ClearTextButton="True"
                                  Grid.Row="3" Grid.Column="1" Margin="10"/>
-                        <TextBox Text="{Binding ArchiveFilter.CompanyName}"
+                        <TextBox Text="{Binding ArchiveStore.CompanyName}"
                                  mah:TextBoxHelper.ClearTextButton="True"
                                  Grid.Row="4" Grid.Column="1" Margin="10"/>
-                        <TextBox Text="{Binding ArchiveFilter.City}"
+                        <TextBox Text="{Binding ArchiveStore.City}"
                                  mah:TextBoxHelper.ClearTextButton="True"
                                  Grid.Row="5" Grid.Column="1" Margin="10"/>
                         <ComboBox ItemsSource="{Binding Users}"
                                   mah:TextBoxHelper.ClearTextButton="True"
-                                  SelectedItem="{Binding ArchiveFilter.Creator}"
+                                  SelectedItem="{Binding ArchiveStore.Creator}"
                                   Grid.Row="6" Grid.Column="1" Margin="10"/>
                         <ComboBox ItemsSource="{Binding Users}"
                                   mah:TextBoxHelper.ClearTextButton="True"
-                                  SelectedItem="{Binding ArchiveFilter.Manager}"
+                                  SelectedItem="{Binding ArchiveStore.Manager}"
                                   Grid.Row="7" Grid.Column="1" Margin="10"/>
                         <Button Content="Применить" 
                                 ToolTip="Включает скидку и закрывает меню"
@@ -232,6 +232,118 @@
                                 Style="{DynamicResource MahApps.Styles.Button.Square}"
                                 Height="30"
                                 Margin="10"/>
+                    </Grid>
+
+                </StackPanel>
+            </mah:Flyout>
+
+            <mah:Flyout Header="Фильтр шаблонов"
+                        IsModal="True"
+                        Position="Right"
+                        IsOpen="{Binding IsOfferTemplatesFilterOpen}">
+                <StackPanel Width="450"
+                            Margin="20">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="60" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                            <RowDefinition Height="50" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="№"
+                                   Grid.Row="1"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="дата"
+                                   Grid.Row="2"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="ФИО заказчика"
+                                   Grid.Row="3"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="компания"
+                                   Grid.Row="4"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="город"
+                                   Grid.Row="5"
+                                   HorizontalAlignment="Right"
+                                   Margin="10"
+                                   VerticalAlignment="Center" />
+                        <TextBox Text="{Binding ArchiveStore.Id}"
+                                 mah:TextBoxHelper.ClearTextButton="True"
+                                 Grid.Row="1"
+                                 Grid.Column="1"
+                                 Margin="10"
+                                 ToolTip="Если это поле заполнено, то работает поиск по Id и остальные поля игнорируются"
+                                 VerticalAlignment="Center" />
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="10">
+                            <DatePicker SelectedDate="{Binding ArchiveStore.BeginDateTime}"
+                                        Width="150"
+                                        HorizontalContentAlignment="Stretch"
+                                        mah:TextBoxHelper.ClearTextButton="True"
+                                        mah:TextBoxHelper.UseFloatingWatermark="True"
+                                        mah:TextBoxHelper.Watermark="от"
+                                        mah:TextBoxHelper.WatermarkAlignment="Right" />
+                            <DatePicker SelectedDate="{Binding ArchiveStore.EndDateTime}"
+                                        Width="150"
+                                        Margin="10,0"
+                                        HorizontalContentAlignment="Stretch"
+                                        mah:TextBoxHelper.ClearTextButton="True"
+                                        mah:TextBoxHelper.UseFloatingWatermark="True"
+                                        mah:TextBoxHelper.Watermark="до"
+                                        mah:TextBoxHelper.WatermarkAlignment="Right" />
+                        </StackPanel>
+                        <TextBox Text="{Binding ArchiveStore.CustomerName}"
+                                 mah:TextBoxHelper.ClearTextButton="True"
+                                 Grid.Row="3"
+                                 Grid.Column="1"
+                                 Margin="10" />
+                        <TextBox Text="{Binding ArchiveStore.CompanyName}"
+                                 mah:TextBoxHelper.ClearTextButton="True"
+                                 Grid.Row="4"
+                                 Grid.Column="1"
+                                 Margin="10" />
+                        <TextBox Text="{Binding ArchiveStore.City}"
+                                 mah:TextBoxHelper.ClearTextButton="True"
+                                 Grid.Row="5"
+                                 Grid.Column="1"
+                                 Margin="10" />
+                        <Button Content="Применить"
+                                ToolTip="Включает скидку и закрывает меню"
+                                Grid.Row="6"
+                                Grid.Column="0"
+                                CommandParameter="ApplyArchiveFilter"
+                                Command="{Binding Cmd}"
+                                Style="{DynamicResource MahApps.Styles.Button.Square}"
+                                Margin="10"
+                                Height="30" />
+                        <Button Content="Сброс"
+                                ToolTip="Отключает скидку и закрывает меню"
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                CommandParameter="ResetArchiveFilter"
+                                Command="{Binding Cmd}"
+                                Style="{DynamicResource MahApps.Styles.Button.Square}"
+                                Height="30"
+                                Margin="10" />
                     </Grid>
 
                 </StackPanel>
@@ -370,8 +482,8 @@
                     Grid.Row="0"
                     Margin="0"
                     mah:TabControlHelper.Underlined="TabItems">
-            
-            <TabItem Header="Конструктор" 
+
+            <TabItem Header="Конструктор"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
                 <Grid Background="{Binding Settings.AdditionalColor}">
@@ -528,13 +640,13 @@
                                 VerticalAlignment="Top"
                                 BorderThickness="1"
                                 BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                            <Image Source="{Binding Banner}"  
+                            <Image Source="{Binding Banner}"
                                    Margin="2"
                                    ToolTip="Баннер">
                                 <Image.InputBindings>
                                     <MouseBinding MouseAction="LeftClick"
                                                   CommandParameter="OpenBanners"
-                                                  Command="{Binding Cmd}"/>
+                                                  Command="{Binding Cmd}" />
                                 </Image.InputBindings>
                             </Image>
                         </Border>
@@ -552,10 +664,10 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="{Binding Image.LocalPhotoPath}"
                                                Width="38"
-                                               Height="38"/>
+                                               Height="38" />
                                         <StackPanel Margin="5,0,0,0">
-                                            <TextBlock Text="{Binding FirstName}"/>
-                                            <TextBlock Text="{Binding LastName}"/>
+                                            <TextBlock Text="{Binding FirstName}" />
+                                            <TextBlock Text="{Binding LastName}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </DataTemplate>
@@ -563,13 +675,13 @@
                         </ComboBox>
                         <StackPanel Margin="5">
                             <CheckBox Content="Детально"
-                                      IsChecked="{Binding IsShowPriceDetails, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                      IsChecked="{Binding IsShowPriceDetails, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                             <CheckBox Content="По себестоимости"
                                       IsChecked="{Binding IsCreateByCostPrice, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                      Margin="0,5,0,0"/>
+                                      Margin="0,5,0,0" />
                             <CheckBox Content="Скрыть цены номенклатур"
                                       IsChecked="{Binding IsHideNomsPrice, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                      Margin="0,5,0,0"/>
+                                      Margin="0,5,0,0" />
                         </StackPanel>
                         <StackPanel Margin="5">
                             <CheckBox IsChecked="{Binding IsResultSummInRub}"
@@ -587,93 +699,17 @@
                             <ComboBox Width="150"
                                       SelectedIndex="{Binding IsWithNds}"
                                       HorizontalAlignment="Left">
-                                <ComboBoxItem Content="С НДС"/>
-                                <ComboBoxItem Content="Без НДС"/>
+                                <ComboBoxItem Content="С НДС" />
+                                <ComboBoxItem Content="Без НДС" />
                             </ComboBox>
                             <CheckBox Content="Скрыть надпись НДС"
                                       IsChecked="{Binding IsHiddenTextNds}"
-                                      Margin="0,5"/>
+                                      Margin="0,5" />
                         </StackPanel>
                     </StackPanel>
                 </Grid>
             </TabItem>
-            
-            <!--<TabItem Header="Документ"
-                     mah:TabControlHelper.Underlined="TabPanel"
-                     mah:HeaderedControlHelper.HeaderFontSize="16">
-                <Grid Background="{Binding Settings.AdditionalColor}">
-                    <StackPanel Orientation="Horizontal"
-                                Margin="5">
-                        <Button CommandParameter="OpenOfferFromFile"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                ToolTip="Открыть документ"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
-                            <iconPacks:PackIconMaterial Kind="FolderOpenOutline"
-                                                        Width="20"
-                                                        Height="20"/>
-                        </Button>
-                        <Button CommandParameter="SaveOfferToFile"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                ToolTip="Сохранить документ">
-                            <iconPacks:PackIconMaterial Kind="ContentSaveOutline"
-                                                        Width="20"
-                                                        Height="20" />
-                        </Button>
-                        <Button CommandParameter="SaveTemplateToArchive"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                ToolTip="Сохранить шаблон">
-                            <iconPacks:PackIconMaterial Kind="ContentSaveCogOutline"
-                                                        Width="20"
-                                                        Height="20"/>
-                        </Button>
-                        <Button CommandParameter="SaveToPdfWithBanner"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                ToolTip="Сохранить в PDF с баннером">
-                            <iconPacks:PackIconCodicons Kind="FilePdf"
-                                                        Width="20"
-                                                        Height="20"/>
-                        </Button>
-                        <Button CommandParameter="SaveToPdfWithoutBanner"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                ToolTip="Сохранить в PDF без баннера">
-                            <iconPacks:PackIconBoxIcons Kind="SolidFilePdf"
-                                                        Width="20"
-                                                        Height="20"/>
-                        </Button>
-                        <Button CommandParameter="SaveOffer"
-                                Command="{Binding Cmd}"
-                                Height="35"
-                                Width="35"
-                                Margin="5"
-                                Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                ToolTip="Сохранить в архив">
-                            <iconPacks:PackIconRemixIcon Kind="ArchiveDrawerLine"
-                                                        Width="20"
-                                                        Height="20"/>
-                        </Button>
-                    </StackPanel>
-                </Grid>
-            </TabItem>-->
-            
+
             <TabItem Header="Архив"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
@@ -684,10 +720,9 @@
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
-
-                    <TextBox Text="{Binding ArchiveFilter.ArchiveSearchByNameText, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding ArchiveStore.OfferSearchByNameText, UpdateSourceTrigger=PropertyChanged}"
                              mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
                              Grid.Column="0"
                              Grid.Row="0"
@@ -738,8 +773,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
-
-                    <TextBox Text="{Binding ArchiveFilter.ArchiveSearchByNameText, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Text="{Binding TemplatesStore.OfferSearchByNameText, UpdateSourceTrigger=PropertyChanged}"
                              mah:TextBoxHelper.ButtonCommand="{Binding TextBoxButtonCmd, Mode=OneWay}"
                              Grid.Column="0"
                              Grid.Row="0"
@@ -752,7 +786,7 @@
                                         CommandParameter="FindOfferInArchive" />
                         </TextBox.InputBindings>
                     </TextBox>
-                    <Button CommandParameter="FindOfferInArchive"
+                    <Button CommandParameter="FindOfferTemplate"
                             Grid.Column="1"
                             Grid.Row="0"
                             Command="{Binding Cmd}"
@@ -765,7 +799,7 @@
                                                     Width="20"
                                                     Height="20" />
                     </Button>
-                    <Button Command="{Binding FlyOffersFilter}"
+                    <Button Command="{Binding FlyOfferTemplatesFilter}"
                             Grid.Column="2"
                             Grid.Row="0"
                             Height="35"
@@ -897,14 +931,38 @@
                                    FontFamily="Arial"
                                    FontSize="12"
                                    FontWeight="Bold"/>
-                        <TextBlock Grid.Column="6"
-                                   Margin="10,5"
-                                   Grid.Row="1" 
-                                   VerticalAlignment="Center"
-                                   Text="{Binding TotalSum, StringFormat={}{0:### ### ### ### ###}}"
-                                   FontFamily="Arial"
-                                   FontSize="12"
-                                   FontWeight="Bold"/>
+                        <StackPanel Grid.Column="6"
+                                    Grid.Row="1"
+                                    Orientation="Horizontal">
+                            <TextBlock Margin="10,5"
+                                       VerticalAlignment="Center"
+                                       Text="{Binding TotalSum, StringFormat={}{0:### ### ### ### ###}}"
+                                       FontFamily="Arial"
+                                       FontSize="12"
+                                       FontWeight="Bold" />
+                            <TextBlock FontFamily="Arial"
+                                       FontSize="12"
+                                       VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Margin="0">
+                                <TextBlock.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsResultSummInRub}"
+                                                         Value="True">
+                                                <Setter Property="TextBlock.Text"
+                                                        Value="₽" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsResultSummInRub}"
+                                                         Value="False">
+                                                <Setter Property="TextBlock.Text"
+                                                        Value="{Binding Currency.Symbol}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
                     </Grid>
 
                 </Border>
@@ -1136,7 +1194,7 @@
                                                     Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}">
                                                 <Button.CommandParameter>
                                                     <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                        <Binding Source="LoadOfferFromArchive" />
+                                                        <Binding Source="LoadOfferTemplate" />
                                                         <Binding Path="." />
                                                     </MultiBinding>
                                                 </Button.CommandParameter>

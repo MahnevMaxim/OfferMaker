@@ -22,6 +22,8 @@ namespace API.Data
         public DbSet<NomenclatureGroup> NomenclatureGroups { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Hint> Hints { get; set; }
+        public DbSet<Banner> Banners { get; set; }
+        public DbSet<PromoImage> PromoImages { get; set; }
 
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)

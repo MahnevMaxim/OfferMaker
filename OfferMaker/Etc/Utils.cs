@@ -15,14 +15,16 @@ namespace OfferMaker
         /// <param name="offer"></param>
         /// <param name="users"></param>
         /// <returns></returns>
-        static public Offer RestoreOffer(Offer offer, ObservableCollection<User> users)
+        static public Offer RestoreOffer(Offer offer, ObservableCollection<User> users, bool isArchive)
         {
             try
             {
                 offer.OfferCreator = users.Where(u => u.Id == offer.OfferCreatorId).FirstOrDefault();
                 offer.Manager = users.Where(u => u.Id == offer.ManagerId).FirstOrDefault();
                 offer.OfferGroups.ToList().ForEach(g => g.NomWrappers.ToList().ForEach(n => n.SetOfferGroup(g)));
+                offer.OfferGroups.ToList().ForEach(g => g.NomWrappers.ToList().ForEach(n => n.RestoreCurrencyCharCode()));
                 offer.OfferGroups.ToList().ForEach(g => g.SetOffer(offer));
+                if (isArchive) offer.IsArchive = true;
             }
             catch (Exception ex)
             {

@@ -261,16 +261,14 @@ namespace OfferMaker
             InitAdvertising();
 
             //архив
-            SetOffers(offers);
-            main.ArchiveFilter = new ArchiveFilter(offers, main.User);
-            main.ArchiveOffers = main.ArchiveFilter.GetFilteredOffers();
-            main.offers = offers;
+            SetOffers(offers, true);
+            main.ArchiveStore = new OfferStore(offers, main.User);
+            main.ArchiveStore.ApplyOfferFilter();
 
             //шаблоны
-            SetOffers(offerTemplates);
-            //main.TemplatesFilter = new ArchiveFilter(offerTemplates, main.User);
-            //main.OfferTemplates = main.TemplatesFilter.GetFilteredOffers();
-            main.offerTemplates = offerTemplates;
+            SetOffers(offerTemplates, false);
+            main.TemplatesStore = new OfferStore(offerTemplates, main.User);
+            main.TemplatesStore.ApplyOfferFilter();
 
             //менеджер картинок
             main.ImageManager = ImageManager.GetInstance();
@@ -280,11 +278,11 @@ namespace OfferMaker
         /// Восстанавливаем необходимые данные.
         /// </summary>
         /// <param name="data"></param>
-        private void SetOffers(ObservableCollection<Offer> offers)
+        private void SetOffers(ObservableCollection<Offer> offers, bool isArchive)
         {
             ObservableCollection<Offer> restoredOffers = new ObservableCollection<Offer>();
             foreach (var offer in offers)
-                restoredOffers.Add(Utils.RestoreOffer(offer, users));
+                restoredOffers.Add(Utils.RestoreOffer(offer, users, isArchive));
             offers = restoredOffers;
         }
 

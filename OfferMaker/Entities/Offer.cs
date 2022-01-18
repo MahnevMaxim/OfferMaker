@@ -46,6 +46,7 @@ namespace OfferMaker
         bool isCreateByCostPrice;
         bool isHideNomsPrice;
         bool isTemplate;
+        bool isArchive;
 
         public int Id
         {
@@ -346,6 +347,19 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Если IsArchive=true, то это архив.
+        /// </summary>
+        public bool IsArchive
+        {
+            get => isArchive;
+            set
+            {
+                isArchive = value;
+                OnPropertyChanged();
+            }
+        }
+
         #region Money
 
         /// <summary>
@@ -526,14 +540,18 @@ namespace OfferMaker
 
         public int GetAddGroupsCounter() => ++addGroupsCounter;
 
-        internal Offer SetCurrency()
+        internal Offer PrepareArchive()
         {
             Currencies = new ObservableCollection<Currency>();
-            Currencies.Add(Currency);
+            Currency rub = Global.GetRub();
+            Currencies.Add(rub);
+            if(!Currencies.Contains(Currency))
+                Currencies.Add(Currency);
             foreach(OfferGroup offerGroup in OfferGroups)
             {
                 foreach(NomWrapper nw in offerGroup.NomWrappers)
                 {
+                    nw.SetCurrencyCharCode();
                     if(!Currencies.Contains(nw.Currency))
                     {
                         Currencies.Add(nw.Currency);
@@ -545,6 +563,9 @@ namespace OfferMaker
                     }
                 }
             }
+
+            IsArchive = true;
+
             return this;
         }
 

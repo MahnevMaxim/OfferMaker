@@ -23,10 +23,9 @@ namespace OfferMaker
         bool isDiscountOpen;
         int currentMainSelectedTabIndex;
         ObservableCollection<User> users;
-        ArchiveFilter archiveFilter;
-        ArchiveFilter templatesFilter;
-        ObservableCollection<Offer> archiveOffers = new ObservableCollection<Offer>();
-        public ObservableCollection<Offer> offerTemplates = new ObservableCollection<Offer>();
+        OfferStore archiveStore;
+        OfferStore templatesStore;
+        //public ObservableCollection<Offer> offerTemplates = new ObservableCollection<Offer>();
 
         #endregion Fields
 
@@ -44,19 +43,27 @@ namespace OfferMaker
             }
         }
 
-        internal List<string> GetHints()
-        {
-            throw new NotImplementedException();
-        }
-
         public ObservableCollection<Currency> Currencies
         {
-            get => currencies;
+            get
+            {
+                return currencies;
+            }
             set
             {
                 currencies = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(UsingCurrencies));
+            }
+        }
+
+        public ObservableCollection<string> ConstructorCurrencies
+        {
+            get
+            {
+                if (Constructor.Currencies == null) return null;
+                var list = Constructor.Currencies.Where(c => c.IsEnabled || c.CharCode == "RUB").Select(c => c.CharCode).ToList();
+                return new ObservableCollection<string>(list);
             }
         }
 
@@ -80,33 +87,9 @@ namespace OfferMaker
             }
         }
 
-        /// <summary>
-        /// Все КП получаем строго через ArchiveFilter.
-        /// </summary>
-        public ObservableCollection<Offer> ArchiveOffers
-        {
-            get => archiveOffers;
-            set
-            {
-                archiveOffers = value;
-                OnPropertyChanged();
-            }
-        }
-
-        /// <summary>
-        /// Все КП получаем строго через ArchiveFilter.
-        /// </summary>
-        public ObservableCollection<Offer> OfferTemplates
-        {
-            get => offerTemplates;
-            set
-            {
-                offerTemplates = value;
-                OnPropertyChanged();
-            }
-        }
-
         public Offer SelectedOfferInArchive { get; set; }
+
+        public Offer SelectedOfferTemplate { get; set; }
 
         public int CurrentMainSelectedTabIndex
         {
@@ -114,7 +97,7 @@ namespace OfferMaker
             set
             {
                 currentMainSelectedTabIndex = value;
-                ShowArchive();
+                ShowOffers();
                 OnPropertyChanged();
             }
         }
@@ -129,27 +112,27 @@ namespace OfferMaker
             }
         }
 
-        public ArchiveFilter ArchiveFilter
+        public OfferStore ArchiveStore
         {
-            get => archiveFilter;
+            get => archiveStore;
             set
             {
-                archiveFilter = value;
+                archiveStore = value;
                 OnPropertyChanged();
             }
         }
 
-        public ArchiveFilter TemplatesFilter
+        public OfferStore TemplatesStore
         {
-            get => templatesFilter;
+            get => templatesStore;
             set
             {
-                templatesFilter = value;
+                templatesStore = value;
                 OnPropertyChanged();
             }
         }
 
-        public StringCollection Hints { get; set; }
+        //public StringCollection Hints { get; set; }
 
         #endregion Propetries
 
@@ -180,8 +163,6 @@ namespace OfferMaker
         #endregion Properties
 
         #region Fields
-
-        public ObservableCollection<Offer> offers;
 
         public static List<Hint> hints;
 
@@ -366,39 +347,58 @@ namespace OfferMaker
                 OnSendMessage("Выберите КП");
         }
 
-        private void ShowArchive()
+        private void ShowOffers()
         {
             if(CurrentMainSelectedTabIndex==1)
-            {
-                ArchiveFilter.SetArchiveMode(ArchiveMode.ShowOffers);
-            }
+                ArchiveStore.ApplyOfferFilter();
             else if(CurrentMainSelectedTabIndex==2)
-            {
-                ArchiveFilter.SetArchiveMode(ArchiveMode.ShowTemplate);
-            }
-            ApplyArchiveFilter();
+                TemplatesStore.ApplyOfferFilter();
         }
 
-        public void ApplyArchiveFilter() => ArchiveOffers = ArchiveFilter.GetFilteredOffers();
+        public void ApplyArchiveFilter() => ArchiveStore.ApplyOfferFilter();
 
-        public void FindOfferInArchive() => ApplyArchiveFilter();
+        public void FindOfferInArchive() => ArchiveStore.ApplyOfferFilter();
 
         public void ResetArchiveFilter()
         {
-            ArchiveFilter = new ArchiveFilter(offers, User);
-            ArchiveOffers = ArchiveFilter.GetFilteredOffers();
+            ArchiveStore.ResetFilter();
+            ArchiveStore.ApplyOfferFilter();
+            OnPropertyChanged(nameof(ArchiveStore));
         }
-          
+           
         async public void DeleteOfferFromArchive(Offer offer)
         {
-            offers.Remove(offer);
-            ArchiveOffers = ArchiveFilter.GetFilteredOffers();
-            var cr = await DataRepository.OfferDelete(offer, offers);
+            ArchiveStore.RemoveOffer(offer);
+            ArchiveStore.ApplyOfferFilter();
+            var cr = await DataRepository.OfferDelete(offer, ArchiveStore.Offers);
             if (!cr.Success)
                 OnSendMessage(cr.Error.Message);
         }
 
         #endregion Archive
+
+        #region Offer templates
+
+        public void LoadOfferTemplate(Offer offer)
+        {
+            CurrentMainSelectedTabIndex = 0;
+            Constructor.LoadOfferTemplate(offer);
+        }
+
+        public void FindOfferTemplate() => TemplatesStore.ApplyOfferFilter();
+
+        public void LoadSelectedOfferTemplate()
+        {
+            if (SelectedOfferTemplate != null) 
+            {
+                CurrentMainSelectedTabIndex = 0;
+                Constructor.LoadOfferTemplate(SelectedOfferTemplate);
+            }
+            else
+                OnSendMessage("Выберите шаблон");
+        }
+
+        #endregion Offer templates
 
         #region DocManager
 

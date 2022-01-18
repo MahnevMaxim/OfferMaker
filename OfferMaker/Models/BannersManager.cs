@@ -54,5 +54,16 @@ namespace OfferMaker
             Settings.SetDefaultBanner(path);
             Close();
         }
+
+        public void AddBanner()
+        {
+            string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
+            if (path != null)
+            {
+                Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
+                Global.ImageManager.Add(image);
+                //Nomenclature.SetPhoto(image);
+            }
+        }
     }
 }

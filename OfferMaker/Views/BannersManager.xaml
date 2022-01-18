@@ -12,33 +12,37 @@
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="0"
-                 Title="Галерея" Height="730" Width="1100">
+                 Title="Галерея"
+                 Height="730"
+                 Width="1100">
 
     <Window.Resources>
-        <root:MultiConverter x:Key="MultiConverter"/>
+        <root:MultiConverter x:Key="MultiConverter" />
     </Window.Resources>
-    
+
     <Grid>
         <TabControl x:Name="tabControl"
                     mah:TabControlHelper.Underlined="TabItems">
             <TabItem Header="Баннер"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <Border Margin="5"
-                            BorderThickness="1"
-                            BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                        <ListBox ItemsSource="{Binding Banners}" 
+                <Border Margin="5"
+                        BorderThickness="1"
+                        BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+
+                        <ListBox ItemsSource="{Binding Banners}"
                                  SelectedItem="{Binding SelectedBanner}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  Margin="5">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Width="100" Height="100"
+                                    <Border Width="100"
+                                            Height="100"
                                             BorderThickness="1"
                                             BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
                                         <Image Source="{Binding Path=.}"
@@ -48,74 +52,94 @@
                                                               Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}">
                                                     <MouseBinding.CommandParameter>
                                                         <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                            <Binding Source="SelectBanner"/>
-                                                            <Binding Path="."/>
+                                                            <Binding Source="SelectBanner" />
+                                                            <Binding Path="." />
                                                         </MultiBinding>
                                                     </MouseBinding.CommandParameter>
                                                 </MouseBinding>
                                             </Image.InputBindings>
-                                            
+
                                         </Image>
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                    <WrapPanel IsItemsHost="True"
+                                               Orientation="Horizontal" />
                                 </ItemsPanelTemplate>
                             </ListBox.ItemsPanel>
                         </ListBox>
-                    </Border>
-                </Grid>
+
+                        <Button Content="Загрузить баннер"
+                                Grid.Row="1"
+                                Margin="5"
+                                Style="{StaticResource MahApps.Styles.Button.Square}"
+                                CommandParameter="AddBanner"
+                                Command="{Binding Cmd}" />
+                    </Grid>
+                </Border>
             </TabItem>
             <TabItem Header="Реклама"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="16">
                 <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="230"/>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="230" />
                     </Grid.ColumnDefinitions>
                     <Border Margin="5"
                             BorderThickness="1"
                             BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                        <ListBox ItemsSource="{Binding Advertisings}" 
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 dd:DragDrop.IsDragSource="True"
-                                 dd:DragDrop.DragDropCopyKeyState="LeftMouseButton"
-                                 Margin="5">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Width="105" Height="150"
-                                            BorderThickness="1"
-                                            BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                        <Image Source="{Binding Path=.}"
-                                               Margin="5">
-                                            <Image.InputBindings>
-                                                <MouseBinding MouseAction="LeftDoubleClick"
-                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}">
-                                                    <MouseBinding.CommandParameter>
-                                                        <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                            <Binding Source="SelectAdvertising"/>
-                                                            <Binding Path="."/>
-                                                        </MultiBinding>
-                                                    </MouseBinding.CommandParameter>
-                                                </MouseBinding>
-                                            </Image.InputBindings>
-                                        </Image>
-                                    </Border>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                            <ListBox.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel IsItemsHost="True" Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </ListBox.ItemsPanel>
-                        </ListBox>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="auto" />
+                            </Grid.RowDefinitions>
+                            <ListBox ItemsSource="{Binding Advertisings}"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     dd:DragDrop.IsDragSource="True"
+                                     dd:DragDrop.DragDropCopyKeyState="LeftMouseButton"
+                                     Margin="5">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Width="105"
+                                                Height="150"
+                                                BorderThickness="1"
+                                                BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
+                                            <Image Source="{Binding Path=.}"
+                                                   Margin="5">
+                                                <Image.InputBindings>
+                                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}">
+                                                        <MouseBinding.CommandParameter>
+                                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                                <Binding Source="SelectAdvertising" />
+                                                                <Binding Path="." />
+                                                            </MultiBinding>
+                                                        </MouseBinding.CommandParameter>
+                                                    </MouseBinding>
+                                                </Image.InputBindings>
+                                            </Image>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True"
+                                                   Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                            </ListBox>
+                            <Button Content="Загрузить рекламный материал"
+                                    Grid.Row="1"
+                                    Margin="5"
+                                    Style="{StaticResource MahApps.Styles.Button.Square}" />
+                        </Grid>
                     </Border>
                     <Border Margin="5"
                             Grid.Column="1"
@@ -126,20 +150,21 @@
                             <TabItem Header="После титульника"
                                      mah:TabControlHelper.Underlined="TabPanel"
                                      mah:HeaderedControlHelper.HeaderFontSize="14">
-                                <ListBox ItemsSource="{Binding AdvertisingsUp}" 
+                                <ListBox ItemsSource="{Binding AdvertisingsUp}"
                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                         dd:DragDrop.IsDropTarget="True" 
+                                         dd:DragDrop.IsDropTarget="True"
                                          dd:DragDrop.IsDragSource="True"
                                          ScrollViewer.CanContentScroll="False"
                                          Margin="5">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Width="105" Height="150"
+                                            <Border Width="105"
+                                                    Height="150"
                                                     BorderThickness="1"
                                                     Margin="5"
                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
                                                 <Image Source="{Binding Path=.}"
-                                                       Margin="5"/>
+                                                       Margin="5" />
                                             </Border>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
@@ -148,20 +173,21 @@
                             <TabItem Header="В конец"
                                      mah:TabControlHelper.Underlined="TabPanel"
                                      mah:HeaderedControlHelper.HeaderFontSize="14">
-                                <ListBox ItemsSource="{Binding AdvertisingsDown}" 
+                                <ListBox ItemsSource="{Binding AdvertisingsDown}"
                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                         dd:DragDrop.IsDropTarget="True" 
+                                         dd:DragDrop.IsDropTarget="True"
                                          dd:DragDrop.IsDragSource="True"
                                          ScrollViewer.CanContentScroll="False"
                                          Margin="5">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Width="105" Height="150"
+                                            <Border Width="105"
+                                                    Height="150"
                                                     BorderThickness="1"
                                                     Margin="5"
                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
                                                 <Image Source="{Binding Path=.}"
-                                                       Margin="5"/>
+                                                       Margin="5" />
                                             </Border>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>

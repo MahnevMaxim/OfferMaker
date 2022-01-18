@@ -12,7 +12,7 @@
                  ResizeMode="NoResize"
                  Title="Название КП и данные клиента"
                  x:Name="cust"
-                 Height="350" Width="400"
+                 Height="280" Width="400"
                  Closing="cust_Closing">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,7 +20,6 @@
             <ColumnDefinition Width="*" MinWidth="125"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition  MinHeight="25" Height="*"/>
             <RowDefinition  MinHeight="25" Height="*"/>
             <RowDefinition  MinHeight="25" Height="*"/>
             <RowDefinition  MinHeight="25" Height="*"/>
@@ -39,7 +38,7 @@
                  mah:TextBoxHelper.Watermark="Название КП"
                  mah:TextBoxHelper.WatermarkAlignment="Right"
                  ToolTip="Название КП"/>
-        <TextBox Margin="5" 
+        <TextBox Margin="5"
                  FontSize="14"
                  Text="{Binding Customer.FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Grid.Row="1"
@@ -50,23 +49,11 @@
                  mah:TextBoxHelper.UseFloatingWatermark="True"
                  mah:TextBoxHelper.Watermark="ФИО"
                  mah:TextBoxHelper.WatermarkAlignment="Right"
-                 ToolTip="ФИО"/>
-        <TextBox Margin="5" 
-                 FontSize="14"
-                 Text="{Binding Customer.Position, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 Grid.Row="2"
-                 Grid.ColumnSpan="2"
-                 HorizontalContentAlignment="Stretch"
-                 mah:TextBoxHelper.ClearTextButton="True"
-                 mah:TextBoxHelper.IsWaitingForData="True"
-                 mah:TextBoxHelper.UseFloatingWatermark="True"
-                 mah:TextBoxHelper.Watermark="Должность"
-                 mah:TextBoxHelper.WatermarkAlignment="Right"
-                 ToolTip="Должность"/>
+                 ToolTip="ФИО" />
         <TextBox Margin="5" 
                  FontSize="14"
                  Text="{Binding Customer.Organization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 Grid.Row="3"
+                 Grid.Row="2"
                  Grid.ColumnSpan="2"
                  HorizontalContentAlignment="Stretch"
                  mah:TextBoxHelper.ClearTextButton="True"
@@ -78,7 +65,7 @@
         <TextBox Margin="5" 
                  FontSize="14"
                  Text="{Binding Customer.Location, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 Grid.Row="4"
+                 Grid.Row="3"
                  Grid.ColumnSpan="2"
                  HorizontalContentAlignment="Stretch"
                  mah:TextBoxHelper.ClearTextButton="True"
@@ -87,11 +74,11 @@
                  mah:TextBoxHelper.Watermark="Город"
                  mah:TextBoxHelper.WatermarkAlignment="Right"
                  ToolTip="Город"/>
-        <Button Grid.Row="5"
+        <Button Grid.Row="4"
                 Margin="5" 
                 Content="Сохранить"
                 Style="{DynamicResource MahApps.Styles.Button.Square.Accent}" Click="Button_Click"/>
-        <Button Grid.Row="5" 
+        <Button Grid.Row="4" 
                 Grid.Column="1"
                 Margin="5" 
                 Content="Отмена"

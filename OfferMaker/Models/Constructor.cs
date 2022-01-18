@@ -146,8 +146,18 @@ namespace OfferMaker
         /// </summary>
         BitmapImage smallLogo;
 
-
         #endregion Fields
+
+        public ObservableCollection<Currency> Currencies
+        {
+            get
+            {
+                if (Offer.IsArchive)
+                    return Offer.Currencies;
+                else
+                    return Global.Currencies;
+            }
+        }
 
         #region Singleton
 
@@ -165,11 +175,7 @@ namespace OfferMaker
 
         private static readonly Constructor instance = new Constructor();
 
-        public static Constructor GetInstance()
-        {
-            return instance;
-        }
-            
+        public static Constructor GetInstance() => instance;
 
         #endregion Singleton
 
@@ -181,7 +187,7 @@ namespace OfferMaker
         private void InitNewOffer()
         {
             ObservableCollection<OfferInfoBlock> offerInfoBlocks = GetInfoBlocks();
-            Currency currency = Global.GetCurrencyByCode("RUB");
+            Currency currency = Global.GetRub();
             Offer = new Offer(this, currency, offerInfoBlocks, Global.Main.User, Settings.GetDefaultBanner());
         }
 
@@ -189,7 +195,26 @@ namespace OfferMaker
         /// Загрузка КП из архива.
         /// </summary>
         /// <param name="offer"></param>
-        internal void LoadOfferFromArchive(Offer offer)
+        internal void LoadOfferFromArchive(Offer offer) => LoadOffer(offer);
+
+        /// <summary>
+        /// Загрузка шаблона.
+        /// </summary>
+        /// <param name="offer"></param>
+        internal void LoadOfferTemplate(Offer offer)
+        {
+            offer.Id = 0;
+            offer.Guid = Guid.NewGuid().ToString();
+            offer.Manager = Global.Main.User;
+            offer.OfferCreator = Global.Main.User;
+            LoadOffer(offer);
+        }
+
+        /// <summary>
+        /// Загрузка любой хуйни.
+        /// </summary>
+        /// <param name="offer"></param>
+        internal void LoadOffer(Offer offer)
         {
             Offer = offer;
             offer.Discount.SetOffer(offer);
@@ -204,7 +229,7 @@ namespace OfferMaker
         internal void SkipOffer()
         {
             ObservableCollection<OfferInfoBlock> offerInfoBlocks = GetInfoBlocks();
-            Currency currency = Global.GetCurrencyByCode("RUB");
+            Currency currency = Global.GetRub();
             Offer = new Offer(this, currency, offerInfoBlocks, Global.Main.User, Settings.GetDefaultBanner());
             Offer.OnPropertyChanged(String.Empty);
             viewModel.OnPropertyChanged(String.Empty);
