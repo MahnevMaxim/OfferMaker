@@ -12,9 +12,11 @@
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="0"
-                 WindowState="Maximized"
+                 Height="600" Width="1000"
+                 >
+    <!--WindowState="Maximized"
                  Height="650"
-                 Width="1200">
+                 Width="1200"-->
     <Window.Resources>
         <CollectionViewSource x:Key="Nomenclatures"
                               Filter="CollectionViewSource_Filter"

@@ -435,7 +435,7 @@ namespace OfferMaker
         /// </summary>
         /// <param name="offerGroup"></param>
         internal void AddNomenclatureToOfferGroup(OfferGroup offerGroup) =>
-            MvvmFactory.CreateWindow(new AddNomToConstructor(offerGroup), new ViewModels.AddNomToConstructorViewModel(), new Views.AddNomToConstructor(), ViewMode.ShowDialog);
+            MvvmFactory.CreateWindow(new AddNomToConstructor(offerGroup), new ViewModels.AddNomToConstructorViewModel(), new Views.AddNomToConstructor(), ViewMode.Show);
 
         #endregion OfferGroups
 

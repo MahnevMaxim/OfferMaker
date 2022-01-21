@@ -103,7 +103,7 @@ namespace OfferMaker
             }
 
             offerGroup.OnPropertyChanged(string.Empty);
-            Close();
+            //Close();
         }
 
         /// <summary>
@@ -116,7 +116,6 @@ namespace OfferMaker
                 OnSendMessage("Выберите группу номенклатур для добавления");
                 return;
             }
-            //List<NomWrapper> list = new List<NomWrapper>();
             foreach(var nomen in SelectedNomGroup.Nomenclatures)
             {
                 var nom = Helpers.CloneObject<Nomenclature>(nomen);
@@ -131,11 +130,9 @@ namespace OfferMaker
                 {
                     res.Amount++;
                 }
-                //list.Add(new NomWrapper(offerGroup, nom));
             }
-            //offerGroup.AddNomenclaturesSilent(list);
             offerGroup.OnPropertyChanged(string.Empty);
-            Close();
+            //Close();
         }
       
 
