@@ -192,7 +192,7 @@ namespace OfferMaker
                     bool isOneCurrency = NomWrappers.All(n => n.Currency.CharCode == firstCurrencyCode);
                     if (isOneCurrency && firstCurrencyCode != Currency.CharCode)
                     {
-                        return Global.GetCurrencyByCode(firstCurrencyCode);
+                        return Global.GetConstructorCurrencyByCode(firstCurrencyCode);
                     }
                 }
                 return offer.Currency;

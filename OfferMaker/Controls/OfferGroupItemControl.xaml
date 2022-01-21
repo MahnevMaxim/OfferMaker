@@ -42,35 +42,35 @@
             </DataTemplate>
 
             <DataTemplate x:Key="NomCostPriceTextBlock">
-                <TextBlock Text="{Binding CostPrice, StringFormat={}{0:### ### ### ### ###}}"
-                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
-                           Width="80"
-                           TextWrapping="Wrap"
-                           FontWeight="Bold"
-                           Foreground="{DynamicResource MahApps.Brushes.Text}"/>
+                <TextBox Text="{Binding CostPrice, StringFormat={}{0:N0}, ConverterCulture='ru-RU',UpdateSourceTrigger=PropertyChanged}"
+                         Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
+                         Width="90"
+                         TextWrapping="NoWrap"
+                         FontWeight="Bold"
+                         Foreground="{DynamicResource MahApps.Brushes.Text}"/>
             </DataTemplate>
 
             <DataTemplate x:Key="NomMarkup">
-                <TextBlock Text="{Binding Markup, StringFormat=F2}"
+                <TextBox Text="{Binding Markup, StringFormat=F2, ConverterCulture='ru-RU',UpdateSourceTrigger=PropertyChanged}"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
-                           TextWrapping="Wrap"
+                           TextWrapping="NoWrap"
                            Width="50"
                            FontWeight="Bold"
                            Foreground="{DynamicResource MahApps.Brushes.Text}"/>
             </DataTemplate>
 
             <DataTemplate x:Key="NomPrice">
-                <TextBlock Text="{Binding Price, StringFormat={}{0:### ### ### ### ###}}"
-                           TextWrapping="Wrap"
+                <TextBox Text="{Binding Price, StringFormat={}{0:N0}, ConverterCulture='ru-RU',UpdateSourceTrigger=PropertyChanged}"
+                           TextWrapping="NoWrap"
                            Width="{StaticResource Width80}"
                            FontWeight="Bold"
                            Foreground="{DynamicResource MahApps.Brushes.Text}"/>
             </DataTemplate>
 
             <DataTemplate x:Key="NomProfit">
-                <TextBlock Text="{Binding ProfitSum, StringFormat={}{0:### ### ### ### ###}}"
+                <TextBlock Text="{Binding ProfitSum, StringFormat={}{0:### ### ### ### ###}, ConverterCulture='ru-RU',UpdateSourceTrigger=PropertyChanged}"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
-                           TextWrapping="Wrap"
+                           TextWrapping="NoWrap"
                            Width="{StaticResource Width80}"
                            FontWeight="Bold"
                            Foreground="{DynamicResource MahApps.Brushes.Text}"/>
@@ -324,7 +324,7 @@
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Название" DisplayIndex="0" Width="320" CellTemplate="{StaticResource NomTitle}"/>
-                    <DataGridTemplateColumn Header="Затраты" DisplayIndex="1" Width="80" CellTemplate="{StaticResource NomCostPriceTextBlock}">
+                    <DataGridTemplateColumn Header="Затраты" DisplayIndex="1" Width="95" CellTemplate="{StaticResource NomCostPriceTextBlock}">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -350,8 +350,8 @@
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Цена" DisplayIndex="3" Width="80" CellTemplate="{StaticResource NomPrice}"/>
-                    <DataGridTemplateColumn Header="Прибыль" DisplayIndex="4" Width="80" CellTemplate="{StaticResource NomProfit}">
+                    <DataGridTemplateColumn Header="Цена" DisplayIndex="3" Width="90" CellTemplate="{StaticResource NomPrice}"/>
+                    <DataGridTemplateColumn Header="Прибыль" DisplayIndex="4" Width="90" CellTemplate="{StaticResource NomProfit}">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
                                 <Setter Property="Visibility" Value="Hidden"/>

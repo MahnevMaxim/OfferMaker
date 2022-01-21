@@ -19,9 +19,13 @@ namespace OfferMaker
 
         public static Main Main;
 
-        public static List<Currency> Currencies { get => Main.Currencies.ToList(); }
+        public static ObservableCollection<Currency> Currencies { get => Main.Currencies; }
 
-        internal static Currency GetCurrencyByCode(string currencyCharCode) => Currencies.Where(c => c.CharCode == currencyCharCode).FirstOrDefault();
+        public static ObservableCollection<Currency> ConstructorCurrencies { get => Main.Constructor.Currencies; }
+
+        internal static Currency GetConstructorCurrencyByCode(string currencyCharCode) => Constructor.Currencies.Where(c => c.CharCode == currencyCharCode).FirstOrDefault();
+
+        internal static Currency GetRub() => Main.Currencies.Where(c => c.CharCode == "RUB").FirstOrDefault();
 
         public static Catalog Catalog { get => Main.Catalog; }
 
@@ -33,8 +37,6 @@ namespace OfferMaker
 
         public static ImageManager ImageManager { get => Main.ImageManager; }
 
-        public static Offer Offer { get => Main.Constructor.Offer; }
-
         public static Constructor Constructor { get => Main.Constructor; }
 
         public static string NoProfilePicturePath { get => AppDomain.CurrentDomain.BaseDirectory + "Images\\no-profile-picture.png"; }
@@ -43,8 +45,11 @@ namespace OfferMaker
 
         public static List<Hint> Hints { get => Main.hints; }
 
-        public static ObservableCollection<Offer> OfferTemplates { get => Main.offerTemplates; }
+        public static Offer Offer { get => Main.Constructor.Offer; }
 
-        public static ObservableCollection<Offer> Offers { get => Main.offers; }
+        public static ObservableCollection<Offer> OfferTemplates { get => Main.TemplatesStore.Offers; }
+
+        public static ObservableCollection<Offer> Offers { get => Main.ArchiveStore.Offers; }
+
     }
 }

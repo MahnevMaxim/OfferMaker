@@ -20,18 +20,43 @@ using System.Net;
 using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
+using System.Text.Json;
+using System.Net.Http.Headers;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace DatabaseExporter
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : MetroWindow
     {
+        string logText;
+
+        public string LogText
+        {
+            get => logText;
+            set
+            {
+                logText = value;
+                if (logText != null)
+                {
+                    if (logText.Count() > 50000)
+                        logText = logText.Substring(0, 40000);
+                }
+                messagesTextBox.Text = logText;
+            }
+        }
+
         Client client;
         WebClient webClient = new WebClient();
         System.Net.Http.HttpClient httpClient;
-
+        string AccessToken;
+        string apiEndpoint = "https://localhost:44313/";
+        //позиция по умолчанию
+        ApiLib.Position pos = new ApiLib.Position() { Permissions = new ObservableCollection<Permissions>() { Permissions.CanAll }, PositionName = "Админ" };
         private readonly AdsContext _context;
 
         List<Ad> ads;
@@ -40,9 +65,7 @@ namespace DatabaseExporter
         {
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            httpClient = new System.Net.Http.HttpClient();
-            string apiEndpoint = "https://localhost:44313/";
-            client = new Client(apiEndpoint, httpClient);
+
 
             string con = "Server=(localdb)\\mssqllocaldb;Database=AdsStore;Trusted_Connection=True;";
             var optionsBuilder = new DbContextOptionsBuilder<AdsContext>();
@@ -57,38 +80,95 @@ namespace DatabaseExporter
             //}
         }
 
-        async private void button_Click_1(object sender, RoutedEventArgs e)
+        void Message(string message)
+        {
+            DateTime date = DateTime.Now;
+            string time = String.Format("[{0:H:mm:ss:fff}] ", date);
+            LogText += "\n" + time + message;
+        }
+
+        async private void GetTokenButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                System.Net.Http.HttpClient httpClient_ = new System.Net.Http.HttpClient();
+                Client client_ = new Client(apiEndpoint, httpClient_);
+
+                var res = await client_.GetTokenAsync();
+                JsonElement authRes = (JsonElement)res.Result;
+                AccessToken = authRes.GetProperty("access_token").GetString();
+
+                httpClient = new System.Net.Http.HttpClient();
+                if (AccessToken != null)
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", AccessToken);
+                client = new Client(apiEndpoint, httpClient);
+                Message("Получен токен: " + AccessToken);
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex);
+                Message(ex.StackTrace);
+            }
+        }
+
+        async private void CreatePositionButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var res = await client.PositionPostAsync(pos);
+                Message("Создана позиция " + res.Result.PositionName);
+            }
+            catch (Exception ex)
+            {
+                Message(ex.StackTrace);
+            }
+        }
+
+        async private void ExportUsersButton_Click(object sender, RoutedEventArgs e)
         {
             var users = JsonConvert.DeserializeObject(File.ReadAllText("users.json")).ToString();
             JArray jaUsers = JArray.Parse(users.ToString());
 
             foreach (var user in jaUsers)
             {
-                string s = user.ToString();
-
-                string id = user["Id"].ToString();
-                string fullName = user["FullName"].ToString();
-                string[] ss = fullName.Split(' ');
-                string name = ss[0];
-                string secondName = ss[1];
-                string phone1 = user["PhoneNumber1"].ToString();
-                string phone2 = user["PhoneNumber2"].ToString();
-                string email = user["Email"].ToString();
-
-                User user_ = new User()
+                try
                 {
-                    FirstName = name,
-                    LastName = secondName,
-                    PhoneNumber1 = phone1,
-                    PhoneNumber2 = phone2,
-                    Email = email
-                };
-                var res = await client.UserCreateAsync(null, user_);
+                    string s = user.ToString();
+
+                    string id = user["Id"].ToString();
+                    string fullName = user["FullName"].ToString();
+                    string[] ss = fullName.Split(' ');
+                    string name = ss[0];
+                    string secondName = ss[1];
+                    string phone1 = user["PhoneNumber1"].ToString();
+                    string phone2 = user["PhoneNumber2"].ToString();
+                    string email = user["Email"].ToString();
+
+                    if (string.IsNullOrWhiteSpace(email))
+                        continue;
+
+                    User user_ = new User()
+                    {
+                        FirstName = name,
+                        LastName = secondName,
+                        PhoneNumber1 = phone1,
+                        PhoneNumber2 = phone2,
+                        Email = email,
+                        Position = pos
+                    };
+                    user_.Account = new Account();
+                    var res = await client.UserCreateAsync(user_);
+                    Message("пользователь " + user_.FirstName + " добавлен");
+                }
+                catch (Exception ex)
+                {
+                    Message(ex.StackTrace);
+                }
             }
-            MessageBox.Show("пользователи добавлены");
+            Message("пользователи добавлены");
         }
 
-        async private void button1_Click(object sender, RoutedEventArgs e)
+        async private void ExportNomenclatureButton_Click(object sender, RoutedEventArgs e)
         {
             var noms_ = JsonConvert.DeserializeObject(File.ReadAllText("noms.json")).ToString();
             JArray jaNoms = JArray.Parse(noms_.ToString());
@@ -143,48 +223,49 @@ namespace DatabaseExporter
                 descs.Add(new Description() { Text = ad.Time.ToLongTimeString() });
                 descs.Add(new Description() { Text = ad.Price.ToString() });
                 decimal costPrice = decimal.Parse(ad.Price.ToString());
-                decimal markUp = 1 + ((decimal)rnd.Next(1,200))/100;
+                decimal markUp = 1 + ((decimal)rnd.Next(1, 200)) / 100;
                 string charCode = "RUB";
 
-                ApiLib.Image image=null;
+                ApiLib.Image image = null;
                 ObservableCollection<ApiLib.Image> images = new ObservableCollection<ApiLib.Image>();
-                if(ad.ImgPath!=null)
+                if (ad.ImgPath != null)
                 {
                     image = new ApiLib.Image() { Guid = ad.ImgPath.Split("avitoimages\\")[1] };
                     images.Add(image);
                 }
-                
+
                 Nomenclature nomenclature = new Nomenclature()
                 {
-                    Guid=Guid.NewGuid().ToString(),
+                    Guid = Guid.NewGuid().ToString(),
                     CostPrice = costPrice,
                     Descriptions = descs,
                     Markup = markUp,
                     Title = title,
                     CurrencyCharCode = charCode,
-                    Image=image,
-                    Images=images
+                    Image = image,
+                    Images = images
                 };
-                nomenclature.Descriptions.ToList().ForEach(d=>d.IsEnabled=true);
+                nomenclature.Descriptions.ToList().ForEach(d => d.IsEnabled = true);
 
                 string fPath = "avitoimages\\" + image.Guid + ".jpg";
                 using var stream = new MemoryStream(File.ReadAllBytes(fPath).ToArray());
                 FileParameter param = new FileParameter(stream, System.IO.Path.GetFileName(fPath));
-                var wwww = client.ImagesPOSTAsync(param);
+                var wwww = client.ImagePostAsync(param);
 
                 try
                 {
                     var res = await client.NomenclaturePostAsync(nomenclature);
+                    Message(Title + " добавлен");
                 }
                 catch (Exception ex)
                 {
-                    Console.Write(ex);
+                    Message(Title + " - исключение. " + ex.StackTrace);
                 }
             }
-            MessageBox.Show("номенклатура добавлена");
+            Message("номенклатура добавлена");
         }
 
-        async private void button2_Click(object sender, RoutedEventArgs e)
+        async private void ExportCurrencyButton_Click(object sender, RoutedEventArgs e)
         {
             var xml = webClient.DownloadString("https://www.cbr-xml-daily.ru/daily.xml");
             XDocument xdoc = XDocument.Parse(xml);
@@ -241,22 +322,17 @@ namespace DatabaseExporter
                 if (i_ == 100) break;
             }
 
-            MessageBox.Show("валюты добавлены");
+            Message("валюты добавлены");
         }
 
-        private void button3_Click(object sender, RoutedEventArgs e)
+        private void ExportAllButton_Click(object sender, RoutedEventArgs e)
         {
-            button_Click_1(null, null);
-            button1_Click(null, null);
-            button2_Click(null, null);
+            ExportUsersButton_Click(null, null);
+            ExportNomenclatureButton_Click(null, null);
+            ExportCurrencyButton_Click(null, null);
         }
 
-        private void button4_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void button4_Click_1(object sender, RoutedEventArgs e)
+        private void NewExportButton_Click(object sender, RoutedEventArgs e)
         {
             var noms_ = JsonConvert.DeserializeObject(File.ReadAllText("noms.json")).ToString();
             JArray jaNoms = JArray.Parse(noms_.ToString());

@@ -27,7 +27,6 @@ namespace OfferMaker
         System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
         Client client;
         string token;
-        int maxImageWidth = 500;
 
         #region Singleton
 
@@ -50,16 +49,16 @@ namespace OfferMaker
         /// Если не скопировалась то пытаемся несколько раз сделать это повторно.
         /// </summary>
         /// <param name="image"></param>
-        internal void Add(Image image)
+        internal void Add(Image image, int? maxImageWidth)
         {
-            Copy(image);
+            Copy(image, maxImageWidth);
         }
 
         /// <summary>
         /// Копируем файл в кэш.
         /// </summary>
         /// <param name="image"></param>
-        private void Copy(Image image)
+        private void Copy(Image image, int? maxImageWidth)
         {
             try
             {
@@ -70,7 +69,7 @@ namespace OfferMaker
 
                 string ext = Path.GetExtension(image.OriginalPath);
                 string filePath = Path.Combine(AppSettings.Default.ImageManagerDir, image.Guid + ext);
-                FileCopy(image.OriginalPath, filePath);
+                FileCopy(image.OriginalPath, filePath, maxImageWidth);
                 image.IsCopied = true;
             }
             catch (Exception ex)
@@ -84,15 +83,15 @@ namespace OfferMaker
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destinationPath"></param>
-        private void FileCopy(string source, string destinationPath)
+        private void FileCopy(string source, string destinationPath, int? maxImageWidth)
         {
             Bitmap img = new Bitmap(source);
             int width = img.Width;
             int height = img.Height;
-            if (width > maxImageWidth)
+            if (width > maxImageWidth && maxImageWidth!=null)
             {
-                int newHeight = height * maxImageWidth / width;
-                Bitmap result = ResizeBitmap(img, maxImageWidth, newHeight);
+                int newHeight = height * (int)maxImageWidth / width;
+                Bitmap result = ResizeBitmap(img, (int)maxImageWidth, newHeight);
                 result.Save(destinationPath, GetImageFormatFromPath(destinationPath));
             }
             else
@@ -241,7 +240,7 @@ namespace OfferMaker
                             var file = TryGetLocalFilePath(image.Guid);
                             using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
                             FileParameter param = new FileParameter(stream, Path.GetFileName(file));
-                            var res = await client.ImagesPOSTAsync(param);
+                            var res = await client.ImagePostAsync(param);
                         }
                         catch (Exception ex)
                         {
@@ -259,11 +258,27 @@ namespace OfferMaker
                 var file = TryGetLocalFilePath(user.Image.Guid);
                 using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
                 FileParameter param = new FileParameter(stream, Path.GetFileName(file));
-                var res = await client.ImagesPOSTAsync(param);
+                var res = await client.ImagePostAsync(param);
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
+            }
+        }
+
+        async internal Task<CallResult> UploadBanner(Image banner)
+        {
+            try
+            {
+                var file = TryGetLocalFilePath(banner.Guid);
+                using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
+                FileParameter param = new FileParameter(stream, Path.GetFileName(file));
+                var res = await client.ImagePostAsync(param);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                return new CallResult() { Error = new Error(ex) };
             }
         }
     }

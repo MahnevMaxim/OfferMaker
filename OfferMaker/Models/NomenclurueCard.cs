@@ -98,7 +98,7 @@ namespace OfferMaker
             if (path != null)
             {
                 Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
-                Global.ImageManager.Add(image);
+                Global.ImageManager.Add(image, 500);
                 Nomenclature.SetPhoto(image);
             }
         }

@@ -87,6 +87,8 @@ namespace OfferMaker
 
         private static readonly Settings instance = new Settings();
 
+        
+
         public static Settings GetInstance() => instance;
 
         private Settings()
@@ -122,9 +124,9 @@ namespace OfferMaker
             ThemeManager.Current.ChangeTheme(Application.Current, theme);
         }
 
-        public static void SetDefaultBanner(string path)
+        public static void SetDefaultBannerGuid(string guid)
         {
-            AppSettings.Default.DefaultBanner = path;
+            AppSettings.Default.DefaultBannerGuid = guid;
             AppSettings.Default.Save();
         }
 
@@ -136,7 +138,6 @@ namespace OfferMaker
 
         public static void SetToken(string accessToken)
         {
-            if (!AppSettings.Default.IsRememberMe) return;
             AppSettings.Default.AccessToken = accessToken;
             AppSettings.Default.Save();
         }
@@ -147,7 +148,7 @@ namespace OfferMaker
             AppSettings.Default.Save();
         }
 
-        public static string GetDefaultBanner() => AppSettings.Default.DefaultBanner;
+        public static string GetDefaultBannerGuid() => AppSettings.Default.DefaultBannerGuid;
 
         public static int GetMaxInfoblocksCount() => AppSettings.Default.MaxInfoblocksCount;
 

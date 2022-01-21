@@ -27,6 +27,7 @@ namespace Shared
 
         public Image Image { get; set; }
 
+        [Required]
         public Position Position { get; set; }
 
         [Required]

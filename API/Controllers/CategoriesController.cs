@@ -23,14 +23,14 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        [HttpGet(Name = nameof(CategoriesGet))]
+        public async Task<ActionResult<IEnumerable<Category>>> CategoriesGet()
         {
             return await _context.Categories.ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        [HttpGet("{id}", Name = nameof(CategoryGet))]
+        public async Task<ActionResult<Category>> CategoryGet(int id)
         {
             var category = await _context.Categories.FindAsync(id);
 
@@ -42,8 +42,8 @@ namespace API.Controllers
             return category;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        [HttpPut("{id}", Name = nameof(CategoryEdit))]
+        public async Task<IActionResult> CategoryEdit(int id, Category category)
         {
             if (id != category.Id)
             {
@@ -72,8 +72,8 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> SaveCategories(IEnumerable<Category> categories)
+        [HttpPut(Name = nameof(CategoriesSave))]
+        public async Task<IActionResult> CategoriesSave(IEnumerable<Category> categories)
         {
             DeleteUnusedCategories(categories);
 
@@ -86,12 +86,12 @@ namespace API.Controllers
                         var res = _context.Categories.Where(c => c.Guid == category.Guid).FirstOrDefault();
                         if(res==null)
                         {
-                            await PostCategory(category);
+                            await CategoryPost(category);
                         }
                     }
                     else
                     {
-                        await PutCategory(category.Id, category);
+                        await CategoryEdit(category.Id, category);
                     }
                 }
                 catch (Exception ex)
@@ -102,17 +102,17 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        [HttpPost(Name = nameof(CategoryPost))]
+        public async Task<ActionResult<Category>> CategoryPost(Category category)
         {
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
+            return CreatedAtAction("CategoryGet", new { id = category.Id }, category);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        [HttpDelete("{id}", Name = nameof(CategoryDelete))]
+        public async Task<IActionResult> CategoryDelete(int id)
         {
             var category = await _context.Categories.FindAsync(id);
             if (category == null)

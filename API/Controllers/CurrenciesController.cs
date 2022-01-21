@@ -57,8 +57,8 @@ namespace API.Controllers
                 if (res != null)
                 {
                     res.Rate = currency.Rate;
-                    res.RateDatetime = DateTime.UtcNow;
-                    _context.Currencies.Where(c => c.CharCode == "RUB").FirstOrDefault().RateDatetime = DateTime.UtcNow;
+                    res.RateDatetime = currency.RateDatetime;
+                    _context.Currencies.Where(c => c.CharCode == "RUB").FirstOrDefault().RateDatetime = currency.RateDatetime;
                 }
 
                 try

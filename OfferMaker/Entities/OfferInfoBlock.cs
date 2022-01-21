@@ -73,7 +73,7 @@ namespace OfferMaker
             {
                 if(image==null)
                 {
-                    Uri uri = new Uri(imagePath, UriKind.Absolute);
+                    Uri uri = new Uri(AppDomain.CurrentDomain.BaseDirectory + imagePath, UriKind.Absolute);
                     image = (ImageSource)new BitmapImage(uri);
                 }
                 return image;

@@ -27,7 +27,7 @@ namespace API.Controllers
         [HttpGet(Name = nameof(OffersGet))]
         public async Task<ActionResult<IEnumerable<Offer>>> OffersGet()
         {
-            return await _context.Offers.ToListAsync();
+            return await _context.Offers.Include(o => o.Banner_).ToListAsync();
         }
 
         [HttpGet("/self", Name = nameof(OffersSelfGet))]
@@ -53,6 +53,12 @@ namespace API.Controllers
         [HttpPost(Name = nameof(OfferPost))]
         public async Task<ActionResult<Offer>> OfferPost(Offer offer)
         {
+            if(offer.Banner_!=null)
+            {
+                Banner banner = _context.Banners.Where(b => b.Guid == offer.Banner_.Guid).First();
+                offer.Banner_ = banner;
+            }
+            
             _context.Offers.Add(offer);
             await _context.SaveChangesAsync();
 

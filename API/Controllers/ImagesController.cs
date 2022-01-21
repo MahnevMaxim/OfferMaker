@@ -25,8 +25,8 @@ namespace API.Controllers
             uploadDir = environment.WebRootPath + "/Upload/";
         }
 
-        [HttpPost]
-        public async Task<string> Post(IFormFile file)
+        [HttpPost(Name = nameof(ImagePost))]
+        public async Task<IActionResult> ImagePost(IFormFile file)
         {
             try
             {
@@ -41,22 +41,23 @@ namespace API.Controllers
                     {
                         await file.CopyToAsync(fileStream);
                         fileStream.Flush();
-                        return uploadDir + file.FileName;
+                        return Ok(uploadDir + file.FileName);
                     }
                 }
                 else
                 {
-                    return "Failed";
+                    return BadRequest("Upload failed, file lenght is 0");
                 }
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                Log.Write(ex);
+                return BadRequest("Upload image exeption:\n"+ex.StackTrace);
             }
         }
 
-        [HttpGet]
-        public PhysicalFileResult Get(string guid)
+        [HttpGet(Name = nameof(ImageGet))]
+        public PhysicalFileResult ImageGet(string guid)
         {
             try
             {

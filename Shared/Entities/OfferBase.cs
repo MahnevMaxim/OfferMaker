@@ -43,8 +43,10 @@ namespace Shared
 
         public ObservableCollection<string> AdvertisingsDown { get; set; }
 
-        public string Banner { get; set; }
-        
+        //public string Banner { get; set; }
+
+        public Banner Banner_ { get; set; }
+
         public bool IsShowPriceDetails { get; set; }
 
         public bool IsCreateByCostPrice { get; set; }

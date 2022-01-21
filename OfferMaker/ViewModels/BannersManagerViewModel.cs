@@ -17,12 +17,12 @@ namespace OfferMaker.ViewModels
             bannersManager = (BannersManager)model;
         }
 
-        public ObservableCollection<string> Banners { get => bannersManager.Banners; }
+        public ObservableCollection<Banner> Banners { get => bannersManager.Banners; }
 
-        public ObservableCollection<string> Advertisings { get => bannersManager.Advertisings; }
+        public ObservableCollection<Advertising> Advertisings { get => bannersManager.Advertisings; }
 
-        public ObservableCollection<string> AdvertisingsUp { get => bannersManager.AdvertisingsUp; }
+        public ObservableCollection<IImage> AdvertisingsUp { get => bannersManager.AdvertisingsUp; }
 
-        public ObservableCollection<string> AdvertisingsDown { get => bannersManager.AdvertisingsDown; }
+        public ObservableCollection<IImage> AdvertisingsDown { get => bannersManager.AdvertisingsDown; }
     }
 }

@@ -31,6 +31,8 @@ namespace OfferMaker
         ObservableCollection<Offer> offerTemplates;
         ObservableCollection<Currency> currencies;
         List<Hint> hints;
+        ObservableCollection<Banner> banners;
+        ObservableCollection<Advertising> advertisings;
 
         async internal void Run()
         {
@@ -215,6 +217,24 @@ namespace OfferMaker
             else
                 errorMessage += hintsCr.Error.Message + "\n";
 
+            //получаем баннеры
+            var bannersCr = await dataRepository.BannersGet();
+            if (bannersCr.Success)
+            {
+                banners = bannersCr.Data;
+            }
+            else
+                errorMessage += bannersCr.Error.Message + "\n";
+
+            //получаем рекламу
+            var advertisingsCr = await dataRepository.AdvertisingsGet();
+            if (advertisingsCr.Success)
+            {
+                advertisings = advertisingsCr.Data;
+            }
+            else
+                errorMessage += advertisingsCr.Error.Message + "\n";
+
             if (!string.IsNullOrWhiteSpace(errorMessage))
                 MessageBox.Show("", errorMessage);
         }
@@ -249,6 +269,8 @@ namespace OfferMaker
 
             //банеры
             main.BannersManager = BannersManager.GetInstance();
+            main.BannersManager.Banners = banners;
+            main.BannersManager.Advertisings = advertisings;
 
             //конструктор
             main.Constructor = Constructor.GetInstance();
@@ -256,21 +278,15 @@ namespace OfferMaker
             //менеджер документов
             main.DocManager = DocManager.GetInstance();
 
-            //баннеры
-            InitBanners();
-            InitAdvertising();
-
             //архив
-            SetOffers(offers);
-            main.ArchiveFilter = new ArchiveFilter(offers, main.User);
-            main.ArchiveOffers = main.ArchiveFilter.GetFilteredOffers();
-            main.offers = offers;
+            SetOffers(offers, true);
+            main.ArchiveStore = new OfferStore(offers, main.User);
+            main.ArchiveStore.ApplyOfferFilter();
 
             //шаблоны
-            SetOffers(offerTemplates);
-            //main.TemplatesFilter = new ArchiveFilter(offerTemplates, main.User);
-            //main.OfferTemplates = main.TemplatesFilter.GetFilteredOffers();
-            main.offerTemplates = offerTemplates;
+            SetOffers(offerTemplates, false);
+            main.TemplatesStore = new OfferStore(offerTemplates, main.User);
+            main.TemplatesStore.ApplyOfferFilter();
 
             //менеджер картинок
             main.ImageManager = ImageManager.GetInstance();
@@ -280,32 +296,12 @@ namespace OfferMaker
         /// Восстанавливаем необходимые данные.
         /// </summary>
         /// <param name="data"></param>
-        private void SetOffers(ObservableCollection<Offer> offers)
+        private void SetOffers(ObservableCollection<Offer> offers, bool isArchive)
         {
             ObservableCollection<Offer> restoredOffers = new ObservableCollection<Offer>();
             foreach (var offer in offers)
-                restoredOffers.Add(Utils.RestoreOffer(offer, users));
+                restoredOffers.Add(Utils.RestoreOffer(offer, users, isArchive));
             offers = restoredOffers;
-        }
-
-        /// <summary>
-        /// Инициализация рекламных материалов.
-        /// </summary>
-        private void InitAdvertising()
-        {
-            string advertisingsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\advertisings");
-            var files = Directory.GetFiles(advertisingsPath);
-            files.ToList().ForEach(f => main.BannersManager.Advertisings.Add(f));
-        }
-
-        /// <summary>
-        /// Инициализация баннеров.
-        /// </summary>
-        private void InitBanners()
-        {
-            string bannersPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\banners");
-            var files = Directory.GetFiles(bannersPath);
-            files.ToList().ForEach(f => main.BannersManager.Banners.Add(f));
         }
 
         /// <summary>
