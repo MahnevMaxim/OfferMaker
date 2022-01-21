@@ -128,8 +128,12 @@
                 </StackPanel>
             </DataTemplate>
         </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="41*"/>
+            <ColumnDefinition Width="199*"/>
+        </Grid.ColumnDefinitions>
 
-        <Grid Background="{Binding Settings.AdditionalColor}">
+        <Grid Background="{Binding Settings.AdditionalColor}" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto" />
                 <ColumnDefinition Width="*" />
@@ -178,7 +182,7 @@
             </TextBox>
         </Grid>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="350"
                                   MaxWidth="350"
