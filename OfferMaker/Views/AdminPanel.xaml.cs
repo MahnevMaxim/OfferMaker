@@ -102,6 +102,11 @@ namespace OfferMaker.Views
         }
 
         public void ClearPwdNewUserPasswordTextBox() => newUserPasswordTextBox.Password = null;
-        
+
+        private void TextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            (sender as TextBox).SelectAll();
+        }
     }
 }
