@@ -12,6 +12,7 @@
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
@@ -204,6 +205,12 @@
     <Folder Include="Images\banners\" />
     <Folder Include="Images\advertisings\" />
     <Folder Include="Images\informIcons\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ImageCropperLibrary">
+      <HintPath>..\..\ImageCropperLibrary\bin\Debug\net5.0-windows\ImageCropperLibrary.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

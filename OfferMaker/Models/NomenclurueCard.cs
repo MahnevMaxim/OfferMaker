@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using ImageCropperLibrary;
+using System.Windows;
+using System.IO;
 
 namespace OfferMaker
 {
@@ -39,8 +42,8 @@ namespace OfferMaker
             }
         }
 
-        public string CategoryTitle 
-        { 
+        public string CategoryTitle
+        {
             get => catalog?.Categories.Where(c => c.Guid == Nomenclature.CategoryGuid).FirstOrDefault()?.Title;
             set
             {
@@ -88,19 +91,44 @@ namespace OfferMaker
             catalog.CatalogFilter.RemoveFromCategory(Nomenclature);
             CategoryTitle = null;
         }
-           
+
         /// <summary>
         /// Заменяем/добавляем фото
         /// </summary>
         public void AddImage()
         {
-            string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
-            if (path != null)
+            string path = SomeMethod();
+            if (path != null && path != "")
             {
                 Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
                 Global.ImageManager.Add(image, 500);
                 Nomenclature.SetPhoto(image);
             }
+        }
+
+        private string SomeMethod()
+        {
+            byte[] result = ImageCropper.GetImage(new Size(600, 400));
+
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string newImagePath = currentDirectory + @"\images\new\";
+            if (!Directory.Exists(newImagePath))
+            {
+                Directory.CreateDirectory(newImagePath);
+            }
+            string retPath = newImagePath + DateTime.Now.ToShortDateString() + ".png";
+            try
+            {
+                System.IO.File.WriteAllBytes(retPath, result);
+            }
+            catch (Exception ex)
+            {
+                retPath = "";
+            }
+
+            //string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
+
+            return retPath;
         }
 
         /// <summary>
