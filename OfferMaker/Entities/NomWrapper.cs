@@ -122,6 +122,12 @@ namespace OfferMaker
                 decimal costPrice = CurrencyCharCode == Nomenclature.CurrencyCharCode ? Nomenclature.CostPrice : Nomenclature.CostPrice * DefaultCurrency.Rate / Currency.Rate;
                 return IsWithNds ? costPrice : costPrice / 1.2m;
             }
+            set
+            {
+                decimal koef = value / CostPrice;
+                Nomenclature.CostPrice = Nomenclature.CostPrice * koef;
+                UpdateAmount();
+            }
         }
 
         /// <summary>
@@ -168,13 +174,30 @@ namespace OfferMaker
         /// Цена одной номенклатурной единицы.
         /// </summary>
         [JsonIgnore]
-        public decimal Price { get => offerGroup == null ? 0 : offerGroup.IsCreateByCostPrice ? CostPrice : CostPrice * Markup; }
+        public decimal Price 
+        { 
+            get => offerGroup == null ? 0 : offerGroup.IsCreateByCostPrice ? CostPrice : CostPrice * Markup;
+            set
+            {
+                decimal koef = value / Price;
+                Nomenclature.CostPrice = Nomenclature.CostPrice * koef;
+                UpdateAmount();
+            }
+        }
 
         /// <summary>
         /// Наценка.
         /// </summary>
         [JsonIgnore]
-        public decimal Markup { get => offerGroup.IsCreateByCostPrice ? 1 : Nomenclature.Markup; }
+        public decimal Markup 
+        { 
+            get => offerGroup.IsCreateByCostPrice ? 1 : Nomenclature.Markup; 
+            set
+            {
+                Nomenclature.Markup = value;
+                UpdateAmount();
+            }
+        }
 
         /// <summary>
         /// Себестоимость заданного кол-ва номенклатурных единиц.
@@ -192,7 +215,16 @@ namespace OfferMaker
         /// Суммарная прибыль с заданного кол-ва номенклатурных единиц.
         /// </summary>
         [JsonIgnore]
-        public decimal ProfitSum { get => offerGroup.IsCreateByCostPrice ? 0 : Profit * amount; }
+        public decimal ProfitSum
+        { 
+            get => offerGroup.IsCreateByCostPrice ? 0 : Profit * amount;
+            set
+            {
+                decimal koef = value / ProfitSum;
+                Nomenclature.CostPrice = Nomenclature.CostPrice * koef;
+                UpdateCurrency();
+            }
+        }
 
         // <summary>
         /// Сумма прибыли при продаже 1 единицы номенклатуры.
