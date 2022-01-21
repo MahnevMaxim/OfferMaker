@@ -14,7 +14,7 @@ namespace API
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }
@@ -26,6 +26,7 @@ namespace API
                     webBuilder.UseStartup<Startup>();
                 }).ConfigureServices((hostContext, services) =>
                 {
+                    //Добавление задания в планировщик.
                     // Add the required Quartz.NET services
                     services.AddQuartz(q =>
                     {
@@ -42,7 +43,7 @@ namespace API
                         q.AddTrigger(opts => opts
                             .ForJob(jobKey) // link to the HelloWorldJob
                             .WithIdentity("CurrencyJob-trigger") // give the trigger a unique name
-                            .WithCronSchedule("0 0/10 * * * ?")); 
+                            .WithCronSchedule("0 0/3 * * * ?")); 
                     });
 
                     // Add the Quartz.NET hosted service
@@ -54,6 +55,9 @@ namespace API
                 });
     }
 
+    /// <summary>
+    /// Задание для планировщика.
+    /// </summary>
     [DisallowConcurrentExecution]
     public class CurrencyJob : IJob
     {
