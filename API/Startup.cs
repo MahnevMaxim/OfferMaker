@@ -16,6 +16,8 @@ using API.Data;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
+using Quartz.Impl;
 
 namespace API
 {
