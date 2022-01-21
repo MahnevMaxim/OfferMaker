@@ -17,6 +17,8 @@ namespace OfferMaker
         public static string NomenclatureGroupsPath { get => Path.Combine(DataCacheDir, "nomenclature_groups.json"); } 
         public static string OffersPath { get => Path.Combine(DataCacheDir, "offers.json"); } 
         public static string HintsPath { get => Path.Combine(DataCacheDir, "hints.json"); }
-        public static string OfferTemplates { get => Path.Combine(DataCacheDir, "offer_templates.json"); }
+        public static string OfferTemplatesPath { get => Path.Combine(DataCacheDir, "offer_templates.json"); }
+        public static string BannersPath { get => Path.Combine(DataCacheDir, "banners.json"); }
+        public static string AdvertisingsPath { get => Path.Combine(DataCacheDir, "advertisings.json"); }
     }
 }

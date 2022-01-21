@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shared
 {
     public class Banner : Image
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace OfferMaker
         ObservableCollection<OfferGroup> offerGroups = new ObservableCollection<OfferGroup>();
         ObservableCollection<OfferInfoBlock> offerInfoBlocks = new ObservableCollection<OfferInfoBlock>();
         ObservableCollection<string> advertisingsUp = new ObservableCollection<string>();
+        ObservableCollection<Advertising> advertisingsUp_;
         ObservableCollection<string> advertisingsDown = new ObservableCollection<string>();
         DateTime createDate = DateTime.Now;
         User manager;
@@ -38,6 +39,7 @@ namespace OfferMaker
         Discount discount;
         string createDateString;
         string banner;
+        Banner banner_;
         string offerName = "Новое КП";
         bool isHiddenTextNds;
         bool isWithNds = true;
@@ -208,6 +210,16 @@ namespace OfferMaker
             }
         }
 
+        //public ObservableCollection<Advertising> AdvertisingsUp_
+        //{
+        //    get => advertisingsUp_;
+        //    set
+        //    {
+        //        advertisingsUp_ = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
+
         /// <summary>
         /// Рекламмные материалы, идущие внизу.
         /// </summary>
@@ -233,14 +245,28 @@ namespace OfferMaker
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(banner))
-                    return banner;
+                if (banner_ != null)
+                    return banner_.LocalPhotoPath;
                 return Environment.CurrentDirectory + @"\Images\no-image.jpg";
             }
             set
             {
                 banner = value;
                 OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Баннер_.
+        /// </summary>
+        public Banner Banner_
+        {
+            get => banner_;
+            set
+            {
+                banner_ = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(Banner));
             }
         }
 
@@ -507,17 +533,24 @@ namespace OfferMaker
         /// Конструктор первой инициализации объекта.
         /// </summary>
         /// <param name="constructor"></param>
-        public Offer(Constructor constructor, Currency currency, ObservableCollection<OfferInfoBlock> offerInfoBlocks, User offerCreator, string banner)
+        public Offer(Constructor constructor, Currency currency, ObservableCollection<OfferInfoBlock> offerInfoBlocks, User offerCreator, string bannerGuid)
         {
             this.constructor = constructor;
             Currency = currency;
             OfferInfoBlocks = offerInfoBlocks;
             OfferCreator = offerCreator;
-            Banner = banner;
+            Banner_ = GetBannerByGuid(bannerGuid);
             OfferInfoBlocks.CollectionChanged += OfferInfoBlocks_CollectionChanged;
             OfferGroups.CollectionChanged += OfferGroups_CollectionChanged;
             Guid = System.Guid.NewGuid().ToString();
             discount = new Discount(this);
+        }
+
+        private Banner GetBannerByGuid(string bannerGuid)
+        {
+            string path = ImageManager.GetInstance().GetImagePath(bannerGuid);
+            Banner bann = new Banner(bannerGuid, 0, path);
+            return bann;
         }
 
         public void SetConstructor(Constructor constructor)
@@ -545,19 +578,19 @@ namespace OfferMaker
             Currencies = new ObservableCollection<Currency>();
             Currency rub = Global.GetRub();
             Currencies.Add(rub);
-            if(!Currencies.Contains(Currency))
+            if (!Currencies.Contains(Currency))
                 Currencies.Add(Currency);
-            foreach(OfferGroup offerGroup in OfferGroups)
+            foreach (OfferGroup offerGroup in OfferGroups)
             {
-                foreach(NomWrapper nw in offerGroup.NomWrappers)
+                foreach (NomWrapper nw in offerGroup.NomWrappers)
                 {
                     nw.SetCurrencyCharCode();
-                    if(!Currencies.Contains(nw.Currency))
+                    if (!Currencies.Contains(nw.Currency))
                     {
                         Currencies.Add(nw.Currency);
                     }
 
-                    if(!Currencies.Contains(nw.DefaultCurrency))
+                    if (!Currencies.Contains(nw.DefaultCurrency))
                     {
                         Currencies.Add(nw.DefaultCurrency);
                     }

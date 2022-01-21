@@ -8,12 +8,14 @@ using Newtonsoft.Json;
 
 namespace OfferMaker
 {
-    public class Image : BaseEntity
+    public class Image : BaseEntity, IImage
     {
         string guid;
         int creatorid;
         string originalPath;
         string localPhotoPath;
+
+        public int Id { get; set; }
 
         public string Guid 
         { 

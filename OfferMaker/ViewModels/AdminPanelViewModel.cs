@@ -59,6 +59,16 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public Position NewUserSelectedPosition
+        {
+            get => adminPanel.NewUserSelectedPosition;
+            set
+            {
+                adminPanel.NewUserSelectedPosition = value;
+                OnPropertyChanged();
+            }
+        }
+
         public int MenuSelectedIndex
         {
             get => adminPanel.MenuSelectedIndex;

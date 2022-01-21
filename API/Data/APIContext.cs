@@ -23,7 +23,7 @@ namespace API.Data
         public DbSet<Position> Positions { get; set; }
         public DbSet<Hint> Hints { get; set; }
         public DbSet<Banner> Banners { get; set; }
-        public DbSet<PromoImage> PromoImages { get; set; }
+        public DbSet<Advertising> Advertisings { get; set; }
 
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)

@@ -41,6 +41,12 @@ namespace OfferMaker
         static readonly string userEditErrorMess = "Ошибка при попытке сохранить пользователя на сервере.";
         static readonly string offersSelfGetErrorMess = "Ошибка при попытке получить свои КП с сервера.";
         static readonly string offerTemplatesGetErrorMess = "Ошибка при попытке получить шаблоны с сервера.";
+        static readonly string bannerCreateErrorMess = "Ошибка при попытке загрузить баннер.";
+        static readonly string bannersGetErrorMess = "Ошибка при попытке получить баннеры с сервера.";
+        static readonly string bannerDeleteErrorMess = "Ошибка при попытке удалить баннер с сервера.";
+        static readonly string advertisingsGetErrorMess = "Ошибка при попытке получить рекламные изображения с сервера.";
+        static readonly string advertisingCreateErrorMess = "Ошибка при попытке создать рекламное изображение с сервера.";
+        static readonly string advertisingDeleteErrorMess = "Ошибка при попытке удалить рекламное изображение с сервера.";
 
         public ServerData(string accessToken)
         {
@@ -491,7 +497,7 @@ namespace OfferMaker
         {
             try
             {
-                var response = await client.CategoriesAllAsync();
+                var response = await client.CategoriesGetAsync();
                 if (response.StatusCode == 200)
                 {
                     ObservableCollection<Category> res = Helpers.CloneObject<ObservableCollection<Category>>(response.Result);
@@ -519,7 +525,7 @@ namespace OfferMaker
             try
             {
                 IEnumerable<ApiLib.Category> categoriesTreeCopy = Helpers.CloneObject<IEnumerable<ApiLib.Category>>(categoriesTree);
-                await client.CategoriesPUTAsync(categoriesTreeCopy);
+                await client.CategoriesSaveAsync(categoriesTreeCopy);
                 return new CallResult();
             }
             catch (Exception ex)
@@ -676,6 +682,10 @@ namespace OfferMaker
 
         #region Offer templates
 
+        /// <summary>
+        /// ПОлучение всех шаблонов.
+        /// </summary>
+        /// <returns></returns>
         async internal Task<CallResult<ObservableCollection<Offer>>> OfferTemplatesGet()
         {
             try
@@ -697,6 +707,11 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Создание шаблона.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
         async internal Task<CallResult> OfferTemplateCreate(Offer offer)
         {
             try
@@ -704,7 +719,7 @@ namespace OfferMaker
                 ApiLib.OfferTemplate offerCopy = Helpers.CloneObject<ApiLib.OfferTemplate>(offer);
                 var res = await client.OfferTemplatePostAsync(offerCopy);
                 offer.Id = res.Result.Id;
-                return new CallResult() { SuccessMessage="Шаблон сохранён."};
+                return new CallResult() { SuccessMessage = "Шаблон сохранён." };
             }
             catch (Exception ex)
             {
@@ -716,6 +731,10 @@ namespace OfferMaker
 
         #region Hints
 
+        /// <summary>
+        /// Получение всех хинтов.
+        /// </summary>
+        /// <returns></returns>
         async internal Task<CallResult<List<Hint>>> HintsGet()
         {
             try
@@ -738,6 +757,168 @@ namespace OfferMaker
         }
 
         #endregion Hints
+
+        #region Banners
+
+        /// <summary>
+        /// Создание баннера.
+        /// </summary>
+        /// <param name="banner"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> BannerCreate(Banner banner)
+        {
+            try
+            {
+                CallResult cr = await Global.ImageManager.UploadBanner(banner);
+                if (cr.Success)
+                {
+                    ApiLib.Banner bannerCopy = Helpers.CloneObject<ApiLib.Banner>(banner);
+                    var res = await client.BannerPostAsync(bannerCopy);
+                    return new CallResult() { SuccessMessage = "Баннер загружен" };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(bannerCreateErrorMess) };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(bannerCreateErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// Получение одиночного баннера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Banner>>> BannersGet()
+        {
+            try
+            {
+                var response = await client.BannersGetAsync();
+                if (response.StatusCode == 200)
+                {
+                    ObservableCollection<Banner> res = Helpers.CloneObject<ObservableCollection<Banner>>(response.Result);
+                    return new CallResult<ObservableCollection<Banner>>() { Data = res };
+                }
+                else
+                {
+                    return GetApiError<ObservableCollection<Banner>>(bannersGetErrorMess, response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return GetApiError<ObservableCollection<Banner>>(bannersGetErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// Удаление баннера.
+        /// </summary>
+        /// <param name="banner"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> BannerDelete(Banner banner)
+        {
+            try
+            {
+                var response = await client.BannerDeleteAsync(banner.Id);
+                if (response.StatusCode == 204)
+                {
+                    return new CallResult() { SuccessMessage = "Баннер удалён." };
+                }
+                else
+                {
+                    return GetApiError(bannerDeleteErrorMess, response.StatusCode);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(bannerDeleteErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// Получение рекламы.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Advertising>>> AdvertisingsGet()
+        {
+            try
+            {
+                var response = await client.AdvertisingsGetAsync();
+                if (response.StatusCode == 200)
+                {
+                    ObservableCollection<Advertising> res = Helpers.CloneObject<ObservableCollection<Advertising>>(response.Result);
+                    return new CallResult<ObservableCollection<Advertising>>() { Data = res };
+                }
+                else
+                {
+                    return GetApiError<ObservableCollection<Advertising>>(advertisingsGetErrorMess, response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return GetApiError<ObservableCollection<Advertising>>(advertisingsGetErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// СОздание рекламы.
+        /// </summary>
+        /// <param name="advertising"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> AdvertisingCreate(Advertising advertising)
+        {
+            try
+            {
+                CallResult cr = await Global.ImageManager.UploadBanner(advertising);
+                if (cr.Success)
+                {
+                    ApiLib.Advertising advertisingCopy = Helpers.CloneObject<ApiLib.Advertising>(advertising);
+                    var res = await client.AdvertisingPostAsync(advertisingCopy);
+                    return new CallResult() { SuccessMessage = "Рекламное изображение загружено" };
+                }
+                else
+                {
+                    return new CallResult() { Error = new Error(advertisingCreateErrorMess) };
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(advertisingCreateErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// Удаление рекламы.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> AdvertisingDelete(int id)
+        {
+            try
+            {
+                var response = await client.AdvertisingDeleteAsync(id);
+                if (response.StatusCode == 204)
+                {
+                    return new CallResult() { SuccessMessage = "Рекламное изображение удалено." };
+                }
+                else
+                {
+                    return GetApiError(advertisingDeleteErrorMess, response.StatusCode);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(advertisingDeleteErrorMess, ex);
+            }
+        }
+
+        #endregion Banners
 
         #region Errors
 
@@ -764,7 +945,7 @@ namespace OfferMaker
                 else
                 {
                     string errorDetails = "";
-                    if(apiEx.Response!=null)
+                    if (apiEx.Response != null)
                         errorDetails = TryGetErrorDetails(apiEx.Response);
                     string errorMessage = errorMess + "Код ошибки " + apiEx.StatusCode;
                     if (!string.IsNullOrWhiteSpace(errorDetails))
@@ -786,7 +967,7 @@ namespace OfferMaker
                 JObject jo = JObject.Parse(response);
                 errorDetails = jo["errors"].ToString();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Write(ex);
             }

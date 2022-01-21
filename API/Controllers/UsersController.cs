@@ -232,6 +232,10 @@ namespace API.Controllers
         [HttpPost(Name = nameof(UserCreate))]
         public async Task<ActionResult<User>> UserCreate(User user)
         {
+            string positionName = user.Position.PositionName;
+            var position = _context.Positions.Where(p => p.PositionName == positionName).First();
+            user.Position = position;
+
             string password = user.Account.Password;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

@@ -271,10 +271,10 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerData.OfferTemplateCreate(offer);
             if (AppMode == AppMode.Offline)
-                return LocalData.UpdateCache(offers, LocalDataConfig.OfferTemplates);
+                return LocalData.UpdateCache(offers, LocalDataConfig.OfferTemplatesPath);
 
             var callResult = await ServerData.OfferTemplateCreate(offer);
-            LocalData.UpdateCache(offers, LocalDataConfig.OfferTemplates);
+            LocalData.UpdateCache(offers, LocalDataConfig.OfferTemplatesPath);
             return callResult;
         }
 
@@ -283,15 +283,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerData.OfferTemplatesGet();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OfferTemplates);
+                return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OfferTemplatesPath);
 
             CallResult<ObservableCollection<Offer>> callResult = await ServerData.OfferTemplatesGet();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.OfferTemplates);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.OfferTemplatesPath);
                 return callResult;
             }
-            return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OfferTemplates);
+            return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OfferTemplatesPath);
         }
 
         #endregion Offer templates
@@ -439,5 +439,50 @@ namespace OfferMaker
         }
 
         #endregion Hints
+
+        #region Banners
+
+        async internal Task<CallResult> BannerCreate(Banner banner) => await ServerData.BannerCreate(banner);
+
+        async internal Task<CallResult<ObservableCollection<Banner>>> BannersGet()
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.BannersGet();
+            if (AppMode == AppMode.Offline)
+                return await LocalData.GetCache<ObservableCollection<Banner>>(LocalDataConfig.BannersPath);
+
+            CallResult<ObservableCollection<Banner>> callResult = await ServerData.BannersGet();
+            if (callResult.Success)
+            {
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.BannersPath);
+                return callResult;
+            }
+            return await LocalData.GetCache<ObservableCollection<Banner>>(LocalDataConfig.BannersPath);
+        }
+
+        async internal Task<CallResult> BannerDelete(Banner banner) => await ServerData.BannerDelete(banner);
+
+        async internal Task<CallResult<ObservableCollection<Advertising>>> AdvertisingsGet()
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.AdvertisingsGet();
+            if (AppMode == AppMode.Offline)
+                return await LocalData.GetCache<ObservableCollection<Advertising>>(LocalDataConfig.AdvertisingsPath);
+
+            CallResult<ObservableCollection<Advertising>> callResult = await ServerData.AdvertisingsGet();
+            if (callResult.Success)
+            {
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.AdvertisingsPath);
+                return callResult;
+            }
+            return await LocalData.GetCache<ObservableCollection<Advertising>>(LocalDataConfig.AdvertisingsPath);
+        }
+
+        async internal Task<CallResult> AdvertisingCreate(Advertising advertising) => await ServerData.AdvertisingCreate(advertising);
+
+        async internal Task<CallResult> AdvertisingDelete(int id) => await ServerData.AdvertisingDelete(id);
+
+        #endregion Banners
+
     }
 }

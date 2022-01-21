@@ -14,7 +14,7 @@
                  BorderThickness="0"
                  Title="Галерея"
                  Height="730"
-                 Width="1100">
+                 Width="1010">
 
     <Window.Resources>
         <root:MultiConverter x:Key="MultiConverter" />
@@ -39,27 +39,62 @@
                                  SelectedItem="{Binding SelectedBanner}"
                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  Margin="5">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="IsSelected"
+                                            Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <ContentPresenter />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Width="100"
-                                            Height="100"
-                                            BorderThickness="1"
+                                    <Border Width="150"
+                                            Margin="5"
+                                            Height="150"
+                                            BorderThickness="2"
                                             BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                        <Image Source="{Binding Path=.}"
-                                               Margin="5">
-                                            <Image.InputBindings>
-                                                <MouseBinding MouseAction="LeftDoubleClick"
-                                                              Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}">
-                                                    <MouseBinding.CommandParameter>
-                                                        <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                            <Binding Source="SelectBanner" />
-                                                            <Binding Path="." />
-                                                        </MultiBinding>
-                                                    </MouseBinding.CommandParameter>
-                                                </MouseBinding>
-                                            </Image.InputBindings>
-
-                                        </Image>
+                                        <Grid>
+                                            <Image Source="{Binding LocalPhotoPath}"
+                                                   Margin="25">
+                                                <Image.InputBindings>
+                                                    <MouseBinding MouseAction="LeftDoubleClick"
+                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}">
+                                                        <MouseBinding.CommandParameter>
+                                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                                <Binding Source="SelectBanner" />
+                                                                <Binding Path="." />
+                                                            </MultiBinding>
+                                                        </MouseBinding.CommandParameter>
+                                                    </MouseBinding>
+                                                </Image.InputBindings>
+                                            </Image>
+                                            <Button MinHeight="20"
+                                                    MinWidth="20"
+                                                    Margin="2"
+                                                    Padding="0"
+                                                    BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Top"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}"
+                                                    Style="{StaticResource MahApps.Styles.Button.Square}">
+                                                <Button.CommandParameter>
+                                                    <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                        <Binding Source="RemoveBanner" />
+                                                        <Binding Path="." />
+                                                    </MultiBinding>
+                                                </Button.CommandParameter>
+                                                <iconPacks:PackIconMaterial Kind="Close"
+                                                                            Width="6"
+                                                                            Height="6" />
+                                            </Button>
+                                        </Grid>
+                                        
                                     </Border>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
@@ -105,26 +140,61 @@
                                      dd:DragDrop.IsDragSource="True"
                                      dd:DragDrop.DragDropCopyKeyState="LeftMouseButton"
                                      Margin="5">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="IsSelected"
+                                                Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <ContentPresenter />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Width="105"
-                                                Height="150"
-                                                BorderThickness="1"
+                                        <Border Width="115"
+                                                Height="165"
+                                                Margin="5"
+                                                BorderThickness="2"
                                                 BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                            <Image Source="{Binding Path=.}"
-                                                   Margin="5">
-                                                <Image.InputBindings>
-                                                    <MouseBinding MouseAction="LeftDoubleClick"
-                                                                  Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}">
-                                                        <MouseBinding.CommandParameter>
-                                                            <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                                <Binding Source="SelectAdvertising" />
-                                                                <Binding Path="." />
-                                                            </MultiBinding>
-                                                        </MouseBinding.CommandParameter>
-                                                    </MouseBinding>
-                                                </Image.InputBindings>
-                                            </Image>
+                                            <Grid>
+                                                <Image Source="{Binding LocalPhotoPath}"
+                                                       Margin="5">
+                                                    <Image.InputBindings>
+                                                        <MouseBinding MouseAction="LeftDoubleClick"
+                                                                      Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}">
+                                                            <MouseBinding.CommandParameter>
+                                                                <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                                    <Binding Source="SelectAdvertising" />
+                                                                    <Binding Path="." />
+                                                                </MultiBinding>
+                                                            </MouseBinding.CommandParameter>
+                                                        </MouseBinding>
+                                                    </Image.InputBindings>
+                                                </Image>
+                                                <Button MinHeight="20"
+                                                        MinWidth="20"
+                                                        Margin="2"
+                                                        Padding="0"
+                                                        BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Top"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}"
+                                                        Style="{StaticResource MahApps.Styles.Button.Square}">
+                                                    <Button.CommandParameter>
+                                                        <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                            <Binding Source="RemoveAdvertising" />
+                                                            <Binding Path="." />
+                                                        </MultiBinding>
+                                                    </Button.CommandParameter>
+                                                    <iconPacks:PackIconMaterial Kind="Close"
+                                                                                Width="6"
+                                                                                Height="6" />
+                                                </Button>
+                                            </Grid>
                                         </Border>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
@@ -138,7 +208,9 @@
                             <Button Content="Загрузить рекламный материал"
                                     Grid.Row="1"
                                     Margin="5"
-                                    Style="{StaticResource MahApps.Styles.Button.Square}" />
+                                    Style="{StaticResource MahApps.Styles.Button.Square}"
+                                    CommandParameter="AddAdvertising"
+                                    Command="{Binding Cmd}" />
                         </Grid>
                     </Border>
                     <Border Margin="5"
@@ -156,15 +228,49 @@
                                          dd:DragDrop.IsDragSource="True"
                                          ScrollViewer.CanContentScroll="False"
                                          Margin="5">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="IsSelected"
+                                                    Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}" />
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListBoxItem">
+                                                        <ContentPresenter />
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Border Width="105"
-                                                    Height="150"
-                                                    BorderThickness="1"
+                                            <Border Width="115"
+                                                    Height="165"
+                                                    BorderThickness="2"
                                                     Margin="5"
                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                                <Image Source="{Binding Path=.}"
-                                                       Margin="5" />
+                                                <Grid>
+                                                    <Image Source="{Binding LocalPhotoPath}"
+                                                           Margin="5"/>
+                                                    <Button MinHeight="20"
+                                                            MinWidth="20"
+                                                            Margin="2"
+                                                            Padding="0"
+                                                            BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Top"
+                                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}"
+                                                            Style="{StaticResource MahApps.Styles.Button.Square}">
+                                                        <Button.CommandParameter>
+                                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                                <Binding Source="RemoveAdvertisingUp" />
+                                                                <Binding Path="."/>
+                                                            </MultiBinding>
+                                                        </Button.CommandParameter>
+                                                        <iconPacks:PackIconMaterial Kind="Close"
+                                                                                    Width="6"
+                                                                                    Height="6"/>
+                                                    </Button>
+                                                </Grid>
                                             </Border>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
@@ -179,6 +285,19 @@
                                          dd:DragDrop.IsDragSource="True"
                                          ScrollViewer.CanContentScroll="False"
                                          Margin="5">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Setter Property="IsSelected"
+                                                    Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}" />
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ListBoxItem">
+                                                        <ContentPresenter />
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             <Border Width="105"
@@ -186,8 +305,29 @@
                                                     BorderThickness="1"
                                                     Margin="5"
                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                                <Image Source="{Binding Path=.}"
-                                                       Margin="5" />
+                                                <Grid>
+                                                    <Image Source="{Binding LocalPhotoPath}"
+                                                           Margin="5" />
+                                                    <Button MinHeight="20"
+                                                            MinWidth="20"
+                                                            Margin="2"
+                                                            Padding="0"
+                                                            BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
+                                                            HorizontalAlignment="Right"
+                                                            VerticalAlignment="Top"
+                                                            Command="{Binding RelativeSource={RelativeSource AncestorType=ListBox}, Path=DataContext.Cmd}"
+                                                            Style="{StaticResource MahApps.Styles.Button.Square}">
+                                                        <Button.CommandParameter>
+                                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                                <Binding Source="RemoveAdvertisingDown" />
+                                                                <Binding Path="." />
+                                                            </MultiBinding>
+                                                        </Button.CommandParameter>
+                                                        <iconPacks:PackIconMaterial Kind="Close"
+                                                                                    Width="6"
+                                                                                    Height="6" />
+                                                    </Button>
+                                                </Grid>
                                             </Border>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>

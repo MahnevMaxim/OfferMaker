@@ -46,10 +46,34 @@ namespace API.Migrations
                     b.ToTable("Account");
                 });
 
+            modelBuilder.Entity("Shared.Advertising", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Creatorid")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Guid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OriginalPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Advertisings");
+                });
+
             modelBuilder.Entity("Shared.Banner", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Creatorid")
                         .HasColumnType("int");
@@ -205,7 +229,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 18, 19, 25, 43, 266, DateTimeKind.Utc).AddTicks(9269));
+                        .HasDefaultValue(new DateTime(2022, 1, 21, 10, 1, 56, 354, DateTimeKind.Utc).AddTicks(7721));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -249,13 +273,13 @@ namespace API.Migrations
                     b.Property<string>("AdvertisingsUp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Banner")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Banner_Id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 18, 19, 25, 43, 271, DateTimeKind.Utc).AddTicks(4439));
+                        .HasDefaultValue(new DateTime(2022, 1, 21, 10, 1, 56, 359, DateTimeKind.Utc).AddTicks(2986));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -315,6 +339,8 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Banner_Id");
+
                     b.ToTable("Offers");
                 });
 
@@ -331,13 +357,13 @@ namespace API.Migrations
                     b.Property<string>("AdvertisingsUp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Banner")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Banner_Id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 18, 19, 25, 43, 274, DateTimeKind.Utc).AddTicks(8820));
+                        .HasDefaultValue(new DateTime(2022, 1, 21, 10, 1, 56, 362, DateTimeKind.Utc).AddTicks(3722));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -393,6 +419,8 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Banner_Id");
+
                     b.ToTable("OfferTemplates");
                 });
 
@@ -416,26 +444,6 @@ namespace API.Migrations
                         .IsUnique();
 
                     b.ToTable("Positions");
-                });
-
-            modelBuilder.Entity("Shared.PromoImage", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Creatorid")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Guid")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OriginalPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PromoImages");
                 });
 
             modelBuilder.Entity("Shared.User", b =>
@@ -483,6 +491,24 @@ namespace API.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Shared.Offer", b =>
+                {
+                    b.HasOne("Shared.Banner", "Banner_")
+                        .WithMany()
+                        .HasForeignKey("Banner_Id");
+
+                    b.Navigation("Banner_");
+                });
+
+            modelBuilder.Entity("Shared.OfferTemplate", b =>
+                {
+                    b.HasOne("Shared.Banner", "Banner_")
+                        .WithMany()
+                        .HasForeignKey("Banner_Id");
+
+                    b.Navigation("Banner_");
                 });
 
             modelBuilder.Entity("Shared.User", b =>

@@ -188,7 +188,7 @@ namespace OfferMaker
         {
             ObservableCollection<OfferInfoBlock> offerInfoBlocks = GetInfoBlocks();
             Currency currency = Global.GetRub();
-            Offer = new Offer(this, currency, offerInfoBlocks, Global.Main.User, Settings.GetDefaultBanner());
+            Offer = new Offer(this, currency, offerInfoBlocks, Global.Main.User, Settings.GetDefaultBannerGuid());
         }
 
         /// <summary>
@@ -230,7 +230,7 @@ namespace OfferMaker
         {
             ObservableCollection<OfferInfoBlock> offerInfoBlocks = GetInfoBlocks();
             Currency currency = Global.GetRub();
-            Offer = new Offer(this, currency, offerInfoBlocks, Global.Main.User, Settings.GetDefaultBanner());
+            Offer = new Offer(this, currency, offerInfoBlocks, Global.Main.User, Settings.GetDefaultBannerGuid());
             Offer.OnPropertyChanged(String.Empty);
             viewModel.OnPropertyChanged(String.Empty);
         }
@@ -299,7 +299,7 @@ namespace OfferMaker
             {
                 Title = "Дополнительное описание",
                 Text = "Дополнительное описание",
-                ImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images\\informIcons\\Commertial5.png"),
+                ImagePath = Path.Combine("Images\\informIcons\\Commertial5.png"),
                 IsCustom = true
             };
             Offer.OfferInfoBlocks.Add(block);
@@ -334,24 +334,24 @@ namespace OfferMaker
                 new OfferInfoBlock(){
                     Title = "Срок готовности товара к отгрузке",
                     Text ="до 30 рабочих дней",
-                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "Images\\informIcons\\Commertial1.png"
+                    ImagePath="Images\\informIcons\\Commertial1.png"
                 },
                 new OfferInfoBlock(){
                     Title = "Срок проведения монтажных и пусконаладочных работ",
                     Text ="до 12 рабочих дней",
-                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "Images\\informIcons\\Commertial2.png"
+                    ImagePath= "Images\\informIcons\\Commertial2.png"
                 },
                 new OfferInfoBlock(){
                     Title = "Условие оплаты",
                     Text ="50% - аванс, 40% - после извещения о готовности товара к отгрузке, " +
                     "5% - после поступления товара на склад Покупателя, " +
                     "оставшиеся 5 % -в трехдневный срок после подписания акта проведения ШМР и ПНР",
-                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "Images\\informIcons\\Commertial3.png"
+                    ImagePath= "Images\\informIcons\\Commertial3.png"
                 },
                 new OfferInfoBlock(){
                     Title = "Условия поставки",
                     Text ="Доставка осуществляется за счет Покупателя",
-                    ImagePath=AppDomain.CurrentDomain.BaseDirectory + "Images\\informIcons\\Commertial4.png"
+                    ImagePath="Images\\informIcons\\Commertial4.png"
                 }
             };
         }
@@ -568,24 +568,48 @@ namespace OfferMaker
         internal void OpenBanners()
         {
             MvvmFactory.CreateWindow(Global.Main.BannersManager, new ViewModels.BannersManagerViewModel(), new Views.BannersManager(), ViewMode.ShowDialog);
+            UpdateBanners();
+            
+        }
+
+        private void UpdateBanners()
+        {
             if (Global.Main.BannersManager.SelectedBanner != null &&
-                Global.Main.BannersManager.SelectedBanner != Offer.Banner)
+                Global.Main.BannersManager.SelectedBanner.LocalPhotoPath != Offer.Banner)
             {
-                Offer.Banner = Global.Main.BannersManager.SelectedBanner;
+                Offer.Banner_ = Global.Main.BannersManager.SelectedBanner;
                 viewModel.OnPropertyChanged("Banner");
             }
 
-            if (!Offer.AdvertisingsUp.Equals(Global.Main.BannersManager.AdvertisingsUp))
+            if(IsChangeAdvertisings(Offer.AdvertisingsUp, Global.Main.BannersManager.AdvertisingsUp))
             {
-                Offer.AdvertisingsUp = Global.Main.BannersManager.AdvertisingsUp;
+                Offer.AdvertisingsUp = GetPathCollection(Global.Main.BannersManager.AdvertisingsUp);
                 viewModel.OnPropertyChanged("AdvertisingsUp");
             }
 
-            if (!Offer.AdvertisingsDown.Equals(Global.Main.BannersManager.AdvertisingsDown))
+            if (IsChangeAdvertisings(Offer.AdvertisingsDown, Global.Main.BannersManager.AdvertisingsDown))
             {
-                Offer.AdvertisingsDown = Global.Main.BannersManager.AdvertisingsDown;
+                Offer.AdvertisingsDown = GetPathCollection(Global.Main.BannersManager.AdvertisingsDown);
                 viewModel.OnPropertyChanged("AdvertisingsDown");
             }
+        }
+
+        private ObservableCollection<string> GetPathCollection(ObservableCollection<IImage> advertisingsUp)
+        {
+            var res = advertisingsUp.Select(i=>i.LocalPhotoPath);
+            return new ObservableCollection<string>(res);
+        }
+
+        private bool IsChangeAdvertisings(ObservableCollection<string> advertisings, ObservableCollection<IImage> advertisings_)
+        {
+            if (advertisings.Count != advertisings_.Count)
+                return true;
+            for(int i=0;i<advertisings.Count;i++)
+            {
+                if (advertisings[i] != advertisings_[i].LocalPhotoPath)
+                    return true;
+            }
+            return false;
         }
 
         #endregion Etc

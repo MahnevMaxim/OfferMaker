@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Shared;
+
 namespace OfferMaker
 {
     public class BannersManager : BaseModel
@@ -12,27 +14,29 @@ namespace OfferMaker
         /// Пока не прочувствовал, чем банер отличается от простой картинки, возможно в будущем придётся во
         /// что-нибудь обернуть, пока выражаю просто через путь к картинке.
         /// </summary>
-        public ObservableCollection<string> Banners { get; set; } = new ObservableCollection<string>();
+        //public ObservableCollection<string> Banners { get; set; } = new ObservableCollection<string>();
+
+        public ObservableCollection<Banner> Banners { get; set; } = new ObservableCollection<Banner>();
 
         /// <summary>
         /// Рекламные материалы.
         /// </summary>
-        public ObservableCollection<string> Advertisings { get; set; } = new ObservableCollection<string>();
+        public ObservableCollection<Advertising> Advertisings { get; set; } = new ObservableCollection<Advertising>();
 
         /// <summary>
         /// Рекламные материалы вверху.
         /// </summary>
-        public ObservableCollection<string> AdvertisingsUp = new ObservableCollection<string>();
+        public ObservableCollection<IImage> AdvertisingsUp = new ObservableCollection<IImage>();
 
         /// <summary>
         /// Рекламные материалы внизу.
         /// </summary>
-        public ObservableCollection<string> AdvertisingsDown = new ObservableCollection<string>();
+        public ObservableCollection<IImage> AdvertisingsDown = new ObservableCollection<IImage>();
 
         /// <summary>
         /// Выбранный баннер.
         /// </summary>
-        public string SelectedBanner { get; set; }
+        public Banner SelectedBanner { get; set; }
 
         #region Singleton
 
@@ -48,22 +52,103 @@ namespace OfferMaker
         /// Срабатывает при двойном клике по баннеру. Выбирает баннер, сохраняет его и закрывает окно.
         /// </summary>
         /// <param name="path"></param>
-        public void SelectBanner(string path)
+        public void SelectBanner(Banner banner)
         {
-            SelectedBanner = path;
-            Settings.SetDefaultBanner(path);
+            SelectedBanner = banner;
+            Settings.SetDefaultBannerGuid(banner.Guid);
             Close();
         }
 
-        public void AddBanner()
+        /// <summary>
+        /// Удаление баннера.
+        /// </summary>
+        /// <param name="banner"></param>
+        async public void RemoveBanner(Banner banner)
+        {
+            CallResult cr = await Global.Main.DataRepository.BannerDelete(banner);
+            if(cr.Success)
+            {
+                Banners.Remove(banner);
+            }
+            else
+            {
+                if(cr.Error.Code==404)
+                    Banners.Remove(banner);
+                OnSendMessage(cr.Message);
+            }
+        }
+
+        /// <summary>
+        /// Добавление баннера.
+        /// </summary>
+        async public void AddBanner()
         {
             string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
             if (path != null)
             {
-                Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
-                Global.ImageManager.Add(image);
-                //Nomenclature.SetPhoto(image);
+                Banner banner = new Banner(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
+                Global.ImageManager.Add(banner, null);
+                
+                CallResult cr = await Global.Main.DataRepository.BannerCreate(banner);
+                if (cr.Success)
+                {
+                    Banners.Add(banner);
+                }
+                else
+                    OnSendMessage(cr.Message);
             }
         }
+
+        /// <summary>
+        /// Добавление ракламного материала.
+        /// </summary>
+        async public void AddAdvertising()
+        {
+            string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
+            if (path != null)
+            {
+                Advertising advertising = new Advertising(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
+                Global.ImageManager.Add(advertising, null);
+
+                CallResult cr = await Global.Main.DataRepository.AdvertisingCreate(advertising);
+                if (cr.Success)
+                {
+                    Advertisings.Add(advertising);
+                }
+                else
+                    OnSendMessage(cr.Message);
+            }
+        }
+
+        /// <summary>
+        /// Удаление рекламного материала.
+        /// </summary>
+        /// <param name="advertising"></param>
+        async public void RemoveAdvertising(Advertising advertising)
+        {
+            CallResult cr = await Global.Main.DataRepository.AdvertisingDelete(advertising.Id);
+            if (cr.Success)
+            {
+                Advertisings.Remove(advertising);
+            }
+            else
+            {
+                if (cr.Error.Code == 404)
+                    Advertisings.Remove(advertising);
+                OnSendMessage(cr.Message);
+            }
+        }
+
+        /// <summary>
+        /// Удаление ракламного материала из конструктора.
+        /// </summary>
+        /// <param name="advertising"></param>
+        public void RemoveAdvertisingDown(IImage advertising) => AdvertisingsDown.Remove(advertising);
+
+        /// <summary>
+        /// Удаление ракламного материала из конструктора.
+        /// </summary>
+        /// <param name="advertising"></param>
+        public void RemoveAdvertisingUp(IImage advertising) => AdvertisingsUp.Remove(advertising);
     }
 }
