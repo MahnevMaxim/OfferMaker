@@ -15,7 +15,7 @@ namespace API
 {
     public class CurrenciesUpdater
     {
-        async public static void Update()
+        public static void Update()
         {
             WebClient client = new WebClient();
             var xml = client.DownloadString("https://www.cbr-xml-daily.ru/daily.xml");
@@ -33,12 +33,13 @@ namespace API
             var controller = new CurrenciesController(context);
 
             var date = xdoc.Element("ValCurs").Attribute("Date").Value;
+            DateTime rateDatetime = DateTime.Parse(date);
             foreach (var item in el)
             {
                 var code = item.Element("CharCode").Value;
                 var rate = item.Element("Value").Value;
-                Currency curr = new Currency() { CharCode = code, Rate = decimal.Parse(rate) };
-                var res = await controller.PutCurrency(0,curr);
+                Currency curr = new Currency() { CharCode = code, Rate = decimal.Parse(rate), RateDatetime = rateDatetime };
+                var res = controller.PutCurrency(0,curr).Result;
             }
         }
     }
