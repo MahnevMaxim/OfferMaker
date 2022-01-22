@@ -368,10 +368,13 @@ namespace OfferMaker
            
         async public void DeleteOfferFromArchive(Offer offer)
         {
-            ArchiveStore.RemoveOffer(offer);
-            ArchiveStore.ApplyOfferFilter();
             var cr = await DataRepository.OfferDelete(offer, ArchiveStore.Offers);
-            if (!cr.Success)
+            if (cr.Success)
+            {
+                ArchiveStore.RemoveOffer(offer);
+                ArchiveStore.ApplyOfferFilter();
+            }
+            else
                 OnSendMessage(cr.Error.Message);
         }
 

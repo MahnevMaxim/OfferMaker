@@ -27,22 +27,27 @@ namespace API.Controllers
         [HttpGet(Name = nameof(OffersGet))]
         public async Task<ActionResult<IEnumerable<Offer>>> OffersGet()
         {
-            return await _context.Offers.Include(o => o.Banner_).ToListAsync();
+            return await _context.Offers.Where(o=>o.IsDelete==false).Include(o => o.Banner_).ToListAsync();
         }
 
         [HttpGet("/self", Name = nameof(OffersSelfGet))]
         public async Task<ActionResult<IEnumerable<Offer>>> OffersSelfGet()
         {
             User user = _context.Users.AsNoTracking().FirstOrDefault(x => x.Email == User.Identity.Name);
-            return await _context.Offers.Where(o => o.OfferCreatorId == user.Id).ToListAsync();
+            return await _context.Offers.Where(o => o.OfferCreatorId == user.Id).Where(o => o.IsDelete == false).ToListAsync();
         }
 
+        [Authorize(Roles = "CanAll,CanSeeAllOffers")]
         [HttpGet("{id}", Name = nameof(OfferGet))]
         public async Task<ActionResult<Offer>> OfferGet(int id)
         {
             var offer = await _context.Offers.FindAsync(id);
 
             if (offer == null)
+            {
+                return NotFound();
+            }
+            else if(offer.IsDelete)
             {
                 return NotFound();
             }
@@ -67,6 +72,7 @@ namespace API.Controllers
             return CreatedAtAction("OfferGet", new { id = offer.Id }, offer);
         }
 
+        [Authorize(Roles = "CanAll,CanControlArchive")]
         [HttpDelete("{id}", Name = nameof(OfferDelete))]
         public async Task<IActionResult> OfferDelete(int id)
         {
@@ -76,7 +82,8 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            _context.Offers.Remove(offer);
+            //_context.Offers.Remove(offer);
+            offer.IsDelete = true;
             await _context.SaveChangesAsync();
 
             return NoContent();

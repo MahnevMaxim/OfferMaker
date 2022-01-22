@@ -301,7 +301,7 @@ namespace OfferMaker
         {
             ObservableCollection<Offer> restoredOffers = new ObservableCollection<Offer>();
             foreach (var offer in offers)
-                restoredOffers.Add(Utils.RestoreOffer(offer, users, isArchive));
+                restoredOffers.Add(Utils.RestoreOffer(offer, main.Users, isArchive));
             offers = restoredOffers;
         }
 

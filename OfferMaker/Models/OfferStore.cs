@@ -80,6 +80,7 @@ namespace OfferMaker
         {
             if (offers.Count == 0)
             {
+                FilteredOffers.Clear(); //при удалении последнего КП надо очистить коллекцию 
                 return;
             }
 
@@ -215,6 +216,7 @@ namespace OfferMaker
         internal void RemoveOffer(Offer offer)
         {
             Offers.Remove(offer);
+            ApplyOfferFilter();
         }
     }
 }

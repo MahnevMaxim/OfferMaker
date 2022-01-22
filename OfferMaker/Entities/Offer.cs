@@ -49,6 +49,7 @@ namespace OfferMaker
         bool isHideNomsPrice;
         bool isTemplate;
         bool isArchive;
+        bool isDelete;
 
         public int Id
         {
@@ -382,6 +383,16 @@ namespace OfferMaker
             set
             {
                 isArchive = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsDelete
+        {
+            get => isDelete;
+            set
+            {
+                isDelete = value;
                 OnPropertyChanged();
             }
         }

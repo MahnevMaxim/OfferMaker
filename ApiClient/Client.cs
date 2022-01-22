@@ -5289,6 +5289,9 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("isTemplate")]
         public bool IsTemplate { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("isDelete")]
+        public bool IsDelete { get; set; }
+
         [System.Text.Json.Serialization.JsonPropertyName("currencies")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Currency> Currencies { get; set; } = new System.Collections.ObjectModel.Collection<Currency>();
@@ -5367,6 +5370,9 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("isTemplate")]
         public bool IsTemplate { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("isDelete")]
+        public bool IsDelete { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
@@ -5374,10 +5380,10 @@ namespace ApiLib
     {
         CanControlPositions,
         CanControlUsers,
+        CanControlArchive,
+        CanControlTemplates,
         CanEditCurrencies,
         CanEditProducts,
-        CanEditTemplates,
-        CanSaveTemplate,
         CanUseManager,
         CanExportOfferWithOldPrice,
         CanMakeOfferWithCostPrice,
