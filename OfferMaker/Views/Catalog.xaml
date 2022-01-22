@@ -310,6 +310,18 @@
                                     </Style.Triggers>
                                 </Style>
                             </DataGrid.RowStyle>-->
+                            <DataGrid.RowStyle>
+                                <Style TargetType="{x:Type DataGridRow}"
+                                       BasedOn="{StaticResource MahApps.Styles.DataGridRow}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPriceActual}"
+                                                     Value="false">
+                                            <Setter Property="Background"
+                                                    Value="{StaticResource DataGrid.LightRow.Background}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Название"
                                                     Binding="{Binding Title}"

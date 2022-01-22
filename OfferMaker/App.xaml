@@ -6,13 +6,26 @@
     <Application.Resources>
         <ResourceDictionary>
             <SolidColorBrush x:Key="DataGrid.EvenRow.Background" Color="#FFF"/>
-            <SolidColorBrush x:Key="DataGrid.OddRow.Background" Color="#330A7AFF"/>
+            <SolidColorBrush x:Key="DataGrid.OddRow.Background"
+                             Color="#330A7AFF" />
+            <SolidColorBrush x:Key="DataGrid.LightRow.Background"
+                             Color="LightPink" />
+            <SolidColorBrush x:Key="DataGrid.DarkRow.Background"
+                             Color="#FF633d43" />
             <ResourceDictionary.MergedDictionaries>
                 <!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
+                
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <!-- Theme setting -->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Steel.xaml" />
+                <ResourceDictionary>
+                    <Style TargetType="TextBox"
+                           BasedOn="{StaticResource MahApps.Styles.TextBox}">
+                        <Setter Property="local:TextBoxBehavior.TripleClickSelectAll"
+                                Value="True" />
+                    </Style>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

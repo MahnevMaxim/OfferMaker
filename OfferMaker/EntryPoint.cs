@@ -264,6 +264,7 @@ namespace OfferMaker
 
             //каталог
             SetNomGroups();
+            nomenclatures.ToList().ForEach(n=>n.SkipIsEdit());
             main.Catalog = Catalog.GetInstance(nomenclatures, categories, nomenclatureGroups);
             main.Catalog.Run();
 

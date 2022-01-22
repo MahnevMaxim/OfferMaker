@@ -119,8 +119,12 @@ namespace OfferMaker
         {
             if (string.IsNullOrEmpty(LightOrDark) || string.IsNullOrEmpty(SelectedTheme)) return;
             string theme = LightOrDark + "." + SelectedTheme;
-            Application.Current.Resources["DataGrid.EvenRow.Background"] = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)); 
-            Application.Current.Resources["DataGrid.OddRow.Background"] = new SolidColorBrush(Color.FromArgb(255, 115, 194, 251));
+            Color color;
+            if (LightOrDark=="Dark")
+                color = (Color)ColorConverter.ConvertFromString("#FF3A292B");
+            else
+                color = (Color)ColorConverter.ConvertFromString("#FFFFB6C1");
+            Application.Current.Resources["DataGrid.LightRow.Background"] = new SolidColorBrush(color); 
             ThemeManager.Current.ChangeTheme(Application.Current, theme);
         }
 
