@@ -252,17 +252,17 @@ namespace OfferMaker
             return ret;
         }
 
-        //public void DownloadAllImages()
-        //{
-        //    //находим все фотки, которые нужны номенклатуре
-        //    List<string> guids = new List<string>();
-        //    foreach (var nom in Global.Catalog.Nomenclatures)
-        //    {
-        //        foreach (var image in nom.Images)
-        //        {
-        //            guids.Add(image.Guid);
-        //        }
-        //    }
-        //}
+        public void DownloadAllImages()
+        {
+            //находим все фотки, которые нужны номенклатуре
+            List<string> guids = new List<string>();
+            foreach (var nom in Global.Catalog.Nomenclatures)
+            {
+                foreach (var image in nom.Images)
+                {
+                    guids.Add(image.Guid);
+                }
+            }
+        }
     }
 }
