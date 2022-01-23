@@ -164,7 +164,21 @@ namespace OfferMaker
         /// Получаем должности.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<ObservableCollection<Position>>> PositionsGet() => await ServerData.PositionsGet();
+        async internal Task<CallResult<ObservableCollection<Position>>> PositionsGet()
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerData.PositionsGet();
+            if (AppMode == AppMode.Offline)
+                return await LocalData.GetCache<ObservableCollection<Position>>(LocalDataConfig.PositionsPath);
+
+            CallResult<ObservableCollection<Position>> callResult = await ServerData.PositionsGet();
+            if (callResult.Success)
+            {
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.PositionsPath);
+                return callResult;
+            }
+            return await LocalData.GetCache<ObservableCollection<Position>>(LocalDataConfig.PositionsPath);
+        }
 
         /// <summary>
         /// Удаление должности.

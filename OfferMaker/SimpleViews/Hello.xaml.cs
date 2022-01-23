@@ -28,14 +28,29 @@ namespace OfferMaker.SimpleViews
     /// </summary>
     public partial class Hello : MetroWindow
     {
-        
-        public static User User;
+        readonly string apiEndpoint = Global.apiEndpoint;
+        string token;
+
+        User user;
+        Main main;
         DataRepository dataRepository;
+        ObservableCollection<User> users;
+        ObservableCollection<Position> positions;
+        ObservableCollection<Category> categories;
+        ObservableCollection<Nomenclature> nomenclatures;
+        ObservableCollection<NomenclatureGroup> nomenclatureGroups;
+        ObservableCollection<Offer> offers;
+        ObservableCollection<Offer> offerTemplates;
+        ObservableCollection<Currency> currencies;
+        List<Hint> hints;
+        ObservableCollection<Banner> banners;
+        ObservableCollection<Advertising> advertisings;
+
+        public static User User;
         bool isBusy;
 
         Client client;
         System.Net.Http.HttpClient httpClient;
-        string apiEndpoint = Global.apiEndpoint;
 
         public static string AccessToken { get; private set; }
         public string LogoPath { get; set; }
@@ -52,7 +67,7 @@ namespace OfferMaker.SimpleViews
             sets.SetSettings();
             isRememberMeCheckBox.IsChecked = Settings.GetIsRememberMe();
             //инициализация хранилища
-            dataRepository = DataRepository.GetInstance(sets.AppMode); 
+            dataRepository = DataRepository.GetInstance(sets.AppMode);
             //инициализация API-клиента
             httpClient = new System.Net.Http.HttpClient();
             client = new Client(apiEndpoint, httpClient);
@@ -68,20 +83,52 @@ namespace OfferMaker.SimpleViews
         async private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (isBusy) return;
+            var mode = Settings.GetInstance().AppMode;
             isBusy = true;
-            string login = loginTextBox.Text.Trim();
-            string pwd = passwordTextBox.Password.Trim();
-            IsRememberMe = (bool)isRememberMeCheckBox.IsChecked;
-            //авторизация и получение пользователей
-            CallResult cr = await Auth(dataRepository, login, pwd); 
-            if (!cr.Success)
+            if (mode == AppMode.Offline)
             {
-                await this.ShowMessageAsync("", cr.Error.Message);
-                isBusy = false;
-                return;
+                string login = loginTextBox.Text.Trim();
+                string pwd = passwordTextBox.Password.Trim();
+                bool isOk = CheckUser(login, pwd);
+                if (!isOk)
+                {
+                    await this.ShowMessageAsync("", "Неправильный логин или пароль");
+                    isBusy = false;
+                    return;
+                }
+                else
+                {
+                    Login = login;
+                }
+            }
+            else
+            {
+                string login = loginTextBox.Text.Trim();
+                string pwd = passwordTextBox.Password.Trim();
+                IsRememberMe = (bool)isRememberMeCheckBox.IsChecked;
+                //авторизация и получение пользователей
+                CallResult cr = await Auth(dataRepository, login, pwd);
+                if (!cr.Success)
+                {
+                    await this.ShowMessageAsync("", cr.Error.Message);
+                    isBusy = false;
+                    return;
+                }
             }
             DialogResult = true;
             Close();
+        }
+
+        private bool CheckUser(string login, string pwd)
+        {
+            if (login == AppSettings.Default.Login)
+            {
+                if(pwd== AppSettings.Default.Pwd)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
@@ -98,16 +145,23 @@ namespace OfferMaker.SimpleViews
                 var userString = authRes.GetProperty("user").ToString();
                 User = JsonConvert.DeserializeObject<User>(userString);
                 Login = login;
+                SavePasswordForOffline(pwd);
                 return new CallResult();
             }
-            catch(ApiException ex)
+            catch (ApiException ex)
             {
-                return new CallResult() { Error = new Error(ex.Response.ToString())};
+                return new CallResult() { Error = new Error(ex.Response.ToString()) };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new CallResult() { Error = new Error(ex) };
             }
+        }
+
+        private void SavePasswordForOffline(string pwd)
+        {
+            AppSettings.Default.Pwd = pwd;
+            AppSettings.Default.Save();
         }
 
         #endregion Auth

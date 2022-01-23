@@ -4,16 +4,40 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace OfferMaker.ViewModels
 {
     class SettingsViewModel : BaseViewModel
     {
         Settings settingsModel;
+        private IDialogCoordinator dialogCoordinator;
 
         public override void InitializeViewModel()
         {
             settingsModel = (Settings)model;
+            dialogCoordinator = ((Views.Settings)view).dialogCoordinator;
+        }
+
+        public RelayCommand ClearCacheCommand
+        {
+            get => new RelayCommand(obj =>
+            {
+                ClearCache();
+            });
+        }
+
+        async void ClearCache()
+        {
+            var dialogSettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "Да",
+                NegativeButtonText = "Нет"
+            };
+            var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "Очистка кэша", "Удалить все кэшированные данные?",
+                MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+            if (dialogRes == MessageDialogResult.Affirmative)
+                settingsModel.ClearCache();
         }
 
         #region Properties

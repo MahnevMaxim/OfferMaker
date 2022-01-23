@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 using System.IO;
+using System.Diagnostics;
 
 namespace OfferMaker
 {
@@ -134,6 +135,12 @@ namespace OfferMaker
             AppSettings.Default.Save();
         }
 
+        internal static void SavePasswordForOffline(string pwd)
+        {
+            AppSettings.Default.Pwd = pwd;
+            AppSettings.Default.Save();
+        }
+
         public static void SetIsRememberMe(bool isRememberMe)
         {
             AppSettings.Default.IsRememberMe = isRememberMe;
@@ -164,10 +171,32 @@ namespace OfferMaker
 
         internal void SkipUserSettings()
         {
-            AppSettings.Default.Login=null;
             AppSettings.Default.AccessToken = null;
             AppSettings.Default.IsRememberMe = false;
             AppSettings.Default.Save();
+        }
+
+        public void ShowLog()
+        {
+            try
+            {
+                Process.Start(@"C:\Program Files (x86)\Notepad++\notepad++.exe", "log.txt");
+                return;
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
+
+            try
+            {
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "log.txt");
+                Process.Start("notepad.exe", filePath);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
         }
 
         public void ClearCache()
@@ -207,5 +236,7 @@ namespace OfferMaker
 
             OnSendMessage(res);
         }
+
+        
     }
 }

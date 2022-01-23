@@ -142,5 +142,17 @@ namespace OfferMaker {
                 this["Login"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Pwd {
+            get {
+                return ((string)(this["Pwd"]));
+            }
+            set {
+                this["Pwd"] = value;
+            }
+        }
     }
 }

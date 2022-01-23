@@ -6,12 +6,14 @@
                  xmlns:local="clr-namespace:OfferMaker.Views"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                 Dialog:DialogParticipation.Register="{Binding}"
                  mc:Ignorable="d"
                  GlowBrush="Black"
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="1"
                  ResizeMode="NoResize"
-                 Title="Настройки" Height="250" Width="280">
+                 Title="Настройки" Height="300" Width="360">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -22,6 +24,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Label Content="Тема" 
@@ -56,13 +59,31 @@
             <ComboBoxItem Content="Offline"/>
             <ComboBoxItem Content="Online"/>
         </ComboBox>
-        <Button Content="Очистить кэш"
-                Name="clearCacheButton"
+        <Grid Grid.Column="1"
+              Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Content="Очистить кэш"
+                    Name="clearCacheButton"
+                    Command="{Binding ClearCacheCommand}"
+                    Margin="10"
+                    Style="{StaticResource MahApps.Styles.Button.Square}" />
+            <Button Content="Лог"
+                    Grid.Column="1"
+                    Command="{Binding Cmd}"
+                    CommandParameter="ShowLog"
+                    Margin="10"
+                    Style="{StaticResource MahApps.Styles.Button.Square}" />
+        </Grid>
+        <Button Content="Скачать все изображения"
+                Grid.Column="1"
+                Grid.Row="4"
                 Command="{Binding Cmd}"
-                CommandParameter="ClearCache"
-                Grid.Column="1" 
-                Grid.Row="3"
+                CommandParameter="DownloadAllImages"
                 Margin="10"
-                Style="{StaticResource MahApps.Styles.Button.Square}"/>
+                Style="{StaticResource MahApps.Styles.Button.Square}" />
+
     </Grid>
 </mah:MetroWindow>

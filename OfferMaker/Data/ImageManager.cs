@@ -153,6 +153,10 @@ namespace OfferMaker
             if (localFilePath != null)
                 return localFilePath;
 
+            //если работаем в оффлайн режиме, то возвращаем картинку по умолчанию
+            return Environment.CurrentDirectory + @"\Images\no-image.jpg";
+
+
             //если в кэше нет, то пытаемся качнуть,
             //при скачивании файл кэшируется
             CallResult cr = GetImageFromServer(guid);

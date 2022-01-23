@@ -20,5 +20,6 @@ namespace OfferMaker
         public static string OfferTemplatesPath { get => Path.Combine(DataCacheDir, "offer_templates.json"); }
         public static string BannersPath { get => Path.Combine(DataCacheDir, "banners.json"); }
         public static string AdvertisingsPath { get => Path.Combine(DataCacheDir, "advertisings.json"); }
+        public static string PositionsPath { get => Path.Combine(DataCacheDir, "positions.json"); }
     }
 }

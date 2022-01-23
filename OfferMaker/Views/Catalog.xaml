@@ -163,7 +163,7 @@
                         ToolTip="Сохранить всё">
                     <iconPacks:PackIconMaterial Kind="ContentSaveAllOutline"
                                                 Width="20"
-                                                Height="20" />
+                                                Height="20"/>
                 </Button>
             </StackPanel>
             <TextBox x:Name="SearchString"
@@ -199,10 +199,10 @@
                 <AdornerDecorator AllowDrop="True">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
                         </Grid.RowDefinitions>
                         <Button CommandParameter="ShowAllCategory"
                                 Command="{Binding Cmd}"
@@ -297,19 +297,6 @@
                                                        SelectionMode="Extended"
                                                        AlternationCount="2"
                                                        IsReadOnly="True">
-                            <!--Тут будет зебра, но потом-->
-                            <!--<DataGrid.RowStyle>
-                                <Style TargetType="{x:Type DataGridRow}">
-                                    <Style.Triggers>
-                                        <Trigger Property="ItemsControl.AlternationIndex" Value="0">
-                                            <Setter Property="Background" Value="{DynamicResource DataGrid.EvenRow.Background}" />
-                                        </Trigger>
-                                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                                            <Setter Property="Background" Value="{DynamicResource DataGrid.OddRow.Background}" />
-                                        </Trigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </DataGrid.RowStyle>-->
                             <DataGrid.RowStyle>
                                 <Style TargetType="{x:Type DataGridRow}"
                                        BasedOn="{StaticResource MahApps.Styles.DataGridRow}">
