@@ -28,6 +28,7 @@ namespace OfferMaker.Views
             InitializeComponent();
             dialogCoordinator = (DialogCoordinator)DialogCoordinator.Instance;
             clearCacheButton.IsEnabled = isFromAuth;
+            downloadImagesButton.IsEnabled = !isFromAuth;
         }
 
         void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);

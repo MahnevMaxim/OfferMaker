@@ -9,7 +9,6 @@ using ApiLib;
 using System.Collections.Specialized;
 using System.Net.Http;
 using System.IO;
-using Microsoft.AspNetCore.Http.Internal;
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 

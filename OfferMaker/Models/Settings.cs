@@ -137,7 +137,7 @@ namespace OfferMaker
 
         internal static void SavePasswordForOffline(string pwd)
         {
-            AppSettings.Default.Pwd = pwd;
+            AppSettings.Default.Pwd = GenerateHash(pwd);
             AppSettings.Default.Save();
         }
 
@@ -237,6 +237,32 @@ namespace OfferMaker
             OnSendMessage(res);
         }
 
-        
+        public static string GenerateHash(string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+
+            // создаем экземпляр реализации SHA256
+            System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
+            var passwordByte = sha256.ComputeHash(stream);
+            string ret = String.Join("", passwordByte);
+            return ret;
+        }
+
+        public void DownloadAllImages()
+        {
+            //находим все фотки, которые нужны номенклатуре
+            List<string> guids = new List<string>();
+            foreach (var nom in Global.Catalog.Nomenclatures)
+            {
+                foreach (var image in nom.Images)
+                {
+                    guids.Add(image.Guid);
+                }
+            }
+        }
     }
 }

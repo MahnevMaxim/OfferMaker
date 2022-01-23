@@ -239,7 +239,7 @@ namespace OfferMaker
         {
             if (Login == AppSettings.Default.Login)
             {
-                if (Pwd == AppSettings.Default.Pwd)
+                if (Settings.GenerateHash(Pwd) == AppSettings.Default.Pwd)
                 {
                     return true;
                 }

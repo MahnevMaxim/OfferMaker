@@ -11,7 +11,6 @@
   <ItemGroup>
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />

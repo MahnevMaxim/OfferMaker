@@ -78,6 +78,7 @@
                     Style="{StaticResource MahApps.Styles.Button.Square}" />
         </Grid>
         <Button Content="Скачать все изображения"
+                Name="downloadImagesButton"
                 Grid.Column="1"
                 Grid.Row="4"
                 Command="{Binding Cmd}"
