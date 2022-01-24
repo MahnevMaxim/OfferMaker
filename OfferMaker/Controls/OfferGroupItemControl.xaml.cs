@@ -90,11 +90,5 @@ namespace OfferMaker.Controls
             if(((ComboBox)sender).SelectedValue!=null)
                 groupTitleTextBox.Text = ((ComboBox)sender).SelectedValue.ToString();
         }
-
-        private void GroupTitleTextBox_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            e.Handled = true;
-            (sender as TextBox).SelectAll();
-        }
     }
 }

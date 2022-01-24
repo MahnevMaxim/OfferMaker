@@ -275,7 +275,6 @@
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Телефон 1"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      Margin="20,5"
                                                      Grid.Row="4" />
                                             <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.PhoneNumber2}"
@@ -283,7 +282,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Телефон 2"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="20,5"
                                                      Grid.Row="5" />
@@ -292,7 +290,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Имя"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="20,5"
                                                      Grid.Row="6" />
@@ -301,7 +298,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Фамилия"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="20,5"
                                                      Grid.Row="7" />
@@ -507,7 +503,6 @@
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Телефон 1"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      HorizontalAlignment="Left"
                                                      Margin="10,5"
                                                      Grid.Row="4"
@@ -517,7 +512,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Телефон 2"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      HorizontalAlignment="Left"
                                                      Margin="10,5"
@@ -528,7 +522,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Имя"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      HorizontalAlignment="Left"
                                                      Margin="10,5"
@@ -539,7 +532,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Фамилия"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      HorizontalAlignment="Left"
                                                      Margin="10,5"
@@ -616,7 +608,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Телефон 1"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="5"
                                                      Grid.Row="2" />
@@ -625,7 +616,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Телефон 2"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="5"
                                                      Grid.Row="3" />
@@ -635,7 +625,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Фамилия пользователя"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="5"/>
                                             <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.FirstName}"
@@ -644,7 +633,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Имя нового пользователя"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="5"/>
                                             <TextBox Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.Email}"
@@ -653,7 +641,6 @@
                                                      mah:TextBoxHelper.ClearTextButton="True"
                                                      mah:TextBoxHelper.UseFloatingWatermark="True"
                                                      mah:TextBoxHelper.Watermark="Email нового пользователя"
-                                                     PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                      mah:TextBoxHelper.WatermarkAlignment="Right"
                                                      Margin="5"/>
                                             <PasswordBox x:Name="newUserPasswordTextBox"
@@ -756,7 +743,6 @@
                                                          mah:TextBoxHelper.ClearTextButton="True"
                                                          mah:TextBoxHelper.UseFloatingWatermark="True"
                                                          mah:TextBoxHelper.Watermark="Новая должность"
-                                                         PreviewMouseDoubleClick="TextBox_PreviewMouseDoubleClick"
                                                          mah:TextBoxHelper.WatermarkAlignment="Right" />
                                                 <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
                                                         CommandParameter="AddPosition"

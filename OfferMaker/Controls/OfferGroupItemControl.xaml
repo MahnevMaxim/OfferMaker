@@ -207,7 +207,6 @@
                      Margin="10"
                      Height="30"
                      MaxWidth="800"
-                     PreviewMouseDoubleClick="GroupTitleTextBox_PreviewMouseDoubleClick"
                      KeyUp="TextBox_KeyUp"/>
             <StackPanel Grid.Row="0"  Grid.Column="1"
                         Orientation="Horizontal">
