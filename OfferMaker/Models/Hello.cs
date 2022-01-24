@@ -173,6 +173,7 @@ namespace OfferMaker
             {
                 Application.Current.Shutdown();
                 OnSendMessage("Пользователь не найден");
+                Application.Current.Shutdown();
                 return;
             }
 
