@@ -97,7 +97,7 @@ namespace OfferMaker
         /// </summary>
         public void AddImage()
         {
-            string path = SomeMethod();
+            string path = GetPathToImage();
             if (path != null && path != "")
             {
                 Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
@@ -105,8 +105,11 @@ namespace OfferMaker
                 Nomenclature.SetPhoto(image);
             }
         }
-
-        private string SomeMethod()
+        /// <summary>
+        /// Получение пути к новому изображению, созданному с использованием редактора
+        /// </summary>
+        /// <returns></returns>
+        private string GetPathToImage()
         {
             byte[] result = ImageCropper.GetImage(new Size(600, 400));
 
@@ -125,8 +128,6 @@ namespace OfferMaker
             {
                 retPath = "";
             }
-
-            //string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
 
             return retPath;
         }
