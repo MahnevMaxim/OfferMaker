@@ -3,3 +3,6 @@ Debug
 
 Connection complete
 
+ImagesController GetSystem.NullReferenceException: Object reference not set to an instance of an object.
+   at API.Controllers.ImagesController.Get(String guid) in C:\Users\o.marusina\source\repos\OfferMaker1\API\Controllers\ImagesController.cs:line 65
+

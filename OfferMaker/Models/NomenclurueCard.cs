@@ -111,7 +111,7 @@ namespace OfferMaker
         /// <returns></returns>
         private string GetPathToImage()
         {
-            byte[] result = ImageCropper.GetImage(new Size(600, 400));
+            byte[] result = ImageCropper.GetImage(new Size(600, 400), null);
 
             string currentDirectory = Directory.GetCurrentDirectory();
             string newImagePath = currentDirectory + @"\images\new\";
