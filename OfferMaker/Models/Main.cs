@@ -102,9 +102,9 @@ namespace OfferMaker
             }
         }
 
-        public ObservableCollection<User> Users 
-        { 
-            get => users; 
+        public ObservableCollection<User> Users
+        {
+            get => users;
             set
             {
                 users = value;
@@ -171,7 +171,7 @@ namespace OfferMaker
         #region Initialization Main
 
         async internal override void Run() => MvvmFactory.RegisterModel(this, Constructor);
-        
+
         #endregion Initialization Main
 
         #region Commands
@@ -209,7 +209,7 @@ namespace OfferMaker
         /// <param name="parentId"></param>
         private void SetParents(ObservableCollection<Category> categoriesTree, int? parentId, string parentGuid)
         {
-            int order=0;
+            int order = 0;
             categoriesTree.ToList().ForEach(c =>
             {
                 c.ParentId = parentId;
@@ -226,10 +226,10 @@ namespace OfferMaker
         private ObservableCollection<Category> GetFlattenTree()
         {
             List<Category> flattenTree = new List<Category>();
-            foreach(var cat in Catalog.CategoriesTree)
+            foreach (var cat in Catalog.CategoriesTree)
             {
                 var subCats = TreeWalker.Walk<Category>(cat, c => c.Childs).ToList();
-                if(subCats.Count>0)
+                if (subCats.Count > 0)
                 {
                     flattenTree.AddRange(subCats);
                 }
@@ -335,12 +335,12 @@ namespace OfferMaker
             CurrentMainSelectedTabIndex = 0;
             Constructor.LoadOfferFromArchive(offer);
         }
-            
+
         public void LoadSelectedOfferFromArchive()
         {
             if (SelectedOfferInArchive != null)
             {
-                CurrentMainSelectedTabIndex=0;
+                CurrentMainSelectedTabIndex = 0;
                 Constructor.LoadOfferFromArchive(SelectedOfferInArchive);
             }
             else
@@ -349,9 +349,9 @@ namespace OfferMaker
 
         private void ShowOffers()
         {
-            if(CurrentMainSelectedTabIndex==1)
+            if (CurrentMainSelectedTabIndex == 1)
                 ArchiveStore.ApplyOfferFilter();
-            else if(CurrentMainSelectedTabIndex==2)
+            else if (CurrentMainSelectedTabIndex == 2)
                 TemplatesStore.ApplyOfferFilter();
         }
 
@@ -365,13 +365,14 @@ namespace OfferMaker
             ArchiveStore.ApplyOfferFilter();
             OnPropertyChanged(nameof(ArchiveStore));
         }
-           
+
         async public void DeleteOfferFromArchive(Offer offer)
         {
-            var cr = await DataRepository.OfferDelete(offer, ArchiveStore.Offers);
+            var cr = await DataRepository.OfferDelete(offer);
             if (cr.Success)
             {
-                ArchiveStore.RemoveOffer(offer);
+                if (!(offer.Id != 0 && Settings.AppMode == AppMode.Offline))
+                    ArchiveStore.RemoveOffer(offer);
                 ArchiveStore.ApplyOfferFilter();
             }
             else
@@ -392,7 +393,7 @@ namespace OfferMaker
 
         public void LoadSelectedOfferTemplate()
         {
-            if (SelectedOfferTemplate != null) 
+            if (SelectedOfferTemplate != null)
             {
                 CurrentMainSelectedTabIndex = 0;
                 Constructor.LoadOfferTemplate(SelectedOfferTemplate);
@@ -416,7 +417,7 @@ namespace OfferMaker
         public void OpenOfferFromFile() => DocManager.OpenOfferFromFile();
 
         async public void OfferCreate() => DocManager.OfferCreate();
-        
+
         #endregion DocManager
 
         #region Settings

@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Quartz;
 using Quartz.Impl;
+using Swashbuckle.AspNetCore.Filters;
+using System.IO;
 
 namespace API
 {
@@ -76,10 +78,33 @@ namespace API
 
             Log.Write("Connection complete");
             services.AddControllers();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerExamples();
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
+                options.ExampleFilters();
+
+                //options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
+
+                //options.OperationFilter<AddResponseHeadersFilter>();
+
+                options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
+
+                //var filePath = Path.Combine(System.AppContext.BaseDirectory, "API.xml");
+                //options.IncludeXmlComments(filePath);
+
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Description = "Standard Authorization header using the Bearer scheme. Example: \"bearer {token}\"",
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+                options.EnableAnnotations();
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
+
+                options.IgnoreObsoleteProperties();
             });
+            
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {

@@ -92,18 +92,15 @@ namespace OfferMaker
         internal void SaveOfferToFile()
         {
             if (!Directory.Exists(defaultPath))
-            {
                 Directory.CreateDirectory(defaultPath);
-            }
 
             var sfd = new SaveFileDialog();
             sfd.Filter = omfFilter;
             sfd.FileName = String.Format("Offer from {0}", DateTime.Today.ToShortDateString());
             sfd.InitialDirectory = defaultPath;
+
             if (sfd.ShowDialog() == DialogResult.OK)
-            {
                 Helpers.SaveObject(sfd.FileName, Global.Offer);
-            }
         }
 
         internal void OpenOfferFromFile()
@@ -154,13 +151,12 @@ namespace OfferMaker
             {
                 Global.Main.ArchiveStore.AddOffer(constructor.Offer.PrepareArchive());
                 Global.Main.OnPropertyChanged(nameof(Global.Main.UsingCurrencies));
-                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer, Global.Offers);
+                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer);
+                //if (cr.Success)
+                //    Global.Main.ArchiveStore.AddOffer(constructor.Offer);
             }
 
-            if (cr.Success)
-                Global.Main.SendMess(cr.SuccessMessage);
-            else
-                Global.Main.SendMess(cr.Error.Message);
+            Global.Main.SendMess(cr.Message);
             Global.Main.ArchiveStore.ApplyOfferFilter();
         }
 

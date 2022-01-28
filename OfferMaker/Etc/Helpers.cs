@@ -37,13 +37,17 @@ namespace OfferMaker
         {
             try
             {
-                if(!Directory.Exists(LocalDataConfig.DataCacheDir))
+                if (!Directory.Exists(LocalDataConfig.DataCacheDir))
                 {
                     Directory.CreateDirectory(LocalDataConfig.DataCacheDir);
                 }
+                if (!Directory.Exists(LocalDataConfig.LocalDataDir))
+                {
+                    Directory.CreateDirectory(LocalDataConfig.LocalDataDir);
+                }
                 string output = JsonConvert.SerializeObject(obj);
                 File.WriteAllText(filePath, output);
-                return new CallResult();
+                return new CallResult() { SuccessMessage = "Объект добавлен" };
             }
             catch (Exception ex)
             {

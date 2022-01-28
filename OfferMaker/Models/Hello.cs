@@ -21,7 +21,7 @@ namespace OfferMaker
         public bool isAuthorizationOk;
 
         User User { get; set; }
-        public string AccessToken { get; set; }
+        //public string AccessToken { get; set; }
 
         Main main;
         DataRepository dataRepository;
@@ -41,6 +41,7 @@ namespace OfferMaker
 
         bool isBusy;
         string helloStatus;
+        string appModeString;
 
         public string LogoPath { get; set; }
 
@@ -66,6 +67,16 @@ namespace OfferMaker
             set
             {
                 helloStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string AppModeString 
+        {
+            get => appModeString;
+            set
+            {
+                appModeString = value;
                 OnPropertyChanged();
             }
         }
@@ -105,6 +116,7 @@ namespace OfferMaker
             Global.Main = main;
             main.Settings = Settings.GetInstance();
             main.Settings.SetSettings();
+            AppModeString = main.Settings.AppMode.ToString();
         }
 
         private void InitHello()
@@ -125,8 +137,12 @@ namespace OfferMaker
 
         public void LoginCommand() => HandAuth();
 
-        public void OpenSettingsCommand() => MvvmFactory.CreateWindow(Global.Settings, new ViewModels.SettingsViewModel(), new Views.Settings(true), ViewMode.ShowDialog);
-
+        public void OpenSettingsCommand()
+        {
+            MvvmFactory.CreateWindow(Global.Settings, new ViewModels.SettingsViewModel(), new Views.Settings(true), ViewMode.ShowDialog);
+            AppModeString = main.Settings.AppMode.ToString();
+        }
+           
         #endregion Комманды
 
         #region Авторизация
@@ -136,30 +152,18 @@ namespace OfferMaker
             IsBusy = true;
 
             var mode = Settings.GetInstance().AppMode;
-            if (mode == AppMode.Offline)
+            //авторизация и получение пользователя
+            SetHelloStatus("авторизация и получение пользователя...");
+            CallResult cr = await Auth();
+            if (!cr.Success)
             {
-                bool isOk = CheckUser();
-                if (!isOk)
+                if (mode == AppMode.Auto || mode == AppMode.Offline)
                 {
+                    bool isAuthOk = await AuthLocal();
                     IsBusy = false;
-                    OnSendMessage("Неправильный логин или пароль");
-                    return;
+                    if (!isAuthOk) return;
                 }
-                User = await GetLocalUser(Login.Trim());
-                if (User == null)
-                {
-                    IsBusy = false;
-                    OnSendMessage("Пользователь не найден. Это означает, что у программы нет сохранённых данных пользователя." +
-                        " Пользователи сохраняются в режиме Auto во время загрузки данных. Настроить режим можно нажав на кнопку с шестерёнкой");
-                    return;
-                }
-            }
-            else
-            {
-                //авторизация и получение пользователя
-                SetHelloStatus("авторизация и получение пользователя...");
-                CallResult cr = await Auth(dataRepository);
-                if (!cr.Success)
+                else
                 {
                     IsBusy = false;
                     OnSendMessage(cr.Error.Message);
@@ -167,7 +171,7 @@ namespace OfferMaker
                 }
             }
 
-            /// Вроде бы к этому моменту User по-любому не должен быть null, но хуй его знает.
+            // Вроде бы к этому моменту User по-любому не должен быть null, но хуй его знает.
             IsBusy = false;
             if (User == null)
             {
@@ -177,7 +181,6 @@ namespace OfferMaker
             }
 
             Settings.SetIsRememberMe(IsRememberMe);
-            Settings.SetToken(AccessToken);
             Settings.SetLogin(Login.Trim());
             Settings.SavePasswordForOffline(Pwd);
 
@@ -185,10 +188,34 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Локальная авторизация.
+        /// </summary>
+        /// <returns></returns>
+        async private Task<bool> AuthLocal()
+        {
+            bool isOk = CheckUser();
+            if (!isOk)
+            {
+
+                OnSendMessage("Неправильный логин или пароль");
+                return false;
+            }
+            User = await GetLocalUser(Login.Trim());
+            if (User == null)
+            {
+                IsBusy = false;
+                OnSendMessage("Пользователь не найден. Это означает, что у программы нет сохранённых данных пользователя." +
+                    " Пользователи сохраняются в режиме Auto во время загрузки данных. Настроить режим можно нажав на кнопку с шестерёнкой");
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Авторизация по логину и паролю.
         /// </summary>
         /// <returns></returns>
-        async private Task<CallResult> Auth(DataRepository dataRepository)
+        async private Task<CallResult> Auth()
         {
             try
             {
@@ -196,7 +223,7 @@ namespace OfferMaker
                 JsonElement authRes = (JsonElement)res.Result;
                 var userAsString = authRes.GetProperty("user").ToString();
                 User = JsonConvert.DeserializeObject<User>(userAsString);
-                AccessToken = authRes.GetProperty("access_token").GetString();
+                Settings.SetToken(authRes.GetProperty("access_token").GetString());
                 return new CallResult();
             }
             catch (ApiException ex)
@@ -222,7 +249,7 @@ namespace OfferMaker
                 JsonElement authRes = (JsonElement)res.Result;
                 var userString = authRes.GetProperty("user").ToString();
                 User = JsonConvert.DeserializeObject<User>(userString);
-                AccessToken = authRes.GetProperty("access_token").GetString();
+                Settings.SetToken(authRes.GetProperty("access_token").GetString());
                 return new CallResult();
             }
             catch (ApiException ex)
@@ -272,11 +299,7 @@ namespace OfferMaker
                 if (Settings.GetIsRememberMe() && (Settings.GetInstance().AppMode == AppMode.Auto || Settings.GetInstance().AppMode == AppMode.Online))
                 {
                     CallResult userCr = await Auth(Settings.GetToken());
-                    if (userCr.Success)
-                    {
-                        Settings.SetToken(AccessToken);
-                    }
-                    else
+                    if (!userCr.Success)
                     {
                         OnSendMessage(userCr.Message);
                         Log.Write(userCr.Message);
@@ -305,8 +328,8 @@ namespace OfferMaker
         /// <returns></returns>
         async private Task InitData()
         {
-            main.DataRepository = DataRepository.GetInstance(AccessToken); //инициализация хранилища
-            dataRepository = main.DataRepository;
+            main.DataRepository = DataRepository.GetInstance(Settings.GetToken()); //инициализация хранилища
+            //dataRepository = main.DataRepository;
             await ReciveData(); //инициализация данных
             InitModules(); //инициализация модулей на основе данных
         }
@@ -379,10 +402,9 @@ namespace OfferMaker
                 || User.Position.Permissions.Contains(Shared.Permissions.CanSeeAllOffers))
             {
                 var offersCr = await dataRepository.OffersGet();
-                if (offersCr.Success)
-                    offers = offersCr.Data;
-                else
+                if (!offersCr.Success)
                     errorMessage += offersCr.Error.Message + "\n";
+                offers = offersCr.Data;
             }
             else
             {
@@ -459,6 +481,10 @@ namespace OfferMaker
             positions.ToList().ForEach(p => p.SetWrapperPermission());
             main.AdminPanel = AdminPanel.GetInstance(users, main.User, positions);
 
+            //менеджер картинок
+            SetHelloStatus("инициализация менеджера картинок...");
+            main.ImageManager = ImageManager.GetInstance();
+
             //каталог
             SetHelloStatus("инициализация каталога...");
             SetNomGroups();
@@ -490,10 +516,6 @@ namespace OfferMaker
             SetOffers(offerTemplates, false);
             main.TemplatesStore = new OfferStore(offerTemplates, main.User);
             main.TemplatesStore.ApplyOfferFilter();
-
-            //менеджер картинок
-            SetHelloStatus("инициализация менеджера картинок...");
-            main.ImageManager = ImageManager.GetInstance();
         }
 
         /// <summary>

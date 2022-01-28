@@ -25,6 +25,12 @@ namespace API.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Получение токена по логину и паролю.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [HttpPost("/token", Name = nameof(AccountGetToken))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -137,6 +143,11 @@ namespace API.Controllers
             return Ok(responseJson);
         }
 
+        /// <summary>
+        /// Обновление токена перед запуском приложения.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpPost("/updatetoken", Name = nameof(AccountUpdateToken))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

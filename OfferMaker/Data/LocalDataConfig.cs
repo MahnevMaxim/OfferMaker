@@ -10,16 +10,18 @@ namespace OfferMaker
     class LocalDataConfig
     {
         public static string DataCacheDir = "data_cache";
-        public static string CurrenciesPath { get => Path.Combine(DataCacheDir, "currencies.json"); }
-        public static string NomenclaturesPath { get => Path.Combine(DataCacheDir, "nomenclatures.json"); } 
-        public static string UsersPath { get => Path.Combine(DataCacheDir, "users.json"); } 
-        public static string CategoriesPath { get => Path.Combine(DataCacheDir, "categories.json"); } 
-        public static string NomenclatureGroupsPath { get => Path.Combine(DataCacheDir, "nomenclature_groups.json"); } 
-        public static string OffersPath { get => Path.Combine(DataCacheDir, "offers.json"); } 
-        public static string HintsPath { get => Path.Combine(DataCacheDir, "hints.json"); }
-        public static string OfferTemplatesPath { get => Path.Combine(DataCacheDir, "offer_templates.json"); }
-        public static string BannersPath { get => Path.Combine(DataCacheDir, "banners.json"); }
-        public static string AdvertisingsPath { get => Path.Combine(DataCacheDir, "advertisings.json"); }
-        public static string PositionsPath { get => Path.Combine(DataCacheDir, "positions.json"); }
+        public static string LocalDataDir = "local_data";
+
+        public static string CurrenciesPath = "currencies.json";
+        public static string NomenclaturesPath = "nomenclatures.json";
+        public static string UsersPath = "users.json";
+        public static string CategoriesPath = "categories.json";
+        public static string NomenclatureGroupsPath = "nomenclature_groups.json";
+        public static string OffersPath = "offers.json";
+        public static string HintsPath = "hints.json";
+        public static string OfferTemplatesPath = "offer_templates.json";
+        public static string BannersPath = "banners.json";
+        public static string AdvertisingsPath = "advertisings.json";
+        public static string PositionsPath = "positions.json";
     }
 }

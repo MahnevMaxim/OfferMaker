@@ -1043,6 +1043,48 @@
                               AutoGenerateColumns="False"
                               IsReadOnly="True"
                               GridLinesVisibility="All">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="{x:Type DataGridRow}"
+                                   BasedOn="{StaticResource MahApps.Styles.DataGridRow}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Id}"
+                                                 Value="0">
+                                        <Setter Property="Background"
+                                                Value="#33f0a30a" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDelete}"
+                                                 Value="True">
+                                        <Setter Property="Background"
+                                                Value="#33a20025" />
+                                    </DataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=Id}"
+                                                       Value="0" />
+                                            <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                                       Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Background"
+                                                    Value="#99f0a30a" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                    <MultiDataTrigger>
+                                        <MultiDataTrigger.Conditions>
+                                            <Condition Binding="{Binding Path=IsDelete}"
+                                                       Value="True" />
+                                            <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                                       Value="True" />
+                                        </MultiDataTrigger.Conditions>
+                                        <MultiDataTrigger.Setters>
+                                            <Setter Property="Background"
+                                                    Value="#cca20025" />
+                                        </MultiDataTrigger.Setters>
+                                    </MultiDataTrigger>
+                                </Style.Triggers>
+                                
+                            </Style>
+                        </DataGrid.RowStyle>
                         <DataGrid.InputBindings>
                             <MouseBinding MouseAction="LeftDoubleClick"
                                           Command="{Binding Cmd}"

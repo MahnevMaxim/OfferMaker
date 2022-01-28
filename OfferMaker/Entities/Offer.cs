@@ -9,13 +9,14 @@ using Newtonsoft.Json;
 
 namespace OfferMaker
 {
-    public class Offer : BaseEntity
+    public class Offer : BaseEntity, IEntity
     {
         /// <summary>
         /// Счётчик добавлений групп в текущем КП,
         /// используется только для выводв названия групп.
         /// </summary>
         int addGroupsCounter;
+
         /// <summary>
         /// Обсервер.
         /// </summary>

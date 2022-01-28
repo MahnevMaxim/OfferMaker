@@ -301,6 +301,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Advertising>>> AdvertisingsGetAsync()
@@ -309,6 +312,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Advertising>>> AdvertisingsGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -356,6 +362,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Advertising>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -375,6 +393,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Advertising>> AdvertisingPostAsync(Advertising body)
@@ -383,6 +404,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Advertising>> AdvertisingPostAsync(Advertising body, System.Threading.CancellationToken cancellationToken)
@@ -433,6 +457,18 @@ namespace ApiLib
                             return new ApiResponse<Advertising>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -452,6 +488,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Advertising>> AdvertisingGetAsync(int id)
@@ -460,6 +499,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Advertising>> AdvertisingGetAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -511,6 +553,18 @@ namespace ApiLib
                             return new ApiResponse<Advertising>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -530,6 +584,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> AdvertisingDeleteAsync(int id)
@@ -538,6 +595,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> AdvertisingDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -583,6 +643,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -602,6 +674,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Banner>>> BannersGetAsync()
@@ -610,6 +685,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Banner>>> BannersGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -657,6 +735,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Banner>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -676,6 +766,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Banner>> BannerPostAsync(Banner body)
@@ -684,6 +777,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Banner>> BannerPostAsync(Banner body, System.Threading.CancellationToken cancellationToken)
@@ -734,6 +830,18 @@ namespace ApiLib
                             return new ApiResponse<Banner>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -753,6 +861,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Banner>> BannerGetAsync(int id)
@@ -761,6 +872,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Banner>> BannerGetAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -812,6 +926,18 @@ namespace ApiLib
                             return new ApiResponse<Banner>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -831,6 +957,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> BannerDeleteAsync(int id)
@@ -839,6 +968,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> BannerDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -884,6 +1016,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -903,6 +1047,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Category>>> CategoriesGetAsync()
@@ -911,6 +1058,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Category>>> CategoriesGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -958,6 +1108,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Category>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -977,6 +1139,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> CategoriesSaveAsync(System.Collections.Generic.IEnumerable<Category> body)
@@ -985,6 +1150,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> CategoriesSaveAsync(System.Collections.Generic.IEnumerable<Category> body, System.Threading.CancellationToken cancellationToken)
@@ -1029,6 +1197,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1048,6 +1228,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Category>> CategoryPostAsync(Category body)
@@ -1056,6 +1239,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Category>> CategoryPostAsync(Category body, System.Threading.CancellationToken cancellationToken)
@@ -1106,6 +1292,18 @@ namespace ApiLib
                             return new ApiResponse<Category>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1125,6 +1323,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Category>> CategoryGetAsync(int id)
@@ -1133,6 +1334,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Category>> CategoryGetAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -1184,6 +1388,18 @@ namespace ApiLib
                             return new ApiResponse<Category>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1203,6 +1419,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> CategoryEditAsync(int id, Category body)
@@ -1211,6 +1430,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> CategoryEditAsync(int id, Category body, System.Threading.CancellationToken cancellationToken)
@@ -1259,6 +1481,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1278,6 +1512,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> CategoryDeleteAsync(int id)
@@ -1286,6 +1523,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> CategoryDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -1331,6 +1571,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1350,6 +1602,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Currency>>> CurrenciesAllAsync()
@@ -1358,6 +1613,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Currency>>> CurrenciesAllAsync(System.Threading.CancellationToken cancellationToken)
@@ -1405,6 +1663,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Currency>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1424,6 +1694,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesPUTAsync(System.Collections.Generic.IEnumerable<Currency> body)
@@ -1432,6 +1705,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesPUTAsync(System.Collections.Generic.IEnumerable<Currency> body, System.Threading.CancellationToken cancellationToken)
@@ -1476,6 +1752,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1495,6 +1783,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesPOSTAsync(Currency body)
@@ -1503,6 +1794,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesPOSTAsync(Currency body, System.Threading.CancellationToken cancellationToken)
@@ -1553,6 +1847,18 @@ namespace ApiLib
                             return new ApiResponse<Currency>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1572,6 +1878,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesGETAsync(int id)
@@ -1580,6 +1889,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesGETAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -1631,6 +1943,18 @@ namespace ApiLib
                             return new ApiResponse<Currency>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1650,6 +1974,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesPUT2Async(int id, Currency body)
@@ -1658,6 +1985,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesPUT2Async(int id, Currency body, System.Threading.CancellationToken cancellationToken)
@@ -1706,6 +2036,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1725,6 +2067,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesDELETEAsync(int id)
@@ -1733,6 +2078,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -1778,6 +2126,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1797,6 +2157,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Hint>>> HintsGetAsync()
@@ -1805,6 +2168,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Hint>>> HintsGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -1852,6 +2218,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Hint>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1871,6 +2249,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> ImagePostAsync(FileParameter file)
@@ -1879,6 +2260,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> ImagePostAsync(FileParameter file, System.Threading.CancellationToken cancellationToken)
@@ -1897,7 +2281,9 @@ namespace ApiLib
                     content_.Headers.Remove("Content-Type");
                     content_.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=" + boundary_);
 
-                    if (file != null)
+                    if (file == null)
+                        throw new System.ArgumentNullException("file");
+                    else
                     {
                         var content_file_ = new System.Net.Http.StreamContent(file.Data);
                         if (!string.IsNullOrEmpty(file.ContentType))
@@ -1933,6 +2319,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -1952,6 +2350,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> ImageGetAsync(string guid)
@@ -1960,6 +2361,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> ImageGetAsync(string guid, System.Threading.CancellationToken cancellationToken)
@@ -2006,6 +2410,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2025,6 +2441,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>> NomenclatureGroupsAllAsync()
@@ -2033,6 +2452,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>> NomenclatureGroupsAllAsync(System.Threading.CancellationToken cancellationToken)
@@ -2080,6 +2502,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2099,6 +2533,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPUTAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body)
@@ -2107,6 +2544,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPUTAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body, System.Threading.CancellationToken cancellationToken)
@@ -2157,6 +2597,18 @@ namespace ApiLib
                             return new ApiResponse<NomenclatureGroup>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2176,6 +2628,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPOSTAsync(NomenclatureGroup body)
@@ -2184,6 +2639,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPOSTAsync(NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
@@ -2234,6 +2692,18 @@ namespace ApiLib
                             return new ApiResponse<NomenclatureGroup>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2253,6 +2723,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsGETAsync(int id)
@@ -2261,6 +2734,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsGETAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -2312,6 +2788,18 @@ namespace ApiLib
                             return new ApiResponse<NomenclatureGroup>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2331,6 +2819,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsPUT2Async(int id, NomenclatureGroup body)
@@ -2339,6 +2830,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsPUT2Async(int id, NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
@@ -2387,6 +2881,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2406,6 +2912,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsDELETEAsync(int id)
@@ -2414,6 +2923,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -2459,6 +2971,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2478,6 +3002,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesGetAsync()
@@ -2486,6 +3013,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -2533,6 +3063,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2552,6 +3094,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesEditAsync(System.Collections.Generic.IEnumerable<Nomenclature> body)
@@ -2560,6 +3105,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesEditAsync(System.Collections.Generic.IEnumerable<Nomenclature> body, System.Threading.CancellationToken cancellationToken)
@@ -2610,6 +3158,18 @@ namespace ApiLib
                             return new ApiResponse<Nomenclature>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2629,6 +3189,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturePostAsync(Nomenclature body)
@@ -2637,6 +3200,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturePostAsync(Nomenclature body, System.Threading.CancellationToken cancellationToken)
@@ -2687,6 +3253,18 @@ namespace ApiLib
                             return new ApiResponse<Nomenclature>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2706,6 +3284,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclatureGetAsync(int id)
@@ -2714,6 +3295,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclatureGetAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -2765,6 +3349,18 @@ namespace ApiLib
                             return new ApiResponse<Nomenclature>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2784,6 +3380,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureEditAsync(int id, Nomenclature body)
@@ -2792,6 +3391,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureEditAsync(int id, Nomenclature body, System.Threading.CancellationToken cancellationToken)
@@ -2840,6 +3442,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2859,6 +3473,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> DeleteNomenclatureAsync(int id)
@@ -2867,6 +3484,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> DeleteNomenclatureAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -2912,6 +3532,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -2931,6 +3563,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanAll,CanSeeAllOffers)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Offer>>> OffersGetAsync()
@@ -2939,6 +3574,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanAll,CanSeeAllOffers)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Offer>>> OffersGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -2986,6 +3624,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Offer>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3005,6 +3655,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Offer>> OfferPostAsync(Offer body)
@@ -3013,6 +3666,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Offer>> OfferPostAsync(Offer body, System.Threading.CancellationToken cancellationToken)
@@ -3063,6 +3719,18 @@ namespace ApiLib
                             return new ApiResponse<Offer>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3082,6 +3750,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Offer>>> OffersSelfGetAsync()
@@ -3090,6 +3761,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Offer>>> OffersSelfGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -3137,6 +3811,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Offer>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3156,6 +3842,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanAll,CanSeeAllOffers)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Offer>> OfferGetAsync(int id)
@@ -3164,6 +3853,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanAll,CanSeeAllOffers)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Offer>> OfferGetAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -3215,6 +3907,18 @@ namespace ApiLib
                             return new ApiResponse<Offer>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3234,6 +3938,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanAll,CanControlArchive)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> OfferDeleteAsync(int id)
@@ -3242,6 +3949,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanAll,CanControlArchive)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> OfferDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -3287,6 +3997,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3306,6 +4028,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<OfferTemplate>>> OfferTemplatesGetAsync()
@@ -3314,6 +4039,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<OfferTemplate>>> OfferTemplatesGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -3361,6 +4089,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<OfferTemplate>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3380,6 +4120,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<OfferTemplate>> OfferTemplatePostAsync(OfferTemplate body)
@@ -3388,6 +4131,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<OfferTemplate>> OfferTemplatePostAsync(OfferTemplate body, System.Threading.CancellationToken cancellationToken)
@@ -3438,6 +4184,18 @@ namespace ApiLib
                             return new ApiResponse<OfferTemplate>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3457,6 +4215,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<OfferTemplate>> OfferTemplateGetAsync(int id)
@@ -3465,6 +4226,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<OfferTemplate>> OfferTemplateGetAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -3516,6 +4280,18 @@ namespace ApiLib
                             return new ApiResponse<OfferTemplate>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3535,6 +4311,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> OfferTemplateEditAsync(int id, OfferTemplate body)
@@ -3543,6 +4322,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> OfferTemplateEditAsync(int id, OfferTemplate body, System.Threading.CancellationToken cancellationToken)
@@ -3591,6 +4373,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3610,6 +4404,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> OfferTemplateDeleteAsync(int id)
@@ -3618,6 +4415,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> OfferTemplateDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -3663,6 +4463,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3682,6 +4494,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Position>>> PositionsGetAsync()
@@ -3690,6 +4505,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Position>>> PositionsGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -3737,6 +4555,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Position>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3756,6 +4586,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlPositions,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Position>>> PositionsEditAsync(System.Collections.Generic.IEnumerable<Position> body)
@@ -3764,6 +4597,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlPositions,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Position>>> PositionsEditAsync(System.Collections.Generic.IEnumerable<Position> body, System.Threading.CancellationToken cancellationToken)
@@ -3814,6 +4650,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<Position>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3833,6 +4681,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlPositions,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Position>> PositionPostAsync(Position body)
@@ -3841,6 +4692,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlPositions,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Position>> PositionPostAsync(Position body, System.Threading.CancellationToken cancellationToken)
@@ -3891,6 +4745,18 @@ namespace ApiLib
                             return new ApiResponse<Position>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3910,6 +4776,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<Position>> PositionGetAsync(int id)
@@ -3918,6 +4787,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<Position>> PositionGetAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -3969,6 +4841,18 @@ namespace ApiLib
                             return new ApiResponse<Position>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -3988,6 +4872,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlPositions,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> PositionEditAsync(int id, Position body)
@@ -3996,6 +4883,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlPositions,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> PositionEditAsync(int id, Position body, System.Threading.CancellationToken cancellationToken)
@@ -4044,6 +4934,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4063,6 +4965,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlPositions,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> PositionDeleteAsync(int id)
@@ -4071,6 +4976,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlPositions,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> PositionDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -4116,6 +5024,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4135,6 +5055,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll,CanUseManager,CanSeeAllOffers)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<User>>> UsersGetAsync()
@@ -4143,6 +5066,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll,CanUseManager,CanSeeAllOffers)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<User>>> UsersGetAsync(System.Threading.CancellationToken cancellationToken)
@@ -4190,6 +5116,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<User>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4209,6 +5147,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<User>>> UsersEditAsync(System.Collections.Generic.IEnumerable<User> body)
@@ -4217,6 +5158,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<User>>> UsersEditAsync(System.Collections.Generic.IEnumerable<User> body, System.Threading.CancellationToken cancellationToken)
@@ -4267,6 +5211,18 @@ namespace ApiLib
                             return new ApiResponse<System.Collections.Generic.ICollection<User>>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4286,6 +5242,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<User>> UserCreateAsync(User body)
@@ -4294,6 +5253,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<User>> UserCreateAsync(User body, System.Threading.CancellationToken cancellationToken)
@@ -4344,6 +5306,18 @@ namespace ApiLib
                             return new ApiResponse<User>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4363,6 +5337,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll,CanUseManager,CanSeeAllOffers)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse<User>> UserGetAsync(int id)
@@ -4371,6 +5348,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll,CanUseManager,CanSeeAllOffers)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse<User>> UserGetAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -4422,6 +5402,18 @@ namespace ApiLib
                             return new ApiResponse<User>(status_, headers_, objectResponse_.Object);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4441,6 +5433,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> UserEditAsync(int id, User body)
@@ -4449,6 +5444,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> UserEditAsync(int id, User body, System.Threading.CancellationToken cancellationToken)
@@ -4497,6 +5495,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4516,6 +5526,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> UserDeleteAsync(int id)
@@ -4524,6 +5537,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> UserDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
@@ -4569,6 +5585,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4588,6 +5616,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> UserSelfEditAsync(int id, string password, User body)
@@ -4596,6 +5627,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> UserSelfEditAsync(int id, string password, User body, System.Threading.CancellationToken cancellationToken)
@@ -4649,6 +5683,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4668,6 +5714,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> UserChangePasswordAsync(string password, User body)
@@ -4676,6 +5725,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth roles: CanControlUsers,CanAll)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> UserChangePasswordAsync(string password, User body, System.Threading.CancellationToken cancellationToken)
@@ -4725,6 +5777,18 @@ namespace ApiLib
                             return new ApiResponse(status_, headers_);
                         }
                         else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -4744,6 +5808,9 @@ namespace ApiLib
             }
         }
 
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> UserSelfChangePasswordAsync(string oldPassword, User body)
@@ -4752,6 +5819,9 @@ namespace ApiLib
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<ApiResponse> UserSelfChangePasswordAsync(string oldPassword, User body, System.Threading.CancellationToken cancellationToken)
@@ -4799,6 +5869,18 @@ namespace ApiLib
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
                             return new ApiResponse(status_, headers_);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
                         }
                         else
                         {
@@ -4921,6 +6003,24 @@ namespace ApiLib
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
+    public partial class Account
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("token")]
+        public string Token { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isTokenActive")]
+        public bool IsTokenActive { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("password")]
+        public string Password { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
     public partial class Advertising
     {
 
@@ -4933,6 +6033,9 @@ namespace ApiLib
 
         [System.Text.Json.Serialization.JsonPropertyName("originalPath")]
         public string OriginalPath { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isDeleted")]
+        public bool IsDeleted { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("id")]
         public int Id { get; set; }
@@ -4952,6 +6055,9 @@ namespace ApiLib
 
         [System.Text.Json.Serialization.JsonPropertyName("originalPath")]
         public string OriginalPath { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isDeleted")]
+        public bool IsDeleted { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("id")]
         public int Id { get; set; }
@@ -5015,14 +6121,20 @@ namespace ApiLib
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class Hint
+    public partial class Customer
     {
 
         [System.Text.Json.Serialization.JsonPropertyName("id")]
         public int Id { get; set; }
 
-        [System.Text.Json.Serialization.JsonPropertyName("hintString")]
-        public string HintString { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("fullName")]
+        public string FullName { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("location")]
+        public string Location { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("organization")]
+        public string Organization { get; set; }
 
     }
 
@@ -5042,6 +6154,36 @@ namespace ApiLib
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
+    public partial class Discount
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("isEnabled")]
+        public bool IsEnabled { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isPercentage")]
+        public bool IsPercentage { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("percentage")]
+        public decimal Percentage { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("discountSum")]
+        public decimal DiscountSum { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
+    public partial class Hint
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("hintString")]
+        public string HintString { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
     public partial class Image
     {
 
@@ -5054,6 +6196,9 @@ namespace ApiLib
 
         [System.Text.Json.Serialization.JsonPropertyName("originalPath")]
         public string OriginalPath { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isDeleted")]
+        public bool IsDeleted { get; set; }
 
     }
 
@@ -5119,24 +6264,6 @@ namespace ApiLib
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class Customer
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("id")]
-        public int Id { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("fullName")]
-        public string FullName { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("location")]
-        public string Location { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("organization")]
-        public string Organization { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
     public partial class NomWrapper
     {
 
@@ -5157,63 +6284,6 @@ namespace ApiLib
 
         [System.Text.Json.Serialization.JsonPropertyName("currencyCharCode_")]
         public string CurrencyCharCode_ { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class OfferGroup
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("id")]
-        public int Id { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("groupTitle")]
-        public string GroupTitle { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("isOption")]
-        public bool IsOption { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("nomWrappers")]
-        public System.Collections.Generic.ICollection<NomWrapper> NomWrappers { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class OfferInfoBlock
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("isEnabled")]
-        public bool IsEnabled { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("isCustom")]
-        public bool IsCustom { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("title")]
-        public string Title { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("text")]
-        public string Text { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("imagePath")]
-        public string ImagePath { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class Discount
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("isEnabled")]
-        public bool IsEnabled { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("isPercentage")]
-        public bool IsPercentage { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("percentage")]
-        public decimal Percentage { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("discountSum")]
-        public decimal DiscountSum { get; set; }
 
     }
 
@@ -5295,6 +6365,45 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("currencies")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Currency> Currencies { get; set; } = new System.Collections.ObjectModel.Collection<Currency>();
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
+    public partial class OfferGroup
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public int Id { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("groupTitle")]
+        public string GroupTitle { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isOption")]
+        public bool IsOption { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("nomWrappers")]
+        public System.Collections.Generic.ICollection<NomWrapper> NomWrappers { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
+    public partial class OfferInfoBlock
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("isEnabled")]
+        public bool IsEnabled { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("isCustom")]
+        public bool IsCustom { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("title")]
+        public string Title { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("text")]
+        public string Text { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("imagePath")]
+        public string ImagePath { get; set; }
 
     }
 
@@ -5404,24 +6513,6 @@ namespace ApiLib
 
         [System.Text.Json.Serialization.JsonPropertyName("permissions")]
         public System.Collections.Generic.ICollection<Permissions> Permissions { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
-    public partial class Account
-    {
-
-        [System.Text.Json.Serialization.JsonPropertyName("id")]
-        public int Id { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("token")]
-        public string Token { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("isTokenActive")]
-        public bool IsTokenActive { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("password")]
-        public string Password { get; set; }
 
     }
 

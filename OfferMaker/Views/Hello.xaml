@@ -67,12 +67,18 @@
                         Height="26">
                     <iconPacks:PackIconUnicons Kind="Setting"
                                                Width="13"
-                                               Height="13" />
+                                               Height="13"/>
                 </Button>
                 <CheckBox IsChecked="{Binding IsRememberMe}"
                           Content="запомнить"
                           Margin="15,5"
                           FontSize="14" />
+                <TextBlock Text="Режим:"
+                           FontSize="14"
+                           Margin="10,0" VerticalAlignment="Center"/>
+                <TextBlock FontSize="14"
+                           VerticalAlignment="Center"
+                           Text="{Binding AppModeString}"/>
             </StackPanel>
 
             <Button Content="Войти"
@@ -85,7 +91,8 @@
                     CommandParameter="LoginCommand" />
 
         </Grid>
-        <Grid Visibility="{Binding IsBusy, Converter={StaticResource VisibleIfTrue}}">
+        <Grid Visibility="{Binding IsBusy, Converter={StaticResource VisibleIfTrue}}"
+              d:Visibility="Collapsed">
             <StackPanel VerticalAlignment="Center">
                 <mah:ProgressRing IsActive="True"
                                   IsLarge="True" />

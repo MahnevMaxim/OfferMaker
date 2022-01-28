@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Data;
 using Shared;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers
 {

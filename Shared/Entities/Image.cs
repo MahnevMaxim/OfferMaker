@@ -15,5 +15,7 @@ namespace Shared
         public int Creatorid { get; set; }
 
         public string OriginalPath { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

@@ -58,9 +58,9 @@ namespace OfferMaker
 
         async internal Task<CallResult<ObservableCollection<Offer>>> OffersSelfGet() => await Proxy.OffersSelfGet();
 
-        async internal Task<CallResult> OfferCreate(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferCreate(offer, offers);
+        async internal Task<CallResult> OfferCreate(Offer offer) => await Proxy.OfferCreate(offer);
 
-        async internal Task<CallResult> OfferDelete(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferDelete(offer, offers);
+        async internal Task<CallResult> OfferDelete(Offer offer) => await Proxy.OfferDelete(offer);
 
         #endregion Offers
 

@@ -209,7 +209,7 @@
 
   <ItemGroup>
     <Reference Include="ImageCropperLibrary">
-      <HintPath>..\..\ImageCropperLibrary\bin\Debug\net5.0-windows\ImageCropperLibrary.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\дело\ImageCropperLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
 

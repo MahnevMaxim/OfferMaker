@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.ComponentModel;
+using System.Windows;
 
 namespace OfferMaker
 {
@@ -51,7 +52,11 @@ namespace OfferMaker
         /// <summary>
         /// Кто знает более правильный метод закрывания окна из модели - может поделиться.
         /// </summary>
-        protected void Close() => viewModel.view.Close();
+        protected void Close()
+        {
+            var w = (Window)viewModel.view;
+            w.Dispatcher.Invoke(()=>w.Close());
+        }
 
         #region INotifyPropertyChanged code
 
