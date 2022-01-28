@@ -25,6 +25,12 @@ namespace API.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Получение токена по логину и паролю.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [HttpPost("/token", Name = nameof(AccountGetToken))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,9 +55,11 @@ namespace API.Controllers
 
             var res = await _context.Users.Include(u => u.Account).ToListAsync();
             User user = res.FirstOrDefault(x => x.Email == identity.Name);
+            if (user.Position.Id == 0)
+                user.Position = null;
             if (user.Account == null)
             {
-                user.Account = new Account() { Token = encodedJwt, IsTokenActive = true }; //пароль на первое время остаётся в 2-х местах, это чтобы ничего не ломалось
+                user.Account = new Account() { Token = encodedJwt, IsTokenActive = true }; 
             }
             else
             {
@@ -85,6 +93,61 @@ namespace API.Controllers
             return Ok(responseJson);
         }
 
+        /// <summary>
+        /// Токен для экспорта, на рабочем сервере закомменгтировать или удалить.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/token", Name = nameof(GetToken))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+        async public Task<ActionResult> GetToken()
+        {
+            var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, "Export") };
+            claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, Permissions.CanAll.ToString()));
+
+            ClaimsIdentity claimsIdentity =
+            new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+
+            var now = DateTime.UtcNow;
+            // создаем JWT-токен
+            var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    notBefore: now,
+                    claims: claimsIdentity.Claims,
+                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            var response = new
+            {
+                access_token = encodedJwt,
+                username = "Export"
+            };
+
+            //int count = _context.Users.Count();
+            //if(count>0)
+            //{
+            //    var someUser = _context.Users.Include(u => u.Account).First();
+            //    if (someUser != null)
+            //    {
+            //        someUser.Account.Token = encodedJwt;
+            //        someUser.Account.IsTokenActive = true;
+            //        _context.SaveChanges();
+            //    }
+            //}
+            
+            JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.Preserve };
+            string responseJson = JsonSerializer.Serialize(response, options);
+
+            return Ok(responseJson);
+        }
+
+        /// <summary>
+        /// Обновление токена перед запуском приложения.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpPost("/updatetoken", Name = nameof(AccountUpdateToken))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -180,10 +243,19 @@ namespace API.Controllers
                     {
                         new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                     };
-                    foreach (var p in user.Position.Permissions)
+
+                    if(user.Position!=null)
                     {
-                        claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, p.ToString()));
+                        foreach (var p in user.Position.Permissions)
+                        {
+                            claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, p.ToString()));
+                        }
                     }
+                    else
+                    {
+                        user.Position = new Position() { Permissions = new System.Collections.ObjectModel.ObservableCollection<Permissions>()};
+                    }
+                    
                     ClaimsIdentity claimsIdentity =
                     new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                         ClaimsIdentity.DefaultRoleClaimType);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shared
 {
@@ -11,6 +12,7 @@ namespace Shared
     {
         public int Id { get; set; }
 
+        [Required]
         public string PositionName { get; set; }
 
         public ObservableCollection<Permissions> Permissions { get; set; }

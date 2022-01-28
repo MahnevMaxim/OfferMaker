@@ -11,6 +11,8 @@ namespace OfferMaker
 {
     class Log
     {
+        static string defaultLogPath = "log.txt";
+
         public static void Write(string log_string, Exception exc = null)
         {
             DateTime date = DateTime.UtcNow;
@@ -27,7 +29,7 @@ namespace OfferMaker
 
             try
             {
-                using (StreamWriter sw = File.AppendText(@"log.txt"))
+                using (StreamWriter sw = File.AppendText(defaultLogPath))
                 {
                     sw.WriteLine(text);
                     Console.WriteLine(text);
@@ -41,6 +43,24 @@ namespace OfferMaker
         }
 
         public static void Write(Exception ex) => Write("", ex);
+
+        /// <summary>
+        /// Clear log
+        /// </summary>
+        internal static void Clear(string logPath = null)
+        {
+            try
+            {
+                if (logPath == null)
+                    logPath = defaultLogPath;
+
+                //стираем лог
+                StreamWriter sw = new StreamWriter(logPath, false, Encoding.UTF8);
+                sw.WriteLine("");
+                sw.Close();
+            }
+            catch { }
+        }
 
         public static void ShowMessage(Exception ex)
         {

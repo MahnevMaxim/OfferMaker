@@ -26,7 +26,7 @@ namespace Shared
 
         public Error(Exception ex) => Message = ex.StackTrace;
 
-        public Error(int code, string message)
+        public Error(string message, int code)
         {
             Code = code;
             Message = message;

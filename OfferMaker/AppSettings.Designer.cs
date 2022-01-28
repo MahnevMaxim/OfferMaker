@@ -74,12 +74,12 @@ namespace OfferMaker {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DefaultBanner {
+        public string DefaultBannerGuid {
             get {
-                return ((string)(this["DefaultBanner"]));
+                return ((string)(this["DefaultBannerGuid"]));
             }
             set {
-                this["DefaultBanner"] = value;
+                this["DefaultBannerGuid"] = value;
             }
         }
         
@@ -140,6 +140,18 @@ namespace OfferMaker {
             }
             set {
                 this["Login"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string Pwd {
+            get {
+                return ((string)(this["Pwd"]));
+            }
+            set {
+                this["Pwd"] = value;
             }
         }
     }

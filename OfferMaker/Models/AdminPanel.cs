@@ -12,6 +12,7 @@ namespace OfferMaker
     {
         int menuSelectedIndex;
         Position selectedPosition;
+        Position newUserSelectedPosition;
         User selectedUser;
         User newUser = new User() { Image = Global.NoProfileImage };
 
@@ -25,6 +26,16 @@ namespace OfferMaker
             set
             {
                 selectedPosition = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Position NewUserSelectedPosition
+        {
+            get => newUserSelectedPosition;
+            set
+            {
+                newUserSelectedPosition = value;
                 OnPropertyChanged();
             }
         }
@@ -184,7 +195,7 @@ namespace OfferMaker
             if (path != null)
             {
                 Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
-                Global.ImageManager.Add(image);
+                Global.ImageManager.Add(image, 500);
                 user.Image = image;
             }
         }
@@ -215,7 +226,8 @@ namespace OfferMaker
                 return;
             }
 
-            NewUser.Pwd = NewUserPassword;
+            NewUser.Account = new Account() { Password = NewUserPassword };
+            NewUser.Position = NewUserSelectedPosition;
             CallResult<User> cr = await Global.Main.DataRepository.UserCreate(NewUser);
             if (cr.Success)
             {

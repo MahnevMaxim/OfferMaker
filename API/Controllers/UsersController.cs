@@ -16,10 +16,11 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly APIContext _context;
+        private readonly string defaultPassword = "88888888";
 
         public UsersController(APIContext context)
         {
@@ -229,13 +230,18 @@ namespace API.Controllers
 
         [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPost(Name = nameof(UserCreate))]
-        public async Task<ActionResult<User>> UserCreate(User user, string password)
+        public async Task<ActionResult<User>> UserCreate(User user)
         {
+            string positionName = user.Position.PositionName;
+            var position = _context.Positions.Where(p => p.PositionName == positionName).First();
+            user.Position = position;
+
+            string password = user.Account.Password;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             if (string.IsNullOrWhiteSpace(password))
-                password = "88888888";
+                password = defaultPassword;
             await UserChangePassword(user, password);
 
             return CreatedAtAction(nameof(UserGet), new { id = user.Id }, user);

@@ -22,12 +22,16 @@ namespace OfferMaker
     /// </summary>
     public class ImageManager
     {
-        static List<Image> images = new List<Image>();
+
+        public delegate void UpdateHandler();
+        public event UpdateHandler UpdateProgress;
+
         string apiEndpoint = Global.apiEndpoint;
         System.Net.Http.HttpClient httpClient = new System.Net.Http.HttpClient();
         Client client;
         string token;
-        int maxImageWidth = 500;
+        string imagesDirectory = AppSettings.Default.ImageManagerDir;
+        public DownLoadProgress downLoadProgress;
 
         #region Singleton
 
@@ -50,27 +54,27 @@ namespace OfferMaker
         /// Если не скопировалась то пытаемся несколько раз сделать это повторно.
         /// </summary>
         /// <param name="image"></param>
-        internal void Add(Image image)
+        internal void Add(Image image, int? maxImageWidth)
         {
-            Copy(image);
+            Copy(image, maxImageWidth);
         }
 
         /// <summary>
         /// Копируем файл в кэш.
         /// </summary>
         /// <param name="image"></param>
-        private void Copy(Image image)
+        private void Copy(Image image, int? maxImageWidth)
         {
             try
             {
-                if (!Directory.Exists(AppSettings.Default.ImageManagerDir))
+                if (!Directory.Exists(imagesDirectory))
                 {
-                    Directory.CreateDirectory(AppSettings.Default.ImageManagerDir);
+                    Directory.CreateDirectory(imagesDirectory);
                 }
 
                 string ext = Path.GetExtension(image.OriginalPath);
-                string filePath = Path.Combine(AppSettings.Default.ImageManagerDir, image.Guid + ext);
-                FileCopy(image.OriginalPath, filePath);
+                string filePath = Path.Combine(imagesDirectory, image.Guid + ext);
+                FileCopy(image.OriginalPath, filePath, maxImageWidth);
                 image.IsCopied = true;
             }
             catch (Exception ex)
@@ -84,15 +88,15 @@ namespace OfferMaker
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destinationPath"></param>
-        private void FileCopy(string source, string destinationPath)
+        private void FileCopy(string source, string destinationPath, int? maxImageWidth)
         {
             Bitmap img = new Bitmap(source);
             int width = img.Width;
             int height = img.Height;
-            if (width > maxImageWidth)
+            if (width > maxImageWidth && maxImageWidth != null)
             {
-                int newHeight = height * maxImageWidth / width;
-                Bitmap result = ResizeBitmap(img, maxImageWidth, newHeight);
+                int newHeight = height * (int)maxImageWidth / width;
+                Bitmap result = ResizeBitmap(img, (int)maxImageWidth, newHeight);
                 result.Save(destinationPath, GetImageFormatFromPath(destinationPath));
             }
             else
@@ -109,7 +113,7 @@ namespace OfferMaker
         private ImageFormat GetImageFormatFromPath(string destinationPath)
         {
             string format = Path.GetExtension(destinationPath).ToLower();
-            return format switch 
+            return format switch
             {
                 ".jpg" => ImageFormat.Jpeg,
                 ".bmp" => ImageFormat.Bmp,
@@ -154,6 +158,10 @@ namespace OfferMaker
             if (localFilePath != null)
                 return localFilePath;
 
+            //если работаем в оффлайн режиме, то возвращаем картинку по умолчанию
+            if (Global.Settings.AppMode == AppMode.Offline)
+                return Environment.CurrentDirectory + @"\Images\no-image.jpg";
+
             //если в кэше нет, то пытаемся качнуть,
             //при скачивании файл кэшируется
             CallResult cr = GetImageFromServer(guid);
@@ -180,7 +188,7 @@ namespace OfferMaker
         /// <returns></returns>
         private string TryGetLocalFilePath(string guid)
         {
-            string dir = Path.Combine(Directory.GetCurrentDirectory(), AppSettings.Default.ImageManagerDir);
+            string dir = Path.Combine(Directory.GetCurrentDirectory(), imagesDirectory);
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
             var files = Directory.GetFiles(dir);
@@ -214,8 +222,41 @@ namespace OfferMaker
             client.OpenRead(new Uri(url));
             string headerContentDisposition = client.ResponseHeaders["content-disposition"];
             string filename = new ContentDisposition(headerContentDisposition).FileName;
-            client.DownloadFile(new Uri(url), Path.Combine(AppSettings.Default.ImageManagerDir, filename));
+            client.DownloadFile(new Uri(url), Path.Combine(imagesDirectory, filename));
         }
+
+        async internal Task SyncImagesWithServer(List<string> guids)
+        {
+            string[] files = Directory.GetFiles(imagesDirectory);
+            List<string> existingFilesGuids = new List<string>();
+            files.ToList().ForEach(f => existingFilesGuids.Add(f.Split('.')[0].Replace("cache\\", "")));
+            List<string> needDownloadGuids = guids.Except(existingFilesGuids).ToList();
+
+            downLoadProgress = new DownLoadProgress() { BeginFilesCount = needDownloadGuids.Count };
+            UpdateProgress();
+
+            foreach (string guid in needDownloadGuids)
+            {
+                downLoadProgress.Status = "Загрузка " + guid;
+                UpdateProgress();
+                if (downLoadProgress.IsStop)
+                    break;
+                var cr = await Task.Run(()=> GetImageFromServer(guid));
+                if (cr.Success)
+                {
+                    downLoadProgress.CopiedFilesCount++;
+                }
+                else
+                {
+                    downLoadProgress.ErrorFilesCount++;
+                    Log.Write("Загрузка изображения не удалась:\n" + cr.Message);
+                }
+                UpdateProgress();
+            }
+        }
+
+
+        internal void DownloadStop() => downLoadProgress.IsStop = true;
 
         public async Task CopyFileAsync(string sourcePath, string destinationPath)
         {
@@ -241,7 +282,7 @@ namespace OfferMaker
                             var file = TryGetLocalFilePath(image.Guid);
                             using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
                             FileParameter param = new FileParameter(stream, Path.GetFileName(file));
-                            var res = await client.ImagesPOSTAsync(param);
+                            var res = await client.ImagePostAsync(param);
                         }
                         catch (Exception ex)
                         {
@@ -259,12 +300,40 @@ namespace OfferMaker
                 var file = TryGetLocalFilePath(user.Image.Guid);
                 using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
                 FileParameter param = new FileParameter(stream, Path.GetFileName(file));
-                var res = await client.ImagesPOSTAsync(param);
+                var res = await client.ImagePostAsync(param);
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
             }
         }
+
+        async internal Task<CallResult> UploadBanner(Image banner)
+        {
+            try
+            {
+                var file = TryGetLocalFilePath(banner.Guid);
+                using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
+                FileParameter param = new FileParameter(stream, Path.GetFileName(file));
+                var res = await client.ImagePostAsync(param);
+                return new CallResult();
+            }
+            catch (Exception ex)
+            {
+                return new CallResult() { Error = new Error(ex) };
+            }
+        }
+    }
+
+    public class DownLoadProgress
+    {
+        public int BeginFilesCount { get; set; }
+
+        public int CopiedFilesCount { get; set; }
+
+        public int ErrorFilesCount { get; set; }
+
+        public string Status { get; set; }
+        public bool IsStop { get; internal set; }
     }
 }

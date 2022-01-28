@@ -15,6 +15,7 @@ namespace OfferMaker.ViewModels
         Main modelMain;
         bool isInfoBlocksOpen = false;
         bool isOffersFilterOpen = false;
+        bool isOfferTemplatesFilterOpen = false;
 
         public override void InitializeViewModel()
         {
@@ -53,11 +54,23 @@ namespace OfferMaker.ViewModels
             }
         }
 
+        public bool IsOfferTemplatesFilterOpen
+        {
+            get { return isOfferTemplatesFilterOpen; }
+            set
+            {
+                isOfferTemplatesFilterOpen = value;
+                OnPropertyChanged();
+            }
+        }
+
         public RelayCommand FlyInfoBlocks { get => new RelayCommand(obj => IsInfoBlocksOpen = true); }
 
         public RelayCommand FlyDiscount { get => new RelayCommand(obj => IsDiscountOpen = true); }
 
         public RelayCommand FlyOffersFilter { get => new RelayCommand(obj => IsOffersFilterOpen = true); }
+
+        public RelayCommand FlyOfferTemplatesFilter { get => new RelayCommand(obj => IsOfferTemplatesFilterOpen = true); }
 
         #endregion Fly menu
 
@@ -69,7 +82,13 @@ namespace OfferMaker.ViewModels
 
         #region Main
 
-        public ArchiveFilter ArchiveFilter { get => modelMain.ArchiveFilter; }
+        public OfferStore ArchiveStore { get => modelMain.ArchiveStore; }
+
+        public OfferStore TemplatesStore { get => modelMain.TemplatesStore; }
+
+        public ObservableCollection<Offer> ArchiveOffers { get => modelMain.ArchiveStore.FilteredOffers; }
+
+        public ObservableCollection<Offer> OfferTemplates { get => modelMain.TemplatesStore.FilteredOffers; }
 
         public ObservableCollection<User> Users { get => modelMain.Users; }
 
@@ -83,14 +102,16 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public ObservableCollection<Offer> ArchiveOffers { get => modelMain.ArchiveOffers; }
-
-        public ObservableCollection<Offer> OfferTemplates { get => modelMain.OfferTemplates; }
-
         public Offer SelectedOfferInArchive 
         { 
             get => modelMain.SelectedOfferInArchive;
             set=> modelMain.SelectedOfferInArchive=value;
+        }
+
+        public Offer SelectedOfferTemplate
+        {
+            get => modelMain.SelectedOfferTemplate;
+            set => modelMain.SelectedOfferTemplate = value;
         }
 
         public int CurrentMainSelectedTabIndex
@@ -99,7 +120,7 @@ namespace OfferMaker.ViewModels
             set => modelMain.CurrentMainSelectedTabIndex = value;
         }
 
-        public ObservableCollection<string> UsingCurrencies { get => modelMain.UsingCurrencies; }
+        public ObservableCollection<string> UsingCurrencies { get => modelMain.ConstructorCurrencies; }
 
         public User User { get => modelMain.User; }
 

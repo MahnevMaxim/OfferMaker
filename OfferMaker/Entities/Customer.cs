@@ -9,7 +9,6 @@ namespace OfferMaker
     public class Customer : BaseEntity
     {
         string fullName;
-        string position;
         string location;
         string organization;
 
@@ -21,16 +20,6 @@ namespace OfferMaker
             set
             {
                 fullName = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public string Position
-        {
-            get => position;
-            set
-            {
-                position = value;
                 OnPropertyChanged();
             }
         }

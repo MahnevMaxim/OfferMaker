@@ -92,18 +92,15 @@ namespace OfferMaker
         internal void SaveOfferToFile()
         {
             if (!Directory.Exists(defaultPath))
-            {
                 Directory.CreateDirectory(defaultPath);
-            }
 
             var sfd = new SaveFileDialog();
             sfd.Filter = omfFilter;
             sfd.FileName = String.Format("Offer from {0}", DateTime.Today.ToShortDateString());
             sfd.InitialDirectory = defaultPath;
+
             if (sfd.ShowDialog() == DialogResult.OK)
-            {
                 Helpers.SaveObject(sfd.FileName, Global.Offer);
-            }
         }
 
         internal void OpenOfferFromFile()
@@ -114,7 +111,7 @@ namespace OfferMaker
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 Offer offer = Helpers.InitObject<Offer>(ofd.FileName);
-                Offer offer_ = Utils.RestoreOffer(offer, Global.Users);
+                Offer offer_ = Utils.RestoreOffer(offer, Global.Users, false);
                 Global.Constructor.LoadOfferFromArchive(offer_);
             }
         }
@@ -147,26 +144,26 @@ namespace OfferMaker
             if (isTemplate)
             {
                 Offer temp = CreateTemplate(constructor.Offer);
-                Global.OfferTemplates.Add(temp);
+                Global.Main.TemplatesStore.AddOffer(temp);
                 cr = await Global.Main.DataRepository.OfferTemplateCreate(temp, Global.OfferTemplates);
             }
             else
             {
-                Global.Offers.Add(constructor.Offer.SetCurrency());
-                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer, Global.Offers);
+                Global.Main.ArchiveStore.AddOffer(constructor.Offer.PrepareArchive());
+                Global.Main.OnPropertyChanged(nameof(Global.Main.UsingCurrencies));
+                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer);
+                //if (cr.Success)
+                //    Global.Main.ArchiveStore.AddOffer(constructor.Offer);
             }
 
-            if (cr.Success)
-                Global.Main.SendMess(cr.SuccessMessage);
-            else
-                Global.Main.SendMess(cr.Error.Message);
-            Global.Main.ArchiveOffers = Global.Main.ArchiveFilter.GetFilteredOffers();
+            Global.Main.SendMess(cr.Message);
+            Global.Main.ArchiveStore.ApplyOfferFilter();
         }
 
         private Offer CreateTemplate(Offer offer)
         {
             Offer temp_ = Helpers.CloneObject<Offer>(offer);
-            Offer temp = Utils.RestoreOffer(temp_, Global.Main.Users);
+            Offer temp = Utils.RestoreOffer(temp_, Global.Main.Users, false);
             temp.IsTemplate = true;
             temp.Id = 0;
             temp.CreateDate = DateTime.Now;

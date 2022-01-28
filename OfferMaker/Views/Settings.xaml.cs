@@ -21,12 +21,26 @@ namespace OfferMaker.Views
     /// </summary>
     public partial class Settings : MetroWindow, IView
     {
+        public DialogCoordinator dialogCoordinator;
+
         public Settings(bool isFromAuth)
         {
             InitializeComponent();
+            dialogCoordinator = (DialogCoordinator)DialogCoordinator.Instance;
             clearCacheButton.IsEnabled = isFromAuth;
+            downloadImagesButton.IsEnabled = !isFromAuth;
         }
 
         void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var t = sender.GetType().Name;
+            if(((ViewModels.SettingsViewModel)DataContext).IsBusy)
+            {
+                ((ViewModels.SettingsViewModel)DataContext).TryClose();
+                e.Cancel = true;
+            }
+        }
     }
 }

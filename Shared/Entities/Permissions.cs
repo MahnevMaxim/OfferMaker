@@ -10,10 +10,10 @@ namespace Shared
     {
         CanControlPositions,
         CanControlUsers,
+        CanControlArchive,
+        CanControlTemplates,
         CanEditCurrencies,
         CanEditProducts,
-        CanEditTemplates,
-        CanSaveTemplate,
         CanUseManager,
         CanExportOfferWithOldPrice,
         CanMakeOfferWithCostPrice,

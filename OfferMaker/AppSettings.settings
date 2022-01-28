@@ -14,7 +14,7 @@
     <Setting Name="AppMode" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="DefaultBanner" Type="System.String" Scope="User">
+    <Setting Name="DefaultBannerGuid" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="MaxInfoblocksCount" Type="System.Int32" Scope="User">
@@ -30,6 +30,9 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Login" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Pwd" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

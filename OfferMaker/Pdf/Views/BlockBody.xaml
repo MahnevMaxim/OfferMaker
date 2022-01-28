@@ -15,6 +15,7 @@
         <root:VisToBoolConverter x:Key="VisibleIfTrue" Inverted="True" Not="False" />
         <root:VisToBoolConverter x:Key="VisibleIfNotTrue" Inverted="True" Not="True" />
         <convert:NumConvertors x:Key="numConvertors"></convert:NumConvertors>
+        <root:EmptyStringToBoolConverter x:Key="TrueIfStringNotEmpty" />
     </UserControl.Resources>
 
     <StackPanel Visibility="{Binding IsIncludeIntoOffer, Converter={StaticResource VisibleIfTrue}}"
@@ -109,9 +110,38 @@
                 </Grid.RowDefinitions>
 
                 <!--картинка-->
-                <Canvas Width="6cm" Height="4cm" MaxWidth="6cm" MaxHeight="4cm" VerticalAlignment="Top" x:Name="canva" Grid.Row="0" Margin="0.5cm,0.5cm,0.3cm,-0.2cm">
-                    <Image Stretch="UniformToFill" x:Name="image" Width="6cm" Height="4cm" Source="{Binding Photo}"/>
-                </Canvas>
+                <StackPanel>
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Style.Setters>
+                                <Setter Property="Visibility"
+                                        Value="Visible" />
+                            </Style.Setters>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Photo, Converter={StaticResource TrueIfStringNotEmpty}}"
+                                             Value="False">
+                                    <Setter Property="Visibility"
+                                            Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+                    <Canvas Width="6cm"
+                            Height="4cm"
+                            MaxWidth="6cm"
+                            MaxHeight="4cm"
+                            VerticalAlignment="Top"
+                            x:Name="canva"
+                            Grid.Row="0"
+                            Margin="0.5cm,0.5cm,0.3cm,-0.2cm">
+
+                        <Image Stretch="UniformToFill"
+                               x:Name="image"
+                               Width="6cm"
+                               Height="4cm"
+                               Source="{Binding Photo}" />
+                    </Canvas>
+                </StackPanel>
 
                 <!--стоимость-->
                 <Grid VerticalAlignment="Top" Grid.Row="1" Margin="0,0.3cm,0,0"  >

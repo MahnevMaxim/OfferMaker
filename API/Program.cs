@@ -8,48 +8,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
 using Quartz.Impl;
+using Quartz.Core;
 
 namespace API
 {
     public class Program
     {
-        static IScheduler scheduler;
-
         public static void Main(string[] args)
         {
-            //StartScheduler();
             CreateHostBuilder(args).Build().Run();
-            //StopScheduler();
-        }
-
-        async private static void AddJob()
-        {
-            // define the job and tie it to our HelloJob class
-            IJobDetail job = JobBuilder.Create<CurrencyJob>()
-                .WithIdentity("job1", "group1")
-                .Build();
-
-            // Trigger the job to run now, and then repeat every 10 seconds
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("trigger1", "group1")
-                .StartNow()
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInMinutes(5)
-                    .RepeatForever())
-                .Build();
-
-            // Tell quartz to schedule the job using our trigger
-            await scheduler.ScheduleJob(job, trigger);
-        }
-
-        async private static void StopScheduler() => await scheduler.Shutdown();
-
-        async private static void StartScheduler()
-        {
-            StdSchedulerFactory factory = new StdSchedulerFactory();
-            scheduler = await factory.GetScheduler();
-            await scheduler.Start();
-            AddJob();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -57,17 +24,47 @@ namespace API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                }).ConfigureServices((hostContext, services) =>
+                {
+                    //Добавление задания в планировщик.
+                    // Add the required Quartz.NET services
+                    services.AddQuartz(q =>
+                    {
+                        // Use a Scoped container to create jobs. I'll touch on this later
+                        q.UseMicrosoftDependencyInjectionScopedJobFactory();
+
+                        // Create a "key" for the job
+                        var jobKey = new JobKey("CurrencyJob");
+
+                        // Register the job with the DI container
+                        q.AddJob<CurrencyJob>(opts => opts.WithIdentity(jobKey));
+
+                        // Create a trigger for the job
+                        q.AddTrigger(opts => opts
+                            .ForJob(jobKey) // link to the HelloWorldJob
+                            .WithIdentity("CurrencyJob-trigger") // give the trigger a unique name
+                            .WithCronSchedule("0 0/3 * * * ?")); 
+                    });
+
+                    // Add the Quartz.NET hosted service
+
+                    services.AddQuartzHostedService(
+                        q => q.WaitForJobsToComplete = true);
+
+                    // other config
                 });
     }
 
+    /// <summary>
+    /// Задание для планировщика.
+    /// </summary>
+    [DisallowConcurrentExecution]
     public class CurrencyJob : IJob
     {
-        static bool isBusy;
-        public async Task Execute(IJobExecutionContext context)
+        public Task Execute(IJobExecutionContext context)
         {
-            if (isBusy) return;
-            isBusy = true;
             CurrenciesUpdater.Update();
+            return Task.CompletedTask;
         }
     }
 }

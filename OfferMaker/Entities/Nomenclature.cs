@@ -12,6 +12,7 @@ namespace OfferMaker
     public class Nomenclature : BaseEntity
     {
         string categoryGuid;
+        string title;
         ObservableCollection<Description> descriptions = new ObservableCollection<Description>();
         decimal costPrice;
         decimal markup;
@@ -31,27 +32,41 @@ namespace OfferMaker
         /// <summary>
         /// Название номенклатуры.
         /// </summary>
-        public string Title { get; set; }
+        public string Title
+        {
+            get => title;
+            set
+            {
+                title = value;
+                SetIsEdit();
+            }
+        }
+
 
         /// <summary>
         /// Категория.
         /// </summary>
-        public string CategoryGuid 
+        public string CategoryGuid
         {
             get => categoryGuid;
             set
             {
                 categoryGuid = value;
+                SetIsEdit();
             }
         }
 
         /// <summary>
         /// Описания.
         /// </summary>
-        public ObservableCollection<Description> Descriptions 
-        { 
+        public ObservableCollection<Description> Descriptions
+        {
             get => descriptions;
-            set => descriptions = value; 
+            set
+            {
+                descriptions = value;
+                SetIsEdit();
+            }  
         }
 
         /// <summary>
@@ -63,6 +78,7 @@ namespace OfferMaker
             set
             {
                 costPrice = value;
+                SetIsEdit();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Price));
                 OnPropertyChanged(nameof(Profit));
@@ -78,6 +94,7 @@ namespace OfferMaker
             set
             {
                 markup = value;
+                SetIsEdit();
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Price));
                 OnPropertyChanged(nameof(Profit));
@@ -88,12 +105,13 @@ namespace OfferMaker
         /// Цена.
         /// </summary>
         [JsonIgnore]
-        public decimal Price 
-        { 
+        public decimal Price
+        {
             get => CostPrice * Markup;
             set
             {
                 price = value;
+                SetIsEdit();
                 if (price != 0 && CostPrice != 0)
                 {
                     markup = price / costPrice;
@@ -116,10 +134,11 @@ namespace OfferMaker
             set
             {
                 profit = value;
+                SetIsEdit();
                 if (price != 0 && profit != 0)
                 {
                     markup = (value + costPrice) / costPrice;
-                    price = costPrice * markup;                    
+                    price = costPrice * markup;
                 }
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(Markup));
@@ -136,6 +155,7 @@ namespace OfferMaker
             set
             {
                 currencyCharCode = value;
+                SetIsEdit();
                 OnPropertyChanged();
             }
         }
@@ -149,6 +169,7 @@ namespace OfferMaker
             set
             {
                 lastChangePriceDate = value;
+                SetIsEdit();
                 OnPropertyChanged();
             }
         }
@@ -156,10 +177,15 @@ namespace OfferMaker
         /// <summary>
         /// Срок в днях, по истечении которого цена номенклатуры теряет актуальность.
         /// </summary>
-        public int ActualPricePeriod 
+        public int ActualPricePeriod
         {
             get => actualPricePeriod;
-            set => actualPricePeriod = value;
+            set
+            {
+                actualPricePeriod = value;
+                OnPropertyChanged(nameof(IsPriceActual));
+                SetIsEdit();
+            }
         }
 
         /// <summary>
@@ -171,35 +197,47 @@ namespace OfferMaker
             set
             {
                 image = value;
+                SetIsEdit();
                 OnPropertyChanged();
-            }  
+            }
         }
 
         /// <summary>
         /// Коллекция фото номенклатуры.
         /// </summary>
-        public ObservableCollection<Image> Images 
-        { 
+        public ObservableCollection<Image> Images
+        {
             get
             {
                 if (images == null) images = new ObservableCollection<Image>();
                 return images;
+            }
+            set
+            {
+                images = value;
+                SetIsEdit();
             }  
-            set => images = value;
-        } 
+        }
 
         /// <summary>
         /// Указывает, актуальна ли цена у номенклатуры.
         /// </summary>
-        [JsonIgnore] 
-        public bool IsPriceActual { get; set; }
+        [JsonIgnore]
+        public bool IsPriceActual
+        {
+            get
+            {
+                if (LastChangePriceDate == null) return true;
+                return (DateTime.Now - LastChangePriceDate).Value.Days < ActualPricePeriod;
+            }
+        }
 
         /// <summary>
         /// Помечена как удалённая.
         /// </summary>
-        public bool IsDelete 
-        { 
-            get => isDelete; 
+        public bool IsDelete
+        {
+            get => isDelete;
             set
             {
                 isDelete = value;
@@ -220,7 +258,7 @@ namespace OfferMaker
 
         public void SetCategoryGuid(string categoryGuid)
         {
-            CategoryGuid = categoryGuid; 
+            CategoryGuid = categoryGuid;
             SetIsEdit();
         }
 
@@ -241,6 +279,6 @@ namespace OfferMaker
             SetIsEdit();
         }
 
-        public override string ToString() => "Id:" + Id +" "+ Title;
+        public override string ToString() => "Id:" + Id + " " + Title;
     }
 }

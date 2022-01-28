@@ -31,6 +31,7 @@ namespace OfferMaker.Views
             InitializeComponent();
         }
 
+        MetroDialogSettings ms = new MetroDialogSettings();
         void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);
 
         /// <summary>

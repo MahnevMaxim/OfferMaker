@@ -22,6 +22,8 @@ namespace API.Data
         public DbSet<NomenclatureGroup> NomenclatureGroups { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Hint> Hints { get; set; }
+        public DbSet<Banner> Banners { get; set; }
+        public DbSet<Advertising> Advertisings { get; set; }
 
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)
@@ -30,7 +32,7 @@ namespace API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.LogTo(message => Log.EfWrite(message));
+            //optionsBuilder.LogTo(message => Log.EfWrite(message));
         }
 
         protected override void OnModelCreating(ModelBuilder builder)

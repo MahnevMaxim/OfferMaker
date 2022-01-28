@@ -58,9 +58,9 @@ namespace OfferMaker
 
         async internal Task<CallResult<ObservableCollection<Offer>>> OffersSelfGet() => await Proxy.OffersSelfGet();
 
-        async internal Task<CallResult> OfferCreate(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferCreate(offer, offers);
+        async internal Task<CallResult> OfferCreate(Offer offer) => await Proxy.OfferCreate(offer);
 
-        async internal Task<CallResult> OfferDelete(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferDelete(offer, offers);
+        async internal Task<CallResult> OfferDelete(Offer offer) => await Proxy.OfferDelete(offer);
 
         #endregion Offers
 
@@ -133,5 +133,21 @@ namespace OfferMaker
         async internal Task<CallResult> UserDelete(User user) => await Proxy.UserDelete(user);
 
         #endregion Users
+
+        #region Banners
+
+        async internal Task<CallResult> BannerCreate(Banner banner) => await Proxy.BannerCreate(banner);
+
+        async internal Task<CallResult<ObservableCollection<Banner>>> BannersGet() => await Proxy.BannersGet();
+
+        async internal Task<CallResult> BannerDelete(Banner banner) => await Proxy.BannerDelete(banner);
+
+        async internal Task<CallResult<ObservableCollection<Advertising>>> AdvertisingsGet() => await Proxy.AdvertisingsGet();
+
+        async internal Task<CallResult> AdvertisingCreate(Advertising advertising) => await Proxy.AdvertisingCreate(advertising);
+
+        async internal Task<CallResult> AdvertisingDelete(int id) => await Proxy.AdvertisingDelete(id);
+
+        #endregion Banners
     }
 }

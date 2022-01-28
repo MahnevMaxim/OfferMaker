@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Media;
 using System.IO;
+using System.Diagnostics;
 
 namespace OfferMaker
 {
@@ -25,13 +26,28 @@ namespace OfferMaker
 
         #region Fields
 
+        bool isBusy;
         string selectedTheme;
         AppMode appMode;
         string lightOrDark;
+        int beginFilesCount;
+        int copiedFilesCount;
+        int errorFilesCount;
+        string copyStatus;
 
         #endregion Fields
 
         #region Properties
+
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string SelectedTheme
         {
@@ -73,19 +89,67 @@ namespace OfferMaker
             }
         }
 
-        public string AdditionalColor { get => LightOrDark == "Light" ? "#FFE5E5E5" : "#FF313131" ; }
+        public string AdditionalColor { get => LightOrDark == "Light" ? "#FFE5E5E5" : "#FF313131"; }
 
         public List<string> Themes { get; set; } = new List<string>();
 
         public List<string> LightOrDarkList { get; set; }
 
+        public int BeginFilesCount
+        {
+            get => beginFilesCount;
+            set
+            {
+                beginFilesCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int CopiedFilesCount
+        {
+            get => copiedFilesCount;
+            set
+            {
+                copiedFilesCount = value;
+                OnPropertyChanged();
+                OnPropertyChanged("LeftFilesCount");
+                OnPropertyChanged("CopyProgress");
+            }
+        }
+
+        public int ErrorFilesCount
+        {
+            get => errorFilesCount;
+            set
+            {
+                errorFilesCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string CopyStatus
+        {
+            get => copyStatus;
+            set
+            {
+                copyStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
         #endregion Properties
 
         #endregion MVVM
 
+        ImageManager imageManager;
+
         #region Singleton
 
         private static readonly Settings instance = new Settings();
+
+
 
         public static Settings GetInstance() => instance;
 
@@ -105,9 +169,9 @@ namespace OfferMaker
         private void UpdateSettings()
         {
             AppSettings.Default.AppMode = (int)appMode;
-            if (LightOrDark != null) 
+            if (LightOrDark != null)
                 AppSettings.Default.LightOrDark = LightOrDark;
-            if (LightOrDark != null) 
+            if (LightOrDark != null)
                 AppSettings.Default.Theme = SelectedTheme;
             AppSettings.Default.Save();
             SetSettings();
@@ -117,14 +181,24 @@ namespace OfferMaker
         {
             if (string.IsNullOrEmpty(LightOrDark) || string.IsNullOrEmpty(SelectedTheme)) return;
             string theme = LightOrDark + "." + SelectedTheme;
-            Application.Current.Resources["DataGrid.EvenRow.Background"] = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255)); 
-            Application.Current.Resources["DataGrid.OddRow.Background"] = new SolidColorBrush(Color.FromArgb(255, 115, 194, 251));
+            Color color;
+            if (LightOrDark == "Dark")
+                color = (Color)ColorConverter.ConvertFromString("#FF3A292B");
+            else
+                color = (Color)ColorConverter.ConvertFromString("#FFFFB6C1");
+            Application.Current.Resources["DataGrid.LightRow.Background"] = new SolidColorBrush(color);
             ThemeManager.Current.ChangeTheme(Application.Current, theme);
         }
 
-        public static void SetDefaultBanner(string path)
+        public static void SetDefaultBannerGuid(string guid)
         {
-            AppSettings.Default.DefaultBanner = path;
+            AppSettings.Default.DefaultBannerGuid = guid;
+            AppSettings.Default.Save();
+        }
+
+        internal static void SavePasswordForOffline(string pwd)
+        {
+            AppSettings.Default.Pwd = GenerateHash(pwd);
             AppSettings.Default.Save();
         }
 
@@ -136,7 +210,6 @@ namespace OfferMaker
 
         public static void SetToken(string accessToken)
         {
-            if (!AppSettings.Default.IsRememberMe) return;
             AppSettings.Default.AccessToken = accessToken;
             AppSettings.Default.Save();
         }
@@ -147,7 +220,7 @@ namespace OfferMaker
             AppSettings.Default.Save();
         }
 
-        public static string GetDefaultBanner() => AppSettings.Default.DefaultBanner;
+        public static string GetDefaultBannerGuid() => AppSettings.Default.DefaultBannerGuid;
 
         public static int GetMaxInfoblocksCount() => AppSettings.Default.MaxInfoblocksCount;
 
@@ -159,10 +232,32 @@ namespace OfferMaker
 
         internal void SkipUserSettings()
         {
-            AppSettings.Default.Login=null;
             AppSettings.Default.AccessToken = null;
             AppSettings.Default.IsRememberMe = false;
             AppSettings.Default.Save();
+        }
+
+        public void ShowLog()
+        {
+            try
+            {
+                Process.Start(@"C:\Program Files (x86)\Notepad++\notepad++.exe", "log.txt");
+                return;
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
+
+            try
+            {
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "log.txt");
+                Process.Start("notepad.exe", filePath);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
         }
 
         public void ClearCache()
@@ -170,7 +265,7 @@ namespace OfferMaker
             string res = "";
             try
             {
-                if(Directory.Exists("cache"))
+                if (Directory.Exists("cache"))
                 {
                     Directory.Delete("cache", true);
                     res += "Изображения удалены\n";
@@ -178,7 +273,7 @@ namespace OfferMaker
                 else
                     res += "Изображения не найдены\n";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Write(ex);
                 res += "Не удалось удалить изображения\n";
@@ -189,7 +284,7 @@ namespace OfferMaker
                 if (Directory.Exists(LocalDataConfig.DataCacheDir))
                 {
                     Directory.Delete(LocalDataConfig.DataCacheDir, true);
-                    res += "Данные удалены"; 
+                    res += "Данные удалены";
                 }
                 else
                     res += "Данные не найдены";
@@ -201,6 +296,52 @@ namespace OfferMaker
             }
 
             OnSendMessage(res);
+        }
+
+        public static string GenerateHash(string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+
+            // создаем экземпляр реализации SHA256
+            System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
+            var passwordByte = sha256.ComputeHash(stream);
+            return String.Join("", passwordByte);
+        }
+
+        async public void DownloadAllImages()
+        {
+            IsBusy = true;
+            List<string> guids = new List<string>();
+            Global.Catalog.Nomenclatures.ToList().ForEach(n => n.Images.ToList().ForEach(i => guids.Add(i.Guid)));
+            Global.Users.Where(u => u.Image.Guid != null).ToList().ForEach(u => guids.Add(u.Image.Guid));
+            Global.Main.BannersManager.Banners.ToList().ForEach(b => guids.Add(b.Guid));
+            Global.Main.BannersManager.Advertisings.ToList().ForEach(a => guids.Add(a.Guid));
+            if (imageManager == null)
+                imageManager = ImageManager.GetInstance();
+            imageManager.UpdateProgress += ImageManager_UpdateProgress;
+            await imageManager.SyncImagesWithServer(guids);
+            imageManager.UpdateProgress -= ImageManager_UpdateProgress;
+            await Task.Delay(1000);
+            IsBusy = false;
+        }
+
+        private void ImageManager_UpdateProgress()
+        {
+            BeginFilesCount = imageManager.downLoadProgress.BeginFilesCount;
+            CopiedFilesCount = imageManager.downLoadProgress.CopiedFilesCount;
+            ErrorFilesCount = imageManager.downLoadProgress.ErrorFilesCount;
+            CopyStatus = imageManager.downLoadProgress.Status;
+        }
+
+        internal void TryClose()
+        {
+            IsBusy = false;
+            imageManager?.DownloadStop();
+            Close();
         }
     }
 }
