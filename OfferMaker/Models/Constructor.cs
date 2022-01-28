@@ -235,6 +235,8 @@ namespace OfferMaker
             viewModel.OnPropertyChanged(String.Empty);
         }
 
+       
+
         #endregion Offer
 
         #region Create PDF

@@ -37,7 +37,8 @@ namespace OfferMaker
         {
             constructor.CreateDocumentWithBanner();
             FixedDocument fixedDoc = constructor.PdfDocument;
-            SaveToPdf(fixedDoc);
+            //SaveToPdf(fixedDoc);
+            _ = SaveToPdf(fixedDoc);
         }
 
         /// <summary>
@@ -45,46 +46,51 @@ namespace OfferMaker
         /// </summary>
         internal void SaveToPdfWithoutBanner()
         {
+            
             constructor.CreateDocumentWithoutBanner();
             FixedDocument fixedDoc = constructor.PdfDocumentShort;
-            SaveToPdf(fixedDoc);
+            _ = SaveToPdf(fixedDoc);
         }
 
-        internal void SaveToPdf(FixedDocument fixedDoc)
+        internal async Task SaveToPdf(FixedDocument fixedDoc)
         {
-            System.Windows.Controls.PrintDialog printDialog = new System.Windows.Controls.PrintDialog();
-            var serv = new LocalPrintServer();
-            printDialog.PrintQueue = serv.GetPrintQueue("Microsoft Print to PDF");
-
-            PrintTicket pt = new PrintTicket()
+            bool resultOfferCreate = await OfferCreate(false);//Сохранение КП в архив
+            if (resultOfferCreate == true) 
             {
-                OutputColor = OutputColor.Color,
-                PageBorderless = PageBorderless.Borderless,
-                PageMediaSize = new PageMediaSize(PageMediaSizeName.ISOA4),
-                OutputQuality = OutputQuality.Photographic,
-                PageMediaType = PageMediaType.ScreenPaged,
-                PageOrder = PageOrder.Standard,
-                PageOrientation = PageOrientation.Portrait,
-                PageResolution = new PageResolution(PageQualitativeResolution.High),
-                PagesPerSheet = 1
-            };
+                System.Windows.Controls.PrintDialog printDialog = new System.Windows.Controls.PrintDialog();
+                var serv = new LocalPrintServer();
+                printDialog.PrintQueue = serv.GetPrintQueue("Microsoft Print to PDF");
 
-            printDialog.PrintTicket = pt;
-            FixedDocumentSequence fixedDocumentSequence1 = (IDocumentPaginatorSource)fixedDoc as FixedDocumentSequence;
+                PrintTicket pt = new PrintTicket()
+                {
+                    OutputColor = OutputColor.Color,
+                    PageBorderless = PageBorderless.Borderless,
+                    PageMediaSize = new PageMediaSize(PageMediaSizeName.ISOA4),
+                    OutputQuality = OutputQuality.Photographic,
+                    PageMediaType = PageMediaType.ScreenPaged,
+                    PageOrder = PageOrder.Standard,
+                    PageOrientation = PageOrientation.Portrait,
+                    PageResolution = new PageResolution(PageQualitativeResolution.High),
+                    PagesPerSheet = 1
+                };
 
-            if (fixedDoc != null)
-                fixedDoc.PrintTicket = printDialog.PrintTicket;
+                printDialog.PrintTicket = pt;
+                FixedDocumentSequence fixedDocumentSequence1 = (IDocumentPaginatorSource)fixedDoc as FixedDocumentSequence;
 
-            if (fixedDocumentSequence1 != null)
-                fixedDocumentSequence1.PrintTicket = printDialog.PrintTicket;
+                if (fixedDoc != null)
+                    fixedDoc.PrintTicket = printDialog.PrintTicket;
 
-            XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printDialog.PrintQueue);
+                if (fixedDocumentSequence1 != null)
+                    fixedDocumentSequence1.PrintTicket = printDialog.PrintTicket;
 
-            if (fixedDoc != null)
-                writer.WriteAsync(fixedDoc, printDialog.PrintTicket);
+                XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printDialog.PrintQueue);
 
-            if (fixedDocumentSequence1 != null)
-                writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
+                if (fixedDoc != null)
+                    writer.WriteAsync(fixedDoc, printDialog.PrintTicket);
+
+                if (fixedDocumentSequence1 != null)
+                    writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
+            }
         }
 
         internal void OfferTemplateCreate() => OfferCreate(true);
@@ -123,24 +129,66 @@ namespace OfferMaker
         /// Сохранение(создание) шаблонов и КП на сервер/локально.
         /// </summary>
         /// <param name="isTemplate"></param>
-        async internal void OfferCreate(bool isTemplate = false)
+        //async internal void OfferCreate(bool isTemplate = false)
+        //{
+        //    if (constructor.Offer.Id != 0)
+        //    {
+        //        Global.Main.SendMess("Нельзя перезаписать архив.");
+        //        return;
+        //    }
+
+        //    //если создаётся архивное КП
+        //    if (constructor.Offer.Id == 0 && !isTemplate)
+        //    {
+        //        if(string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
+        //            || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
+        //            || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
+        //        {
+        //            Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
+        //            return;
+        //        }    
+        //    }
+
+        //    CallResult cr;
+        //    if (isTemplate)
+        //    {
+        //        Offer temp = CreateTemplate(constructor.Offer);
+        //        Global.Main.TemplatesStore.AddOffer(temp);
+        //        cr = await Global.Main.DataRepository.OfferTemplateCreate(temp, Global.OfferTemplates);
+        //    }
+        //    else
+        //    {
+        //        Global.Main.ArchiveStore.AddOffer(constructor.Offer.PrepareArchive());
+        //        Global.Main.OnPropertyChanged(nameof(Global.Main.UsingCurrencies));
+        //        cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer, Global.Offers);
+        //    }
+
+        //    if (cr.Success)
+        //        Global.Main.SendMess(cr.SuccessMessage);
+        //    else
+        //        Global.Main.SendMess(cr.Error.Message);
+        //    Global.Main.ArchiveStore.ApplyOfferFilter();
+        //}
+
+       
+        async internal Task<bool> OfferCreate(bool isTemplate = false)
         {
             if (constructor.Offer.Id != 0)
             {
                 Global.Main.SendMess("Нельзя перезаписать архив.");
-                return;
+                return false;
             }
 
             //если создаётся архивное КП
             if (constructor.Offer.Id == 0 && !isTemplate)
             {
-                if(string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
+                if (string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
                     || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
                     || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
                 {
                     Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
-                    return;
-                }    
+                    return false;
+                }
             }
 
             CallResult cr;
@@ -158,9 +206,16 @@ namespace OfferMaker
             }
 
             if (cr.Success)
+            {
                 Global.Main.SendMess(cr.SuccessMessage);
-            else
+                return true;
+            }
+            else 
+            {
                 Global.Main.SendMess(cr.Error.Message);
+                return false;
+
+            }
             Global.Main.ArchiveStore.ApplyOfferFilter();
         }
 

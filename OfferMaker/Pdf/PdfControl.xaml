@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:layout="clr-namespace:OfferMaker.Pdf"
@@ -43,7 +44,7 @@
                             <!--#endregion Титульник-->
 
                             <!--#region Верхние баннеры-->
-                            
+
                             <Paragraph Margin="0"
                                        x:Name="adv">
                                 <ItemsControl ItemsSource="{Binding AdvertisingsUp}">
@@ -58,7 +59,7 @@
                             </Paragraph>
 
                             <!--#endregion Верхние баннеры-->
-                            
+
                             <!--#region краткий -->
 
                             <Paragraph Margin="0">
@@ -233,15 +234,45 @@
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="12">
                 <DocumentViewer x:Name="pdfWithBanner"
-                                Document="{Binding PdfDocument}" />
+                                Document="{Binding PdfDocument}">
+                    <!--<DocumentViewer.Resources>
+                        <Style TargetType="ContentControl">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </Style>
+                        <Style TargetType="ToolBar">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </Style>
+                    </DocumentViewer.Resources>-->
+                    <DocumentViewer.Resources>
+                        <Style TargetType="ContentControl">
+                            <Style.Triggers>
+                                <Trigger Property="Name" Value="PART_FindToolBarHost">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DocumentViewer.Resources>
+                    <DocumentViewer.InputBindings>
+                        <KeyBinding Key="P" Modifiers="Control"/>
+                    </DocumentViewer.InputBindings>
+                </DocumentViewer>
             </TabItem>
             <TabItem Header="Без баннера"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="12">
                 <DocumentViewer Document="{Binding PdfDocumentShort}" />
             </TabItem>
-            
+
         </TabControl>
+        <!--<Button Content="Button" HorizontalAlignment="Left" Click="Button_Click" Margin="7,28,0,0" VerticalAlignment="Top" Width="25"/>-->
+        <!--<Button CommandParameter="SaveToPdfWithBanner"
+                                        Command="{Binding Cmd}"
+                                        HorizontalAlignment="Left" Margin="7,30,0,0" VerticalAlignment="Top" Width="20"
+                                        ToolTip="Печать" Height="20">
+            <iconPacks:PackIconCodicons Kind="FileSymlinkDirectory"
+                                        Width="10"
+                                        Height="10" />
+        </Button>-->
     </Grid>
-    
+
 </UserControl>

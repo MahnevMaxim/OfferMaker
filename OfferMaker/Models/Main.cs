@@ -415,7 +415,7 @@ namespace OfferMaker
 
         public void OpenOfferFromFile() => DocManager.OpenOfferFromFile();
 
-        async public void OfferCreate() => DocManager.OfferCreate();
+        async public void OfferCreate() => await DocManager.OfferCreate();
         
         #endregion DocManager
 
