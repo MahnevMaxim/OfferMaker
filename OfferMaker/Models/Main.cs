@@ -25,7 +25,8 @@ namespace OfferMaker
         ObservableCollection<User> users;
         OfferStore archiveStore;
         OfferStore templatesStore;
-        //public ObservableCollection<Offer> offerTemplates = new ObservableCollection<Offer>();
+        bool isBusy;
+        string processStatus;
 
         #endregion Fields
 
@@ -132,7 +133,25 @@ namespace OfferMaker
             }
         }
 
-        //public StringCollection Hints { get; set; }
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ProcessStatus
+        {
+            get => processStatus;
+            set
+            {
+                processStatus = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion Propetries
 
@@ -379,18 +398,67 @@ namespace OfferMaker
                 OnSendMessage(cr.Error.Message);
         }
 
+        async public void SaveAllArchiveChanges()
+        {
+            IsBusy = true;
+
+            var forDelOffers = ArchiveStore.Offers.Where(a => a.IsDelete).ToList();
+            var forPostOffers = ArchiveStore.Offers.Where(a => a.Id == 0).ToList();
+            string message = null;
+
+            foreach(var forDel in forDelOffers)
+            {
+                ProcessStatus = "Удаление архива Id " + forDel.Id;
+                var cr = await DataRepository.OfferDelete(forDel);
+                if (cr.Success)
+                    ArchiveStore.RemoveOffer(forDel);
+                message += cr.Message + "\n";
+            }
+
+            foreach (var forPost in forPostOffers)
+            {
+                ProcessStatus = "Добавление архива Id " + forPost.Id;
+                var cr = await DataRepository.OfferCreate(forPost);
+                message += cr.Message + "\n";
+            }
+
+            IsBusy = false;
+
+            OnSendMessage(message);
+        }
+
         #endregion Archive
 
         #region Offer templates
 
+        /// <summary>
+        /// Загрузка шаблона для создания на нём КП.
+        /// </summary>
+        /// <param name="offer"></param>
         public void LoadOfferTemplate(Offer offer)
         {
             CurrentMainSelectedTabIndex = 0;
             Constructor.LoadOfferTemplate(offer);
         }
 
+        /// <summary>
+        /// Загрузка шаблона в режиме редактирования.
+        /// </summary>
+        /// <param name="offer"></param>
+        public void EditOfferTemplate(Offer offer)
+        {
+            CurrentMainSelectedTabIndex = 0;
+            Constructor.EditOfferTemplate(offer);
+        }
+
+        /// <summary>
+        /// Поиск шаблона.
+        /// </summary>
         public void FindOfferTemplate() => TemplatesStore.ApplyOfferFilter();
 
+        /// <summary>
+        /// Загрузка шаблона по двойному клику.
+        /// </summary>
         public void LoadSelectedOfferTemplate()
         {
             if (SelectedOfferTemplate != null)
@@ -400,6 +468,76 @@ namespace OfferMaker
             }
             else
                 OnSendMessage("Выберите шаблон");
+        }
+
+        /// <summary>
+        /// Сохранение всех изменений шаблонов.
+        /// </summary>
+        async public void SaveAllOfferTemplatesChanges()
+        {
+            IsBusy = true;
+            string message = null;
+            if (Settings.AppMode == AppMode.Auto)
+            {
+                var forDelOffers = TemplatesStore.Offers.Where(a => a.IsDelete).ToList();
+                var forPostOffers = TemplatesStore.Offers.Where(a => a.Id == 0).ToList();
+                var forEditOffers = TemplatesStore.Offers.Where(a => a.IsEdited).ToList();
+
+                foreach (var forDel in forDelOffers)
+                {
+                    ProcessStatus = "Удаление шаблона Id " + forDel.Id;
+                    var cr = await DataRepository.OfferTemplateDelete(forDel);
+                    if (cr.Success)
+                        TemplatesStore.RemoveOffer(forDel);
+                    message += cr.Message + "\n";
+                }
+
+                foreach (var forPost in forPostOffers)
+                {
+                    ProcessStatus = "Добавление шаблона Id " + forPost.Id;
+                    var cr = await DataRepository.OfferTemplateCreate(forPost);
+                    message += cr.Message + "\n";
+                }
+
+                foreach (var offer in forEditOffers)
+                {
+                    ProcessStatus = "Изменение шаблона Id " + offer.Id;
+                    var cr = await DataRepository.OfferTemplateEdit(offer);
+                    message += cr.Message + "\n";
+                }
+            }
+            else if(Settings.AppMode == AppMode.Offline)
+            {
+                var forEditOffers = TemplatesStore.Offers.Where(a => a.IsEdited).ToList();
+
+                foreach (var offer in forEditOffers)
+                {
+                    ProcessStatus = "Изменение шаблона Id " + offer.Id;
+                    var cr = await DataRepository.OfferTemplateEdit(offer);
+                    message += cr.Message + "\n";
+                }
+            }
+
+            IsBusy = false;
+
+            OnSendMessage(message);
+        }
+
+        /// <summary>
+        /// Удаление шаблона.
+        /// </summary>
+        /// <param name="offer"></param>
+        async public void OfferTemplateDelete(Offer offer)
+        {
+            var cr = await DataRepository.OfferTemplateDelete(offer);
+            if (cr.Success)
+            {
+                if (!(offer.Id != 0 && Settings.AppMode == AppMode.Offline))
+                    TemplatesStore.RemoveOffer(offer);
+                TemplatesStore.ApplyOfferFilter();
+            }
+            else
+                OnSendMessage(cr.Error.Message);
         }
 
         #endregion Offer templates

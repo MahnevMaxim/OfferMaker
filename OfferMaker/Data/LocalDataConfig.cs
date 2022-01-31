@@ -9,19 +9,48 @@ namespace OfferMaker
 {
     class LocalDataConfig
     {
-        public static string DataCacheDir = "data_cache";
+        //папки
+        public static string ServerCacheDataDir = "data_cache";
         public static string LocalDataDir = "local_data";
+        public static readonly string ImageCacheDir = "cache";
 
-        public static string CurrenciesPath = "currencies.json";
-        public static string NomenclaturesPath = "nomenclatures.json";
-        public static string UsersPath = "users.json";
-        public static string CategoriesPath = "categories.json";
-        public static string NomenclatureGroupsPath = "nomenclature_groups.json";
-        public static string OffersPath = "offers.json";
-        public static string HintsPath = "hints.json";
-        public static string OfferTemplatesPath = "offer_templates.json";
-        public static string BannersPath = "banners.json";
-        public static string AdvertisingsPath = "advertisings.json";
-        public static string PositionsPath = "positions.json";
+        //имена файлов
+        static string CurrenciesPath = "currencies.json";
+        static string NomenclaturesPath = "nomenclatures.json";
+        static string UsersPath = "users.json";
+        static string CategoriesPath = "categories.json";
+        static string NomenclatureGroupsPath = "nomenclature_groups.json";
+        static string OffersPath = "offers.json";
+        static string HintsPath = "hints.json";
+        static string OfferTemplatesPath = "offer_templates.json";
+        static string BannersPath = "banners.json";
+        static string AdvertisingsPath = "advertisings.json";
+        static string PositionsPath = "positions.json";
+
+        //локальные пути локальных данных, созданных или изменённых локально, относительно директории приложения
+        public static string LocalCurrenciesPath = Path.Combine(LocalDataDir, CurrenciesPath);
+        public static string LocalNomenclaturesPath = Path.Combine(LocalDataDir, NomenclaturesPath);
+        public static string LocalUsersPath = Path.Combine(LocalDataDir, UsersPath);
+        public static string LocalCategoriesPath = Path.Combine(LocalDataDir, CategoriesPath);
+        public static string LocalNomenclatureGroupsPath = Path.Combine(LocalDataDir, NomenclatureGroupsPath);
+        public static string LocalOffersPath = Path.Combine(LocalDataDir, OffersPath);
+        public static string LocalHintsPath = Path.Combine(LocalDataDir, HintsPath);
+        public static string LocalOfferTemplatesPath = Path.Combine(LocalDataDir, OfferTemplatesPath);
+        public static string LocalBannersPath = Path.Combine(LocalDataDir, BannersPath);
+        public static string LocalAdvertisingsPath = Path.Combine(LocalDataDir, AdvertisingsPath);
+        public static string LocalPositionsPath = Path.Combine(LocalDataDir, PositionsPath);
+
+        //локальные пути кэшированных данных с сервера относительно директории приложения
+        public static string ServerCacheCurrenciesPath = Path.Combine(ServerCacheDataDir, CurrenciesPath);
+        public static string ServerCacheNomenclaturesPath = Path.Combine(ServerCacheDataDir, NomenclaturesPath);
+        public static string ServerCacheUsersPath = Path.Combine(ServerCacheDataDir, UsersPath);
+        public static string ServerCacheCategoriesPath = Path.Combine(ServerCacheDataDir, CategoriesPath);
+        public static string ServerCacheNomenclatureGroupsPath = Path.Combine(ServerCacheDataDir, NomenclatureGroupsPath);
+        public static string ServerCacheOffersPath = Path.Combine(ServerCacheDataDir, OffersPath);
+        public static string ServerCacheHintsPath = Path.Combine(ServerCacheDataDir, HintsPath);
+        public static string ServerCacheOfferTemplatesPath = Path.Combine(ServerCacheDataDir, OfferTemplatesPath);
+        public static string ServerCacheBannersPath = Path.Combine(ServerCacheDataDir, BannersPath);
+        public static string ServerCacheAdvertisingsPath = Path.Combine(ServerCacheDataDir, AdvertisingsPath);
+        public static string ServerCachePositionsPath = Path.Combine(ServerCacheDataDir, PositionsPath);
     }
 }

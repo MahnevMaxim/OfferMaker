@@ -209,7 +209,7 @@
 
   <ItemGroup>
     <Reference Include="ImageCropperLibrary">
-      <HintPath>..\..\..\..\Desktop\дело\ImageCropperLibrary.dll</HintPath>
+      <HintPath>..\..\..\..\Desktop\ImageCropperLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
 

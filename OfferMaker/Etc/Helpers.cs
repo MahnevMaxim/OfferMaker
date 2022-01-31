@@ -37,9 +37,9 @@ namespace OfferMaker
         {
             try
             {
-                if (!Directory.Exists(LocalDataConfig.DataCacheDir))
+                if (!Directory.Exists(LocalDataConfig.ServerCacheDataDir))
                 {
-                    Directory.CreateDirectory(LocalDataConfig.DataCacheDir);
+                    Directory.CreateDirectory(LocalDataConfig.ServerCacheDataDir);
                 }
                 if (!Directory.Exists(LocalDataConfig.LocalDataDir))
                 {
@@ -47,7 +47,7 @@ namespace OfferMaker
                 }
                 string output = JsonConvert.SerializeObject(obj);
                 File.WriteAllText(filePath, output);
-                return new CallResult() { SuccessMessage = "Объект добавлен" };
+                return new CallResult() { SuccessMessage = "Изменения сохранены" };
             }
             catch (Exception ex)
             {

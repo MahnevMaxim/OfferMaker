@@ -20,29 +20,36 @@ namespace API
         /// </summary>
         async public static void Update()
         {
-            WebClient client = new WebClient();
-            var xml = client.DownloadString("https://www.cbr-xml-daily.ru/daily.xml");
-            XDocument xdoc = XDocument.Parse(xml);
-            var el = xdoc.Element("ValCurs").Elements("Valute").ToList();
+            try
+            {
+                WebClient client = new WebClient();
+                var xml = client.DownloadString("https://www.cbr-xml-daily.ru/daily.xml");
+                XDocument xdoc = XDocument.Parse(xml);
+                var el = xdoc.Element("ValCurs").Elements("Valute").ToList();
 #if DEBUG
-            string con = "Server=(localdb)\\mssqllocaldb;Database=APIContext;Trusted_Connection=True;MultipleActiveResultSets=true";
+                string con = "Server=(localdb)\\mssqllocaldb;Database=APIContext;Trusted_Connection=True;MultipleActiveResultSets=true";
 #else
             string con = "Server=127.0.0.1,1433;Database=kip;User=sa;Password=dnhdhdsryWW33;";
 #endif
-            DbContextOptions<APIContext> dbContextOptions = new DbContextOptionsBuilder<APIContext>()
-                .UseSqlServer(con)
-                .Options;
-            APIContext context = new APIContext(dbContextOptions);
-            var controller = new CurrenciesController(context);
+                DbContextOptions<APIContext> dbContextOptions = new DbContextOptionsBuilder<APIContext>()
+                    .UseSqlServer(con)
+                    .Options;
+                APIContext context = new APIContext(dbContextOptions);
+                var controller = new CurrenciesController(context);
 
-            var date = xdoc.Element("ValCurs").Attribute("Date").Value;
-            DateTime rateDatetime = DateTime.Parse(date);
-            foreach (var item in el)
+                var date = xdoc.Element("ValCurs").Attribute("Date").Value;
+                DateTime rateDatetime = DateTime.Parse(date);
+                foreach (var item in el)
+                {
+                    var code = item.Element("CharCode").Value;
+                    var rate = item.Element("Value").Value;
+                    Currency curr = new Currency() { CharCode = code, Rate = decimal.Parse(rate), RateDatetime = rateDatetime };
+                    var res = controller.PutCurrency(0, curr).Result;
+                }
+            }
+            catch(Exception ex)
             {
-                var code = item.Element("CharCode").Value;
-                var rate = item.Element("Value").Value;
-                Currency curr = new Currency() { CharCode = code, Rate = decimal.Parse(rate), RateDatetime = rateDatetime };
-                var res = controller.PutCurrency(0,curr).Result;
+                Log.Write(ex);
             }
         }
     }

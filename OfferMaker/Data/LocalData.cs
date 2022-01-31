@@ -12,9 +12,6 @@ namespace OfferMaker
 {
     class LocalData
     {
-        public static string DataCacheDir = LocalDataConfig.DataCacheDir;
-        public static string LocalDataDir = LocalDataConfig.LocalDataDir;
-
         #region Update cache
 
         /// <summary>
@@ -22,28 +19,38 @@ namespace OfferMaker
         /// </summary>
         /// <param name="obj"></param>
         /// <param name="path"></param>
-        internal CallResult UpdateCache(object obj, string path) => Helpers.SaveObject(Path.Combine(DataCacheDir, path), obj);
+        internal CallResult UpdateCache(object obj, string path) => Helpers.SaveObject(path, obj);
 
         /// <summary>
         /// Добавление объекта в локальные данные.
+        /// Редактирует объект, если он уже есть (guid такой же если).
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        async internal Task<CallResult> Post<T>(object obj, string path)
+        async internal Task<CallResult> Post<T>(object obj, string path) where T : IEntity
         {
-            string localDataPath = Path.Combine(LocalDataDir, path);
-            var dataCr = await GetData<List<T>>(localDataPath);
+            string guid = GetGuidValue(obj);
+            var dataCr = await GetData<List<T>>(path);
             if (dataCr.Success)
             {
-                dataCr.Data.Add((T)obj);
-                CallResult cr = Helpers.SaveObject(localDataPath, dataCr.Data);
+                var item = dataCr.Data.FirstOrDefault(d => d.Guid == guid);
+                if(item!=null)
+                {
+                    int index = dataCr.Data.IndexOf(item);
+                    dataCr.Data.Remove(item);
+                    dataCr.Data.Insert(index, (T)obj);
+                }
+                else
+                    dataCr.Data.Add((T)obj);
+
+                CallResult cr = Helpers.SaveObject(path, dataCr.Data);
                 return cr;
             }
             else
             {
-                CallResult cr = Helpers.SaveObject(localDataPath, new List<T>() { (T)obj });
+                CallResult cr = Helpers.SaveObject(path, new List<T>() { (T)obj });
                 return cr;
             }
         }
@@ -63,47 +70,38 @@ namespace OfferMaker
             string guid = obj.Guid;
             if (guid == null)
                 throw new Exception("guid is null"); //guid ни при каких обстоятельствах не должен быть null
-            string dataPath = Path.Combine(LocalDataDir, path);
-            var dataCr = await GetData<List<T>>(dataPath);
+            var dataCr = await GetData<List<T>>(path, true);
 
-            if (dataCr.Success)
+            var obj_ = dataCr.Data.FirstOrDefault(d => d.Guid == guid);
+            //если данные локальные, то удаляем
+            if (id == 0)
             {
-                var obj_ = dataCr.Data.FirstOrDefault(d => d.Guid == guid);
-                //если данные локальные, то удаляем
-                if (id == 0)
+                dataCr.Data.Remove(obj_);
+            }
+            //если данные с сервера, то помечаем к удалению и ложим в ту же коллекцию
+            else
+            {
+                if (isMarkAsDeleted)
                 {
-                    dataCr.Data.Remove(obj_);
-                }
-                //если данные с сервера, то помечаем к удалению и ложим в ту же коллекцию
-                else
-                {
-                    if(isMarkAsDeleted)
+                    //проверяем, нету ли объекта уже в коллекции
+                    if (obj_ == null && isMarkAsDeleted)
                     {
-                        //проверяем, нету ли объекта уже в коллекции
-                        if (obj_ == null && isMarkAsDeleted)
-                        {
-                            obj.IsDelete = true;
-                            dataCr.Data.Add((T)obj);
-                        }
-                        else
-                        {
-                            obj_.IsDelete = true;
-                        }
+                        obj.IsDelete = true;
+                        dataCr.Data.Add((T)obj);
                     }
                     else
                     {
-                        dataCr.Data.Remove(obj_);
+                        obj.IsDelete = true;
+                        obj_.IsDelete = true;
                     }
                 }
+                else
+                {
+                    dataCr.Data.Remove(obj_);
+                }
+            }
 
-                CallResult cr = Helpers.SaveObject(dataPath, dataCr.Data);
-                return cr;
-            }
-            else
-            {
-                CallResult cr = Helpers.SaveObject(dataPath, new List<T>() { (T)obj });
-                return cr;
-            }
+            return Helpers.SaveObject(path, dataCr.Data);
         }
 
         private string GetGuidValue(object obj) => obj.GetType().GetProperties().Where(p => p.Name == "Guid").First().GetValue(obj).ToString();
@@ -115,28 +113,18 @@ namespace OfferMaker
         #region Get data from cache
 
         /// <summary>
-        /// Пытаемся получить данные из кэша.
-        /// </summary>
-        /// <returns></returns>
-        async internal Task<CallResult<T>> GetCache<T>(string path) => await GetData<T>(Path.Combine(DataCacheDir, path));
-
-
-        /// <summary>
-        /// Пытаемся получить локальные данные данные.
-        /// </summary>
-        /// <returns></returns>
-        async internal Task<CallResult<T>> GetLocalData<T>(string path) => await GetData<T>(Path.Combine(LocalDataDir, path));
-
-        /// <summary>
         /// Пытаемся получить данные из хранилища.
         /// </summary>
         /// <returns></returns>
-        async internal Task<CallResult<T>> GetData<T>(string path)
+        async internal Task<CallResult<T>> GetData<T>(string path, bool isWithotErroMode = false)
         {
             T res = Helpers.InitObject<T>(path);
             if (res != null)
                 return new CallResult<T>() { Data = res };
+            
             T obj = (T)Activator.CreateInstance(typeof(T));
+            if (isWithotErroMode)
+                return new CallResult<T>() { Data = obj };
             return new CallResult<T>() { Error = new Error("Ошибка при попытке получить кэш из файла " + path), Data = obj };
         }
 

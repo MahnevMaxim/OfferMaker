@@ -96,7 +96,10 @@ namespace OfferMaker
 
             var sfd = new SaveFileDialog();
             sfd.Filter = omfFilter;
-            sfd.FileName = String.Format("Offer from {0}", DateTime.Today.ToShortDateString());
+            if (Global.Offer.Id != 0)
+                sfd.FileName = String.Format("Offer from {0}", Global.Offer.AltId);
+            else
+                sfd.FileName = String.Format("Offer from {0}", DateTime.Today.ToShortDateString());
             sfd.InitialDirectory = defaultPath;
 
             if (sfd.ShowDialog() == DialogResult.OK)
@@ -111,8 +114,17 @@ namespace OfferMaker
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 Offer offer = Helpers.InitObject<Offer>(ofd.FileName);
-                Offer offer_ = Utils.RestoreOffer(offer, Global.Users, false);
-                Global.Constructor.LoadOfferFromArchive(offer_);
+                if(offer!=null)
+                {
+                    if (offer.IsArchive)
+                        Global.Constructor.LoadOfferFromArchive(offer);
+                    else
+                        Global.Constructor.LoadOfferTemplate(offer);
+                }
+                else
+                {
+                    Global.Main.SendMess("Ошибка при попытке считать файл");
+                }
             }
         }
 
@@ -122,38 +134,45 @@ namespace OfferMaker
         /// <param name="isTemplate"></param>
         async internal void OfferCreate(bool isTemplate = false)
         {
-            if (constructor.Offer.Id != 0)
+            if(!isTemplate)
             {
-                Global.Main.SendMess("Нельзя перезаписать архив.");
-                return;
-            }
-
-            //если создаётся архивное КП
-            if (constructor.Offer.Id == 0 && !isTemplate)
-            {
-                if(string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
-                    || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
-                    || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
+                if (constructor.Offer.Id != 0 || constructor.Offer.IsArchive)
                 {
-                    Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
+                    Global.Main.SendMess("Нельзя перезаписать архив.");
                     return;
-                }    
+                }
+
+                //если создаётся архивное КП
+                if (constructor.Offer.Id == 0 && !isTemplate)
+                {
+                    if (string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
+                        || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
+                        || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
+                    {
+                        Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
+                        return;
+                    }
+                }
             }
 
             CallResult cr;
             if (isTemplate)
             {
                 Offer temp = CreateTemplate(constructor.Offer);
-                Global.Main.TemplatesStore.AddOffer(temp);
-                cr = await Global.Main.DataRepository.OfferTemplateCreate(temp, Global.OfferTemplates);
+                cr = await Global.Main.DataRepository.OfferTemplateCreate(temp); if (cr.Success)
+                {
+                    Global.Main.TemplatesStore.AddOffer(temp);
+                    Global.Constructor.LoadOfferTemplate(temp);
+                }
             }
             else
             {
-                Global.Main.ArchiveStore.AddOffer(constructor.Offer.PrepareArchive());
-                Global.Main.OnPropertyChanged(nameof(Global.Main.UsingCurrencies));
-                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer);
-                //if (cr.Success)
-                //    Global.Main.ArchiveStore.AddOffer(constructor.Offer);
+                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer.PrepareArchive());
+                if(cr.Success)
+                {
+                    Global.Main.ArchiveStore.AddOffer(constructor.Offer);
+                    Global.Constructor.LoadOfferTemplate(constructor.Offer);
+                }
             }
 
             Global.Main.SendMess(cr.Message);
@@ -165,7 +184,12 @@ namespace OfferMaker
             Offer temp_ = Helpers.CloneObject<Offer>(offer);
             Offer temp = Utils.RestoreOffer(temp_, Global.Main.Users, false);
             temp.IsTemplate = true;
+            temp.IsArchive = false;
+            temp.IsEditableState = true;
+            temp.IsEdited = false;
+            temp.IsDelete = false;
             temp.Id = 0;
+            temp.Guid = Guid.NewGuid().ToString();
             temp.CreateDate = DateTime.Now;
             return temp;
         }

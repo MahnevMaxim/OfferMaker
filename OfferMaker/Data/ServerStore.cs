@@ -669,7 +669,7 @@ namespace OfferMaker
             {
                 if (offer.Id == 0) return new CallResult(); // нельзя удалить то, чего нет
                 await client.OfferDeleteAsync(offer.Id);
-                return new CallResult();
+                return new CallResult() { SuccessMessage = "КП Id " + offer.Id + " удалено." };
             }
             catch (Exception ex)
             {
@@ -723,6 +723,35 @@ namespace OfferMaker
             catch (Exception ex)
             {
                 return GetApiError(offerCreateErrorMess, ex);
+            }
+        }
+
+        async internal Task<CallResult> OfferTemplateDelete(Offer offer)
+        {
+            try
+            {
+                ApiLib.OfferTemplate offerCopy = Helpers.CloneObject<ApiLib.OfferTemplate>(offer);
+                if (offerCopy.Id == 0) return new CallResult(); // нельзя удалить то, чего нет
+                await client.OfferTemplateDeleteAsync(offerCopy.Id);
+                return new CallResult() { SuccessMessage = "Шаблон Id " + offerCopy.Id + " удалён." };
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(offerDeleteErrorMess, ex);
+            }
+        }
+
+        async internal Task<CallResult> OfferTemplateEdit(Offer offer)
+        {
+            try
+            {
+                ApiLib.OfferTemplate offerCopy = Helpers.CloneObject<ApiLib.OfferTemplate>(offer);
+                var cr = await client.OfferTemplateEditAsync(offerCopy.Id, offerCopy);
+                return new CallResult() { SuccessMessage = "Шаблон Id " + offerCopy.Id + " изменён." };
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(offerDeleteErrorMess, ex);
             }
         }
 

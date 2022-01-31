@@ -25,7 +25,6 @@ namespace OfferMaker
         ObservableCollection<OfferGroup> offerGroups = new ObservableCollection<OfferGroup>();
         ObservableCollection<OfferInfoBlock> offerInfoBlocks = new ObservableCollection<OfferInfoBlock>();
         ObservableCollection<string> advertisingsUp = new ObservableCollection<string>();
-        ObservableCollection<Advertising> advertisingsUp_;
         ObservableCollection<string> advertisingsDown = new ObservableCollection<string>();
         DateTime createDate = DateTime.Now;
         User manager;
@@ -39,7 +38,7 @@ namespace OfferMaker
         int managerId;
         Discount discount;
         string createDateString;
-        string banner;
+        string bannerImagePath;
         Banner banner_;
         string offerName = "Новое КП";
         bool isHiddenTextNds;
@@ -51,6 +50,9 @@ namespace OfferMaker
         bool isTemplate;
         bool isArchive;
         bool isDelete;
+        bool isEdited;
+        bool isEditableState;
+        Offer offerEditBackup;
 
         public int Id
         {
@@ -63,6 +65,10 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Альтернативный человекочитаемый id с датой, публикуется в КП.
+        /// </summary>
+        [JsonIgnore]
         public string AltId { get => Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + Id; }
 
         public string Guid
@@ -91,21 +97,25 @@ namespace OfferMaker
         /// <summary>
         /// Группы, которые являются опциями.
         /// </summary>
+        [JsonIgnore]
         public ObservableCollection<OfferGroup> OfferGroupsOptions { get => new ObservableCollection<OfferGroup>(OfferGroups.Where(o => o.IsOption && o.IsEnabled).ToList()); }
 
         /// <summary>
         /// Группы, которые не являются опциями.
         /// </summary>
+        [JsonIgnore]
         public ObservableCollection<OfferGroup> OfferGroupsNotOptions { get => new ObservableCollection<OfferGroup>(OfferGroups.Where(o => !o.IsOption && o.IsEnabled).ToList()); }
 
         /// <summary>
         /// Имеются ли в наличии группы, которые не опции.
         /// </summary>
+        [JsonIgnore]
         public bool IsRequiredGroups { get => OfferGroupsNotOptions.Count == 0 ? false : true; }
 
         /// <summary>
         /// Имеются ли в наличии группы, которые опции.
         /// </summary>
+        [JsonIgnore]
         public bool IsRequiredOptions { get => OfferGroupsOptions.Count == 0 ? false : true; }
 
         /// <summary>
@@ -212,16 +222,6 @@ namespace OfferMaker
             }
         }
 
-        //public ObservableCollection<Advertising> AdvertisingsUp_
-        //{
-        //    get => advertisingsUp_;
-        //    set
-        //    {
-        //        advertisingsUp_ = value;
-        //        OnPropertyChanged();
-        //    }
-        //}
-
         /// <summary>
         /// Рекламмные материалы, идущие внизу.
         /// </summary>
@@ -238,12 +238,14 @@ namespace OfferMaker
         /// <summary>
         /// Большая картинка с телефоном справа от менеджера.
         /// </summary>
+        [JsonIgnore]
         public string PhotoNumberTeh { get => constructor?.PhotoNumberTeh; }
 
         /// <summary>
         /// Баннер.
         /// </summary>
-        public string Banner
+        [JsonIgnore]
+        public string BannerImagePath
         {
             get
             {
@@ -253,7 +255,7 @@ namespace OfferMaker
             }
             set
             {
-                banner = value;
+                bannerImagePath = value;
                 OnPropertyChanged();
             }
         }
@@ -268,13 +270,14 @@ namespace OfferMaker
             {
                 banner_ = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(Banner));
+                OnPropertyChanged(nameof(BannerImagePath));
             }
         }
 
         /// <summary>
         /// Отображение даты в удобочитаемом формате.
         /// </summary>
+        [JsonIgnore]
         public string CreateDateString
         {
             get => CreateDate.ToLongDateString();
@@ -288,6 +291,7 @@ namespace OfferMaker
         /// <summary>
         /// Время создания КП.
         /// </summary>
+        [JsonIgnore]
         public string CreateTimeString
         {
             get => CreateDate.ToLongTimeString();
@@ -388,6 +392,9 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Пометка на удаление. 
+        /// </summary>
         public bool IsDelete
         {
             get => isDelete;
@@ -397,6 +404,40 @@ namespace OfferMaker
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Отредактировано.
+        /// </summary>
+        public bool IsEdited
+        {
+            get => isEdited;
+            set
+            {
+                if (isEdited != value)
+                {
+                    isEdited = value;
+                    OnPropertyChanged();
+                }
+                if (value && IsEditableState)
+                    UnsetEditableState();
+            }
+        }
+
+        /// <summary>
+        /// В состоянии редактирования.
+        /// </summary>
+        [JsonIgnore]
+        public bool IsEditableState
+        {
+            get => isEditableState;
+            set
+            {
+                isEditableState = value;
+                OnPropertyChanged();
+            }
+        }
+
+        internal void UnsetIsEdited() => IsEdited = false;
 
         #region Money
 
@@ -506,6 +547,7 @@ namespace OfferMaker
             {
                 isCreateByCostPrice = value;
                 UpdatePrices();
+                OnPropertyChanged();
             }
         }
 
@@ -519,13 +561,18 @@ namespace OfferMaker
             {
                 isResultSummInRub = value;
                 UpdateOfferSums();
+                OnPropertyChanged();
             }
         }
 
         /// <summary>
         /// Объект дисконта.
         /// </summary>
-        public Discount Discount { get => discount; set => discount = value; }
+        public Discount Discount
+        {
+            get => discount;
+            set => discount = value;
+        }
 
         /// <summary>
         /// Нужно ли пересчитывать.
@@ -558,6 +605,11 @@ namespace OfferMaker
             discount = new Discount(this);
         }
 
+        /// <summary>
+        /// Получение баннера по guid.
+        /// </summary>
+        /// <param name="bannerGuid"></param>
+        /// <returns></returns>
         private Banner GetBannerByGuid(string bannerGuid)
         {
             string path = ImageManager.GetInstance().GetImagePath(bannerGuid);
@@ -565,6 +617,64 @@ namespace OfferMaker
             return bann;
         }
 
+        #region Edit
+
+        internal void SetEditableState()
+        {
+            IsEditableState = true;
+            offerEditBackup = Helpers.CloneObject<Offer>(this);
+
+            PropertyChanged += Edit_PropertyChanged;
+            Discount.PropertyChanged += Edit_PropertyChanged;
+            Customer.PropertyChanged += Edit_PropertyChanged;
+            offerGroups.ToList().ForEach(o => o.PropertyChanged += Edit_PropertyChanged);
+            offerGroups.ToList().ForEach(o => o.NomWrappers.CollectionChanged += NomWrappers_CollectionChanged);
+            offerGroups.ToList().ForEach(o => o.NomWrappers.ToList().ForEach(n =>
+            {
+                n.PropertyChanged += N_PropertyChanged;
+                n.Nomenclature.PropertyChanged += N_PropertyChanged;
+                n.Nomenclature.Descriptions.ToList().ForEach(d => d.PropertyChanged += N_PropertyChanged);
+                n.Nomenclature.Descriptions.CollectionChanged += NomWrappers_CollectionChanged;
+            }));
+        }
+
+        internal void UnsetEditableState()
+        {
+            IsEditableState = false;
+
+            PropertyChanged -= Edit_PropertyChanged;
+            Discount.PropertyChanged -= Edit_PropertyChanged;
+            Customer.PropertyChanged -= Edit_PropertyChanged;
+            offerGroups.ToList().ForEach(o => o.PropertyChanged -= Edit_PropertyChanged);
+            offerGroups.ToList().ForEach(o => o.NomWrappers.CollectionChanged -= NomWrappers_CollectionChanged);
+            offerGroups.ToList().ForEach(o => o.NomWrappers.ToList().ForEach(n =>
+            {
+                n.PropertyChanged -= N_PropertyChanged;
+                n.Nomenclature.PropertyChanged -= N_PropertyChanged;
+                n.Nomenclature.Descriptions.ToList().ForEach(d => d.PropertyChanged -= N_PropertyChanged);
+                n.Nomenclature.Descriptions.CollectionChanged -= NomWrappers_CollectionChanged;
+            }));
+        }
+
+        private void NomWrappers_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => ChangeHandler();
+
+        private void N_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsRowDetailsVisibility")
+                return;
+            ChangeHandler();
+        }
+
+        private void ChangeHandler() => IsEdited = true;
+
+        private void Edit_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) => ChangeHandler();
+
+        #endregion Edit
+
+        /// <summary>
+        /// Установка конструктора, для вызова всплывающих событий и обращения к свойствам.
+        /// </summary>
+        /// <param name="constructor"></param>
         public void SetConstructor(Constructor constructor)
         {
             this.constructor = constructor;
@@ -581,10 +691,20 @@ namespace OfferMaker
         {
             currency = curr;
             UpdateOfferCurrency();
+            IsEdited = true;
         }
 
+        /// <summary>
+        /// Номер предназначен для именования вновь созданной группы номенклатуры в конструкторе.
+        /// </summary>
+        /// <returns></returns>
         public int GetAddGroupsCounter() => ++addGroupsCounter;
 
+        /// <summary>
+        /// Подготовка данных архива к сохранению.
+        /// Сохраняем валюты и ставим флаг, чтобы отличать архив.
+        /// </summary>
+        /// <returns></returns>
         internal Offer PrepareArchive()
         {
             Currencies = new ObservableCollection<Currency>();
@@ -708,7 +828,10 @@ namespace OfferMaker
             isCreatorBusy = false;
         }
 
-        void UpdateDiscountData() => Discount.CalculateByTotalSum();
+        void UpdateDiscountData()
+        {
+            Discount.CalculateByTotalSum();
+        }
 
         public void UpdateDiscountUI()
         {

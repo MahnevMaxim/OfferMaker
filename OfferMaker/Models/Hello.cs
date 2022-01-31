@@ -328,7 +328,7 @@ namespace OfferMaker
         /// <returns></returns>
         async private Task InitData()
         {
-            main.DataRepository = DataRepository.GetInstance(Settings.GetToken()); //инициализация хранилища
+            main.DataRepository = DataRepository.GetInstance(Settings.GetInstance().AppMode, Settings.GetToken()); //инициализация хранилища
             //dataRepository = main.DataRepository;
             await ReciveData(); //инициализация данных
             InitModules(); //инициализация модулей на основе данных

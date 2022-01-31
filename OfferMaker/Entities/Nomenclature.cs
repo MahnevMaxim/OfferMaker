@@ -66,7 +66,7 @@ namespace OfferMaker
             {
                 descriptions = value;
                 SetIsEdit();
-            }  
+            }
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace OfferMaker
             {
                 images = value;
                 SetIsEdit();
-            }  
+            }
         }
 
         /// <summary>
@@ -280,5 +280,34 @@ namespace OfferMaker
         }
 
         public override string ToString() => "Id:" + Id + " " + Title;
+
+        internal bool IsEqual(Nomenclature nomenclature)
+        {
+            if (CostPrice != nomenclature.CostPrice || Markup != nomenclature.Markup)
+                return false;
+
+            if (nomenclature.Image.Guid != Image.Guid)
+                return false;
+
+            if (nomenclature.Images.Count != Images.Count)
+                return false;
+
+            for (int i = 0; i < Images.Count; i++)
+            {
+                if (Images[i].Guid != nomenclature.Images[i].Guid)
+                    return false;
+            }
+
+            if (nomenclature.Descriptions.Count != Descriptions.Count)
+                return false;
+
+            for (int i = 0; i < Descriptions.Count; i++)
+            {
+                if (!Descriptions[i].IsEqual(nomenclature.Descriptions[i]))
+                    return false;
+            }
+
+            return true;
+        }
     }
 }

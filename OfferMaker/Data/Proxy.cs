@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Shared;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 
 namespace OfferMaker
 {
@@ -18,19 +19,13 @@ namespace OfferMaker
     {
         private ServerStore ServerStore;
         private LocalData LocalData;
-        public AppMode defaultAppMode;
+        readonly AppMode appMode;
 
-        AppMode AppMode
-        {
-            get
-            {
-                if (Global.Main == null) return defaultAppMode;
-                return Global.Main.Settings.AppMode;
-            }
-        }
+        AppMode AppMode { get => appMode; }
 
-        public Proxy(string accessToken = null)
+        public Proxy(AppMode appMode, string accessToken = null)
         {
+            this.appMode = appMode;
             ServerStore = new ServerStore(accessToken);
             LocalData = new LocalData();
         }
@@ -46,15 +41,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.NomenclaturesGet();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<Nomenclature>>(LocalDataConfig.NomenclaturesPath);
+                return await LocalData.GetData<ObservableCollection<Nomenclature>>(LocalDataConfig.ServerCacheNomenclaturesPath);
 
             CallResult<ObservableCollection<Nomenclature>> callResult = await ServerStore.NomenclaturesGet();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.NomenclaturesPath);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCacheNomenclaturesPath);
                 return callResult;
             }
-            return await LocalData.GetCache<ObservableCollection<Nomenclature>>(LocalDataConfig.NomenclaturesPath);
+            return await LocalData.GetData<ObservableCollection<Nomenclature>>(LocalDataConfig.ServerCacheNomenclaturesPath);
         }
 
         /// <summary>
@@ -67,10 +62,10 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.SaveNomenclatures(nomenclatures);
             if (AppMode == AppMode.Offline)
-                return LocalData.UpdateCache(nomenclatures, LocalDataConfig.NomenclaturesPath);
+                return LocalData.UpdateCache(nomenclatures, LocalDataConfig.ServerCacheNomenclaturesPath);
 
             var callResult = await ServerStore.SaveNomenclatures(nomenclatures);
-            LocalData.UpdateCache(nomenclatures, LocalDataConfig.NomenclaturesPath);
+            LocalData.UpdateCache(nomenclatures, LocalDataConfig.ServerCacheNomenclaturesPath);
             return callResult;
         }
 
@@ -87,15 +82,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.UsersGet();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<User>>(LocalDataConfig.UsersPath);
+                return await LocalData.GetData<ObservableCollection<User>>(LocalDataConfig.ServerCacheUsersPath);
 
             CallResult<ObservableCollection<User>> callResult = await ServerStore.UsersGet();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.UsersPath);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCacheUsersPath);
                 return callResult;
             }
-            return await LocalData.GetCache<ObservableCollection<User>>(LocalDataConfig.UsersPath);
+            return await LocalData.GetData<ObservableCollection<User>>(LocalDataConfig.ServerCacheUsersPath);
         }
 
         /// <summary>
@@ -169,15 +164,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.PositionsGet();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<Position>>(LocalDataConfig.PositionsPath);
+                return await LocalData.GetData<ObservableCollection<Position>>(LocalDataConfig.ServerCachePositionsPath);
 
             CallResult<ObservableCollection<Position>> callResult = await ServerStore.PositionsGet();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.PositionsPath);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCachePositionsPath);
                 return callResult;
             }
-            return await LocalData.GetCache<ObservableCollection<Position>>(LocalDataConfig.PositionsPath);
+            return await LocalData.GetData<ObservableCollection<Position>>(LocalDataConfig.ServerCachePositionsPath);
         }
 
         /// <summary>
@@ -207,15 +202,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.GetCurrencies();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<Currency>>(LocalDataConfig.CurrenciesPath);
+                return await LocalData.GetData<ObservableCollection<Currency>>(LocalDataConfig.ServerCacheCurrenciesPath);
 
             var callResult = await ServerStore.GetCurrencies();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.CurrenciesPath);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCacheCurrenciesPath);
                 return callResult;
             }
-            return await LocalData.GetCache<ObservableCollection<Currency>>(LocalDataConfig.CurrenciesPath);
+            return await LocalData.GetData<ObservableCollection<Currency>>(LocalDataConfig.ServerCacheCurrenciesPath);
         }
 
         /// <summary>
@@ -228,10 +223,10 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.SaveCurrencies(currencies);
             if (AppMode == AppMode.Offline)
-                return LocalData.UpdateCache(currencies, LocalDataConfig.CurrenciesPath);
+                return LocalData.UpdateCache(currencies, LocalDataConfig.ServerCacheCurrenciesPath);
 
             var callResult = await ServerStore.SaveCurrencies(currencies);
-            LocalData.UpdateCache(currencies, LocalDataConfig.CurrenciesPath);
+            LocalData.UpdateCache(currencies, LocalDataConfig.ServerCacheCurrenciesPath);
             return callResult;
         }
 
@@ -248,15 +243,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.GetNomGroups();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<NomenclatureGroup>>(LocalDataConfig.NomenclatureGroupsPath);
+                return await LocalData.GetData<ObservableCollection<NomenclatureGroup>>(LocalDataConfig.ServerCacheNomenclatureGroupsPath);
 
             CallResult<ObservableCollection<NomenclatureGroup>> callResult = await ServerStore.GetNomGroups();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.NomenclatureGroupsPath);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCacheNomenclatureGroupsPath);
                 return callResult;
             }
-            return await LocalData.GetCache<ObservableCollection<NomenclatureGroup>>(LocalDataConfig.NomenclatureGroupsPath);
+            return await LocalData.GetData<ObservableCollection<NomenclatureGroup>>(LocalDataConfig.ServerCacheNomenclatureGroupsPath);
         }
 
         /// <summary>
@@ -269,10 +264,10 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.SaveNomenclatureGroups(nomenclatureGroups);
             if (AppMode == AppMode.Offline)
-                return LocalData.UpdateCache(nomenclatureGroups, LocalDataConfig.NomenclatureGroupsPath);
+                return LocalData.UpdateCache(nomenclatureGroups, LocalDataConfig.ServerCacheNomenclatureGroupsPath);
 
             var callResult = await ServerStore.SaveNomenclatureGroups(nomenclatureGroups);
-            LocalData.UpdateCache(nomenclatureGroups, LocalDataConfig.NomenclatureGroupsPath);
+            LocalData.UpdateCache(nomenclatureGroups, LocalDataConfig.ServerCacheNomenclatureGroupsPath);
             return callResult;
         }
 
@@ -280,32 +275,111 @@ namespace OfferMaker
 
         #region Offer templates
 
-        async internal Task<CallResult> OfferTemplateCreate(Offer offer, ObservableCollection<Offer> offers)
+        /// <summary>
+        /// Редактирование шаблона.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> OfferTemplateEdit(Offer offer)
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerStore.OfferTemplateEdit(offer);
+            if (AppMode == AppMode.Offline)
+                return await LocalData.Post<Offer>(offer, LocalDataConfig.LocalOfferTemplatesPath);
+
+            var remoteResult = await ServerStore.OfferTemplateEdit(offer);
+            string message = remoteResult.Message;
+            if (remoteResult.Success)
+            {
+                offer.UnsetIsEdited();
+                var localResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOfferTemplatesPath);
+                remoteResult.AddCallResult(localResult);
+                var serverCachResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOfferTemplatesPath);
+                remoteResult.AddCallResult(serverCachResult);
+            }
+            else
+            {
+                var localResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOfferTemplatesPath);
+                remoteResult.AddCallResult(localResult);
+            }
+            return remoteResult;
+        }
+
+        /// <summary>
+        /// Создание шаблона.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <param name="offers"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> OfferTemplateCreate(Offer offer)
         {
             if (AppMode == AppMode.Online)
                 return await ServerStore.OfferTemplateCreate(offer);
             if (AppMode == AppMode.Offline)
-                return LocalData.UpdateCache(offers, LocalDataConfig.OfferTemplatesPath);
+                return await LocalData.Post<Offer>(offer, LocalDataConfig.LocalOfferTemplatesPath);
 
-            var callResult = await ServerStore.OfferTemplateCreate(offer);
-            LocalData.UpdateCache(offers, LocalDataConfig.OfferTemplatesPath);
-            return callResult;
+            //в режиме auto приходит или вновь созданный шаблон или уже существующий локально,
+            //в случае удачного добавления удаляем из локальных данных этот шаблон, если он есть, и добавляем в кэш,
+            //в случаее неудачного добавления на сервер добавляем(если нету) шаблон в локальные данные
+            var remoteResult = await ServerStore.OfferTemplateCreate(offer);
+            string message = remoteResult.Message;
+            if (remoteResult.Success)
+            {
+                var localResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOfferTemplatesPath);
+                remoteResult.AddCallResult(localResult);
+                var serverCachResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOfferTemplatesPath);
+                remoteResult.AddCallResult(serverCachResult);
+            }
+            else
+            {
+                var localResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOfferTemplatesPath);
+                remoteResult.AddCallResult(localResult);
+            }
+            return remoteResult;
         }
 
+        /// <summary>
+        /// Получение всех шаблонов.
+        /// </summary>
+        /// <returns></returns>
         async internal Task<CallResult<ObservableCollection<Offer>>> OfferTemplatesGet()
         {
             if (AppMode == AppMode.Online)
                 return await ServerStore.OfferTemplatesGet();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OfferTemplatesPath);
-
-            CallResult<ObservableCollection<Offer>> callResult = await ServerStore.OfferTemplatesGet();
-            if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.OfferTemplatesPath);
-                return callResult;
+                var cacheResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOfferTemplatesPath);
+                var localResult = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOfferTemplatesPath, true);
+                return MergeCallResults(cacheResult, localResult);
             }
-            return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OfferTemplatesPath);
+
+            //в режиме auto получаем 2 колекции, если что-то локально помечено к удалению, то также помечаем к удалению данные сервера
+            var serverResult = await ServerStore.OfferTemplatesGet();
+            if (serverResult.Success)
+                LocalData.UpdateCache(serverResult.Data, LocalDataConfig.ServerCacheOfferTemplatesPath);
+            else
+                serverResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOfferTemplatesPath);
+            var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOfferTemplatesPath);
+            return MergeCallResults(serverResult, localResult_);
+        }
+
+        /// <summary>
+        /// Удаление шаблона.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> OfferTemplateDelete(Offer offer)
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerStore.OfferTemplateDelete(offer);
+            if (AppMode == AppMode.Offline)
+                return await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOfferTemplatesPath, true);
+
+            var serverResult = await ServerStore.OfferTemplateDelete(offer);
+            var localResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOfferTemplatesPath, !serverResult.Success);
+            var serverCacheResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.ServerCacheOfferTemplatesPath, !serverResult.Success);
+            localResult.AddCallResult(serverCacheResult);
+            return MergeCallResults(serverResult, localResult);
         }
 
         #endregion Offer templates
@@ -322,16 +396,18 @@ namespace OfferMaker
                 return await ServerStore.OffersGet();
             if (AppMode == AppMode.Offline)
             {
-                var cacheResult = await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OffersPath);
-                var localResult = await LocalData.GetLocalData<List<Offer>>(LocalDataConfig.OffersPath);
+                var cacheResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersPath);
+                var localResult = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersPath);
                 return MergeCallResults(cacheResult, localResult);
             }
 
             //в режиме auto получаем 2 колекции, если что-то локально помечено к удалению, то также помечаем к удалению данные сервера
             var serverResult = await ServerStore.OffersGet();
             if (serverResult.Success)
-                LocalData.UpdateCache(serverResult.Data, LocalDataConfig.OffersPath);
-            var localResult_ = await LocalData.GetLocalData<List<Offer>>(LocalDataConfig.OffersPath);
+                LocalData.UpdateCache(serverResult.Data, LocalDataConfig.ServerCacheOffersPath);
+            else
+                serverResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersPath);
+            var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersPath);
             return MergeCallResults(serverResult, localResult_);
         }
 
@@ -344,15 +420,20 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.OffersSelfGet();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OffersPath);
-
-            CallResult<ObservableCollection<Offer>> callResult = await ServerStore.OffersSelfGet();
-            if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.OffersPath);
-                return callResult;
+                var cacheResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersPath);
+                var localResult = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersPath);
+                return MergeCallResults(cacheResult, localResult);
             }
-            return await LocalData.GetCache<ObservableCollection<Offer>>(LocalDataConfig.OffersPath);
+
+            //в режиме auto получаем 2 колекции, если что-то локально помечено к удалению, то также помечаем к удалению данные сервера
+            var serverResult = await ServerStore.OffersGet();
+            if (serverResult.Success)
+                LocalData.UpdateCache(serverResult.Data, LocalDataConfig.ServerCacheOffersPath);
+            else
+                serverResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersPath);
+            var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersPath);
+            return MergeCallResults(serverResult, localResult_);
         }
 
         /// <summary>
@@ -365,16 +446,26 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.OfferCreate(offer);
             if (AppMode == AppMode.Offline)
-                return await LocalData.Post<Offer>(offer, LocalDataConfig.OffersPath);
+                return await LocalData.Post<Offer>(offer, LocalDataConfig.LocalOffersPath);
 
+            //в режиме auto приходит или вновь созданное КП или уже существующее локально,
+            //в случае удачного добавления удаляем из локальных данных это КП, если оно есть, и добавляем в кэш,
+            //в случаее неудачного добавления на сервер добавляем(если нету) КП в локальные данные
             var remoteResult = await ServerStore.OfferCreate(offer);
             string message = remoteResult.Message;
-            var localResult = await LocalData.Post<Offer>(offer, LocalDataConfig.OffersPath);
-            message += "\n" + localResult.Message;
-            if (remoteResult.Success && localResult.Success)
-                return new CallResult() { SuccessMessage = message };
+            if (remoteResult.Success)
+            {
+                var localResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOffersPath);
+                remoteResult.AddCallResult(localResult);
+                var serverCachResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOffersPath);
+                remoteResult.AddCallResult(serverCachResult);
+            }
             else
-                return new CallResult() { Error = new Error(message) };
+            {
+                var localResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOffersPath);
+                remoteResult.AddCallResult(localResult);
+            }
+            return remoteResult;
         }
 
         /// <summary>
@@ -388,10 +479,12 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.OfferDelete(offer);
             if (AppMode == AppMode.Offline)
-                return await LocalData.Delete<Offer>(offer, LocalDataConfig.OffersPath, true);
-              
+                return await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOffersPath, true);
+
             var serverResult = await ServerStore.OfferDelete(offer);
-            var localResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.OffersPath, !serverResult.Success);
+            var localResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOffersPath, !serverResult.Success);
+            var serverCacheResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.ServerCacheOffersPath, !serverResult.Success);
+            localResult.AddCallResult(serverCacheResult);
             return MergeCallResults(serverResult, localResult);
         }
 
@@ -409,10 +502,10 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.SaveCategories(categoriesTree);
             if (AppMode == AppMode.Offline)
-                return LocalData.UpdateCache(categoriesTree, LocalDataConfig.CategoriesPath);
+                return LocalData.UpdateCache(categoriesTree, LocalDataConfig.ServerCacheCategoriesPath);
 
             var callResult = await ServerStore.SaveCategories(categoriesTree);
-            LocalData.UpdateCache(categoriesTree, LocalDataConfig.CategoriesPath);
+            LocalData.UpdateCache(categoriesTree, LocalDataConfig.ServerCacheCategoriesPath);
             return callResult;
         }
 
@@ -425,15 +518,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.GetCategories();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<Category>>(LocalDataConfig.CategoriesPath);
+                return await LocalData.GetData<ObservableCollection<Category>>(LocalDataConfig.ServerCacheCategoriesPath);
 
             CallResult<ObservableCollection<Category>> callResult = await ServerStore.GetCategories();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.CategoriesPath);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCacheCategoriesPath);
                 return callResult;
             }
-            return await LocalData.GetCache<ObservableCollection<Category>>(LocalDataConfig.CategoriesPath);
+            return await LocalData.GetData<ObservableCollection<Category>>(LocalDataConfig.ServerCacheCategoriesPath);
         }
 
         #endregion Categories
@@ -449,15 +542,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.HintsGet();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<List<Hint>>(LocalDataConfig.HintsPath);
+                return await LocalData.GetData<List<Hint>>(LocalDataConfig.ServerCacheHintsPath);
 
             CallResult<List<Hint>> callResult = await ServerStore.HintsGet();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.HintsPath);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCacheHintsPath);
                 return callResult;
             }
-            return await LocalData.GetCache<List<Hint>>(LocalDataConfig.HintsPath);
+            return await LocalData.GetData<List<Hint>>(LocalDataConfig.ServerCacheHintsPath);
         }
 
         #endregion Hints
@@ -471,15 +564,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.BannersGet();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<Banner>>(LocalDataConfig.BannersPath);
+                return await LocalData.GetData<ObservableCollection<Banner>>(LocalDataConfig.ServerCacheBannersPath);
 
             CallResult<ObservableCollection<Banner>> callResult = await ServerStore.BannersGet();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.BannersPath);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCacheBannersPath);
                 return callResult;
             }
-            return await LocalData.GetCache<ObservableCollection<Banner>>(LocalDataConfig.BannersPath);
+            return await LocalData.GetData<ObservableCollection<Banner>>(LocalDataConfig.ServerCacheBannersPath);
         }
 
         async internal Task<CallResult> BannerDelete(Banner banner) => await ServerStore.BannerDelete(banner);
@@ -489,15 +582,15 @@ namespace OfferMaker
             if (AppMode == AppMode.Online)
                 return await ServerStore.AdvertisingsGet();
             if (AppMode == AppMode.Offline)
-                return await LocalData.GetCache<ObservableCollection<Advertising>>(LocalDataConfig.AdvertisingsPath);
+                return await LocalData.GetData<ObservableCollection<Advertising>>(LocalDataConfig.ServerCacheAdvertisingsPath);
 
             CallResult<ObservableCollection<Advertising>> callResult = await ServerStore.AdvertisingsGet();
             if (callResult.Success)
             {
-                LocalData.UpdateCache(callResult.Data, LocalDataConfig.AdvertisingsPath);
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCacheAdvertisingsPath);
                 return callResult;
             }
-            return await LocalData.GetCache<ObservableCollection<Advertising>>(LocalDataConfig.AdvertisingsPath);
+            return await LocalData.GetData<ObservableCollection<Advertising>>(LocalDataConfig.ServerCacheAdvertisingsPath);
         }
 
         async internal Task<CallResult> AdvertisingCreate(Advertising advertising) => await ServerStore.AdvertisingCreate(advertising);
@@ -525,8 +618,17 @@ namespace OfferMaker
                 foreach (var entity in localData.Data.Where(o => o.Id != 0))
                 {
                     var entity_ = result.FirstOrDefault(o => o.Id == entity.Id);
-                    if (entity_ != null && entity.IsDelete)
+                    if (entity_ == null) continue;
+
+                    if (entity.IsDelete)
                         entity_.IsDelete = true;
+                    else
+                    {
+                        //если есть Id и объект не удалён, то значит - это изменённый объект
+                        int index = result.IndexOf(entity_);
+                        result.Remove(entity_);
+                        result.Insert(index, entity);
+                    }
                 }
             }
 
@@ -536,7 +638,7 @@ namespace OfferMaker
                 return new CallResult<ObservableCollection<T>>() { Error = new Error(message), Data = result };
         }
 
-        private CallResult MergeCallResults(CallResult serverData, CallResult localData) 
+        private CallResult MergeCallResults(CallResult serverData, CallResult localData)
         {
             string message = serverData.Message;
             message += "\n" + localData.Message;

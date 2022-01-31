@@ -22,7 +22,6 @@ namespace OfferMaker
     /// </summary>
     public class ImageManager
     {
-
         public delegate void UpdateHandler();
         public event UpdateHandler UpdateProgress;
 
@@ -229,7 +228,7 @@ namespace OfferMaker
         {
             string[] files = Directory.GetFiles(imagesDirectory);
             List<string> existingFilesGuids = new List<string>();
-            files.ToList().ForEach(f => existingFilesGuids.Add(f.Split('.')[0].Replace("cache\\", "")));
+            files.ToList().ForEach(f => existingFilesGuids.Add(f.Split('.')[0].Replace(LocalDataConfig.ImageCacheDir + "\\", "")));
             List<string> needDownloadGuids = guids.Except(existingFilesGuids).ToList();
 
             downLoadProgress = new DownLoadProgress() { BeginFilesCount = needDownloadGuids.Count };
