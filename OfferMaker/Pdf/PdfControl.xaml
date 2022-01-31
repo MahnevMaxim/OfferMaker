@@ -1,14 +1,14 @@
 ﻿<UserControl x:Class="OfferMaker.Pdf.PdfControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:layout="clr-namespace:OfferMaker.Pdf"
              xmlns:root="clr-namespace:OfferMaker"
-             mc:Ignorable="d" >
+             mc:Ignorable="d">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -16,7 +16,8 @@
         <Geometry x:Key="PrintDocIcon">M506.812,172.125h-38.25V38.25c0-21.038-17.213-38.25-38.25-38.25H143.438c-21.038,0-38.25,17.212-38.25,38.25v133.875    h-38.25c-32.513,0-57.375,24.862-57.375,57.375v172.125C9.562,434.138,34.425,459,66.938,459h38.25v76.5    c0,21.037,17.212,38.25,38.25,38.25h286.875c21.037,0,38.25-17.213,38.25-38.25V459h38.25c32.513,0,57.375-24.862,57.375-57.375    V229.5C564.188,196.987,539.325,172.125,506.812,172.125z M124.312,38.25c0-9.562,7.65-19.125,19.125-19.125h286.875    c9.562,0,19.125,7.65,19.125,19.125v133.875H124.312V38.25z M449.438,535.5c0,9.562-7.65,19.125-19.125,19.125H143.438    c-9.562,0-19.125-7.65-19.125-19.125V401.625h325.125V535.5z M545.062,401.625c0,21.037-17.213,38.25-38.25,38.25h-38.25V382.5    H105.188v57.375h-38.25c-21.038,0-38.25-17.213-38.25-38.25V229.5c0-21.038,17.212-38.25,38.25-38.25h439.875    c21.037,0,38.25,17.212,38.25,38.25V401.625z
         </Geometry>
         <Style x:Key="BlackAndWhite">
-            <Setter Property="Control.Background" Value="Black" />
+            <Setter Property="Control.Background"
+                    Value="Black" />
         </Style>
     </UserControl.Resources>
 
@@ -239,25 +240,30 @@
             </TabItem>
             <TabItem Header="С баннером"
                      mah:TabControlHelper.Underlined="TabPanel"
-                     mah:HeaderedControlHelper.HeaderFontSize="12" Height="23" VerticalAlignment="Top">
+                     mah:HeaderedControlHelper.HeaderFontSize="12"
+                     Height="23"
+                     VerticalAlignment="Top">
                 <Grid>
                     <DocumentViewer x:Name="pdfWithBanner"
-                                Document="{Binding PdfDocument}">
+                                    Document="{Binding PdfDocument}">
                     </DocumentViewer>
-                    <Button Name="PrintPdfWithBanner" 
+                    <Button Name="PrintPdfWithBanner"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=DataContext.Cmd}"
-                            HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Transparent" Background="#f0f0f0"
-                            ToolTip="Печать" 
-                            >
-                        <Path Stretch="Fill" 
-                        Data="{StaticResource PrintDocIcon}"
-                        Fill="#3e5280"  
-                        Height="18"
-                        Width="18" />
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            BorderBrush="Transparent"
+                            Background="#f0f0f0"
+                            ToolTip="Печать">
+                        <Path Stretch="Fill"
+                              Data="{StaticResource PrintDocIcon}"
+                              Fill="#3e5280"
+                              Height="18"
+                              Width="18" />
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="PrintPdfWithBanner"/>
-                                <Binding Path="Document" ElementName="pdfWithBanner"/>
+                                <Binding Source="PrintPdfWithBanner" />
+                                <Binding Path="Document"
+                                         ElementName="pdfWithBanner" />
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
@@ -268,21 +274,25 @@
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="12">
                 <Grid>
-                    <DocumentViewer x:Name="pdfWithoutBanner" Document="{Binding PdfDocumentShort}" />
-                    <Button Name="PrintPdfWithoutBanner" 
+                    <DocumentViewer x:Name="pdfWithoutBanner"
+                                    Document="{Binding PdfDocumentShort}" />
+                    <Button Name="PrintPdfWithoutBanner"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=DataContext.Cmd}"
-                            HorizontalAlignment="Left" VerticalAlignment="Top" BorderBrush="Transparent" Background="#f0f0f0"
-                            ToolTip="Печать" 
-                            >
-                        <Path Stretch="Fill" 
-                        Data="{StaticResource PrintDocIcon}"
-                        Fill="#3e5280"  
-                        Height="18"
-                        Width="18" />
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            BorderBrush="Transparent"
+                            Background="#f0f0f0"
+                            ToolTip="Печать">
+                        <Path Stretch="Fill"
+                              Data="{StaticResource PrintDocIcon}"
+                              Fill="#3e5280"
+                              Height="18"
+                              Width="18" />
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="PrintPdfWithoutBanner"/>
-                                <Binding Path="Document" ElementName="pdfWithoutBanner"/>
+                                <Binding Source="PrintPdfWithoutBanner" />
+                                <Binding Path="Document"
+                                         ElementName="pdfWithoutBanner" />
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
