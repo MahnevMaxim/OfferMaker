@@ -79,6 +79,7 @@ namespace OfferMaker
         /// <summary>
         /// Коллекция описаний.
         /// </summary>
+        [JsonIgnore] 
         public ObservableCollection<Description> Descriptions { get => Nomenclature.Descriptions; }
 
         /// <summary>
@@ -229,6 +230,7 @@ namespace OfferMaker
         // <summary>
         /// Сумма прибыли при продаже 1 единицы номенклатуры.
         /// </summary>
+        [JsonIgnore]
         public decimal Profit { get => Price - CostPrice; }
 
         /// <summary>

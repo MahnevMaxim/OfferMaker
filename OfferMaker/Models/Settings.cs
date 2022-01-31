@@ -265,9 +265,9 @@ namespace OfferMaker
             string res = "";
             try
             {
-                if (Directory.Exists("cache"))
+                if (Directory.Exists(LocalDataConfig.ImageCacheDir))
                 {
-                    Directory.Delete("cache", true);
+                    Directory.Delete(LocalDataConfig.ImageCacheDir, true);
                     res += "Изображения удалены\n";
                 }
                 else
@@ -281,9 +281,31 @@ namespace OfferMaker
 
             try
             {
-                if (Directory.Exists(LocalDataConfig.DataCacheDir))
+                if (Directory.Exists(LocalDataConfig.ServerCacheDataDir))
                 {
-                    Directory.Delete(LocalDataConfig.DataCacheDir, true);
+                    Directory.Delete(LocalDataConfig.ServerCacheDataDir, true);
+                    res += "Данные удалены";
+                }
+                else
+                    res += "Данные не найдены";
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                res += "Не удалось удалить данные";
+            }
+
+            OnSendMessage(res);
+        }
+
+        public void ClearLocalData()
+        {
+            string res = "";
+            try
+            {
+                if (Directory.Exists(LocalDataConfig.LocalDataDir))
+                {
+                    Directory.Delete(LocalDataConfig.LocalDataDir, true);
                     res += "Данные удалены";
                 }
                 else

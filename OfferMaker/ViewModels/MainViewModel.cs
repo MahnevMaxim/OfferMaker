@@ -16,6 +16,7 @@ namespace OfferMaker.ViewModels
         bool isInfoBlocksOpen = false;
         bool isOffersFilterOpen = false;
         bool isOfferTemplatesFilterOpen = false;
+        string appMode;
 
         public override void InitializeViewModel()
         {
@@ -102,10 +103,10 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public Offer SelectedOfferInArchive 
-        { 
+        public Offer SelectedOfferInArchive
+        {
             get => modelMain.SelectedOfferInArchive;
-            set=> modelMain.SelectedOfferInArchive=value;
+            set => modelMain.SelectedOfferInArchive = value;
         }
 
         public Offer SelectedOfferTemplate
@@ -126,13 +127,17 @@ namespace OfferMaker.ViewModels
 
         public ObservableCollection<User> Managers { get => modelMain.Managers; }
 
+        public bool IsBusy { get => modelMain.IsBusy; }
+
+        public string ProcessStatus { get => modelMain.ProcessStatus; }
+
         #endregion Main
 
         #region Constructor
 
         #region Offer
 
-        public Discount Discount { get => modelMain.Constructor.Offer.Discount;}
+        public Discount Discount { get => modelMain.Constructor.Offer.Discount; }
 
         public decimal TotalCostPriceSum { get => modelMain.Constructor.Offer.TotalCostPriceSum; }
 
@@ -193,7 +198,7 @@ namespace OfferMaker.ViewModels
 
         public ObservableCollection<OfferInfoBlock> OfferInfoBlocks
         {
-            get =>  modelMain.Constructor.Offer.OfferInfoBlocks;
+            get => modelMain.Constructor.Offer.OfferInfoBlocks;
             set
             {
                 modelMain.Constructor.Offer.OfferInfoBlocks = value;
@@ -206,7 +211,7 @@ namespace OfferMaker.ViewModels
             get => modelMain.Constructor.Offer.IsHiddenTextNds;
             set
             {
-                if(IsWithNds==1 && value==false)
+                if (IsWithNds == 1 && value == false)
                 {
                     OnPropertyChanged();
                 }
@@ -279,12 +284,12 @@ namespace OfferMaker.ViewModels
             }
         }
 
-        public string Banner
+        public string BannerImagePath
         {
-            get => modelMain.Constructor.Offer.Banner;
+            get => modelMain.Constructor.Offer.BannerImagePath;
             set
             {
-                modelMain.Constructor.Offer.Banner = value;
+                modelMain.Constructor.Offer.BannerImagePath = value;
                 OnPropertyChanged();
             }
         }
@@ -312,6 +317,8 @@ namespace OfferMaker.ViewModels
                 OnPropertyChanged();
             }
         }
+
+        public string OfferStatus { get => modelMain.Constructor.OfferStatus; }
 
         #endregion Offer
 
@@ -392,6 +399,16 @@ namespace OfferMaker.ViewModels
         }
 
         public string PhotoNumberTeh { get => modelMain.Constructor.PhotoNumberTeh; }
+
+        public string AppMode 
+        { 
+            get
+            {
+                if (appMode == null)
+                    return appMode = Settings.GetInstance().AppMode.ToString();
+                return appMode;
+            }
+        }
 
         #endregion Constructor
     }

@@ -42,5 +42,12 @@ namespace OfferMaker
                 OnPropertyChanged();
             }
         }
+
+        internal bool IsEqual(Description description)
+        {
+            if (description.Text != Text || description.IsEnabled != IsEnabled || description.IsComment != IsComment)
+                return false;
+            return true;
+        }
     }
 }

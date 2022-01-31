@@ -41,7 +41,7 @@ namespace OfferMaker.ViewModels
                 AffirmativeButtonText = "Удалить",
                 NegativeButtonText = "Отмена"
             };
-            var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "Удаление номенклатуры", "Вы точно уверены, что хотите удалить номенклатуру?",
+            var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "", "Вы точно уверены, что хотите удалить номенклатуру?",
                 MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
             if (dialogRes == MessageDialogResult.Affirmative)
                 modelCatalog.DeleteNomenclature(nomenclature);
@@ -62,7 +62,7 @@ namespace OfferMaker.ViewModels
                 AffirmativeButtonText = "Удалить",
                 NegativeButtonText = "Отмена"
             };
-            var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "Удаление номенклатур", "Вы точно уверены, что хотите удалить номенклатуры?",
+            var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "", "Вы точно уверены, что хотите удалить номенклатуры?",
                 MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
             if (dialogRes == MessageDialogResult.Affirmative)
                 modelCatalog.DeleteNomenclatures();

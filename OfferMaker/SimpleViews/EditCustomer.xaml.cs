@@ -43,6 +43,7 @@ namespace OfferMaker.SimpleViews
         private void Button_Click(object sender, RoutedEventArgs e) 
         {
             isClickConfirm = true;
+            Offer.OnPropertyChanged();
             Close();
         }
 

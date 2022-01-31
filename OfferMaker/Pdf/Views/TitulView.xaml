@@ -183,7 +183,10 @@
         </StackPanel>
 
         <Viewbox Grid.Row="1">
-            <Image Height="180" Width="180" Stretch="Uniform" Source="{Binding Banner}" />
+            <Image Height="180"
+                   Width="180"
+                   Stretch="Uniform"
+                   Source="{Binding BannerImagePath}" />
         </Viewbox>
 
     </Grid>

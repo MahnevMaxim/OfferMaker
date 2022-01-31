@@ -15,7 +15,7 @@
                  BorderThickness="1"
                  ResizeMode="NoResize"
                  Title="Настройки"
-                 Height="300"
+                 Height="350"
                  Width="360"
                  Closing="MetroWindow_Closing">
     <Window.Resources>
@@ -33,6 +33,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
@@ -65,6 +66,7 @@
                       Margin="10" />
             <ComboBox SelectedIndex="{Binding AppMode}"
                       Grid.Row="2"
+                      ToolTip="Изменения вступают в силу после перезагрузки программы"
                       Grid.Column="1"
                       Margin="10">
                 <ComboBoxItem Content="Auto" />
@@ -95,6 +97,13 @@
                     Grid.Row="4"
                     Command="{Binding Cmd}"
                     CommandParameter="DownloadAllImages"
+                    Margin="10"
+                    Style="{StaticResource MahApps.Styles.Button.Square}" />
+            <Button Content="Удалить локальные данные"
+                    Grid.Column="1"
+                    Grid.Row="5"
+                    Command="{Binding Cmd}"
+                    CommandParameter="ClearLocalData"
                     Margin="10"
                     Style="{StaticResource MahApps.Styles.Button.Square}" />
         </Grid>
