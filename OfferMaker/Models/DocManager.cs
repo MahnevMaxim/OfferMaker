@@ -46,16 +46,36 @@ namespace OfferMaker
         /// </summary>
         internal void SaveToPdfWithoutBanner()
         {
-            
+
             constructor.CreateDocumentWithoutBanner();
             FixedDocument fixedDoc = constructor.PdfDocumentShort;
             _ = SaveToPdf(fixedDoc);
         }
+      
+        internal async Task PrintPdf(FixedDocument fixedDocument)
+        {
+            OfferCreateAnswer resultOfferCreate = await OfferCreate(false);//Сохранение КП в архив
+            //отправлять на печать, если 
+            //КП уже есть в архиве
+            //или КП добавлено в архив
+            if ((resultOfferCreate == OfferCreateAnswer.AddedToArchive) || (resultOfferCreate == OfferCreateAnswer.AllreadyInArchive))
+            {
+                System.Windows.Controls.PrintDialog dialog = new System.Windows.Controls.PrintDialog();
+                dialog.PrintTicket = dialog.PrintQueue.DefaultPrintTicket;
+                dialog.PrintTicket.PageOrientation = PageOrientation.Portrait;
+                dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
 
+                if (dialog.ShowDialog() == true)
+                {
+                    XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(dialog.PrintQueue);
+                    writer.WriteAsync(fixedDocument as FixedDocument, dialog.PrintTicket);
+                }
+            }
+        }
         internal async Task SaveToPdf(FixedDocument fixedDoc)
         {
-            bool resultOfferCreate = await OfferCreate(false);//Сохранение КП в архив
-            if (resultOfferCreate == true) 
+            OfferCreateAnswer resultOfferCreate = await OfferCreate(false);//Сохранение КП в архив
+            if ((resultOfferCreate == OfferCreateAnswer.AddedToArchive)|| (resultOfferCreate == OfferCreateAnswer.AllreadyInArchive))
             {
                 System.Windows.Controls.PrintDialog printDialog = new System.Windows.Controls.PrintDialog();
                 var serv = new LocalPrintServer();
@@ -170,13 +190,23 @@ namespace OfferMaker
         //    Global.Main.ArchiveStore.ApplyOfferFilter();
         //}
 
-       
-        async internal Task<bool> OfferCreate(bool isTemplate = false)
+        public enum OfferCreateAnswer
+        {
+            AddedToArchive,
+            NotAddedToArchive,
+            AllreadyInArchive
+        }
+        //возвращает состояния: 
+        //КП добавлено в архив
+        //КП не добавлено в архив
+        //КП уже есть в архиве
+        async internal Task<OfferCreateAnswer> OfferCreate(bool isTemplate = false)
         {
             if (constructor.Offer.Id != 0)
             {
                 Global.Main.SendMess("Нельзя перезаписать архив.");
-                return false;
+                return OfferCreateAnswer.AllreadyInArchive;
+                //КП уже есть в архиве
             }
 
             //если создаётся архивное КП
@@ -187,7 +217,7 @@ namespace OfferMaker
                     || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
                 {
                     Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
-                    return false;
+                    return OfferCreateAnswer.NotAddedToArchive;
                 }
             }
 
@@ -208,12 +238,12 @@ namespace OfferMaker
             if (cr.Success)
             {
                 Global.Main.SendMess(cr.SuccessMessage);
-                return true;
+                return OfferCreateAnswer.AddedToArchive;
             }
-            else 
+            else
             {
                 Global.Main.SendMess(cr.Error.Message);
-                return false;
+                return OfferCreateAnswer.NotAddedToArchive;
 
             }
             Global.Main.ArchiveStore.ApplyOfferFilter();
