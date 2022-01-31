@@ -36,29 +36,33 @@ namespace OfferMaker.Pdf
             //pdfWithBanner.CommandBindings.Add(commandBinding);
             InitializeComponent();
         }
-        private void PrintPdf(object sender, ExecutedRoutedEventArgs e)
-        {
-            //PrintDialog dialog = new PrintDialog();
-            //dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
-            //dialog.PrintTicket = dialog.PrintQueue.DefaultPrintTicket;
-            //dialog.PrintTicket.PageOrientation = PageOrientation.Landscape;
+        //private void PrintPdf(object sender, ExecutedRoutedEventArgs e)
+        //{
+        //    //PrintDialog dialog = new PrintDialog();
+        //    //dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
+        //    //dialog.PrintTicket = dialog.PrintQueue.DefaultPrintTicket;
+        //    //dialog.PrintTicket.PageOrientation = PageOrientation.Landscape;
 
-            //if (dialog.ShowDialog() == true)
-            //{
-            //    XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(dialog.PrintQueue);
-            //    writer.WriteAsync(pdfWithBanner.Document as FixedDocument, dialog.PrintTicket);
-            //    return true;
-            //}
+        //    //if (dialog.ShowDialog() == true)
+        //    //{
+        //    //    XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(dialog.PrintQueue);
+        //    //    writer.WriteAsync(pdfWithBanner.Document as FixedDocument, dialog.PrintTicket);
+        //    //    return true;
+        //    //}
 
-            //return false;
-        }
+        //    //return false;
+        //}
       
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            PrintTest();
+            bool resultOfferCreate = await OfferCreate(false);//Сохранение КП в архив
+            if (resultOfferCreate == true)
+            {
+                PrintPdf();
+            }
         }
        
-        public bool PrintTest() 
+        public bool PrintPdf() 
         {
             PrintDialog dialog = new PrintDialog();
             dialog.PrintTicket = dialog.PrintQueue.DefaultPrintTicket;
