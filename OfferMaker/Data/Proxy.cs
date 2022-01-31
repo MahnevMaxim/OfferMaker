@@ -359,7 +359,7 @@ namespace OfferMaker
                 LocalData.UpdateCache(serverResult.Data, LocalDataConfig.ServerCacheOfferTemplatesPath);
             else
                 serverResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOfferTemplatesPath);
-            var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOfferTemplatesPath);
+            var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOfferTemplatesPath, true);
             return MergeCallResults(serverResult, localResult_);
         }
 
