@@ -18,7 +18,6 @@
         <Style x:Key="BlackAndWhite">
             <Setter Property="Control.Background" Value="Black" />
         </Style>
-
     </UserControl.Resources>
 
 
