@@ -23,14 +23,14 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Currency>>> GetCurrencies()
+        [HttpGet(Name = nameof(CurrenciesGet))]
+        public async Task<ActionResult<IEnumerable<Currency>>> CurrenciesGet()
         {
             return await _context.Currencies.ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Currency>> GetCurrency(int id)
+        [HttpGet("{id}", Name = nameof(CurrencyGet))]
+        public async Task<ActionResult<Currency>> CurrencyGet(int id)
         {
             var currency = await _context.Currencies.FindAsync(id);
 
@@ -42,8 +42,9 @@ namespace API.Controllers
             return currency;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCurrency(int id, Currency currency)
+        [Authorize(Roles = "CanEditCurrencies,CanAll")]
+        [HttpPut("{id}", Name = nameof(CurrencyEdit))]
+        public async Task<IActionResult> CurrencyEdit(int id, Currency currency)
         {
             if (id != currency.Id)
             {
@@ -101,8 +102,9 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPut]
-        public async Task<IActionResult> PutCurrencies(IEnumerable<Currency> currencies)
+        [Authorize(Roles = "CanEditCurrencies,CanAll")]
+        [HttpPut(Name = nameof(CurrenciesEdit))]
+        public async Task<IActionResult> CurrenciesEdit(IEnumerable<Currency> currencies)
         {
             int id = 0;
             try
@@ -110,7 +112,7 @@ namespace API.Controllers
                 foreach (Currency currency in currencies)
                 {
                     id = currency.Id;
-                    await PutCurrency(currency.Id, currency);
+                    await CurrencyEdit(currency.Id, currency);
                 }
             }
             catch (DbUpdateConcurrencyException)
@@ -128,17 +130,19 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Currency>> PostCurrency(Currency currency)
+        [Authorize(Roles = "CanEditCurrencies,CanAll")]
+        [HttpPost(Name = nameof(CurrencyPost))]
+        public async Task<ActionResult<Currency>> CurrencyPost(Currency currency)
         {
             _context.Currencies.Add(currency);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCurrency", new { id = currency.Id }, currency);
+            return CreatedAtAction("CurrencyGet", new { id = currency.Id }, currency);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCurrency(int id)
+        [Authorize(Roles = "CanEditCurrencies,CanAll")]
+        [HttpDelete("{id}", Name = nameof(CurrencyDelete))]
+        public async Task<IActionResult> CurrencyDelete(int id)
         {
             var currency = await _context.Currencies.FindAsync(id);
             if (currency == null)

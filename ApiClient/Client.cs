@@ -1140,7 +1140,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1151,7 +1151,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1229,7 +1229,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1240,7 +1240,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1420,7 +1420,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1431,7 +1431,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1513,7 +1513,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1524,7 +1524,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -1607,9 +1607,9 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Currency>>> CurrenciesAllAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Currency>>> CurrenciesGetAsync()
         {
-            return CurrenciesAllAsync(System.Threading.CancellationToken.None);
+            return CurrenciesGetAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -1618,7 +1618,7 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Currency>>> CurrenciesAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Currency>>> CurrenciesGetAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Currencies");
@@ -1695,22 +1695,22 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditCurrencies,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesPUTAsync(System.Collections.Generic.IEnumerable<Currency> body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesEditAsync(System.Collections.Generic.IEnumerable<Currency> body)
         {
-            return CurrenciesPUTAsync(body, System.Threading.CancellationToken.None);
+            return CurrenciesEditAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditCurrencies,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesPUTAsync(System.Collections.Generic.IEnumerable<Currency> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesEditAsync(System.Collections.Generic.IEnumerable<Currency> body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Currencies");
@@ -1784,22 +1784,22 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditCurrencies,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesPOSTAsync(Currency body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Currency>> CurrencyPostAsync(Currency body)
         {
-            return CurrenciesPOSTAsync(body, System.Threading.CancellationToken.None);
+            return CurrencyPostAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditCurrencies,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesPOSTAsync(Currency body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Currency>> CurrencyPostAsync(Currency body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Currencies");
@@ -1883,9 +1883,9 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<Currency>> CurrencyGetAsync(int id)
         {
-            return CurrenciesGETAsync(id, System.Threading.CancellationToken.None);
+            return CurrencyGetAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -1894,7 +1894,7 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<Currency>> CurrenciesGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<Currency>> CurrencyGetAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -1975,22 +1975,22 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditCurrencies,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesPUT2Async(int id, Currency body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> CurrencyEditAsync(int id, Currency body)
         {
-            return CurrenciesPUT2Async(id, body, System.Threading.CancellationToken.None);
+            return CurrencyEditAsync(id, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditCurrencies,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesPUT2Async(int id, Currency body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> CurrencyEditAsync(int id, Currency body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2068,22 +2068,22 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditCurrencies,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse> CurrenciesDELETEAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> CurrencyDeleteAsync(int id)
         {
-            return CurrenciesDELETEAsync(id, System.Threading.CancellationToken.None);
+            return CurrencyDeleteAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditCurrencies,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse> CurrenciesDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> CurrencyDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2446,9 +2446,9 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>> NomenclatureGroupsAllAsync()
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>> NomenclatureGroupsGetAsync()
         {
-            return NomenclatureGroupsAllAsync(System.Threading.CancellationToken.None);
+            return NomenclatureGroupsGetAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -2457,7 +2457,7 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>> NomenclatureGroupsAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<NomenclatureGroup>>> NomenclatureGroupsGetAsync(System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/NomenclatureGroups");
@@ -2534,22 +2534,22 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPUTAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsSaveAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body)
         {
-            return NomenclatureGroupsPUTAsync(body, System.Threading.CancellationToken.None);
+            return NomenclatureGroupsSaveAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPUTAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsSaveAsync(System.Collections.Generic.IEnumerable<NomenclatureGroup> body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/NomenclatureGroups");
@@ -2629,22 +2629,22 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPOSTAsync(NomenclatureGroup body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupPostAsync(NomenclatureGroup body)
         {
-            return NomenclatureGroupsPOSTAsync(body, System.Threading.CancellationToken.None);
+            return NomenclatureGroupPostAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsPOSTAsync(NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupPostAsync(NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/NomenclatureGroups");
@@ -2728,9 +2728,9 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupGetAsync(int id)
         {
-            return NomenclatureGroupsGETAsync(id, System.Threading.CancellationToken.None);
+            return NomenclatureGroupGetAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -2739,7 +2739,7 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupsGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<NomenclatureGroup>> NomenclatureGroupGetAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2820,22 +2820,22 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsPUT2Async(int id, NomenclatureGroup body)
+        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupEditAsync(int id, NomenclatureGroup body)
         {
-            return NomenclatureGroupsPUT2Async(id, body, System.Threading.CancellationToken.None);
+            return NomenclatureGroupEditAsync(id, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsPUT2Async(int id, NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupEditAsync(int id, NomenclatureGroup body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -2913,22 +2913,22 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsDELETEAsync(int id)
+        public virtual System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupDeleteAsync(int id)
         {
-            return NomenclatureGroupsDELETEAsync(id, System.Threading.CancellationToken.None);
+            return NomenclatureGroupDeleteAsync(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupsDELETEAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse> NomenclatureGroupDeleteAsync(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -3095,7 +3095,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -3106,7 +3106,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -3190,7 +3190,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -3201,7 +3201,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -3381,7 +3381,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -3392,7 +3392,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -3474,7 +3474,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -3485,7 +3485,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanEditProducts,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4121,7 +4121,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanAll,CanControlTemplates)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4132,7 +4132,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanAll,CanControlTemplates)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4312,7 +4312,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanAll,CanControlTemplates)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4323,7 +4323,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanAll,CanControlTemplates)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4405,7 +4405,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanAll,CanControlTemplates)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4416,7 +4416,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth)
+        /// (Auth roles: CanAll,CanControlTemplates)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>

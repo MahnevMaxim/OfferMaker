@@ -42,6 +42,7 @@ namespace API.Controllers
             return category;
         }
 
+        [Authorize(Roles = "CanEditProducts,CanAll")]
         [HttpPut("{id}", Name = nameof(CategoryEdit))]
         public async Task<IActionResult> CategoryEdit(int id, Category category)
         {
@@ -72,6 +73,7 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "CanEditProducts,CanAll")]
         [HttpPut(Name = nameof(CategoriesSave))]
         public async Task<IActionResult> CategoriesSave(IEnumerable<Category> categories)
         {
@@ -102,6 +104,7 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "CanEditProducts,CanAll")]
         [HttpPost(Name = nameof(CategoryPost))]
         public async Task<ActionResult<Category>> CategoryPost(Category category)
         {
@@ -111,6 +114,7 @@ namespace API.Controllers
             return CreatedAtAction("CategoryGet", new { id = category.Id }, category);
         }
 
+        [Authorize(Roles = "CanEditProducts,CanAll")]
         [HttpDelete("{id}", Name = nameof(CategoryDelete))]
         public async Task<IActionResult> CategoryDelete(int id)
         {

@@ -44,7 +44,7 @@ namespace API
                     var code = item.Element("CharCode").Value;
                     var rate = item.Element("Value").Value;
                     Currency curr = new Currency() { CharCode = code, Rate = decimal.Parse(rate), RateDatetime = rateDatetime };
-                    var res = controller.PutCurrency(0, curr).Result;
+                    var res = controller.CurrencyEdit(0, curr).Result;
                 }
             }
             catch(Exception ex)

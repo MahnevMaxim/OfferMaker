@@ -42,6 +42,7 @@ namespace API.Controllers
             return offerTemplate;
         }
 
+        [Authorize(Roles = "CanAll,CanControlTemplates")]
         [HttpPut("{id}", Name = nameof(OfferTemplateEdit))]
         public async Task<IActionResult> OfferTemplateEdit(int id, OfferTemplate offerTemplate)
         {
@@ -71,6 +72,7 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "CanAll,CanControlTemplates")]
         [HttpPost(Name = nameof(OfferTemplatePost))]
         public async Task<ActionResult<OfferTemplate>> OfferTemplatePost(OfferTemplate offerTemplate)
         {
@@ -86,6 +88,7 @@ namespace API.Controllers
             return CreatedAtAction(nameof(OfferTemplateGet), new { id = offerTemplate.Id }, offerTemplate);
         }
 
+        [Authorize(Roles = "CanAll,CanControlTemplates")]
         [HttpDelete("{id}", Name = nameof(OfferTemplateDelete))]
         public async Task<IActionResult> OfferTemplateDelete(int id)
         {

@@ -392,7 +392,7 @@ namespace OfferMaker
         {
             try
             {
-                var response = await client.CurrenciesAllAsync();
+                var response = await client.CurrenciesGetAsync();
                 if (response.StatusCode == 200)
                 {
                     ObservableCollection<Currency> res = Helpers.CloneObject<ObservableCollection<Currency>>(response.Result);
@@ -420,7 +420,7 @@ namespace OfferMaker
             try
             {
                 IEnumerable<ApiLib.Currency> currs = Helpers.CloneObject<IEnumerable<ApiLib.Currency>>(currencies);
-                await client.CurrenciesPUTAsync(currs);
+                await client.CurrenciesEditAsync(currs);
                 return new CallResult();
             }
             catch (Exception ex)
@@ -546,7 +546,7 @@ namespace OfferMaker
         {
             try
             {
-                var response = await client.NomenclatureGroupsAllAsync();
+                var response = await client.NomenclatureGroupsGetAsync();
                 if (response.StatusCode == 200)
                 {
                     ObservableCollection<NomenclatureGroup> res = Helpers.CloneObject<ObservableCollection<NomenclatureGroup>>(response.Result);
@@ -574,7 +574,7 @@ namespace OfferMaker
             try
             {
                 IEnumerable<ApiLib.NomenclatureGroup> nomeGroups = Helpers.CloneObject<IEnumerable<ApiLib.NomenclatureGroup>>(nomenclatureGroups);
-                await client.NomenclatureGroupsPUTAsync(nomeGroups);
+                await client.NomenclatureGroupsSaveAsync(nomeGroups);
                 return new CallResult();
             }
             catch (Exception ex)
