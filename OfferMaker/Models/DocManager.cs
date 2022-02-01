@@ -33,8 +33,11 @@ namespace OfferMaker
         /// <summary>
         /// Сохранение PDF с баннером.
         /// </summary>
-        internal void SaveToPdfWithBanner()
+        async internal void SaveToPdfWithBanner()
         {
+            bool isArchive = await IsArchive();
+            if (!isArchive) return;
+
             constructor.CreateDocumentWithBanner();
             FixedDocument fixedDoc = constructor.PdfDocument;
             SaveToPdf(fixedDoc);
@@ -43,11 +46,59 @@ namespace OfferMaker
         /// <summary>
         /// Сохранение Pdf без баннеров.
         /// </summary>
-        internal void SaveToPdfWithoutBanner()
+        async internal void SaveToPdfWithoutBanner()
         {
+            bool isArchive = await IsArchive();
+            if (!isArchive) return;
+
             constructor.CreateDocumentWithoutBanner();
             FixedDocument fixedDoc = constructor.PdfDocumentShort;
             SaveToPdf(fixedDoc);
+        }
+
+        /// <summary>
+        /// Не только проверяет архив или нет, но и пытается добавить в архив.
+        /// </summary>
+        /// <returns></returns>
+        async Task<bool> IsArchive()
+        {
+            if (!constructor.Offer.IsArchive)
+                await OfferCreate();
+            return constructor.Offer.IsArchive;
+        }
+
+        async internal void PrintPdfWithoutBanner()
+        {
+            bool isArchive = await IsArchive();
+            if (!isArchive) return;
+
+            constructor.CreateDocumentWithoutBanner();
+            FixedDocument fixedDoc = constructor.PdfDocumentShort;
+            PrintPdf(fixedDoc);
+        }
+
+        async internal void PrintPdfWithBanner()
+        {
+            bool isArchive = await IsArchive();
+            if (!isArchive) return;
+
+            constructor.CreateDocumentWithBanner();
+            FixedDocument fixedDoc = constructor.PdfDocument;
+            PrintPdf(fixedDoc);
+        }
+
+        async internal void PrintPdf(FixedDocument fixedDocument)
+        {
+            System.Windows.Controls.PrintDialog dialog = new System.Windows.Controls.PrintDialog();
+            dialog.PrintTicket = dialog.PrintQueue.DefaultPrintTicket;
+            dialog.PrintTicket.PageOrientation = PageOrientation.Portrait;
+            dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
+
+            if (dialog.ShowDialog() == true)
+            {
+                XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(dialog.PrintQueue);
+                writer.WriteAsync(fixedDocument as FixedDocument, dialog.PrintTicket);
+            }
         }
 
         internal void SaveToPdf(FixedDocument fixedDoc)
@@ -132,7 +183,7 @@ namespace OfferMaker
         /// Сохранение(создание) шаблонов и КП на сервер/локально.
         /// </summary>
         /// <param name="isTemplate"></param>
-        async internal void OfferCreate(bool isTemplate = false)
+        async internal Task OfferCreate(bool isTemplate = false)
         {
             if(!isTemplate)
             {
@@ -159,7 +210,8 @@ namespace OfferMaker
             if (isTemplate)
             {
                 Offer temp = CreateTemplate(constructor.Offer);
-                cr = await Global.Main.DataRepository.OfferTemplateCreate(temp); if (cr.Success)
+                cr = await Global.Main.DataRepository.OfferTemplateCreate(temp); 
+                if (cr.Success)
                 {
                     Global.Main.TemplatesStore.AddOffer(temp);
                     Global.Constructor.LoadOfferTemplate(temp);

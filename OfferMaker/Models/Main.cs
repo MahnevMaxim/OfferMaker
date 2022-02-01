@@ -9,6 +9,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Collections.Specialized;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace OfferMaker
 {
@@ -547,6 +548,10 @@ namespace OfferMaker
         public void SaveToPdfWithBanner() => DocManager.SaveToPdfWithBanner();
 
         public void SaveToPdfWithoutBanner() => DocManager.SaveToPdfWithoutBanner();
+
+        public void PrintPdfWithBanner() => DocManager.PrintPdfWithBanner();
+
+        public void PrintPdfWithoutBanner() => DocManager.PrintPdfWithoutBanner();
 
         public void OfferTemplateCreate() => DocManager.OfferTemplateCreate();
 
