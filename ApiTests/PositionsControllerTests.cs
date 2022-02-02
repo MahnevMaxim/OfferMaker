@@ -11,7 +11,7 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
-namespace ApiTests.PositionsControllerTests
+namespace ApiTests
 {
     public class PositionsControllerTests
     {

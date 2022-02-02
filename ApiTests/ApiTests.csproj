@@ -7,6 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CategoriesControllerTests\**" />
+    <Compile Remove="ImagesControllerTests\**" />
+    <Compile Remove="NomenclatureGroupsControllerTests\**" />
+    <Compile Remove="NomenclaturesControllerTests\**" />
+    <Compile Remove="OffersControllerTests\**" />
+    <EmbeddedResource Remove="CategoriesControllerTests\**" />
+    <EmbeddedResource Remove="ImagesControllerTests\**" />
+    <EmbeddedResource Remove="NomenclatureGroupsControllerTests\**" />
+    <EmbeddedResource Remove="NomenclaturesControllerTests\**" />
+    <EmbeddedResource Remove="OffersControllerTests\**" />
+    <None Remove="CategoriesControllerTests\**" />
+    <None Remove="ImagesControllerTests\**" />
+    <None Remove="NomenclatureGroupsControllerTests\**" />
+    <None Remove="NomenclaturesControllerTests\**" />
+    <None Remove="OffersControllerTests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
     <PackageReference Include="xunit" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
@@ -17,15 +35,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="CategoriesControllerTests\" />
-    <Folder Include="ImagesControllerTests\" />
-    <Folder Include="OffersControllerTests\" />
-    <Folder Include="NomenclaturesControllerTests\" />
-    <Folder Include="NomenclatureGroupsControllerTests\" />
-    <Folder Include="UsersControllerTests\" />
   </ItemGroup>
 
   <ItemGroup>

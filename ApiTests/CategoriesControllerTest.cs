@@ -13,7 +13,7 @@ using Shared;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ApiTests.CategoriesControllerTests
+namespace ApiTests
 {
     public class CategoriesControllerTest
     {
@@ -60,13 +60,28 @@ namespace ApiTests.CategoriesControllerTests
                 var categories = (await controller.CategoriesGet()).Value;
 
                 //Act add
-                Category cat = new Category() { Guid = "new_cat_guid",Title= "new_cat_title" };
+                Category cat = new Category() { Guid = "new_cat_guid", Title = "new_cat_title" };
                 var cats = categories.ToList();
                 cats.Add(cat);
                 var response = await controller.CategoriesSave(cats);
 
                 //Assert 
                 Assert.True(context.Categories.Count() == beginCount + 1);
+
+                //Act delete
+                int beginCount2 = context.Categories.Count();
+                cats.RemoveAt(1);
+                var response2 = await controller.CategoriesSave(cats);
+
+                //Assert 
+                Assert.True(context.Categories.Count() == beginCount2 - 1);
+
+                //Act edit
+                cats[0].Title = "cat0title";
+                var response3 = await controller.CategoriesSave(cats);
+
+                //Assert 
+                Assert.True(context.Categories.First().Title == "cat0title");
             }
         }
     }
