@@ -8,11 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using API.Controllers;
 using Shared;
+using Microsoft.AspNet.Identity;
 
 namespace ApiTests
 {
     public class TestDataInitializer
     {
+        public string testUserLogin = "TestUser";
+        public string testUserPwd = "55555555555555";
+
         public TestDataInitializer()
         {
         }
@@ -37,7 +41,7 @@ namespace ApiTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            Position p1 = new Position() { PositionName = "11111"};
+            Position p1 = new Position() { PositionName = "11111" };
             Position p2 = new Position() { PositionName = "22222" };
             Position p3 = new Position() { PositionName = "3333333" };
 
@@ -50,13 +54,22 @@ namespace ApiTests
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            //User u1 = new User() { Email = "11111", Pwd = "rrrrr", Role = "role" };
-            //User u2 = new User() { Email = "2222", Pwd = "tttttt", Role = "role" };
-            //User u3 = new User() { Email = "3333", Pwd = "yyyyyy", Role = "role" };
-            //User u4 = new User() { Email = "4444", Pwd = "uu", Role = "role" };
-            //User u5 = new User() { Email = "555555", Pwd = "jjjjjjjjj", Role = "role" };
+            var ph = new PasswordHasher();
+            string pwd1 = ph.HashPassword("rrergrrr1");
+            string pwd2 = ph.HashPassword("rrwrrr2");
+            string pwd3 = ph.HashPassword("rrrsedgrr3");
+            string pwd4 = ph.HashPassword("rrsdcrrr4");
+            string pwd5 = ph.HashPassword("rrrergrr5");
+            string testUserPwdHash = ph.HashPassword(testUserPwd);
 
-            //context.Users.AddRange(u1, u2, u3, u4, u5);
+            User u1 = new User() { Email = "11111", Account = new Account() { Password = pwd1 } };
+            User u2 = new User() { Email = "2222", Account = new Account() { Password = pwd2 } };
+            User u3 = new User() { Email = "3333", Account = new Account() { Password = pwd3 } };
+            User u4 = new User() { Email = "4444", Account = new Account() { Password = pwd4 } };
+            User u5 = new User() { Email = "555555", Account = new Account() { Password = pwd5 } };
+            User testUser = new User() { Email = testUserLogin, Account = new Account() { Password = testUserPwdHash } };
+
+            context.Users.AddRange(u1, u2, u3, u4, u5, testUser);
             context.SaveChanges();
         }
     }

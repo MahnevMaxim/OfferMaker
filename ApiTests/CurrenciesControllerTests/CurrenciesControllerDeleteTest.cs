@@ -39,8 +39,8 @@ namespace ApiTests.CurrenciesControllerTests
                 var postId = 2;
 
                 //Act  
-                var request = await controller.DeleteCurrency(postId);
-                var res = await controller.GetCurrency(postId);
+                var request = await controller.CurrencyDelete(postId);
+                var res = await controller.CurrencyGet(postId);
                 var stCode = ((NotFoundResult)((ActionResult<Currency>)res).Result).StatusCode;
 
                 //Assert 
@@ -58,7 +58,7 @@ namespace ApiTests.CurrenciesControllerTests
                 var controller = new CurrenciesController(context);
 
                 //Act  
-                var deletedCurrencyResult = await controller.DeleteCurrency(666);
+                var deletedCurrencyResult = await controller.CurrencyDelete(666);
 
                 //Assert 
                 Assert.IsType<NotFoundResult>(deletedCurrencyResult);

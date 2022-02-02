@@ -317,7 +317,7 @@ namespace DatabaseExporter
             int i_ = 0;
             foreach (var curr in currs)
             {
-                var res = await client.CurrenciesPOSTAsync(curr);
+                var res = await client.CurrencyPostAsync(curr);
                 i_++;
                 if (i_ == 100) break;
             }

@@ -11,6 +11,7 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace ApiTests.AccountControllerTests
 {
@@ -19,6 +20,7 @@ namespace ApiTests.AccountControllerTests
         public static DbContextOptions<APIContext> dbContextOptions { get; }
         public static string connectionString = @"Server=(localdb)\mssqllocaldb;Database=AccountControllerTests;ConnectRetryCount=0";
         ILogger<CurrenciesController> logger;
+        static TestDataInitializer db;
 
         static AccountControllerGetTokenTests()
         {
@@ -26,29 +28,29 @@ namespace ApiTests.AccountControllerTests
                 .UseSqlServer(connectionString)
                 .Options;
             APIContext context = new APIContext(dbContextOptions);
-            TestDataInitializer db = new TestDataInitializer();
+            db = new TestDataInitializer();
             db.SeedAccounts(context);
         }
 
         [Fact]
         async public void GetTokenOkResult()
         {
-            //using (var context = new APIContext(dbContextOptions))
-            //{
-            //    //Arrange  
-            //    var controller = new AccountController(context);
+            using (var context = new APIContext(dbContextOptions))
+            {
+                //Arrange  
+                var controller = new AccountController(context);
 
-            //    //Act  
-            //    var response = await controller.AccountGetToken(context.Users.First().Email, context.Users.First().Pwd);
-            //    object res = ((OkObjectResult)response).Value;
-            //    Type type = res.GetType();
-            //    string access_token = (string)type.GetProperty("access_token")?.GetValue(res, null);
-            //    string username = (string)type.GetProperty("username")?.GetValue(res, null);
+                //Act  
+                var response = await controller.AccountGetToken(db.testUserLogin, db.testUserPwd);
+                string res = ((OkObjectResult)response).Value.ToString();
+                JObject jo = JObject.Parse(res);
+                string access_token = jo["access_token"].ToString();
+                string username = jo["user"]["Email"].ToString();
 
-            //    //Assert 
-            //    Assert.True(access_token!=null);
-            //    Assert.True(username== context.Users.First().Email);
-            //}
+                //Assert 
+                Assert.True(access_token != null);
+                Assert.True(username == context.Users.First(u => u.Email == username).Email);
+            }
         }
 
         [Fact]
