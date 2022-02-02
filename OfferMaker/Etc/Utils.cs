@@ -37,23 +37,22 @@ namespace OfferMaker
         {
             try
             {
-                //string firstName = 
+                string phrase = mainViewModelContainer.SelectedUser.Name;
+                string[] words = phrase.Split(' ');
+                //tranlaterVM.Manager.Image = ToImage(mainViewModelContainer.SelectedUser.Foto);
                 Position position = new Position(mainViewModelContainer.SelectedUser.Status);
                 User manager = new User
                 {
-                    FirstName = mainViewModelContainer.SelectedUser.Name,
-                    LastName = mainViewModelContainer.SelectedUser.Name,
+                    FirstName = words[0],
+                    LastName = words[1],
                     PhoneNumber1 = mainViewModelContainer.SelectedUser.Tel1,
                     PhoneNumber2 = mainViewModelContainer.SelectedUser.Tel2,
                     Email = mainViewModelContainer.SelectedUser.Email,
-                    Position = position
+                    Position = position,
+                    Image =
                 };
-                
-                
                 offer.Manager = manager;
                 offer.OfferCreator = manager;
-                //offer.OfferCreator = users.Where(u => u.FullName == mainViewModelContainer.SelectedUser.Name).FirstOrDefault();
-                //offer.Manager = users.Where(u => u.FullName == mainViewModelContainer.SelectedUser.Name).FirstOrDefault();
                 if (isArchive) offer.IsArchive = true;
             }
             catch (Exception ex)
