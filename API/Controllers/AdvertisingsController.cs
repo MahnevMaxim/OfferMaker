@@ -74,7 +74,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            _context.Advertisings.Remove(advertising);
+            advertising.IsDeleted = true;
             await _context.SaveChangesAsync();
 
             return NoContent();

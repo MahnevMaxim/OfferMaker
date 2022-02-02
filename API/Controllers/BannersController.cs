@@ -74,15 +74,6 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            //var offers = _context.Offers.Where(o => o.Banner_.Id == banner.Id).FirstOrDefault();
-            //if(offers!=null)
-            //{
-
-            //}
-            //else
-            //{
-            //    _context.Banners.Remove(banner);
-            //}
             banner.IsDeleted = true;
             await _context.SaveChangesAsync();
 

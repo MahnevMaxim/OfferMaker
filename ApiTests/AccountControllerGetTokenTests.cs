@@ -13,7 +13,7 @@ using Shared;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
 
-namespace ApiTests.AccountControllerTests
+namespace ApiTests
 {
     public class AccountControllerGetTokenTests
     {
@@ -29,7 +29,7 @@ namespace ApiTests.AccountControllerTests
                 .Options;
             APIContext context = new APIContext(dbContextOptions);
             db = new TestDataInitializer();
-            db.SeedAccounts(context);
+            db.SeedAccountsAndPositions(context);
         }
 
         [Fact]
@@ -79,6 +79,70 @@ namespace ApiTests.AccountControllerTests
                 Assert.IsType<BadRequestObjectResult>(response6);
                 Assert.IsType<BadRequestObjectResult>(response7);
             }
+        }
+
+        /// <summary>
+        /// Проверяем, чтобы токен для экспорта был недоступен, иначе пизда.
+        /// </summary>
+        [Fact]
+        async public void GetTokenForExportNonAccesibleTest()
+        {
+            using (var context = new APIContext(dbContextOptions))
+            {
+                //Arrange  
+                var controller = new AccountController(context);
+
+                //Act  
+                var response = await controller.GetToken();
+
+                //Assert 
+                Assert.IsType<BadRequestResult>(response);
+            }
+        }
+
+        /// <summary>
+        /// Чекаем обновление токена и его работоспособность
+        /// </summary>
+        [Fact]
+        async public void AccountUpdateTokenOkResultTest()
+        {
+            using (var context = new APIContext(dbContextOptions))
+            {
+                //Arrange  
+                var controller = new AccountController(context);
+                var controllerPos = new PositionsController(context);
+                var responseToken = await controller.AccountGetToken(db.testUserLogin, db.testUserPwd);
+                string accessToken = GetTokenFromResponse(responseToken);
+                
+                //Act  
+                var responseUpdateToken = await controller.AccountUpdateToken(accessToken);
+                
+                //Assert 
+                Assert.IsType<OkObjectResult>(responseUpdateToken);
+            }
+        }
+
+        [Fact]
+        async public void AccountUpdateTokenBadResultTest()
+        {
+            using (var context = new APIContext(dbContextOptions))
+            {
+                //Arrange  
+                var controller = new AccountController(context);
+
+                //Act  
+                var response = await controller.GetToken();
+
+                //Assert 
+                Assert.IsType<BadRequestResult>(response);
+            }
+        }
+
+        private string GetTokenFromResponse(ActionResult responseToken)
+        {
+            string res = ((OkObjectResult)responseToken).Value.ToString();
+            JObject jo = JObject.Parse(res);
+            return jo["access_token"].ToString();
         }
     }
 }

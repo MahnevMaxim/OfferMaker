@@ -25,7 +25,7 @@ namespace ApiTests.PositionsControllerTests
                 .Options;
             APIContext context = new APIContext(dbContextOptions);
             TestDataInitializer db = new TestDataInitializer();
-            db.SeedPositions(context);
+            db.SeedAccountsAndPositions(context);
         }
 
         [Fact]

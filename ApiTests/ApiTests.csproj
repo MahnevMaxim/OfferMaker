@@ -20,11 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CategoriesControllerTests\" />
     <Folder Include="ImagesControllerTests\" />
-    <Folder Include="UsersControllerTests\" />
     <Folder Include="OffersControllerTests\" />
     <Folder Include="NomenclaturesControllerTests\" />
     <Folder Include="NomenclatureGroupsControllerTests\" />
+    <Folder Include="UsersControllerTests\" />
   </ItemGroup>
 
   <ItemGroup>
