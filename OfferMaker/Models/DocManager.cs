@@ -11,6 +11,7 @@ using System.Drawing.Printing;
 using System.IO;
 using Shared;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 
 namespace OfferMaker
 {
@@ -19,6 +20,7 @@ namespace OfferMaker
         Constructor constructor;
         string defaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Offer Maker Projects\\";
         string omfFilter = "Offer Maker file | *.omf";
+        string omfKccFilter = "Offer file | *.omf;*.kcc";
 
         #region Singleton
 
@@ -106,19 +108,157 @@ namespace OfferMaker
             }
         }
 
+        private System.Collections.ObjectModel.ObservableCollection<OfferInfoBlock> GetInfoBlocks(OldModelCommercial.MainViewModelContainer mainViewModelContainer)
+        {
+            return new System.Collections.ObjectModel.ObservableCollection<OfferInfoBlock>()
+            {
+                new OfferInfoBlock(){
+                    Title = "Срок готовности товара к отгрузке",
+                    Text = mainViewModelContainer.Notification.ShipmentText,
+                    ImagePath ="Images\\informIcons\\Commertial1.png"
+                },
+                new OfferInfoBlock(){
+                    Title = "Срок проведения монтажных и пусконаладочных работ",
+                    Text = mainViewModelContainer.Notification.MountText,
+                    ImagePath= "Images\\informIcons\\Commertial2.png"
+                },
+                new OfferInfoBlock(){
+                    Title = "Условие оплаты",
+                    Text = mainViewModelContainer.Notification.PaymentText ,
+                    ImagePath= "Images\\informIcons\\Commertial3.png"
+                },
+                new OfferInfoBlock(){
+                    Title = "Условия поставки",
+                    Text = mainViewModelContainer.Notification.DeliveryText,
+                    ImagePath="Images\\informIcons\\Commertial4.png"
+                },
+                 new OfferInfoBlock(){
+                    Title = "Гарантия",
+                    Text = mainViewModelContainer.Notification.WarrantyText,
+                    ImagePath= "Images\\informIcons\\Commertial2.png"
+                }
+            };
+        }
         internal void OpenOfferFromFile()
         {
             var ofd = new OpenFileDialog();
-            ofd.Filter = omfFilter;
+            ofd.Filter = omfKccFilter;//старая и новая версия 
             ofd.InitialDirectory = defaultPath;
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                Offer offer = Helpers.InitObject<Offer>(ofd.FileName);
-                Offer offer_ = Utils.RestoreOffer(offer, Global.Users, false);
-                Global.Constructor.LoadOfferFromArchive(offer_);
+                string ext = Path.GetExtension(ofd.FileName);
+                if (ext == ".omf")
+                {
+                    Offer offer = Helpers.InitObject<Offer>(ofd.FileName, true);
+                    Offer offer_ = Utils.RestoreOffer(offer, Global.Users, false);
+                    Global.Constructor.LoadOfferFromArchive(offer_);
+                }
+                else
+                {
+                    OldModelCommercial.MainViewModelContainer mainViewModelContainer = Helpers.InitObject<OldModelCommercial.MainViewModelContainer>(ofd.FileName, false);
+                    if (mainViewModelContainer != null)
+                    {
+                        //magic
+                        Offer tranlaterVM = new Offer();
+                        tranlaterVM.SetConstructor(constructor);
+                        tranlaterVM.OfferName = mainViewModelContainer.Customer.KpName;
+                        tranlaterVM.CreateDate = mainViewModelContainer.Customer.Date;
+                        tranlaterVM.CreateDateString = mainViewModelContainer.Customer.Date.ToShortDateString();
+                        #region Customer
+                        tranlaterVM.Customer.FullName = mainViewModelContainer.Customer.Name;
+                        tranlaterVM.Customer.Location = mainViewModelContainer.Customer.Location;
+                        tranlaterVM.Customer.Organization = mainViewModelContainer.Customer.Organization;
+                        //tranlaterVM.Customer.Id
+                        #endregion
+
+                        // Коллекция информблоков.
+                        #region InformBlock
+                        tranlaterVM.OfferInfoBlocks = GetInfoBlocks(mainViewModelContainer);
+                        #endregion
+
+                        #region CustomerVM
+                       
+                        //tranlaterVM.CustomerVM.KpNumber = mainViewModelContainer.Customer.KpNumber.ToString();
+                        #endregion
+                        tranlaterVM.Currencies = Global.Currencies;
+                        tranlaterVM.Currency = Global.Currencies.FirstOrDefault(x => x.IsoCode == 810);
+                        #region Groups
+                         tranlaterVM.OfferGroups = new System.Collections.ObjectModel.ObservableCollection<OfferGroup>();
+                        foreach (var group in mainViewModelContainer.Groups)
+                        {
+                            OfferGroup offerGroup = new OfferGroup(tranlaterVM);
+                            offerGroup.NomWrappers = new System.Collections.ObjectModel.ObservableCollection<NomWrapper>();
+                            offerGroup.GroupTitle = group.Name;
+                            foreach (var item in group.Items)
+                            {
+                                Nomenclature nom = new Nomenclature();
+                                nom.Markup = (decimal)item.MarkUp;
+                                nom.Title = item.Name;
+                                nom.CostPrice = item.CostPrice;
+                                nom.Descriptions = new System.Collections.ObjectModel.ObservableCollection<Description>();
+                            
+                                foreach (var description in item.Description)
+                                {
+                                    Description descrip = new Description();
+                                    descrip.IsEnabled = true;
+                                    descrip.Text = description;
+                                    nom.Descriptions.Add(descrip);
+                                    nom.CurrencyCharCode = tranlaterVM.Currency.CharCode;
+                                }
+                                NomWrapper nomWrapper = new NomWrapper(offerGroup, nom);
+                                nomWrapper.Amount = (int)item.Number;
+                                offerGroup.NomWrappers.Add(nomWrapper);
+                            }
+                            tranlaterVM.OfferGroups.Add(offerGroup);
+                        }
+                        #endregion
+
+                        tranlaterVM.Discount = new Discount(tranlaterVM);
+                        tranlaterVM.Discount.DiscountSum = 0;
+                        tranlaterVM.Discount.IsEnabled = false;
+                        tranlaterVM.Discount.Percentage = 0;
+                        tranlaterVM.Discount.TotalSum = 0;
+
+                        //tranlaterVM.OfferCreator.Position.PositionName = mainViewModelContainer.SelectedUser.Status;
+                        //User manager = new User
+                        //{
+                        //    FirstName = mainViewModelContainer.SelectedUser.Name,
+                        //    LastName = mainViewModelContainer.SelectedUser.Name,
+                        //    PhoneNumber1 = mainViewModelContainer.SelectedUser.Tel1,
+                        //    PhoneNumber2 = mainViewModelContainer.SelectedUser.Tel2,
+                        //    Email = mainViewModelContainer.SelectedUser.Email
+                        //};
+                        
+                        //tranlaterVM.Manager = manager;
+
+                        //tranlaterVM.Manager.Image = ToImage(mainViewModelContainer.SelectedUser.Foto);
+
+                        //tranlaterVM.OfferCreator.PhoneNumber1
+                        //tranlaterVM.OfferCreator.PhoneNumber2
+                        //tranlaterVM.OfferCreator.Email
+                        //tranlaterVM.OfferCreator.Account
+
+                        //концовка +- такая
+                        Offer tranlaterVM_ = Utils.RestoreOldOffer(tranlaterVM, mainViewModelContainer, Global.Users, true);
+                        Global.Constructor.LoadOfferFromArchive(tranlaterVM_);
+                    }
+                }
             }
         }
-
+        public BitmapImage ToImage(byte[] array)
+        {
+            if (array == null)
+            {
+                return new BitmapImage();
+            }
+            System.IO.MemoryStream memorystream = new System.IO.MemoryStream();
+            memorystream.Write(array, 0, (int)array.Length);
+            BitmapImage imgsource = new BitmapImage();
+            imgsource.BeginInit();
+            imgsource.StreamSource = memorystream;
+            imgsource.EndInit();
+            return imgsource;
+        }
         /// <summary>
         /// Сохранение(создание) шаблонов и КП на сервер/локально.
         /// </summary>
@@ -134,13 +274,13 @@ namespace OfferMaker
             //если создаётся архивное КП
             if (constructor.Offer.Id == 0 && !isTemplate)
             {
-                if(string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
+                if (string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
                     || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
                     || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
                 {
                     Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
                     return;
-                }    
+                }
             }
 
             CallResult cr;

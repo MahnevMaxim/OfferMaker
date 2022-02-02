@@ -29,7 +29,7 @@ namespace OfferMaker
         /// <returns></returns>
         async internal Task<CallResult<T>> GetCache<T>(string path)
         {
-            T res = Helpers.InitObject<T>(path);
+            T res = Helpers.InitObject<T>(path, true);
             if (res != null)
                 return new CallResult<T>() { Data = res };
             return new CallResult<T>() { Error = new Error("Ошибка при попытке получить кэш из файла " + path) };

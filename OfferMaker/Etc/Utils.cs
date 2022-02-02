@@ -32,5 +32,37 @@ namespace OfferMaker
             }
             return offer;
         }
+
+        static public Offer RestoreOldOffer(Offer offer, OldModelCommercial.MainViewModelContainer mainViewModelContainer, ObservableCollection<User> users, bool isArchive)
+        {
+            try
+            {
+                //string firstName = 
+                Position position = new Position(mainViewModelContainer.SelectedUser.Status);
+                User manager = new User
+                {
+                    FirstName = mainViewModelContainer.SelectedUser.Name,
+                    LastName = mainViewModelContainer.SelectedUser.Name,
+                    PhoneNumber1 = mainViewModelContainer.SelectedUser.Tel1,
+                    PhoneNumber2 = mainViewModelContainer.SelectedUser.Tel2,
+                    Email = mainViewModelContainer.SelectedUser.Email,
+                    Position = position
+                };
+                
+                
+                offer.Manager = manager;
+                offer.OfferCreator = manager;
+                //offer.OfferCreator = users.Where(u => u.FullName == mainViewModelContainer.SelectedUser.Name).FirstOrDefault();
+                //offer.Manager = users.Where(u => u.FullName == mainViewModelContainer.SelectedUser.Name).FirstOrDefault();
+                if (isArchive) offer.IsArchive = true;
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+            }
+            return offer;
+        }
+
+
     }
 }
