@@ -108,37 +108,37 @@ namespace OfferMaker
             }
         }
 
-        private System.Collections.ObjectModel.ObservableCollection<OfferInfoBlock> GetInfoBlocks(OldModelCommercial.MainViewModelContainer mainViewModelContainer)
-        {
-            return new System.Collections.ObjectModel.ObservableCollection<OfferInfoBlock>()
-            {
-                new OfferInfoBlock(){
-                    Title = "Срок готовности товара к отгрузке",
-                    Text = mainViewModelContainer.Notification.ShipmentText,
-                    ImagePath ="Images\\informIcons\\Commertial1.png"
-                },
-                new OfferInfoBlock(){
-                    Title = "Срок проведения монтажных и пусконаладочных работ",
-                    Text = mainViewModelContainer.Notification.MountText,
-                    ImagePath= "Images\\informIcons\\Commertial2.png"
-                },
-                new OfferInfoBlock(){
-                    Title = "Условие оплаты",
-                    Text = mainViewModelContainer.Notification.PaymentText ,
-                    ImagePath= "Images\\informIcons\\Commertial3.png"
-                },
-                new OfferInfoBlock(){
-                    Title = "Условия поставки",
-                    Text = mainViewModelContainer.Notification.DeliveryText,
-                    ImagePath="Images\\informIcons\\Commertial4.png"
-                },
-                 new OfferInfoBlock(){
-                    Title = "Гарантия",
-                    Text = mainViewModelContainer.Notification.WarrantyText,
-                    ImagePath= "Images\\informIcons\\Commertial2.png"
-                }
-            };
-        }
+        //private System.Collections.ObjectModel.ObservableCollection<OfferInfoBlock> GetInfoBlocks(OldModelCommercial.MainViewModelContainer mainViewModelContainer)
+        //{
+        //    return new System.Collections.ObjectModel.ObservableCollection<OfferInfoBlock>()
+        //    {
+        //        new OfferInfoBlock(){
+        //            Title = "Срок готовности товара к отгрузке",
+        //            Text = mainViewModelContainer.Notification.ShipmentText,
+        //            ImagePath ="Images\\informIcons\\Commertial1.png"
+        //        },
+        //        new OfferInfoBlock(){
+        //            Title = "Срок проведения монтажных и пусконаладочных работ",
+        //            Text = mainViewModelContainer.Notification.MountText,
+        //            ImagePath= "Images\\informIcons\\Commertial2.png"
+        //        },
+        //        new OfferInfoBlock(){
+        //            Title = "Условие оплаты",
+        //            Text = mainViewModelContainer.Notification.PaymentText ,
+        //            ImagePath= "Images\\informIcons\\Commertial3.png"
+        //        },
+        //        new OfferInfoBlock(){
+        //            Title = "Условия поставки",
+        //            Text = mainViewModelContainer.Notification.DeliveryText,
+        //            ImagePath="Images\\informIcons\\Commertial4.png"
+        //        },
+        //         new OfferInfoBlock(){
+        //            Title = "Гарантия",
+        //            Text = mainViewModelContainer.Notification.WarrantyText,
+        //            ImagePath= "Images\\informIcons\\Commertial2.png"
+        //        }
+        //    };
+        //}
         internal void OpenOfferFromFile()
         {
             var ofd = new OpenFileDialog();
@@ -158,93 +158,8 @@ namespace OfferMaker
                     OldModelCommercial.MainViewModelContainer mainViewModelContainer = Helpers.InitObject<OldModelCommercial.MainViewModelContainer>(ofd.FileName, false);
                     if (mainViewModelContainer != null)
                     {
-                        //magic
                         Offer tranlaterVM = new Offer();
                         tranlaterVM.SetConstructor(constructor);
-                        tranlaterVM.OfferName = mainViewModelContainer.Customer.KpName;
-                        tranlaterVM.CreateDate = mainViewModelContainer.Customer.Date;
-                        tranlaterVM.CreateDateString = mainViewModelContainer.Customer.Date.ToShortDateString();
-                        #region Customer
-                        tranlaterVM.Customer.FullName = mainViewModelContainer.Customer.Name;
-                        tranlaterVM.Customer.Location = mainViewModelContainer.Customer.Location;
-                        tranlaterVM.Customer.Organization = mainViewModelContainer.Customer.Organization;
-                        //tranlaterVM.Customer.Id
-                        #endregion
-
-                        // Коллекция информблоков.
-                        #region InformBlock
-                        tranlaterVM.OfferInfoBlocks = GetInfoBlocks(mainViewModelContainer);
-                        #endregion
-
-                        #region CustomerVM
-                       
-                        //tranlaterVM.CustomerVM.KpNumber = mainViewModelContainer.Customer.KpNumber.ToString();
-                        #endregion
-                        tranlaterVM.Currencies = Global.Currencies;
-                        tranlaterVM.Currency = Global.Currencies.FirstOrDefault(x => x.IsoCode == 810);
-                        #region Groups
-                         tranlaterVM.OfferGroups = new System.Collections.ObjectModel.ObservableCollection<OfferGroup>();
-                        foreach (var group in mainViewModelContainer.Groups)
-                        {
-                            OfferGroup offerGroup = new OfferGroup(tranlaterVM);
-                            offerGroup.NomWrappers = new System.Collections.ObjectModel.ObservableCollection<NomWrapper>();
-                            offerGroup.GroupTitle = group.Name;
-                            foreach (var item in group.Items)
-                            {
-                                Nomenclature nom = new Nomenclature();
-                                nom.Markup = (decimal)item.MarkUp;
-                                nom.Title = item.Name;
-                                nom.CostPrice = item.CostPrice;
-                                nom.Descriptions = new System.Collections.ObjectModel.ObservableCollection<Description>();
-
-                                //Image nomImage = new Image();
-                                //System.Collections.ObjectModel.ObservableCollection<Image> images = new System.Collections.ObjectModel.ObservableCollection<Image>();
-                                //nomImage = images.Where(u => u.FullName == mainViewModelContainer.SelectedUser.Name).FirstOrDefault();
-                                //nom.Image = Global.
-                                //    nom.Images=
-                            
-                                foreach (var description in item.Description)
-                                {
-                                    Description descrip = new Description();
-                                    descrip.IsEnabled = true;
-                                    descrip.Text = description;
-                                    nom.Descriptions.Add(descrip);
-                                    nom.CurrencyCharCode = tranlaterVM.Currency.CharCode;
-                                }
-                                NomWrapper nomWrapper = new NomWrapper(offerGroup, nom);
-                                nomWrapper.Amount = (int)item.Number;
-                                offerGroup.NomWrappers.Add(nomWrapper);
-                            }
-                            tranlaterVM.OfferGroups.Add(offerGroup);
-                        }
-                        #endregion
-
-                        tranlaterVM.Discount = new Discount(tranlaterVM);
-                        tranlaterVM.Discount.DiscountSum = 0;
-                        tranlaterVM.Discount.IsEnabled = false;
-                        tranlaterVM.Discount.Percentage = 0;
-                        tranlaterVM.Discount.TotalSum = 0;
-
-
-                        //User manager = new User
-                        //{
-                        //    FirstName = mainViewModelContainer.SelectedUser.Name,
-                        //    LastName = mainViewModelContainer.SelectedUser.Name,
-                        //    PhoneNumber1 = mainViewModelContainer.SelectedUser.Tel1,
-                        //    PhoneNumber2 = mainViewModelContainer.SelectedUser.Tel2,
-                        //    Email = mainViewModelContainer.SelectedUser.Email
-                        //};
-
-                        //tranlaterVM.Manager = manager;
-
-                        //tranlaterVM.Manager.Image = ToImage(mainViewModelContainer.SelectedUser.Foto);
-
-                        //tranlaterVM.OfferCreator.PhoneNumber1
-                        //tranlaterVM.OfferCreator.PhoneNumber2
-                        //tranlaterVM.OfferCreator.Email
-                        //tranlaterVM.OfferCreator.Account
-
-                        //концовка +- такая
                         Offer tranlaterVM_ = Utils.RestoreOldOffer(tranlaterVM, mainViewModelContainer, Global.Users, true);
                         Global.Constructor.LoadOfferFromArchive(tranlaterVM_);
                     }

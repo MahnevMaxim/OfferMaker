@@ -61,7 +61,16 @@ namespace OfferMaker
                 constructor?.viewModel.OnPropertyChanged(nameof(AltId));
             }
         }
-
+        string oldKPNumber;
+        public string OldKPNumber
+        {
+            get => oldKPNumber;
+            set
+            {
+                oldKPNumber = value;
+                OnPropertyChanged();
+            }
+        }
         public string AltId { get => Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + Id; }
 
         public string Guid
