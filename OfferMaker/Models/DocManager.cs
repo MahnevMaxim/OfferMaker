@@ -223,7 +223,7 @@ namespace OfferMaker
                 if(cr.Success)
                 {
                     Global.Main.ArchiveStore.AddOffer(constructor.Offer);
-                    Global.Constructor.LoadOfferTemplate(constructor.Offer);
+                    Global.Constructor.LoadOfferFromArchive(constructor.Offer);
                 }
             }
 
