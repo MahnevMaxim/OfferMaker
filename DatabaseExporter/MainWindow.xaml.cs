@@ -170,8 +170,8 @@ namespace DatabaseExporter
 
         async private void ExportNomenclatureButton_Click(object sender, RoutedEventArgs e)
         {
-            var noms_ = JsonConvert.DeserializeObject(File.ReadAllText("noms.json")).ToString();
-            JArray jaNoms = JArray.Parse(noms_.ToString());
+            //var noms_ = JsonConvert.DeserializeObject(File.ReadAllText("noms.json")).ToString();
+            //JArray jaNoms = JArray.Parse(noms_.ToString());
 
             //foreach (var nom in jaNoms)
             //{
@@ -215,6 +215,12 @@ namespace DatabaseExporter
             //    }
             //}
             Random rnd = new Random();
+            string imagesDir = "avitoimages";
+            if(!Directory.Exists(imagesDir))
+            {
+                Directory.CreateDirectory(imagesDir);
+            }
+
             foreach (var ad in ads)
             {
                 string title = ad.Title;
@@ -230,7 +236,7 @@ namespace DatabaseExporter
                 ObservableCollection<ApiLib.Image> images = new ObservableCollection<ApiLib.Image>();
                 if (ad.ImgPath != null)
                 {
-                    image = new ApiLib.Image() { Guid = ad.ImgPath.Split("avitoimages\\")[1] };
+                    image = new ApiLib.Image() { Guid = ad.ImgPath.Split(imagesDir+"\\")[1] };
                     images.Add(image);
                 }
 
@@ -247,7 +253,7 @@ namespace DatabaseExporter
                 };
                 nomenclature.Descriptions.ToList().ForEach(d => d.IsEnabled = true);
 
-                string fPath = "avitoimages\\" + image.Guid + ".jpg";
+                string fPath = System.IO.Path.Combine(imagesDir, image.Guid + ".jpg");
                 using var stream = new MemoryStream(File.ReadAllBytes(fPath).ToArray());
                 FileParameter param = new FileParameter(stream, System.IO.Path.GetFileName(fPath));
                 var wwww = client.ImagePostAsync(param);

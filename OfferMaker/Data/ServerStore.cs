@@ -236,6 +236,8 @@ namespace OfferMaker
             {
                 Global.ImageManager.UploadImage(user);
                 ApiLib.User us = Helpers.CloneObject<ApiLib.User>(user);
+                if (us.Image.Guid == null)
+                    us.Image = null;
                 await client.UserEditAsync(us.Id, us);
                 return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
             }
@@ -993,6 +995,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
+                errorDetails = response;
                 Log.Write(ex);
             }
             return errorDetails;

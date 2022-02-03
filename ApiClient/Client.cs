@@ -6514,6 +6514,9 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("permissions")]
         public System.Collections.Generic.ICollection<Permissions> Permissions { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("users")]
+        public System.Collections.Generic.ICollection<User> Users { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
