@@ -64,16 +64,11 @@ namespace OfferMaker
                 constructor?.viewModel.OnPropertyChanged(nameof(AltId));
             }
         }
-        string oldKPNumber;
-        public string OldKPNumber
-        {
-            get => oldKPNumber;
-            set
-            {
-                oldKPNumber = value;
-                OnPropertyChanged();
-            }
-        }
+
+        /// <summary>
+        /// Альтернативный человекочитаемый id с датой, публикуется в КП.
+        /// </summary>
+        [JsonIgnore]
         public string AltId { get => Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + Id; }
 
         public string Guid
