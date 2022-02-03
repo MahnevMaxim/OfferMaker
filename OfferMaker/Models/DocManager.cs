@@ -11,6 +11,7 @@ using System.Drawing.Printing;
 using System.IO;
 using Shared;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 
 namespace OfferMaker
 {
@@ -19,6 +20,7 @@ namespace OfferMaker
         Constructor constructor;
         string defaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Offer Maker Projects\\";
         string omfFilter = "Offer Maker file | *.omf";
+        string omfKccFilter = "Offer file | *.omf;*.kcc";
 
         #region Singleton
 
@@ -157,10 +159,38 @@ namespace OfferMaker
                 Helpers.SaveObject(sfd.FileName, Global.Offer);
         }
 
+        //internal void OpenOfferFromFile()
+        //{
+        //    var ofd = new OpenFileDialog();
+        //    ofd.Filter = omfKccFilter;//старая и новая версия 
+        //    ofd.InitialDirectory = defaultPath;
+        //    if (ofd.ShowDialog() == DialogResult.OK)
+        //    {
+        //        string ext = Path.GetExtension(ofd.FileName);
+        //        if (ext == ".omf")
+        //        {
+        //            Offer offer = Helpers.InitObject<Offer>(ofd.FileName, true);
+        //            Offer offer_ = Utils.RestoreOffer(offer, Global.Users, false);
+        //            Global.Constructor.LoadOfferFromArchive(offer_);
+        //        }
+        //        else
+        //        {
+        //            OldModelCommercial.MainViewModelContainer mainViewModelContainer = Helpers.InitObject<OldModelCommercial.MainViewModelContainer>(ofd.FileName, false);
+        //            if (mainViewModelContainer != null)
+        //            {
+        //                Offer tranlaterVM = new Offer();
+        //                tranlaterVM.SetConstructor(constructor);
+        //                Offer tranlaterVM_ = Utils.RestoreOldOffer(tranlaterVM, mainViewModelContainer, Global.Users, true);
+        //                Global.Constructor.LoadOfferFromArchive(tranlaterVM_);
+        //            }
+        //        }
+        //    }
+        //}
+        
         internal void OpenOfferFromFile()
         {
             var ofd = new OpenFileDialog();
-            ofd.Filter = omfFilter;
+            ofd.Filter = omfKccFilter;//старая и новая версия 
             ofd.InitialDirectory = defaultPath;
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -178,7 +208,6 @@ namespace OfferMaker
                 }
             }
         }
-
         /// <summary>
         /// Сохранение(создание) шаблонов и КП на сервер/локально.
         /// </summary>

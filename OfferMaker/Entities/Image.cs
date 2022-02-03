@@ -56,8 +56,8 @@ namespace OfferMaker
         {
             get
             {
-                if (localPhotoPath == null)
-                    localPhotoPath = Global.ImageManager?.GetImagePath(Guid);
+                if (localPhotoPath == null && Global.ImageManager!=null)
+                    localPhotoPath = Global.ImageManager.GetImagePath(Guid);
                 return localPhotoPath;
             }
             set

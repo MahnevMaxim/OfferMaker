@@ -7,6 +7,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Shared;
 using System.Text.Json;
+using System.Xml.Serialization;
 
 namespace OfferMaker
 {
@@ -56,21 +57,54 @@ namespace OfferMaker
             }
         }
 
-        public static T InitObject<T>(string filePath)
+        public static T InitObject<T>(string filePath, bool isJson)
         {
             try
             {
                 if (File.Exists(filePath))
                 {
-                    string jsonText = File.ReadAllText(filePath);
-                    return JsonConvert.DeserializeObject<T>(jsonText);
+                    if (isJson)
+                    {
+                        string jsonText = File.ReadAllText(filePath);
+                        var desObject = JsonConvert.DeserializeObject<T>(jsonText);
+                        return desObject;
+                    }
+                    else
+                    {
+                        string xmlText = File.ReadAllText(filePath);
+                        var desObject = XmlToObject<T>(xmlText);
+                        return desObject;
+                    }
                 }
+
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
             }
             return default(T);
+        }
+        public static T XmlToObject<T>(string str_stream)
+        {
+            try
+            {
+                var serializer = new XmlSerializer(typeof(T));
+                T container = (T)serializer.Deserialize(GenerateStreamFromString(str_stream));
+                return container;
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
+        }
+        private static Stream GenerateStreamFromString(string s)
+        {
+            var stream = new MemoryStream();
+            var writer = new StreamWriter(stream);
+            writer.Write(s);
+            writer.Flush();
+            stream.Position = 0;
+            return stream;
         }
 
         public static T CloneObject<T>(object obj) => JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));

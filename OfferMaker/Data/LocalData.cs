@@ -118,7 +118,7 @@ namespace OfferMaker
         /// <returns></returns>
         async internal Task<CallResult<T>> GetData<T>(string path, bool isWithotErroMode = false)
         {
-            T res = Helpers.InitObject<T>(path);
+            T res = Helpers.InitObject<T>(path, true);
             if (res != null)
                 return new CallResult<T>() { Data = res };
             
