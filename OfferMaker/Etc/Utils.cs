@@ -33,45 +33,7 @@ namespace OfferMaker
             }
             return offer;
         }
-        //public Image AddImage(byte[] img)
-        //{
-        //    string path = GetPathToImage(img);
-        //    if (path != null && path != "")
-        //    {
-        //        Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
-        //        return image;
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
-        /// <summary>
-        /// Получение пути к новому изображению, созданному с использованием редактора
-        /// </summary>
-        /// <returns></returns>
-        //private static string GetPathToImage(byte[] img)
-        //{
-        //    byte[] result = img;
-
-        //    string currentDirectory = Directory.GetCurrentDirectory();
-        //    string newImagePath = currentDirectory + @"\OldOffer\images\";
-        //    if (!Directory.Exists(newImagePath))
-        //    {
-        //        Directory.CreateDirectory(newImagePath);
-        //    }
-        //    string retPath = newImagePath + DateTime.Now.ToShortDateString() + ".png";
-        //    try
-        //    {
-        //        System.IO.File.WriteAllBytes(retPath, result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        retPath = "";
-        //    }
-
-        //    return retPath;
-        //}
+ 
         static public Offer RestoreOldOffer(Offer offer, OldModelCommercial.MainViewModelContainer mainViewModelContainer, ObservableCollection<User> users, bool isArchive)
         {
             try
@@ -144,26 +106,31 @@ namespace OfferMaker
         static private User GetManager(OldModelCommercial.MainViewModelContainer mainViewModelContainer, ObservableCollection<User> users) 
         {
             User manager = new User();
+            manager = users.Where(u => u.FullName == mainViewModelContainer.SelectedUser.Name).FirstOrDefault();
+            //ОСТАВИТЬ, ПОКА НЕ РАЗБЕРЕМСЯ, КАК ДОЛЖНО РАБОТАТЬ
+            //СЕЙЧАС РАБОТАЕТ ТАК: 
+            // Поиск менеждера из старого КП среди актуальных 
+            //Найден - забираем его
+            //Не найден- менеджером становится создатель
+            //ВТОРОЙ ВАРИАНТ:
             // Поиск менеждера из старого КП среди актуальных 
             //если найден - подтягиваются новые данные
-            //не найден - подтягиваются данные из файла
-            manager = users.Where(u => u.FullName == mainViewModelContainer.SelectedUser.Name).FirstOrDefault();
-            if (manager == null)
-            {
-                string phrase = mainViewModelContainer.SelectedUser.Name;
-                string[] words = phrase.Split(' ');
-                //tranlaterVM.Manager.Image = ToImage(mainViewModelContainer.SelectedUser.Foto);
-                Position position = new Position(mainViewModelContainer.SelectedUser.Status);
-                manager = new User
-                {
-                    FirstName = words[0],
-                    LastName = words[1],
-                    PhoneNumber1 = mainViewModelContainer.SelectedUser.Tel1,
-                    PhoneNumber2 = mainViewModelContainer.SelectedUser.Tel2,
-                    Email = mainViewModelContainer.SelectedUser.Email,
-                    Position = position,
-                };
-            }
+            //не найден - подтягиваются данные из файла (но тогда надо добавлять в БД нового пользователя с пометкой на удаление)
+            //if (manager == null)
+            //{
+            //    string phrase = mainViewModelContainer.SelectedUser.Name;
+            //    string[] words = phrase.Split(' ');
+            //    Position position = new Position(mainViewModelContainer.SelectedUser.Status);
+            //    manager = new User
+            //    {
+            //        FirstName = words[0],
+            //        LastName = words[1],
+            //        PhoneNumber1 = mainViewModelContainer.SelectedUser.Tel1,
+            //        PhoneNumber2 = mainViewModelContainer.SelectedUser.Tel2,
+            //        Email = mainViewModelContainer.SelectedUser.Email,
+            //        Position = position,
+            //    };
+            //}
             return manager;
         }
         static private ObservableCollection<OfferInfoBlock> GetInfoBlocks(OldModelCommercial.MainViewModelContainer mainViewModelContainer)
@@ -202,6 +169,5 @@ namespace OfferMaker
                 }
             };
         }
-
     }
 }

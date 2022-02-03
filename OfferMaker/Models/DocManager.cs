@@ -159,34 +159,6 @@ namespace OfferMaker
                 Helpers.SaveObject(sfd.FileName, Global.Offer);
         }
 
-        //internal void OpenOfferFromFile()
-        //{
-        //    var ofd = new OpenFileDialog();
-        //    ofd.Filter = omfKccFilter;//старая и новая версия 
-        //    ofd.InitialDirectory = defaultPath;
-        //    if (ofd.ShowDialog() == DialogResult.OK)
-        //    {
-        //        string ext = Path.GetExtension(ofd.FileName);
-        //        if (ext == ".omf")
-        //        {
-        //            Offer offer = Helpers.InitObject<Offer>(ofd.FileName, true);
-        //            Offer offer_ = Utils.RestoreOffer(offer, Global.Users, false);
-        //            Global.Constructor.LoadOfferFromArchive(offer_);
-        //        }
-        //        else
-        //        {
-        //            OldModelCommercial.MainViewModelContainer mainViewModelContainer = Helpers.InitObject<OldModelCommercial.MainViewModelContainer>(ofd.FileName, false);
-        //            if (mainViewModelContainer != null)
-        //            {
-        //                Offer tranlaterVM = new Offer();
-        //                tranlaterVM.SetConstructor(constructor);
-        //                Offer tranlaterVM_ = Utils.RestoreOldOffer(tranlaterVM, mainViewModelContainer, Global.Users, true);
-        //                Global.Constructor.LoadOfferFromArchive(tranlaterVM_);
-        //            }
-        //        }
-        //    }
-        //}
-        
         internal void OpenOfferFromFile()
         {
             var ofd = new OpenFileDialog();
@@ -194,20 +166,36 @@ namespace OfferMaker
             ofd.InitialDirectory = defaultPath;
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                Offer offer = Helpers.InitObject<Offer>(ofd.FileName);
-                if(offer!=null)
+                string ext = Path.GetExtension(ofd.FileName);
+                if (ext == ".omf")
                 {
-                    if (offer.IsArchive)
-                        Global.Constructor.LoadOfferFromArchive(offer);
+                    Offer offer = Helpers.InitObject<Offer>(ofd.FileName,true);
+                    if (offer != null)
+                    {
+                        if (offer.IsArchive)
+                            Global.Constructor.LoadOfferFromArchive(offer);
+                        else
+                            Global.Constructor.LoadOfferTemplate(offer);
+                    }
                     else
-                        Global.Constructor.LoadOfferTemplate(offer);
+                    {
+                        Global.Main.SendMess("Ошибка при попытке считать файл");
+                    }
                 }
                 else
                 {
-                    Global.Main.SendMess("Ошибка при попытке считать файл");
+                    OldModelCommercial.MainViewModelContainer mainViewModelContainer = Helpers.InitObject<OldModelCommercial.MainViewModelContainer>(ofd.FileName, false);
+                    if (mainViewModelContainer != null)
+                    {
+                        Offer tranlaterVM = new Offer();
+                        tranlaterVM.SetConstructor(constructor);
+                        Offer tranlaterVM_ = Utils.RestoreOldOffer(tranlaterVM, mainViewModelContainer, Global.Users, false);
+                        Global.Constructor.LoadOfferTemplate(tranlaterVM_);
+                    }
                 }
             }
         }
+
         /// <summary>
         /// Сохранение(создание) шаблонов и КП на сервер/локально.
         /// </summary>

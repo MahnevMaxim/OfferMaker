@@ -4,14 +4,16 @@ using API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    partial class APIContextModelSnapshot : ModelSnapshot
+    [Migration("20220203124307_AddOldKPNumberMigration")]
+    partial class AddOldKPNumberMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -235,7 +237,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 3, 12, 49, 8, 614, DateTimeKind.Utc).AddTicks(5675));
+                        .HasDefaultValue(new DateTime(2022, 2, 3, 12, 43, 7, 394, DateTimeKind.Utc).AddTicks(541));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -285,7 +287,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 3, 12, 49, 8, 618, DateTimeKind.Utc).AddTicks(3023));
+                        .HasDefaultValue(new DateTime(2022, 2, 3, 12, 43, 7, 397, DateTimeKind.Utc).AddTicks(7785));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -346,9 +348,6 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OldKPNumber")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Banner_Id");
@@ -375,7 +374,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 3, 12, 49, 8, 620, DateTimeKind.Utc).AddTicks(8046));
+                        .HasDefaultValue(new DateTime(2022, 2, 3, 12, 43, 7, 400, DateTimeKind.Utc).AddTicks(3187));
 
                     b.Property<string>("Currency")
                         .IsRequired()

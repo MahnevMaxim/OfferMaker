@@ -44,6 +44,7 @@ namespace OfferMaker
         bool isHiddenTextNds;
         bool isWithNds = true;
         bool isResultSummInRub;
+        string oldKPNumber;
         bool isShowPriceDetails;
         bool isCreateByCostPrice;
         bool isHideNomsPrice;
@@ -53,6 +54,7 @@ namespace OfferMaker
         bool isEdited;
         bool isEditableState;
         Offer offerEditBackup;
+        string altId;
 
         public int Id
         {
@@ -69,7 +71,22 @@ namespace OfferMaker
         /// Альтернативный человекочитаемый id с датой, публикуется в КП.
         /// </summary>
         [JsonIgnore]
-        public string AltId { get => Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + Id; }
+        public string AltId
+        {
+            get
+            {
+                if (OldKPNumber != null)
+                {
+                    //при открытии КП старой версии
+                    altId = OldKPNumber;
+                }
+                else
+                {
+                    altId = Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + Id;
+                }
+                return altId;
+            } 
+        }
 
         public string Guid
         {
@@ -77,6 +94,16 @@ namespace OfferMaker
             set
             {
                 guid = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string OldKPNumber
+        {
+            get => oldKPNumber;
+            set
+            {
+                oldKPNumber = value;
                 OnPropertyChanged();
             }
         }
@@ -171,8 +198,13 @@ namespace OfferMaker
             {
                 manager = value;
                 if (manager == null)
-                    manager = OfferCreator;
-                managerId = manager.Id;
+                {
+                    if (OfferCreator != null)
+                    {
+                        manager = OfferCreator;
+                        managerId = manager.Id;
+                    }
+                }
                 constructor?.viewModel.OnPropertyChanged();
             }
         }
