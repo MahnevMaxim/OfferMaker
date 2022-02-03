@@ -76,33 +76,18 @@ namespace OfferMaker
         {
             try
             {
-                //string phrase = mainViewModelContainer.SelectedUser.Name;
-                //string[] words = phrase.Split(' ');
-                ////tranlaterVM.Manager.Image = ToImage(mainViewModelContainer.SelectedUser.Foto);
-                //Position position = new Position(mainViewModelContainer.SelectedUser.Status);
-
-                
-
-                
-                //User manager = new User
-                //{
-                //    FirstName = words[0],
-                //    LastName = words[1],
-                //    PhoneNumber1 = mainViewModelContainer.SelectedUser.Tel1,
-                //    PhoneNumber2 = mainViewModelContainer.SelectedUser.Tel2,
-                //    Email = mainViewModelContainer.SelectedUser.Email,
-                //    Position = position,
-                //};
-
-                //string path = GetPathToImage(mainViewModelContainer.SelectedUser.Foto);
-                //if (path != null && path != "")
-                //{
-                //    Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
-                //    manager.Image = image;
-                //}
-
-                //offer.Manager = manager;
-                offer.OfferCreator = manager;
+                User manager = new User();
+                manager = users.Where(u => u.FullName == mainViewModelContainer.SelectedUser.Name).FirstOrDefault();
+                if (manager != null)
+                {
+                    offer.Manager = manager;
+                    offer.OfferCreator = manager;
+                }
+                else
+                {
+                    //старый код
+                }
+               
                 if (isArchive) offer.IsArchive = true;
             }
             catch (Exception ex)

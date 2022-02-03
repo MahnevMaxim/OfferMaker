@@ -196,6 +196,12 @@ namespace OfferMaker
                                 nom.Title = item.Name;
                                 nom.CostPrice = item.CostPrice;
                                 nom.Descriptions = new System.Collections.ObjectModel.ObservableCollection<Description>();
+
+                                //Image nomImage = new Image();
+                                //System.Collections.ObjectModel.ObservableCollection<Image> images = new System.Collections.ObjectModel.ObservableCollection<Image>();
+                                //nomImage = images.Where(u => u.FullName == mainViewModelContainer.SelectedUser.Name).FirstOrDefault();
+                                //nom.Image = Global.
+                                //    nom.Images=
                             
                                 foreach (var description in item.Description)
                                 {
@@ -219,7 +225,7 @@ namespace OfferMaker
                         tranlaterVM.Discount.Percentage = 0;
                         tranlaterVM.Discount.TotalSum = 0;
 
-                        //tranlaterVM.OfferCreator.Position.PositionName = mainViewModelContainer.SelectedUser.Status;
+
                         //User manager = new User
                         //{
                         //    FirstName = mainViewModelContainer.SelectedUser.Name,
@@ -228,7 +234,7 @@ namespace OfferMaker
                         //    PhoneNumber2 = mainViewModelContainer.SelectedUser.Tel2,
                         //    Email = mainViewModelContainer.SelectedUser.Email
                         //};
-                        
+
                         //tranlaterVM.Manager = manager;
 
                         //tranlaterVM.Manager.Image = ToImage(mainViewModelContainer.SelectedUser.Foto);
