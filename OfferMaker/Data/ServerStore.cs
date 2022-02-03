@@ -14,7 +14,7 @@ using Newtonsoft.Json.Linq;
 
 namespace OfferMaker
 {
-    class ServerData
+    class ServerStore
     {
         Client client;
         HttpClient httpClient;
@@ -47,7 +47,7 @@ namespace OfferMaker
         static readonly string advertisingCreateErrorMess = "Ошибка при попытке создать рекламное изображение с сервера.";
         static readonly string advertisingDeleteErrorMess = "Ошибка при попытке удалить рекламное изображение с сервера.";
 
-        public ServerData(string accessToken)
+        public ServerStore(string accessToken)
         {
             httpClient = new HttpClient();
             if (accessToken != null)
@@ -392,7 +392,7 @@ namespace OfferMaker
         {
             try
             {
-                var response = await client.CurrenciesAllAsync();
+                var response = await client.CurrenciesGetAsync();
                 if (response.StatusCode == 200)
                 {
                     ObservableCollection<Currency> res = Helpers.CloneObject<ObservableCollection<Currency>>(response.Result);
@@ -400,7 +400,7 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<Currency>>() { Error = new Error(response.StatusCode, getCurrencyErrorMess) };
+                    return new CallResult<ObservableCollection<Currency>>() { Error = new Error(getCurrencyErrorMess, response.StatusCode) };
                 }
             }
             catch (Exception ex)
@@ -420,7 +420,7 @@ namespace OfferMaker
             try
             {
                 IEnumerable<ApiLib.Currency> currs = Helpers.CloneObject<IEnumerable<ApiLib.Currency>>(currencies);
-                await client.CurrenciesPUTAsync(currs);
+                await client.CurrenciesEditAsync(currs);
                 return new CallResult();
             }
             catch (Exception ex)
@@ -450,7 +450,7 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error(response.StatusCode, getNomenclaturesErrorMess) };
+                    return new CallResult<ObservableCollection<Nomenclature>>() { Error = new Error(getNomenclaturesErrorMess, response.StatusCode) };
                 }
             }
             catch (Exception ex)
@@ -504,7 +504,7 @@ namespace OfferMaker
                 }
                 else
                 {
-                    return new CallResult<ObservableCollection<Category>>() { Error = new Error(response.StatusCode, getCategoriesErrorMess) };
+                    return new CallResult<ObservableCollection<Category>>() { Error = new Error(getCategoriesErrorMess, response.StatusCode) };
                 }
             }
             catch (Exception ex)
@@ -546,7 +546,7 @@ namespace OfferMaker
         {
             try
             {
-                var response = await client.NomenclatureGroupsAllAsync();
+                var response = await client.NomenclatureGroupsGetAsync();
                 if (response.StatusCode == 200)
                 {
                     ObservableCollection<NomenclatureGroup> res = Helpers.CloneObject<ObservableCollection<NomenclatureGroup>>(response.Result);
@@ -574,7 +574,7 @@ namespace OfferMaker
             try
             {
                 IEnumerable<ApiLib.NomenclatureGroup> nomeGroups = Helpers.CloneObject<IEnumerable<ApiLib.NomenclatureGroup>>(nomenclatureGroups);
-                await client.NomenclatureGroupsPUTAsync(nomeGroups);
+                await client.NomenclatureGroupsSaveAsync(nomeGroups);
                 return new CallResult();
             }
             catch (Exception ex)
@@ -669,7 +669,7 @@ namespace OfferMaker
             {
                 if (offer.Id == 0) return new CallResult(); // нельзя удалить то, чего нет
                 await client.OfferDeleteAsync(offer.Id);
-                return new CallResult();
+                return new CallResult() { SuccessMessage = "КП Id " + offer.Id + " удалено." };
             }
             catch (Exception ex)
             {
@@ -726,6 +726,35 @@ namespace OfferMaker
             }
         }
 
+        async internal Task<CallResult> OfferTemplateDelete(Offer offer)
+        {
+            try
+            {
+                ApiLib.OfferTemplate offerCopy = Helpers.CloneObject<ApiLib.OfferTemplate>(offer);
+                if (offerCopy.Id == 0) return new CallResult(); // нельзя удалить то, чего нет
+                await client.OfferTemplateDeleteAsync(offerCopy.Id);
+                return new CallResult() { SuccessMessage = "Шаблон Id " + offerCopy.Id + " удалён." };
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(offerDeleteErrorMess, ex);
+            }
+        }
+
+        async internal Task<CallResult> OfferTemplateEdit(Offer offer)
+        {
+            try
+            {
+                ApiLib.OfferTemplate offerCopy = Helpers.CloneObject<ApiLib.OfferTemplate>(offer);
+                var cr = await client.OfferTemplateEditAsync(offerCopy.Id, offerCopy);
+                return new CallResult() { SuccessMessage = "Шаблон Id " + offerCopy.Id + " изменён." };
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(offerDeleteErrorMess, ex);
+            }
+        }
+
         #endregion Offer templates
 
         #region Hints
@@ -779,7 +808,6 @@ namespace OfferMaker
                 {
                     return new CallResult() { Error = new Error(bannerCreateErrorMess) };
                 }
-
             }
             catch (Exception ex)
             {
@@ -830,7 +858,6 @@ namespace OfferMaker
                 {
                     return GetApiError(bannerDeleteErrorMess, response.StatusCode);
                 }
-
             }
             catch (Exception ex)
             {
@@ -883,7 +910,6 @@ namespace OfferMaker
                 {
                     return new CallResult() { Error = new Error(advertisingCreateErrorMess) };
                 }
-
             }
             catch (Exception ex)
             {
@@ -909,7 +935,6 @@ namespace OfferMaker
                 {
                     return GetApiError(advertisingDeleteErrorMess, response.StatusCode);
                 }
-
             }
             catch (Exception ex)
             {
@@ -923,7 +948,7 @@ namespace OfferMaker
 
         private CallResult<T> GetApiError<T>(string errorMess, int statusCode) => new CallResult<T>() { Error = GetApiError(errorMess, statusCode).Error };
 
-        private CallResult GetApiError(string errorMess, int statusCode) => new CallResult() { Error = new Error(statusCode, errorMess + "Код ошибки " + statusCode) };
+        private CallResult GetApiError(string errorMess, int statusCode) => new CallResult() { Error = new Error(errorMess + "Код ошибки " + statusCode, statusCode) };
 
         private CallResult<T> GetApiError<T>(string errorMess, Exception ex) => new CallResult<T>() { Error = GetApiError(errorMess, ex).Error };
 
@@ -935,11 +960,11 @@ namespace OfferMaker
                 ApiException apiEx = ex as ApiException;
                 if (apiEx.StatusCode == 403)
                 {
-                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMess + " Нет прав.") };
+                    return new CallResult() { Error = new Error(errorMess + " Нет прав.", apiEx.StatusCode) };
                 }
                 else if (apiEx.StatusCode == 404)
                 {
-                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMess + " Объект не найден.") };
+                    return new CallResult() { Error = new Error(errorMess + " Объект не найден.", apiEx.StatusCode) };
                 }
                 else
                 {
@@ -949,7 +974,7 @@ namespace OfferMaker
                     string errorMessage = errorMess + "Код ошибки " + apiEx.StatusCode;
                     if (!string.IsNullOrWhiteSpace(errorDetails))
                         errorMessage += "\n" + errorDetails;
-                    return new CallResult() { Error = new Error(apiEx.StatusCode, errorMessage) };
+                    return new CallResult() { Error = new Error(errorMessage, apiEx.StatusCode) };
                 }
             }
             else

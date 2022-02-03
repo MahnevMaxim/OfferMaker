@@ -32,5 +32,15 @@ namespace OfferMaker.Views
         }
 
         void IView.OnSendMessage(string message) => this.ShowMessageAsync("", message);
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var t = sender.GetType().Name;
+            if(((ViewModels.SettingsViewModel)DataContext).IsBusy)
+            {
+                ((ViewModels.SettingsViewModel)DataContext).TryClose();
+                e.Cancel = true;
+            }
+        }
     }
 }

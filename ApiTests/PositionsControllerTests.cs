@@ -11,7 +11,7 @@ using Xunit;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
 
-namespace ApiTests.PositionsControllerTests
+namespace ApiTests
 {
     public class PositionsControllerTests
     {
@@ -25,7 +25,7 @@ namespace ApiTests.PositionsControllerTests
                 .Options;
             APIContext context = new APIContext(dbContextOptions);
             TestDataInitializer db = new TestDataInitializer();
-            db.SeedPositions(context);
+            db.SeedAccountsAndPositions(context);
         }
 
         [Fact]

@@ -34,7 +34,7 @@ namespace API.Controllers
         {
             var nomenclature = await _context.Nomenclatures.FindAsync(id);
 
-            if (nomenclature == null)
+            if (nomenclature == null || nomenclature.IsDelete)
             {
                 return NotFound();
             }
@@ -42,6 +42,7 @@ namespace API.Controllers
             return nomenclature;
         }
 
+        [Authorize(Roles = "CanEditProducts,CanAll")]
         [HttpPut("{id}", Name = nameof(NomenclatureEdit))]
         public async Task<IActionResult> NomenclatureEdit(int id, Nomenclature nomenclature)
         {
@@ -71,6 +72,7 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "CanEditProducts,CanAll")]
         [HttpPut(Name = nameof(NomenclaturesEdit))]
         public async Task<ActionResult<Nomenclature>> NomenclaturesEdit(IEnumerable<Nomenclature> noms)
         {
@@ -95,6 +97,7 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "CanEditProducts,CanAll")]
         [HttpPost(Name = nameof(NomenclaturePost))]
         public async Task<ActionResult<Nomenclature>> NomenclaturePost(Nomenclature nomenclature)
         {
@@ -111,6 +114,7 @@ namespace API.Controllers
             return CreatedAtAction("NomenclaturesGet", new { id = nomenclature.Id }, nomenclature);
         }
 
+        [Authorize(Roles = "CanEditProducts,CanAll")]
         [HttpDelete("{id}", Name = nameof(DeleteNomenclature))]
         public async Task<IActionResult> DeleteNomenclature(int id)
         {
@@ -120,7 +124,8 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            _context.Nomenclatures.Remove(nomenclature);
+            //_context.Nomenclatures.Remove(nomenclature);
+            nomenclature.IsDelete = true;
             await _context.SaveChangesAsync();
 
             return NoContent();

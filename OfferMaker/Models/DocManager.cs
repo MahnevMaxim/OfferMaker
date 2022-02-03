@@ -35,8 +35,11 @@ namespace OfferMaker
         /// <summary>
         /// Сохранение PDF с баннером.
         /// </summary>
-        internal void SaveToPdfWithBanner()
+        async internal void SaveToPdfWithBanner()
         {
+            bool isArchive = await IsArchive();
+            if (!isArchive) return;
+
             constructor.CreateDocumentWithBanner();
             FixedDocument fixedDoc = constructor.PdfDocument;
             SaveToPdf(fixedDoc);
@@ -45,11 +48,59 @@ namespace OfferMaker
         /// <summary>
         /// Сохранение Pdf без баннеров.
         /// </summary>
-        internal void SaveToPdfWithoutBanner()
+        async internal void SaveToPdfWithoutBanner()
         {
+            bool isArchive = await IsArchive();
+            if (!isArchive) return;
+
             constructor.CreateDocumentWithoutBanner();
             FixedDocument fixedDoc = constructor.PdfDocumentShort;
             SaveToPdf(fixedDoc);
+        }
+
+        /// <summary>
+        /// Не только проверяет архив или нет, но и пытается добавить в архив.
+        /// </summary>
+        /// <returns></returns>
+        async Task<bool> IsArchive()
+        {
+            if (!constructor.Offer.IsArchive)
+                await OfferCreate();
+            return constructor.Offer.IsArchive;
+        }
+
+        async internal void PrintPdfWithoutBanner()
+        {
+            bool isArchive = await IsArchive();
+            if (!isArchive) return;
+
+            constructor.CreateDocumentWithoutBanner();
+            FixedDocument fixedDoc = constructor.PdfDocumentShort;
+            PrintPdf(fixedDoc);
+        }
+
+        async internal void PrintPdfWithBanner()
+        {
+            bool isArchive = await IsArchive();
+            if (!isArchive) return;
+
+            constructor.CreateDocumentWithBanner();
+            FixedDocument fixedDoc = constructor.PdfDocument;
+            PrintPdf(fixedDoc);
+        }
+
+        async internal void PrintPdf(FixedDocument fixedDocument)
+        {
+            System.Windows.Controls.PrintDialog dialog = new System.Windows.Controls.PrintDialog();
+            dialog.PrintTicket = dialog.PrintQueue.DefaultPrintTicket;
+            dialog.PrintTicket.PageOrientation = PageOrientation.Portrait;
+            dialog.PrintQueue = LocalPrintServer.GetDefaultPrintQueue();
+
+            if (dialog.ShowDialog() == true)
+            {
+                XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(dialog.PrintQueue);
+                writer.WriteAsync(fixedDocument as FixedDocument, dialog.PrintTicket);
+            }
         }
 
         internal void SaveToPdf(FixedDocument fixedDoc)
@@ -94,51 +145,20 @@ namespace OfferMaker
         internal void SaveOfferToFile()
         {
             if (!Directory.Exists(defaultPath))
-            {
                 Directory.CreateDirectory(defaultPath);
-            }
 
             var sfd = new SaveFileDialog();
             sfd.Filter = omfFilter;
-            sfd.FileName = String.Format("Offer from {0}", DateTime.Today.ToShortDateString());
+            if (Global.Offer.Id != 0)
+                sfd.FileName = String.Format("Offer from {0}", Global.Offer.AltId);
+            else
+                sfd.FileName = String.Format("Offer from {0}", DateTime.Today.ToShortDateString());
             sfd.InitialDirectory = defaultPath;
+
             if (sfd.ShowDialog() == DialogResult.OK)
-            {
                 Helpers.SaveObject(sfd.FileName, Global.Offer);
-            }
         }
 
-        //private System.Collections.ObjectModel.ObservableCollection<OfferInfoBlock> GetInfoBlocks(OldModelCommercial.MainViewModelContainer mainViewModelContainer)
-        //{
-        //    return new System.Collections.ObjectModel.ObservableCollection<OfferInfoBlock>()
-        //    {
-        //        new OfferInfoBlock(){
-        //            Title = "Срок готовности товара к отгрузке",
-        //            Text = mainViewModelContainer.Notification.ShipmentText,
-        //            ImagePath ="Images\\informIcons\\Commertial1.png"
-        //        },
-        //        new OfferInfoBlock(){
-        //            Title = "Срок проведения монтажных и пусконаладочных работ",
-        //            Text = mainViewModelContainer.Notification.MountText,
-        //            ImagePath= "Images\\informIcons\\Commertial2.png"
-        //        },
-        //        new OfferInfoBlock(){
-        //            Title = "Условие оплаты",
-        //            Text = mainViewModelContainer.Notification.PaymentText ,
-        //            ImagePath= "Images\\informIcons\\Commertial3.png"
-        //        },
-        //        new OfferInfoBlock(){
-        //            Title = "Условия поставки",
-        //            Text = mainViewModelContainer.Notification.DeliveryText,
-        //            ImagePath="Images\\informIcons\\Commertial4.png"
-        //        },
-        //         new OfferInfoBlock(){
-        //            Title = "Гарантия",
-        //            Text = mainViewModelContainer.Notification.WarrantyText,
-        //            ImagePath= "Images\\informIcons\\Commertial2.png"
-        //        }
-        //    };
-        //}
         internal void OpenOfferFromFile()
         {
             var ofd = new OpenFileDialog();
@@ -184,23 +204,26 @@ namespace OfferMaker
         /// Сохранение(создание) шаблонов и КП на сервер/локально.
         /// </summary>
         /// <param name="isTemplate"></param>
-        async internal void OfferCreate(bool isTemplate = false)
+        async internal Task OfferCreate(bool isTemplate = false)
         {
-            if (constructor.Offer.Id != 0)
+            if(!isTemplate)
             {
-                Global.Main.SendMess("Нельзя перезаписать архив.");
-                return;
-            }
-
-            //если создаётся архивное КП
-            if (constructor.Offer.Id == 0 && !isTemplate)
-            {
-                if (string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
-                    || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
-                    || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
+                if (constructor.Offer.Id != 0 || constructor.Offer.IsArchive)
                 {
-                    Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
+                    Global.Main.SendMess("Нельзя перезаписать архив.");
                     return;
+                }
+
+                //если создаётся архивное КП
+                if (constructor.Offer.Id == 0 && !isTemplate)
+                {
+                    if (string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
+                        || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
+                        || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
+                    {
+                        Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
+                        return;
+                    }
                 }
             }
 
@@ -208,20 +231,24 @@ namespace OfferMaker
             if (isTemplate)
             {
                 Offer temp = CreateTemplate(constructor.Offer);
-                Global.Main.TemplatesStore.AddOffer(temp);
-                cr = await Global.Main.DataRepository.OfferTemplateCreate(temp, Global.OfferTemplates);
+                cr = await Global.Main.DataRepository.OfferTemplateCreate(temp); 
+                if (cr.Success)
+                {
+                    Global.Main.TemplatesStore.AddOffer(temp);
+                    Global.Constructor.LoadOfferTemplate(temp);
+                }
             }
             else
             {
-                Global.Main.ArchiveStore.AddOffer(constructor.Offer.PrepareArchive());
-                Global.Main.OnPropertyChanged(nameof(Global.Main.UsingCurrencies));
-                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer, Global.Offers);
+                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer.PrepareArchive());
+                if(cr.Success)
+                {
+                    Global.Main.ArchiveStore.AddOffer(constructor.Offer);
+                    Global.Constructor.LoadOfferTemplate(constructor.Offer);
+                }
             }
 
-            if (cr.Success)
-                Global.Main.SendMess(cr.SuccessMessage);
-            else
-                Global.Main.SendMess(cr.Error.Message);
+            Global.Main.SendMess(cr.Message);
             Global.Main.ArchiveStore.ApplyOfferFilter();
         }
 
@@ -230,7 +257,12 @@ namespace OfferMaker
             Offer temp_ = Helpers.CloneObject<Offer>(offer);
             Offer temp = Utils.RestoreOffer(temp_, Global.Main.Users, false);
             temp.IsTemplate = true;
+            temp.IsArchive = false;
+            temp.IsEditableState = true;
+            temp.IsEdited = false;
+            temp.IsDelete = false;
             temp.Id = 0;
+            temp.Guid = Guid.NewGuid().ToString();
             temp.CreateDate = DateTime.Now;
             return temp;
         }

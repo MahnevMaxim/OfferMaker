@@ -30,6 +30,7 @@ namespace OfferMaker
         string photoAdress;
         string photoNumberTeh;
         int pdfControlSelectedIndex;
+        string offerStatus;
 
         #endregion Fields
 
@@ -135,6 +136,27 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Статус документа: новый, шаблон или архив
+        /// </summary>
+        public string OfferStatus
+        {
+            get
+            {
+                if(Offer.IsArchive)
+                    return "архив Id " + Offer.Id;
+                if (Offer.IsTemplate)
+                {
+                    if(Offer.Id==0)
+                        return "шаблон";
+                    else
+                        return "шаблон Id " + Offer.Id;
+                }
+                else
+                    return "новый";
+            }
+        }
+
         #endregion Properties
 
         #endregion MVVM
@@ -195,19 +217,39 @@ namespace OfferMaker
         /// Загрузка КП из архива.
         /// </summary>
         /// <param name="offer"></param>
-        internal void LoadOfferFromArchive(Offer offer) => LoadOffer(offer);
-
+        internal void LoadOfferFromArchive(Offer offer)
+        {
+            Offer clone = Helpers.CloneObject<Offer>(offer);
+            Offer offer_ = Utils.RestoreOffer(clone, Global.Users, true);
+            LoadOffer(offer_);
+        }
+            
         /// <summary>
         /// Загрузка шаблона.
         /// </summary>
         /// <param name="offer"></param>
         internal void LoadOfferTemplate(Offer offer)
         {
-            offer.Id = 0;
-            offer.Guid = Guid.NewGuid().ToString();
+            Offer clone = Helpers.CloneObject<Offer>(offer);
+            Offer offer_ = Utils.RestoreOffer(clone, Global.Users, false);
+
+            offer_.Id = 0;
+            offer_.Guid = Guid.NewGuid().ToString();
+            offer_.Manager = Global.Main.User;
+            offer_.OfferCreator = Global.Main.User;
+            LoadOffer(offer_);
+        }
+
+        /// <summary>
+        /// Редактирование шаблона.
+        /// </summary>
+        /// <param name="offer"></param>
+        internal void EditOfferTemplate(Offer offer)
+        {
             offer.Manager = Global.Main.User;
             offer.OfferCreator = Global.Main.User;
             LoadOffer(offer);
+            offer.SetEditableState();
         }
 
         /// <summary>
@@ -312,9 +354,13 @@ namespace OfferMaker
         /// <param name="nomWrapper"></param>
         internal void OpenCardNomWrapper(NomWrapper nomWrapper)
         {
+            Nomenclature source = Helpers.CloneObject<Nomenclature>(nomWrapper.Nomenclature);
             MvvmFactory.CreateWindow(new NomenclurueCard(nomWrapper), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
-            nomWrapper.UpdateCurrency();
-            nomWrapper.OnPropertyChanged(string.Empty);
+            if(!source.IsEqual(nomWrapper.Nomenclature))
+            {
+                nomWrapper.UpdateCurrency();
+                nomWrapper.OnPropertyChanged(string.Empty);
+            }
         }
 
         /// <summary>
@@ -575,10 +621,10 @@ namespace OfferMaker
         private void UpdateBanners()
         {
             if (Global.Main.BannersManager.SelectedBanner != null &&
-                Global.Main.BannersManager.SelectedBanner.LocalPhotoPath != Offer.Banner)
+                Global.Main.BannersManager.SelectedBanner.LocalPhotoPath != Offer.BannerImagePath)
             {
                 Offer.Banner_ = Global.Main.BannersManager.SelectedBanner;
-                viewModel.OnPropertyChanged("Banner");
+                viewModel.OnPropertyChanged("BannerImagePath");
             }
 
             if(IsChangeAdvertisings(Offer.AdvertisingsUp, Global.Main.BannersManager.AdvertisingsUp))

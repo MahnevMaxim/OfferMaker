@@ -70,8 +70,8 @@ namespace OfferMaker
         {
             this.offers = offers;
             this.currentUser = currentUser;
-            BeginDateTime = offers?.OrderBy(o => o.Id).FirstOrDefault()?.CreateDate;
-            EndDateTime = offers?.OrderByDescending(o => o.Id).FirstOrDefault()?.CreateDate;
+            BeginDateTime = null;
+            EndDateTime = null;
         }
 
         OfferStore() { } //закрываем конструктор
@@ -202,8 +202,8 @@ namespace OfferMaker
         {
             IsShowOnlyCurrentUser = false;
             Id = null;
-            BeginDateTime = offers?.OrderBy(o => o.Id).FirstOrDefault()?.CreateDate;
-            EndDateTime = offers?.OrderByDescending(o => o.Id).FirstOrDefault()?.CreateDate;
+            BeginDateTime = null;
+            EndDateTime = null;
             CustomerName = null;
             CompanyName = null;
             City = null;

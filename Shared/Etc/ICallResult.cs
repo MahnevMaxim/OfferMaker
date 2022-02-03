@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ApiTests.CategoriesControllerTests
+namespace Shared
 {
-    class CategoriesControllerPutTest
+    public interface ICallResult
     {
+        public string Message { get; }
     }
 }

@@ -26,13 +26,28 @@ namespace OfferMaker
 
         #region Fields
 
+        bool isBusy;
         string selectedTheme;
         AppMode appMode;
         string lightOrDark;
+        int beginFilesCount;
+        int copiedFilesCount;
+        int errorFilesCount;
+        string copyStatus;
 
         #endregion Fields
 
         #region Properties
+
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string SelectedTheme
         {
@@ -74,21 +89,67 @@ namespace OfferMaker
             }
         }
 
-        public string AdditionalColor { get => LightOrDark == "Light" ? "#FFE5E5E5" : "#FF313131" ; }
+        public string AdditionalColor { get => LightOrDark == "Light" ? "#FFE5E5E5" : "#FF313131"; }
 
         public List<string> Themes { get; set; } = new List<string>();
 
         public List<string> LightOrDarkList { get; set; }
 
+        public int BeginFilesCount
+        {
+            get => beginFilesCount;
+            set
+            {
+                beginFilesCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int CopiedFilesCount
+        {
+            get => copiedFilesCount;
+            set
+            {
+                copiedFilesCount = value;
+                OnPropertyChanged();
+                OnPropertyChanged("LeftFilesCount");
+                OnPropertyChanged("CopyProgress");
+            }
+        }
+
+        public int ErrorFilesCount
+        {
+            get => errorFilesCount;
+            set
+            {
+                errorFilesCount = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string CopyStatus
+        {
+            get => copyStatus;
+            set
+            {
+                copyStatus = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+
         #endregion Properties
 
         #endregion MVVM
+
+        ImageManager imageManager;
 
         #region Singleton
 
         private static readonly Settings instance = new Settings();
 
-        
+
 
         public static Settings GetInstance() => instance;
 
@@ -108,9 +169,9 @@ namespace OfferMaker
         private void UpdateSettings()
         {
             AppSettings.Default.AppMode = (int)appMode;
-            if (LightOrDark != null) 
+            if (LightOrDark != null)
                 AppSettings.Default.LightOrDark = LightOrDark;
-            if (LightOrDark != null) 
+            if (LightOrDark != null)
                 AppSettings.Default.Theme = SelectedTheme;
             AppSettings.Default.Save();
             SetSettings();
@@ -121,11 +182,11 @@ namespace OfferMaker
             if (string.IsNullOrEmpty(LightOrDark) || string.IsNullOrEmpty(SelectedTheme)) return;
             string theme = LightOrDark + "." + SelectedTheme;
             Color color;
-            if (LightOrDark=="Dark")
+            if (LightOrDark == "Dark")
                 color = (Color)ColorConverter.ConvertFromString("#FF3A292B");
             else
                 color = (Color)ColorConverter.ConvertFromString("#FFFFB6C1");
-            Application.Current.Resources["DataGrid.LightRow.Background"] = new SolidColorBrush(color); 
+            Application.Current.Resources["DataGrid.LightRow.Background"] = new SolidColorBrush(color);
             ThemeManager.Current.ChangeTheme(Application.Current, theme);
         }
 
@@ -204,15 +265,15 @@ namespace OfferMaker
             string res = "";
             try
             {
-                if(Directory.Exists("cache"))
+                if (Directory.Exists(LocalDataConfig.ImageCacheDir))
                 {
-                    Directory.Delete("cache", true);
+                    Directory.Delete(LocalDataConfig.ImageCacheDir, true);
                     res += "Изображения удалены\n";
                 }
                 else
                     res += "Изображения не найдены\n";
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Write(ex);
                 res += "Не удалось удалить изображения\n";
@@ -220,10 +281,32 @@ namespace OfferMaker
 
             try
             {
-                if (Directory.Exists(LocalDataConfig.DataCacheDir))
+                if (Directory.Exists(LocalDataConfig.ServerCacheDataDir))
                 {
-                    Directory.Delete(LocalDataConfig.DataCacheDir, true);
-                    res += "Данные удалены"; 
+                    Directory.Delete(LocalDataConfig.ServerCacheDataDir, true);
+                    res += "Данные удалены";
+                }
+                else
+                    res += "Данные не найдены";
+            }
+            catch (Exception ex)
+            {
+                Log.Write(ex);
+                res += "Не удалось удалить данные";
+            }
+
+            OnSendMessage(res);
+        }
+
+        public void ClearLocalData()
+        {
+            string res = "";
+            try
+            {
+                if (Directory.Exists(LocalDataConfig.LocalDataDir))
+                {
+                    Directory.Delete(LocalDataConfig.LocalDataDir, true);
+                    res += "Данные удалены";
                 }
                 else
                     res += "Данные не найдены";
@@ -248,21 +331,39 @@ namespace OfferMaker
             // создаем экземпляр реализации SHA256
             System.Security.Cryptography.SHA256 sha256 = System.Security.Cryptography.SHA256.Create();
             var passwordByte = sha256.ComputeHash(stream);
-            string ret = String.Join("", passwordByte);
-            return ret;
+            return String.Join("", passwordByte);
         }
 
-        public void DownloadAllImages()
+        async public void DownloadAllImages()
         {
-            //находим все фотки, которые нужны номенклатуре
+            IsBusy = true;
             List<string> guids = new List<string>();
-            foreach (var nom in Global.Catalog.Nomenclatures)
-            {
-                foreach (var image in nom.Images)
-                {
-                    guids.Add(image.Guid);
-                }
-            }
+            Global.Catalog.Nomenclatures.ToList().ForEach(n => n.Images.ToList().ForEach(i => guids.Add(i.Guid)));
+            Global.Users.Where(u => u.Image.Guid != null).ToList().ForEach(u => guids.Add(u.Image.Guid));
+            Global.Main.BannersManager.Banners.ToList().ForEach(b => guids.Add(b.Guid));
+            Global.Main.BannersManager.Advertisings.ToList().ForEach(a => guids.Add(a.Guid));
+            if (imageManager == null)
+                imageManager = ImageManager.GetInstance();
+            imageManager.UpdateProgress += ImageManager_UpdateProgress;
+            await imageManager.SyncImagesWithServer(guids);
+            imageManager.UpdateProgress -= ImageManager_UpdateProgress;
+            await Task.Delay(1000);
+            IsBusy = false;
+        }
+
+        private void ImageManager_UpdateProgress()
+        {
+            BeginFilesCount = imageManager.downLoadProgress.BeginFilesCount;
+            CopiedFilesCount = imageManager.downLoadProgress.CopiedFilesCount;
+            ErrorFilesCount = imageManager.downLoadProgress.ErrorFilesCount;
+            CopyStatus = imageManager.downLoadProgress.Status;
+        }
+
+        internal void TryClose()
+        {
+            IsBusy = false;
+            imageManager?.DownloadStop();
+            Close();
         }
     }
 }

@@ -1,15 +1,18 @@
 ﻿<UserControl x:Class="OfferMaker.Pdf.PdfControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:local="clr-namespace:OfferMaker.Pdf.Views"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:layout="clr-namespace:OfferMaker.Pdf"
-             mc:Ignorable="d" >
+             xmlns:root="clr-namespace:OfferMaker"
+             mc:Ignorable="d">
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <root:MultiConverter x:Key="MultiConverter" />
     </UserControl.Resources>
 
 
@@ -43,7 +46,7 @@
                             <!--#endregion Титульник-->
 
                             <!--#region Верхние баннеры-->
-                            
+
                             <Paragraph Margin="0"
                                        x:Name="adv">
                                 <ItemsControl ItemsSource="{Binding AdvertisingsUp}">
@@ -58,7 +61,7 @@
                             </Paragraph>
 
                             <!--#endregion Верхние баннеры-->
-                            
+
                             <!--#region краткий -->
 
                             <Paragraph Margin="0">
@@ -232,16 +235,46 @@
             <TabItem Header="С баннером"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="12">
-                <DocumentViewer x:Name="pdfWithBanner"
-                                Document="{Binding PdfDocument}" />
+                <Grid>
+                    <DocumentViewer x:Name="pdfWithBanner"
+                                    Document="{Binding PdfDocument}">
+                    </DocumentViewer>
+                    <Button Name="PrintPdfWithBanner"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=DataContext.Cmd}"
+                            CommandParameter="PrintPdfWithBanner"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            BorderBrush="Transparent"
+                            Background="#f0f0f0"
+                            ToolTip="Печать">
+                        <iconPacks:PackIconMaterialLight Kind="Printer"
+                                                         Width="18"
+                                                         Height="18" />
+                    </Button>
+                </Grid>
             </TabItem>
             <TabItem Header="Без баннера"
                      mah:TabControlHelper.Underlined="TabPanel"
                      mah:HeaderedControlHelper.HeaderFontSize="12">
-                <DocumentViewer Document="{Binding PdfDocumentShort}" />
+                <Grid>
+                    <DocumentViewer x:Name="pdfWithoutBanner"
+                                    Document="{Binding PdfDocumentShort}" />
+                    <Button Name="PrintPdfWithoutBanner"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=TabItem}, Path=DataContext.Cmd}"
+                            CommandParameter="PrintPdfWithoutBanner"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            BorderBrush="Transparent"
+                            Background="#f0f0f0"
+                            ToolTip="Печать">
+                        <iconPacks:PackIconMaterialLight Kind="Printer"
+                                                         Width="18"
+                                                         Height="18" />
+                    </Button>
+                </Grid>
             </TabItem>
-            
+
         </TabControl>
     </Grid>
-    
+
 </UserControl>

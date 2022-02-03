@@ -74,7 +74,7 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            _context.Banners.Remove(banner);
+            banner.IsDeleted = true;
             await _context.SaveChangesAsync();
 
             return NoContent();

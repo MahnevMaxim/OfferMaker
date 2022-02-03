@@ -29,16 +29,9 @@ namespace OfferMaker
 
         private static readonly DataRepository instance = new DataRepository();
 
-        public static DataRepository GetInstance(string accessToken)
+        public static DataRepository GetInstance(AppMode appMode, string accessToken = null)
         {
-            instance.Proxy = new Proxy(accessToken);
-            return instance;
-        }
-            
-        internal static DataRepository GetInstance(AppMode appMode)
-        {
-            instance.Proxy = new Proxy();
-            instance.Proxy.defaultAppMode = appMode;
+            instance.Proxy = new Proxy(appMode, accessToken);
             return instance;
         }
 
@@ -58,17 +51,21 @@ namespace OfferMaker
 
         async internal Task<CallResult<ObservableCollection<Offer>>> OffersSelfGet() => await Proxy.OffersSelfGet();
 
-        async internal Task<CallResult> OfferCreate(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferCreate(offer, offers);
+        async internal Task<CallResult> OfferCreate(Offer offer) => await Proxy.OfferCreate(offer);
 
-        async internal Task<CallResult> OfferDelete(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferDelete(offer, offers);
+        async internal Task<CallResult> OfferDelete(Offer offer) => await Proxy.OfferDelete(offer);
 
         #endregion Offers
 
         #region Offer templates
 
-        async internal Task<CallResult> OfferTemplateCreate(Offer offer, ObservableCollection<Offer> offers) => await Proxy.OfferTemplateCreate(offer, offers);
+        async internal Task<CallResult> OfferTemplateCreate(Offer offer) => await Proxy.OfferTemplateCreate(offer);
 
         async internal Task<CallResult<ObservableCollection<Offer>>> OfferTemplatesGet() => await Proxy.OfferTemplatesGet();
+
+        async internal Task<CallResult> OfferTemplateDelete(Offer offer) => await Proxy.OfferTemplateDelete(offer);
+
+        async internal Task<CallResult> OfferTemplateEdit(Offer offer) => await Proxy.OfferTemplateEdit(offer);
 
         #endregion Offer templates
 

@@ -19,21 +19,33 @@ namespace API.Controllers
     public class AccountController : Controller
     {
         private readonly APIContext _context;
+        private readonly string invalidUsername = "Invalid username or password.";
 
         public AccountController(APIContext context)
         {
             _context = context;
         }
 
+        /// <summary>
+        /// Получение токена по логину и паролю.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         [HttpPost("/token", Name = nameof(AccountGetToken))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         async public Task<ActionResult> AccountGetToken(string username, string password)
         {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                return BadRequest(new { errorText = invalidUsername });
+            }
+
             ClaimsIdentity identity = await GetIdentity(username, password);
             if (identity == null)
             {
-                return BadRequest(new { errorText = "Invalid username or password." });
+                return BadRequest(new { errorText = invalidUsername });
             }
 
             var now = DateTime.UtcNow;
@@ -53,7 +65,7 @@ namespace API.Controllers
                 user.Position = null;
             if (user.Account == null)
             {
-                user.Account = new Account() { Token = encodedJwt, IsTokenActive = true }; 
+                user.Account = new Account() { Token = encodedJwt, IsTokenActive = true };
             }
             else
             {
@@ -88,13 +100,15 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Токен для экспорта, на рабочем сервере закомменгтировать или удалить.
+        /// Токен для экспорта, на рабочем сервере закомментировать или удалить.
         /// </summary>
         /// <returns></returns>
         [HttpGet("/token", Name = nameof(GetToken))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         async public Task<ActionResult> GetToken()
         {
+            return BadRequest();
+
             var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, "Export") };
             claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, Permissions.CanAll.ToString()));
 
@@ -119,24 +133,17 @@ namespace API.Controllers
                 username = "Export"
             };
 
-            //int count = _context.Users.Count();
-            //if(count>0)
-            //{
-            //    var someUser = _context.Users.Include(u => u.Account).First();
-            //    if (someUser != null)
-            //    {
-            //        someUser.Account.Token = encodedJwt;
-            //        someUser.Account.IsTokenActive = true;
-            //        _context.SaveChanges();
-            //    }
-            //}
-            
             JsonSerializerOptions options = new() { ReferenceHandler = ReferenceHandler.Preserve };
             string responseJson = JsonSerializer.Serialize(response, options);
 
             return Ok(responseJson);
         }
 
+        /// <summary>
+        /// Обновление токена перед запуском приложения.
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         [HttpPost("/updatetoken", Name = nameof(AccountUpdateToken))]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -164,7 +171,7 @@ namespace API.Controllers
 
             if (user.Account == null)
             {
-                user.Account = new Account() { Token = encodedJwt, IsTokenActive=true}; 
+                user.Account = new Account() { Token = encodedJwt, IsTokenActive = true };
             }
             else
             {
@@ -194,7 +201,7 @@ namespace API.Controllers
 
         async private Task<ClaimsIdentity> GetIdentity(string token)
         {
-            var users = await _context.Users.Include(u => u.Position).Include(u=>u.Account).ToListAsync();
+            var users = await _context.Users.Include(u => u.Position).Include(u => u.Account).ToListAsync();
             User user = users.FirstOrDefault(x => x.Account?.Token == token && x.Account.IsTokenActive);
 
             if (user != null)
@@ -219,7 +226,7 @@ namespace API.Controllers
 
         async private Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            var res = await _context.Users.Include(u => u.Position).Include(u=>u.Account).ToListAsync();
+            var res = await _context.Users.Include(u => u.Position).Include(u => u.Account).ToListAsync();
             User user = res.FirstOrDefault(x => x.Email == username);
 
             if (user != null)
@@ -233,7 +240,7 @@ namespace API.Controllers
                         new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                     };
 
-                    if(user.Position!=null)
+                    if (user.Position != null)
                     {
                         foreach (var p in user.Position.Permissions)
                         {
@@ -242,9 +249,9 @@ namespace API.Controllers
                     }
                     else
                     {
-                        user.Position = new Position() { Permissions = new System.Collections.ObjectModel.ObservableCollection<Permissions>()};
+                        user.Position = new Position() { Permissions = new System.Collections.ObjectModel.ObservableCollection<Permissions>() };
                     }
-                    
+
                     ClaimsIdentity claimsIdentity =
                     new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                         ClaimsIdentity.DefaultRoleClaimType);

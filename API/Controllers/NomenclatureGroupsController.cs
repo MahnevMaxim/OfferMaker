@@ -23,14 +23,14 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<NomenclatureGroup>>> GetNomenclatureGroups()
+        [HttpGet(Name = nameof(NomenclatureGroupsGet))]
+        public async Task<ActionResult<IEnumerable<NomenclatureGroup>>> NomenclatureGroupsGet()
         {
             return await _context.NomenclatureGroups.ToListAsync();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<NomenclatureGroup>> GetNomenclatureGroup(int id)
+        [HttpGet("{id}", Name = nameof(NomenclatureGroupGet))]
+        public async Task<ActionResult<NomenclatureGroup>> NomenclatureGroupGet(int id)
         {
             var nomenclatureGroup = await _context.NomenclatureGroups.FindAsync(id);
 
@@ -42,8 +42,9 @@ namespace API.Controllers
             return nomenclatureGroup;
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutNomenclatureGroup(int id, NomenclatureGroup nomenclatureGroup)
+        [Authorize(Roles = "CanEditProducts,CanAll")]
+        [HttpPut("{id}", Name = nameof(NomenclatureGroupEdit))]
+        public async Task<IActionResult> NomenclatureGroupEdit(int id, NomenclatureGroup nomenclatureGroup)
         {
             if (id != nomenclatureGroup.Id)
             {
@@ -71,8 +72,9 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPut]
-        public async Task<ActionResult<NomenclatureGroup>> SaveNomenclatureGroups(IEnumerable<NomenclatureGroup> nomenclatureGroups)
+        [Authorize(Roles = "CanEditProducts,CanAll")]
+        [HttpPut(Name = nameof(NomenclatureGroupsSave))]
+        public async Task<ActionResult<NomenclatureGroup>> NomenclatureGroupsSave(IEnumerable<NomenclatureGroup> nomenclatureGroups)
         {
             foreach (var ng in nomenclatureGroups)
             {
@@ -80,11 +82,11 @@ namespace API.Controllers
                 {
                     if (ng.Id == 0)
                     {
-                        await PostNomenclatureGroup(ng);
+                        await NomenclatureGroupPost(ng);
                     }
                     else
                     {
-                        await PutNomenclatureGroup(ng.Id, ng);
+                        await NomenclatureGroupEdit(ng.Id, ng);
                     }
                 }
                 catch (Exception ex)
@@ -95,17 +97,19 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<NomenclatureGroup>> PostNomenclatureGroup(NomenclatureGroup nomenclatureGroup)
+        [Authorize(Roles = "CanEditProducts,CanAll")]
+        [HttpPost(Name = nameof(NomenclatureGroupPost))]
+        public async Task<ActionResult<NomenclatureGroup>> NomenclatureGroupPost(NomenclatureGroup nomenclatureGroup)
         {
             _context.NomenclatureGroups.Add(nomenclatureGroup);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetNomenclatureGroup", new { id = nomenclatureGroup.Id }, nomenclatureGroup);
+            return CreatedAtAction("NomenclatureGroupGet", new { id = nomenclatureGroup.Id }, nomenclatureGroup);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteNomenclatureGroup(int id)
+        [Authorize(Roles = "CanEditProducts,CanAll")]
+        [HttpDelete("{id}", Name = nameof(NomenclatureGroupDelete))]
+        public async Task<IActionResult> NomenclatureGroupDelete(int id)
         {
             var nomenclatureGroup = await _context.NomenclatureGroups.FindAsync(id);
             if (nomenclatureGroup == null)

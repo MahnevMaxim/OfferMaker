@@ -9,6 +9,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Collections.Specialized;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace OfferMaker
 {
@@ -25,7 +26,8 @@ namespace OfferMaker
         ObservableCollection<User> users;
         OfferStore archiveStore;
         OfferStore templatesStore;
-        //public ObservableCollection<Offer> offerTemplates = new ObservableCollection<Offer>();
+        bool isBusy;
+        string processStatus;
 
         #endregion Fields
 
@@ -102,9 +104,9 @@ namespace OfferMaker
             }
         }
 
-        public ObservableCollection<User> Users 
-        { 
-            get => users; 
+        public ObservableCollection<User> Users
+        {
+            get => users;
             set
             {
                 users = value;
@@ -132,7 +134,25 @@ namespace OfferMaker
             }
         }
 
-        //public StringCollection Hints { get; set; }
+        public bool IsBusy
+        {
+            get => isBusy;
+            set
+            {
+                isBusy = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ProcessStatus
+        {
+            get => processStatus;
+            set
+            {
+                processStatus = value;
+                OnPropertyChanged();
+            }
+        }
 
         #endregion Propetries
 
@@ -171,7 +191,7 @@ namespace OfferMaker
         #region Initialization Main
 
         async internal override void Run() => MvvmFactory.RegisterModel(this, Constructor);
-        
+
         #endregion Initialization Main
 
         #region Commands
@@ -209,7 +229,7 @@ namespace OfferMaker
         /// <param name="parentId"></param>
         private void SetParents(ObservableCollection<Category> categoriesTree, int? parentId, string parentGuid)
         {
-            int order=0;
+            int order = 0;
             categoriesTree.ToList().ForEach(c =>
             {
                 c.ParentId = parentId;
@@ -226,10 +246,10 @@ namespace OfferMaker
         private ObservableCollection<Category> GetFlattenTree()
         {
             List<Category> flattenTree = new List<Category>();
-            foreach(var cat in Catalog.CategoriesTree)
+            foreach (var cat in Catalog.CategoriesTree)
             {
                 var subCats = TreeWalker.Walk<Category>(cat, c => c.Childs).ToList();
-                if(subCats.Count>0)
+                if (subCats.Count > 0)
                 {
                     flattenTree.AddRange(subCats);
                 }
@@ -335,12 +355,12 @@ namespace OfferMaker
             CurrentMainSelectedTabIndex = 0;
             Constructor.LoadOfferFromArchive(offer);
         }
-            
+
         public void LoadSelectedOfferFromArchive()
         {
             if (SelectedOfferInArchive != null)
             {
-                CurrentMainSelectedTabIndex=0;
+                CurrentMainSelectedTabIndex = 0;
                 Constructor.LoadOfferFromArchive(SelectedOfferInArchive);
             }
             else
@@ -349,9 +369,9 @@ namespace OfferMaker
 
         private void ShowOffers()
         {
-            if(CurrentMainSelectedTabIndex==1)
+            if (CurrentMainSelectedTabIndex == 1)
                 ArchiveStore.ApplyOfferFilter();
-            else if(CurrentMainSelectedTabIndex==2)
+            else if (CurrentMainSelectedTabIndex == 2)
                 TemplatesStore.ApplyOfferFilter();
         }
 
@@ -365,40 +385,160 @@ namespace OfferMaker
             ArchiveStore.ApplyOfferFilter();
             OnPropertyChanged(nameof(ArchiveStore));
         }
-           
+
         async public void DeleteOfferFromArchive(Offer offer)
         {
-            var cr = await DataRepository.OfferDelete(offer, ArchiveStore.Offers);
+            var cr = await DataRepository.OfferDelete(offer);
             if (cr.Success)
             {
-                ArchiveStore.RemoveOffer(offer);
+                if (!(offer.Id != 0 && Settings.AppMode == AppMode.Offline))
+                    ArchiveStore.RemoveOffer(offer);
                 ArchiveStore.ApplyOfferFilter();
             }
             else
                 OnSendMessage(cr.Error.Message);
         }
 
+        async public void SaveAllArchiveChanges()
+        {
+            IsBusy = true;
+
+            var forDelOffers = ArchiveStore.Offers.Where(a => a.IsDelete).ToList();
+            var forPostOffers = ArchiveStore.Offers.Where(a => a.Id == 0).ToList();
+            string message = null;
+
+            foreach(var forDel in forDelOffers)
+            {
+                ProcessStatus = "Удаление архива Id " + forDel.Id;
+                var cr = await DataRepository.OfferDelete(forDel);
+                if (cr.Success)
+                    ArchiveStore.RemoveOffer(forDel);
+                message += cr.Message + "\n";
+            }
+
+            foreach (var forPost in forPostOffers)
+            {
+                ProcessStatus = "Добавление архива Id " + forPost.Id;
+                var cr = await DataRepository.OfferCreate(forPost);
+                message += cr.Message + "\n";
+            }
+
+            IsBusy = false;
+
+            OnSendMessage(message);
+        }
+
         #endregion Archive
 
         #region Offer templates
 
+        /// <summary>
+        /// Загрузка шаблона для создания на нём КП.
+        /// </summary>
+        /// <param name="offer"></param>
         public void LoadOfferTemplate(Offer offer)
         {
             CurrentMainSelectedTabIndex = 0;
             Constructor.LoadOfferTemplate(offer);
         }
 
+        /// <summary>
+        /// Загрузка шаблона в режиме редактирования.
+        /// </summary>
+        /// <param name="offer"></param>
+        public void EditOfferTemplate(Offer offer)
+        {
+            CurrentMainSelectedTabIndex = 0;
+            Constructor.EditOfferTemplate(offer);
+        }
+
+        /// <summary>
+        /// Поиск шаблона.
+        /// </summary>
         public void FindOfferTemplate() => TemplatesStore.ApplyOfferFilter();
 
+        /// <summary>
+        /// Загрузка шаблона по двойному клику.
+        /// </summary>
         public void LoadSelectedOfferTemplate()
         {
-            if (SelectedOfferTemplate != null) 
+            if (SelectedOfferTemplate != null)
             {
                 CurrentMainSelectedTabIndex = 0;
                 Constructor.LoadOfferTemplate(SelectedOfferTemplate);
             }
             else
                 OnSendMessage("Выберите шаблон");
+        }
+
+        /// <summary>
+        /// Сохранение всех изменений шаблонов.
+        /// </summary>
+        async public void SaveAllOfferTemplatesChanges()
+        {
+            IsBusy = true;
+            string message = null;
+            if (Settings.AppMode == AppMode.Auto)
+            {
+                var forDelOffers = TemplatesStore.Offers.Where(a => a.IsDelete).ToList();
+                var forPostOffers = TemplatesStore.Offers.Where(a => a.Id == 0).ToList();
+                var forEditOffers = TemplatesStore.Offers.Where(a => a.IsEdited).ToList();
+
+                foreach (var forDel in forDelOffers)
+                {
+                    ProcessStatus = "Удаление шаблона Id " + forDel.Id;
+                    var cr = await DataRepository.OfferTemplateDelete(forDel);
+                    if (cr.Success)
+                        TemplatesStore.RemoveOffer(forDel);
+                    message += cr.Message + "\n";
+                }
+
+                foreach (var forPost in forPostOffers)
+                {
+                    ProcessStatus = "Добавление шаблона Id " + forPost.Id;
+                    var cr = await DataRepository.OfferTemplateCreate(forPost);
+                    message += cr.Message + "\n";
+                }
+
+                foreach (var offer in forEditOffers)
+                {
+                    ProcessStatus = "Изменение шаблона Id " + offer.Id;
+                    var cr = await DataRepository.OfferTemplateEdit(offer);
+                    message += cr.Message + "\n";
+                }
+            }
+            else if(Settings.AppMode == AppMode.Offline)
+            {
+                var forEditOffers = TemplatesStore.Offers.Where(a => a.IsEdited).ToList();
+
+                foreach (var offer in forEditOffers)
+                {
+                    ProcessStatus = "Изменение шаблона Id " + offer.Id;
+                    var cr = await DataRepository.OfferTemplateEdit(offer);
+                    message += cr.Message + "\n";
+                }
+            }
+
+            IsBusy = false;
+
+            OnSendMessage(message);
+        }
+
+        /// <summary>
+        /// Удаление шаблона.
+        /// </summary>
+        /// <param name="offer"></param>
+        async public void OfferTemplateDelete(Offer offer)
+        {
+            var cr = await DataRepository.OfferTemplateDelete(offer);
+            if (cr.Success)
+            {
+                if (!(offer.Id != 0 && Settings.AppMode == AppMode.Offline))
+                    TemplatesStore.RemoveOffer(offer);
+                TemplatesStore.ApplyOfferFilter();
+            }
+            else
+                OnSendMessage(cr.Error.Message);
         }
 
         #endregion Offer templates
@@ -409,6 +549,10 @@ namespace OfferMaker
 
         public void SaveToPdfWithoutBanner() => DocManager.SaveToPdfWithoutBanner();
 
+        public void PrintPdfWithBanner() => DocManager.PrintPdfWithBanner();
+
+        public void PrintPdfWithoutBanner() => DocManager.PrintPdfWithoutBanner();
+
         public void OfferTemplateCreate() => DocManager.OfferTemplateCreate();
 
         public void SaveOfferToFile() => DocManager.SaveOfferToFile();
@@ -416,7 +560,7 @@ namespace OfferMaker
         public void OpenOfferFromFile() => DocManager.OpenOfferFromFile();
 
         async public void OfferCreate() => DocManager.OfferCreate();
-        
+
         #endregion DocManager
 
         #region Settings

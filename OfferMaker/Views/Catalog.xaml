@@ -304,8 +304,32 @@
                                         <DataTrigger Binding="{Binding IsPriceActual}"
                                                      Value="false">
                                             <Setter Property="Background"
-                                                    Value="{StaticResource DataGrid.LightRow.Background}" />
+                                                    Value="#33a20025" />
                                         </DataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=IsPriceActual}"
+                                                           Value="false" />
+                                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                                           Value="True" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Background"
+                                                        Value="#99a20025" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=IsPriceActual}"
+                                                           Value="false" />
+                                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}"
+                                                           Value="True" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Background"
+                                                        Value="#cca20025" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </DataGrid.RowStyle>

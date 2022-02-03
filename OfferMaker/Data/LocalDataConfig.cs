@@ -9,17 +9,48 @@ namespace OfferMaker
 {
     class LocalDataConfig
     {
-        public static string DataCacheDir = "data_cache";
-        public static string CurrenciesPath { get => Path.Combine(DataCacheDir, "currencies.json"); }
-        public static string NomenclaturesPath { get => Path.Combine(DataCacheDir, "nomenclatures.json"); } 
-        public static string UsersPath { get => Path.Combine(DataCacheDir, "users.json"); } 
-        public static string CategoriesPath { get => Path.Combine(DataCacheDir, "categories.json"); } 
-        public static string NomenclatureGroupsPath { get => Path.Combine(DataCacheDir, "nomenclature_groups.json"); } 
-        public static string OffersPath { get => Path.Combine(DataCacheDir, "offers.json"); } 
-        public static string HintsPath { get => Path.Combine(DataCacheDir, "hints.json"); }
-        public static string OfferTemplatesPath { get => Path.Combine(DataCacheDir, "offer_templates.json"); }
-        public static string BannersPath { get => Path.Combine(DataCacheDir, "banners.json"); }
-        public static string AdvertisingsPath { get => Path.Combine(DataCacheDir, "advertisings.json"); }
-        public static string PositionsPath { get => Path.Combine(DataCacheDir, "positions.json"); }
+        //папки
+        public static string ServerCacheDataDir = "data_cache";
+        public static string LocalDataDir = "local_data";
+        public static readonly string ImageCacheDir = "cache";
+
+        //имена файлов
+        static string CurrenciesPath = "currencies.json";
+        static string NomenclaturesPath = "nomenclatures.json";
+        static string UsersPath = "users.json";
+        static string CategoriesPath = "categories.json";
+        static string NomenclatureGroupsPath = "nomenclature_groups.json";
+        static string OffersPath = "offers.json";
+        static string HintsPath = "hints.json";
+        static string OfferTemplatesPath = "offer_templates.json";
+        static string BannersPath = "banners.json";
+        static string AdvertisingsPath = "advertisings.json";
+        static string PositionsPath = "positions.json";
+
+        //локальные пути локальных данных, созданных или изменённых локально, относительно директории приложения
+        public static string LocalCurrenciesPath = Path.Combine(LocalDataDir, CurrenciesPath);
+        public static string LocalNomenclaturesPath = Path.Combine(LocalDataDir, NomenclaturesPath);
+        public static string LocalUsersPath = Path.Combine(LocalDataDir, UsersPath);
+        public static string LocalCategoriesPath = Path.Combine(LocalDataDir, CategoriesPath);
+        public static string LocalNomenclatureGroupsPath = Path.Combine(LocalDataDir, NomenclatureGroupsPath);
+        public static string LocalOffersPath = Path.Combine(LocalDataDir, OffersPath);
+        public static string LocalHintsPath = Path.Combine(LocalDataDir, HintsPath);
+        public static string LocalOfferTemplatesPath = Path.Combine(LocalDataDir, OfferTemplatesPath);
+        public static string LocalBannersPath = Path.Combine(LocalDataDir, BannersPath);
+        public static string LocalAdvertisingsPath = Path.Combine(LocalDataDir, AdvertisingsPath);
+        public static string LocalPositionsPath = Path.Combine(LocalDataDir, PositionsPath);
+
+        //локальные пути кэшированных данных с сервера относительно директории приложения
+        public static string ServerCacheCurrenciesPath = Path.Combine(ServerCacheDataDir, CurrenciesPath);
+        public static string ServerCacheNomenclaturesPath = Path.Combine(ServerCacheDataDir, NomenclaturesPath);
+        public static string ServerCacheUsersPath = Path.Combine(ServerCacheDataDir, UsersPath);
+        public static string ServerCacheCategoriesPath = Path.Combine(ServerCacheDataDir, CategoriesPath);
+        public static string ServerCacheNomenclatureGroupsPath = Path.Combine(ServerCacheDataDir, NomenclatureGroupsPath);
+        public static string ServerCacheOffersPath = Path.Combine(ServerCacheDataDir, OffersPath);
+        public static string ServerCacheHintsPath = Path.Combine(ServerCacheDataDir, HintsPath);
+        public static string ServerCacheOfferTemplatesPath = Path.Combine(ServerCacheDataDir, OfferTemplatesPath);
+        public static string ServerCacheBannersPath = Path.Combine(ServerCacheDataDir, BannersPath);
+        public static string ServerCacheAdvertisingsPath = Path.Combine(ServerCacheDataDir, AdvertisingsPath);
+        public static string ServerCachePositionsPath = Path.Combine(ServerCacheDataDir, PositionsPath);
     }
 }

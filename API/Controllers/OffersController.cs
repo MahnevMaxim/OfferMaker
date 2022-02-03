@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using API.Data;
 using Shared;
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers
 {
@@ -82,7 +83,6 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            //_context.Offers.Remove(offer);
             offer.IsDelete = true;
             await _context.SaveChangesAsync();
 

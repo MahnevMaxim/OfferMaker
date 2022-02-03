@@ -49,5 +49,7 @@ namespace OfferMaker.ViewModels
             get => hello.HelloStatus;
             set => hello.HelloStatus = value;
         }
+
+        public string AppModeString { get => hello.AppModeString; }
     }
 }

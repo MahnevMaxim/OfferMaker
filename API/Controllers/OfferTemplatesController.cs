@@ -26,7 +26,7 @@ namespace API.Controllers
         [HttpGet(Name = nameof(OfferTemplatesGet))]
         public async Task<ActionResult<IEnumerable<OfferTemplate>>> OfferTemplatesGet()
         {
-            return await _context.OfferTemplates.ToListAsync();
+            return await _context.OfferTemplates.Where(o => o.IsDelete == false).Include(o => o.Banner_).ToListAsync();
         }
 
         [HttpGet("{id}", Name = nameof(OfferTemplateGet))]
@@ -42,6 +42,7 @@ namespace API.Controllers
             return offerTemplate;
         }
 
+        [Authorize(Roles = "CanAll,CanControlTemplates")]
         [HttpPut("{id}", Name = nameof(OfferTemplateEdit))]
         public async Task<IActionResult> OfferTemplateEdit(int id, OfferTemplate offerTemplate)
         {
@@ -71,15 +72,23 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "CanAll,CanControlTemplates")]
         [HttpPost(Name = nameof(OfferTemplatePost))]
         public async Task<ActionResult<OfferTemplate>> OfferTemplatePost(OfferTemplate offerTemplate)
         {
+            if (offerTemplate.Banner_ != null)
+            {
+                Banner banner = _context.Banners.Where(b => b.Guid == offerTemplate.Banner_.Guid).First();
+                offerTemplate.Banner_ = banner;
+            }
+
             _context.OfferTemplates.Add(offerTemplate);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(OfferTemplateGet), new { id = offerTemplate.Id }, offerTemplate);
         }
 
+        [Authorize(Roles = "CanAll,CanControlTemplates")]
         [HttpDelete("{id}", Name = nameof(OfferTemplateDelete))]
         public async Task<IActionResult> OfferTemplateDelete(int id)
         {
