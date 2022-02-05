@@ -28,8 +28,8 @@ namespace ApiTests
                 .UseSqlServer(connectionString)
                 .Options;
             APIContext context = new APIContext(dbContextOptions);
-            db = new TestDataInitializer();
-            db.SeedBanners(context);
+            db = new TestDataInitializer(context);
+            db.SeedBanners();
         }
 
         [Fact]

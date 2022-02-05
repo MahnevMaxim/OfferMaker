@@ -24,8 +24,8 @@ namespace ApiTests
                 .UseSqlServer(connectionString)
                 .Options;
             APIContext context = new APIContext(dbContextOptions);
-            TestDataInitializer db = new TestDataInitializer();
-            db.SeedAccountsAndPositions(context);
+            TestDataInitializer db = new TestDataInitializer(context);
+            db.SeedAccountsAndPositions();
         }
 
         [Fact]
@@ -52,18 +52,38 @@ namespace ApiTests
             {
                 //Arrange  
                 var controller = new PositionsController(context);
-                var positionsForEdit = context.Positions.ToList();
                 string editedName = "editedName";
-                string newPositionName = "newPositionName";
+                var positionsForEdit = new List<Position>()
+                {
+                    new Position(){ Id=1,PositionName=editedName},
+                    new Position(){ Id=2,PositionName=editedName},
+                    new Position(){ Id=3,PositionName=editedName}
+                };
 
                 //Act  
-                positionsForEdit[0].PositionName = editedName;
-                positionsForEdit.Add(new Position() { PositionName = newPositionName });
                 var response = await controller.PositionsEdit(positionsForEdit);
 
                 //Assert 
-                Assert.True(positionsForEdit.Count == context.Positions.Count());
-                Assert.True(context.Positions.ToList()[0].PositionName == newPositionName);
+                Assert.True(context.Positions.ToList()[0].PositionName == editedName);
+                Assert.True(context.Positions.ToList()[1].PositionName == editedName);
+                Assert.True(context.Positions.ToList()[2].PositionName == editedName);
+            }
+        }
+
+        [Fact]
+        async public void PositionsPostTest()
+        {
+            using (var context = new APIContext(dbContextOptions))
+            {
+                //Arrange  
+                var controller = new PositionsController(context);
+                int beginCount = context.Positions.Count();
+
+                //Act  
+                var response = await controller.PositionPost(new Position() { PositionName = "newPositionName" });
+
+                //Assert 
+                Assert.True(context.Positions.Count() == beginCount + 1);
             }
         }
 
@@ -80,7 +100,7 @@ namespace ApiTests
                 var response = await controller.PositionDelete(1);
 
                 //Assert 
-                Assert.True(context.Positions.Count() == beginCount-1);
+                Assert.True(context.Positions.Count() == beginCount - 1);
             }
         }
 
@@ -92,7 +112,7 @@ namespace ApiTests
                 //Arrange  
                 var controller = new PositionsController(context);
                 int beginCount = context.Positions.Count();
-                string newPositionName = "newPositionName";
+                string newPositionName = "newPositionName2";
 
                 //Act  
                 var response = await controller.PositionPost(new Position() { PositionName = newPositionName });

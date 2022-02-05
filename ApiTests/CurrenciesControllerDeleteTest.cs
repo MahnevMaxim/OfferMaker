@@ -25,8 +25,8 @@ namespace ApiTests
                 .UseSqlServer(connectionString)
                 .Options;
             APIContext context = new APIContext(dbContextOptions);
-            TestDataInitializer db = new TestDataInitializer();
-            db.SeedCurrency(context);
+            TestDataInitializer db = new TestDataInitializer(context);
+            db.SeedCurrency();
         }
 
         [Fact]

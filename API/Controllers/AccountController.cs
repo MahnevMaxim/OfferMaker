@@ -107,7 +107,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         async public Task<ActionResult> GetToken()
         {
-            //return BadRequest();
+            return BadRequest();
 
             var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, "Export") };
             claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, Permissions.CanAll.ToString()));

@@ -15,21 +15,21 @@ using Newtonsoft.Json.Linq;
 
 namespace ApiTests
 {
-    public class AccountControllerGetTokenTests
+    public class AccountControllerTests
     {
         public static DbContextOptions<APIContext> dbContextOptions { get; }
         public static string connectionString = @"Server=(localdb)\mssqllocaldb;Database=AccountControllerTests;ConnectRetryCount=0";
         ILogger<CurrenciesController> logger;
         static TestDataInitializer db;
 
-        static AccountControllerGetTokenTests()
+        static AccountControllerTests()
         {
             dbContextOptions = new DbContextOptionsBuilder<APIContext>()
                 .UseSqlServer(connectionString)
                 .Options;
             APIContext context = new APIContext(dbContextOptions);
-            db = new TestDataInitializer();
-            db.SeedAccountsAndPositions(context);
+            db = new TestDataInitializer(context);
+            db.SeedAccountsAndPositions();
         }
 
         [Fact]
