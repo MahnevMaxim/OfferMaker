@@ -18,7 +18,7 @@ namespace OfferMaker
     {
         Constructor constructor;
         string defaultPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Offer Maker Projects\\";
-        string omfFilter = "Offer Maker file | *.omf";
+        string omfFilter = "Offer Maker file |*.omf;*.kcc";
 
         #region Singleton
 
@@ -164,8 +164,15 @@ namespace OfferMaker
             ofd.InitialDirectory = defaultPath;
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                Offer offer = Helpers.InitObject<Offer>(ofd.FileName);
-                if(offer!=null)
+                string ext = Path.GetExtension(ofd.FileName);
+                Offer offer = null;
+
+                if (ext == ".omf")
+                    offer = Helpers.InitObject<Offer>(ofd.FileName);
+                else
+                    offer = Utils.GetOldOffer(ofd.FileName);
+               
+                if (offer != null)
                 {
                     if (offer.IsArchive)
                         Global.Constructor.LoadOfferFromArchive(offer);
@@ -174,7 +181,7 @@ namespace OfferMaker
                 }
                 else
                 {
-                    Global.Main.SendMess("Ошибка при попытке считать файл");
+                    //Global.Main.SendMess("Ошибка при попытке считать файл");
                 }
             }
         }

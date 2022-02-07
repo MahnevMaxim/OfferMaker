@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.IO;
 
 namespace OfferMaker
 {
@@ -30,6 +32,32 @@ namespace OfferMaker
             {
                 Log.Write(ex);
             }
+            return offer;
+        }
+
+        internal static Offer GetOldOffer(string fileName)
+        {
+            Offer offer = new Offer();
+
+            string xmlText = File.ReadAllText(fileName);
+            XDocument doc = XDocument.Parse(xmlText);
+
+            var cust = doc.Root.Element("Customer");
+            var kpNumber = cust.Element("KpNumber").Value;
+            var kpName = cust.Element("KpName").Value;
+            var date = cust.Element("Date").Value;
+            var customerName = cust.Element("Name").Value;
+            var organization = cust.Element("Organization").Value;
+            var location = cust.Element("Location").Value;
+
+            string title = kpName;
+            Customer customer = new Customer()
+            {
+                FullName = customerName,
+                Location=location,
+                Organization=organization
+            };
+
             return offer;
         }
     }

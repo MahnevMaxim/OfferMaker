@@ -65,12 +65,6 @@ namespace OfferMaker
             }
         }
 
-        /// <summary>
-        /// Альтернативный человекочитаемый id с датой, публикуется в КП.
-        /// </summary>
-        [JsonIgnore]
-        public string AltId { get => Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + Id; }
-
         public string Guid
         {
             get => guid;
@@ -80,6 +74,17 @@ namespace OfferMaker
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// Альтернативный человекочитаемый id с датой, публикуется в КП.
+        /// </summary>
+        [JsonIgnore]
+        public string AltId { get => OldIdentifer == null ? (Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + Id) : OldIdentifer; }
+
+        /// <summary>
+        /// Идентификатор старого КП.
+        /// </summary>
+        public string OldIdentifer { get; set; }
 
         /// <summary>
         /// Группы номенклатур для контрола конструктора.

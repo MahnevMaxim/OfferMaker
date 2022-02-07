@@ -13,5 +13,7 @@ namespace Shared
     {
         [Required]
         public ObservableCollection<Currency> Currencies { get; set; }
+
+        public string OldIdentifer { get; set; }
     }
 }
