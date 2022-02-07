@@ -239,7 +239,21 @@ namespace OfferMaker
             offer_.OfferCreator = Global.Main.User;
             LoadOffer(offer_);
         }
+        /// <summary>
+        /// Загрузка шаблона при открытии старого файла.
+        /// </summary>
+        /// <param name="offer"></param>
+        internal void LoadOfferTemplateOld(Offer offer)
+        {
+            Offer clone = Helpers.CloneObject<Offer>(offer);
+            Offer offer_ = Utils.RestoreOffer(clone, Global.Users, false);
 
+            offer_.Id = 0;
+            offer_.Guid = Guid.NewGuid().ToString();
+            offer_.Manager = offer.Manager;
+            offer_.OfferCreator = Global.Main.User;
+            LoadOffer(offer_);
+        }
         /// <summary>
         /// Редактирование шаблона.
         /// </summary>

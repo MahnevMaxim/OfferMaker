@@ -190,7 +190,7 @@ namespace OfferMaker
                         Offer tranlaterVM = new Offer();
                         tranlaterVM.SetConstructor(constructor);
                         Offer tranlaterVM_ = Utils.RestoreOldOffer(tranlaterVM, mainViewModelContainer, Global.Users, false);
-                        Global.Constructor.LoadOfferTemplate(tranlaterVM_);
+                        Global.Constructor.LoadOfferTemplateOld(tranlaterVM_);
                     }
                 }
             }
