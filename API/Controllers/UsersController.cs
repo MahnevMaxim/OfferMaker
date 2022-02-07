@@ -61,17 +61,14 @@ namespace API.Controllers
                 return BadRequest();
             }
 
-            if (user.Position != null)
+            user.Position = _context.Positions.Where(p => p.Id == user.Position.Id).FirstOrDefault();
+            //если должность была изменена, то отзываем токен
+            var posId = user_.Position?.Id;
+            if (posId != user.Position.Id)
             {
-                user.Position = _context.Positions.Where(p => p.Id == user.Position.Id).FirstOrDefault();
-                //если должность была изменена, то отзываем токен
-                var posId = user_.Position?.Id;
-                if (posId != user.Position.Id)
-                {
-                    user_.Position = user.Position;
-                    user_.Account.IsTokenActive = false;
-                    user.Account = user_.Account;
-                }
+                user_.Position = user.Position;
+                user_.Account.IsTokenActive = false;
+                user.Account = user_.Account;
             }
 
             _context.Entry(user_).CurrentValues.SetValues(user);

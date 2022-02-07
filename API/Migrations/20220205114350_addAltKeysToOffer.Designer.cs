@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    [Migration("20220120053953_Init")]
-    partial class Init
+    [Migration("20220205114350_addAltKeysToOffer")]
+    partial class addAltKeysToOffer
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,6 +62,9 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OriginalPath")
                         .HasColumnType("nvarchar(max)");
 
@@ -83,6 +86,9 @@ namespace API.Migrations
                     b.Property<string>("Guid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("OriginalPath")
                         .HasColumnType("nvarchar(max)");
@@ -231,7 +237,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 20, 5, 39, 50, 610, DateTimeKind.Utc).AddTicks(7523));
+                        .HasDefaultValue(new DateTime(2022, 2, 5, 11, 43, 49, 906, DateTimeKind.Utc).AddTicks(7841));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -275,13 +281,13 @@ namespace API.Migrations
                     b.Property<string>("AdvertisingsUp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Banner")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Banner_Id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 20, 5, 39, 50, 614, DateTimeKind.Utc).AddTicks(9063));
+                        .HasDefaultValue(new DateTime(2022, 2, 5, 11, 43, 49, 912, DateTimeKind.Utc).AddTicks(8301));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -300,9 +306,12 @@ namespace API.Migrations
 
                     b.Property<string>("Guid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsCreateByCostPrice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsHiddenTextNds")
@@ -340,6 +349,10 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Guid");
+
+                    b.HasIndex("Banner_Id");
 
                     b.ToTable("Offers");
                 });
@@ -357,13 +370,13 @@ namespace API.Migrations
                     b.Property<string>("AdvertisingsUp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Banner")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("Banner_Id")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 20, 5, 39, 50, 617, DateTimeKind.Utc).AddTicks(7529));
+                        .HasDefaultValue(new DateTime(2022, 2, 5, 11, 43, 49, 917, DateTimeKind.Utc).AddTicks(2648));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -378,9 +391,12 @@ namespace API.Migrations
 
                     b.Property<string>("Guid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsCreateByCostPrice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsHiddenTextNds")
@@ -419,6 +435,10 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("Guid");
+
+                    b.HasIndex("Banner_Id");
+
                     b.ToTable("OfferTemplates");
                 });
 
@@ -430,6 +450,7 @@ namespace API.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Permissions")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PositionName")
@@ -470,7 +491,7 @@ namespace API.Migrations
                     b.Property<string>("PhoneNumber2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PositionId")
+                    b.Property<int>("PositionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -491,13 +512,38 @@ namespace API.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Shared.Offer", b =>
+                {
+                    b.HasOne("Shared.Banner", "Banner_")
+                        .WithMany()
+                        .HasForeignKey("Banner_Id");
+
+                    b.Navigation("Banner_");
+                });
+
+            modelBuilder.Entity("Shared.OfferTemplate", b =>
+                {
+                    b.HasOne("Shared.Banner", "Banner_")
+                        .WithMany()
+                        .HasForeignKey("Banner_Id");
+
+                    b.Navigation("Banner_");
+                });
+
             modelBuilder.Entity("Shared.User", b =>
                 {
                     b.HasOne("Shared.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId");
+                        .WithMany("Users")
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("Shared.Position", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Shared.User", b =>

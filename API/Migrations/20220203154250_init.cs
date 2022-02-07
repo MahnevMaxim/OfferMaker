@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,8 @@ namespace API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Creatorid = table.Column<int>(type: "int", nullable: false),
-                    OriginalPath = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    OriginalPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,7 +31,8 @@ namespace API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Creatorid = table.Column<int>(type: "int", nullable: false),
-                    OriginalPath = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    OriginalPath = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,7 +130,7 @@ namespace API.Migrations
                     CostPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Markup = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CurrencyCharCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastChangePriceDate = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValue: new DateTime(2022, 1, 20, 5, 39, 50, 610, DateTimeKind.Utc).AddTicks(7523)),
+                    LastChangePriceDate = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValue: new DateTime(2022, 2, 3, 15, 42, 50, 506, DateTimeKind.Utc).AddTicks(6204)),
                     ActualPricePeriod = table.Column<int>(type: "int", nullable: false, defaultValue: 30),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Images = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -137,71 +139,6 @@ namespace API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Nomenclatures", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Offers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Currencies = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OfferName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OfferCreatorId = table.Column<int>(type: "int", nullable: false),
-                    ManagerId = table.Column<int>(type: "int", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 1, 20, 5, 39, 50, 614, DateTimeKind.Utc).AddTicks(9063)),
-                    Customer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OfferGroups = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OfferInfoBlocks = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsHiddenTextNds = table.Column<bool>(type: "bit", nullable: false),
-                    IsWithNds = table.Column<bool>(type: "bit", nullable: false),
-                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AdvertisingsUp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AdvertisingsDown = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Banner = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsShowPriceDetails = table.Column<bool>(type: "bit", nullable: false),
-                    IsCreateByCostPrice = table.Column<bool>(type: "bit", nullable: false),
-                    IsHideNomsPrice = table.Column<bool>(type: "bit", nullable: false),
-                    IsResultSummInRub = table.Column<bool>(type: "bit", nullable: false),
-                    Discount = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsTemplate = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Offers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "OfferTemplates",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OfferName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OfferCreatorId = table.Column<int>(type: "int", nullable: false),
-                    ManagerId = table.Column<int>(type: "int", nullable: false),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 1, 20, 5, 39, 50, 617, DateTimeKind.Utc).AddTicks(7529)),
-                    Customer = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OfferGroups = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OfferInfoBlocks = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsHiddenTextNds = table.Column<bool>(type: "bit", nullable: false),
-                    IsWithNds = table.Column<bool>(type: "bit", nullable: false),
-                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AdvertisingsUp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AdvertisingsDown = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Banner = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsShowPriceDetails = table.Column<bool>(type: "bit", nullable: false),
-                    IsCreateByCostPrice = table.Column<bool>(type: "bit", nullable: false),
-                    IsHideNomsPrice = table.Column<bool>(type: "bit", nullable: false),
-                    IsResultSummInRub = table.Column<bool>(type: "bit", nullable: false),
-                    Discount = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsTemplate = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OfferTemplates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -219,6 +156,85 @@ namespace API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Offers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Currencies = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OfferName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OfferCreatorId = table.Column<int>(type: "int", nullable: false),
+                    ManagerId = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 2, 3, 15, 42, 50, 512, DateTimeKind.Utc).AddTicks(2724)),
+                    Customer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OfferGroups = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OfferInfoBlocks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsHiddenTextNds = table.Column<bool>(type: "bit", nullable: false),
+                    IsWithNds = table.Column<bool>(type: "bit", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdvertisingsUp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdvertisingsDown = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Banner_Id = table.Column<int>(type: "int", nullable: true),
+                    IsShowPriceDetails = table.Column<bool>(type: "bit", nullable: false),
+                    IsCreateByCostPrice = table.Column<bool>(type: "bit", nullable: false),
+                    IsHideNomsPrice = table.Column<bool>(type: "bit", nullable: false),
+                    IsResultSummInRub = table.Column<bool>(type: "bit", nullable: false),
+                    Discount = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsTemplate = table.Column<bool>(type: "bit", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Offers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Offers_Banners_Banner_Id",
+                        column: x => x.Banner_Id,
+                        principalTable: "Banners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OfferTemplates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Guid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OfferName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OfferCreatorId = table.Column<int>(type: "int", nullable: false),
+                    ManagerId = table.Column<int>(type: "int", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2022, 2, 3, 15, 42, 50, 516, DateTimeKind.Utc).AddTicks(4602)),
+                    Customer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OfferGroups = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OfferInfoBlocks = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsHiddenTextNds = table.Column<bool>(type: "bit", nullable: false),
+                    IsWithNds = table.Column<bool>(type: "bit", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdvertisingsUp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AdvertisingsDown = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Banner_Id = table.Column<int>(type: "int", nullable: true),
+                    IsShowPriceDetails = table.Column<bool>(type: "bit", nullable: false),
+                    IsCreateByCostPrice = table.Column<bool>(type: "bit", nullable: false),
+                    IsHideNomsPrice = table.Column<bool>(type: "bit", nullable: false),
+                    IsResultSummInRub = table.Column<bool>(type: "bit", nullable: false),
+                    Discount = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsTemplate = table.Column<bool>(type: "bit", nullable: false),
+                    IsDelete = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OfferTemplates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OfferTemplates_Banners_Banner_Id",
+                        column: x => x.Banner_Id,
+                        principalTable: "Banners",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -230,7 +246,7 @@ namespace API.Migrations
                     PhoneNumber1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PositionId = table.Column<int>(type: "int", nullable: true)
+                    PositionId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,7 +256,7 @@ namespace API.Migrations
                         column: x => x.PositionId,
                         principalTable: "Positions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -272,6 +288,16 @@ namespace API.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Offers_Banner_Id",
+                table: "Offers",
+                column: "Banner_Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OfferTemplates_Banner_Id",
+                table: "OfferTemplates",
+                column: "Banner_Id");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Positions_PositionName",
                 table: "Positions",
                 column: "PositionName",
@@ -290,9 +316,6 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Advertisings");
-
-            migrationBuilder.DropTable(
-                name: "Banners");
 
             migrationBuilder.DropTable(
                 name: "Categories");
@@ -320,6 +343,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Banners");
 
             migrationBuilder.DropTable(
                 name: "Positions");

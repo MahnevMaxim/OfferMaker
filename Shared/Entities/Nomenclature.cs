@@ -20,7 +20,7 @@ namespace Shared
         public string CategoryGuid { get; set; }
 
         [Required]
-        public ObservableCollection<Description> Descriptions { get; set; }
+        public ObservableCollection<Description> Descriptions { get; set; } = new ObservableCollection<Description>();
 
         public decimal CostPrice { get; set; }
 

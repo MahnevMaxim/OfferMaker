@@ -235,7 +235,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 26, 11, 24, 18, 911, DateTimeKind.Utc).AddTicks(2454));
+                        .HasDefaultValue(new DateTime(2022, 2, 5, 11, 43, 49, 906, DateTimeKind.Utc).AddTicks(7841));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -285,7 +285,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 26, 11, 24, 18, 915, DateTimeKind.Utc).AddTicks(9933));
+                        .HasDefaultValue(new DateTime(2022, 2, 5, 11, 43, 49, 912, DateTimeKind.Utc).AddTicks(8301));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -304,7 +304,7 @@ namespace API.Migrations
 
                     b.Property<string>("Guid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsCreateByCostPrice")
                         .HasColumnType("bit");
@@ -347,6 +347,8 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Guid");
 
                     b.HasIndex("Banner_Id");
 
@@ -372,7 +374,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 26, 11, 24, 18, 919, DateTimeKind.Utc).AddTicks(2322));
+                        .HasDefaultValue(new DateTime(2022, 2, 5, 11, 43, 49, 917, DateTimeKind.Utc).AddTicks(2648));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -387,7 +389,7 @@ namespace API.Migrations
 
                     b.Property<string>("Guid")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsCreateByCostPrice")
                         .HasColumnType("bit");
@@ -431,6 +433,8 @@ namespace API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("Guid");
+
                     b.HasIndex("Banner_Id");
 
                     b.ToTable("OfferTemplates");
@@ -444,6 +448,7 @@ namespace API.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Permissions")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PositionName")
@@ -484,7 +489,7 @@ namespace API.Migrations
                     b.Property<string>("PhoneNumber2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PositionId")
+                    b.Property<int>("PositionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -526,10 +531,17 @@ namespace API.Migrations
             modelBuilder.Entity("Shared.User", b =>
                 {
                     b.HasOne("Shared.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId");
+                        .WithMany("Users")
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("Shared.Position", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Shared.User", b =>

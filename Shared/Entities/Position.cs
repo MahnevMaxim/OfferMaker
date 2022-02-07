@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Shared
 {
@@ -15,6 +16,10 @@ namespace Shared
         [Required]
         public string PositionName { get; set; }
 
-        public ObservableCollection<Permissions> Permissions { get; set; }
+        [Required]
+        public ObservableCollection<Permissions> Permissions { get; set; } = new ObservableCollection<Permissions>();
+
+        [JsonIgnore]
+        public List<User> Users { get; set; }
     }
 }

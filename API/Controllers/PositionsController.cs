@@ -131,6 +131,14 @@ namespace API.Controllers
                 return NotFound();
             }
 
+            if (position.Users != null)
+            {
+                string users = null;
+                position.Users.ToList().ForEach(u => users += u.FirstName + " " + u.LastName + ", ");
+                users = users.Remove(users.Length - 2);
+                return BadRequest("Нельзя удалить должность, пока эта должность назначена пользователям: " + users);
+            }
+
             _context.Positions.Remove(position);
             await _context.SaveChangesAsync();
 

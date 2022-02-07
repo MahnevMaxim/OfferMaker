@@ -3,96 +3,92 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace API.Migrations
 {
-    public partial class IsDelete : Migration
+    public partial class PermissionsRequired : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<string>(
+                name: "Permissions",
+                table: "Positions",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "",
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)",
+                oldNullable: true);
+
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreateDate",
                 table: "OfferTemplates",
                 type: "datetime2",
                 nullable: false,
-                defaultValue: new DateTime(2022, 1, 22, 5, 8, 27, 241, DateTimeKind.Utc).AddTicks(2326),
+                defaultValue: new DateTime(2022, 2, 4, 7, 1, 27, 610, DateTimeKind.Utc).AddTicks(4194),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
-                oldDefaultValue: new DateTime(2022, 1, 21, 10, 1, 56, 362, DateTimeKind.Utc).AddTicks(3722));
-
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDelete",
-                table: "OfferTemplates",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
+                oldDefaultValue: new DateTime(2022, 2, 3, 15, 42, 50, 516, DateTimeKind.Utc).AddTicks(4602));
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreateDate",
                 table: "Offers",
                 type: "datetime2",
                 nullable: false,
-                defaultValue: new DateTime(2022, 1, 22, 5, 8, 27, 237, DateTimeKind.Utc).AddTicks(5417),
+                defaultValue: new DateTime(2022, 2, 4, 7, 1, 27, 607, DateTimeKind.Utc).AddTicks(4458),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
-                oldDefaultValue: new DateTime(2022, 1, 21, 10, 1, 56, 359, DateTimeKind.Utc).AddTicks(2986));
-
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDelete",
-                table: "Offers",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
+                oldDefaultValue: new DateTime(2022, 2, 3, 15, 42, 50, 512, DateTimeKind.Utc).AddTicks(2724));
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "LastChangePriceDate",
                 table: "Nomenclatures",
                 type: "datetime2",
                 nullable: true,
-                defaultValue: new DateTime(2022, 1, 22, 5, 8, 27, 231, DateTimeKind.Utc).AddTicks(9649),
+                defaultValue: new DateTime(2022, 2, 4, 7, 1, 27, 602, DateTimeKind.Utc).AddTicks(9900),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
                 oldNullable: true,
-                oldDefaultValue: new DateTime(2022, 1, 21, 10, 1, 56, 354, DateTimeKind.Utc).AddTicks(7721));
+                oldDefaultValue: new DateTime(2022, 2, 3, 15, 42, 50, 506, DateTimeKind.Utc).AddTicks(6204));
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "IsDelete",
-                table: "OfferTemplates");
-
-            migrationBuilder.DropColumn(
-                name: "IsDelete",
-                table: "Offers");
+            migrationBuilder.AlterColumn<string>(
+                name: "Permissions",
+                table: "Positions",
+                type: "nvarchar(max)",
+                nullable: true,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreateDate",
                 table: "OfferTemplates",
                 type: "datetime2",
                 nullable: false,
-                defaultValue: new DateTime(2022, 1, 21, 10, 1, 56, 362, DateTimeKind.Utc).AddTicks(3722),
+                defaultValue: new DateTime(2022, 2, 3, 15, 42, 50, 516, DateTimeKind.Utc).AddTicks(4602),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
-                oldDefaultValue: new DateTime(2022, 1, 22, 5, 8, 27, 241, DateTimeKind.Utc).AddTicks(2326));
+                oldDefaultValue: new DateTime(2022, 2, 4, 7, 1, 27, 610, DateTimeKind.Utc).AddTicks(4194));
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "CreateDate",
                 table: "Offers",
                 type: "datetime2",
                 nullable: false,
-                defaultValue: new DateTime(2022, 1, 21, 10, 1, 56, 359, DateTimeKind.Utc).AddTicks(2986),
+                defaultValue: new DateTime(2022, 2, 3, 15, 42, 50, 512, DateTimeKind.Utc).AddTicks(2724),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
-                oldDefaultValue: new DateTime(2022, 1, 22, 5, 8, 27, 237, DateTimeKind.Utc).AddTicks(5417));
+                oldDefaultValue: new DateTime(2022, 2, 4, 7, 1, 27, 607, DateTimeKind.Utc).AddTicks(4458));
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "LastChangePriceDate",
                 table: "Nomenclatures",
                 type: "datetime2",
                 nullable: true,
-                defaultValue: new DateTime(2022, 1, 21, 10, 1, 56, 354, DateTimeKind.Utc).AddTicks(7721),
+                defaultValue: new DateTime(2022, 2, 3, 15, 42, 50, 506, DateTimeKind.Utc).AddTicks(6204),
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2",
                 oldNullable: true,
-                oldDefaultValue: new DateTime(2022, 1, 22, 5, 8, 27, 231, DateTimeKind.Utc).AddTicks(9649));
+                oldDefaultValue: new DateTime(2022, 2, 4, 7, 1, 27, 602, DateTimeKind.Utc).AddTicks(9900));
         }
     }
 }

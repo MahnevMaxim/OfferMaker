@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    [Migration("20220121100200_RemoveBanner")]
-    partial class RemoveBanner
+    [Migration("20220203154250_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,6 +62,9 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OriginalPath")
                         .HasColumnType("nvarchar(max)");
 
@@ -83,6 +86,9 @@ namespace API.Migrations
                     b.Property<string>("Guid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("OriginalPath")
                         .HasColumnType("nvarchar(max)");
@@ -231,7 +237,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 21, 10, 1, 56, 354, DateTimeKind.Utc).AddTicks(7721));
+                        .HasDefaultValue(new DateTime(2022, 2, 3, 15, 42, 50, 506, DateTimeKind.Utc).AddTicks(6204));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -281,7 +287,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 21, 10, 1, 56, 359, DateTimeKind.Utc).AddTicks(2986));
+                        .HasDefaultValue(new DateTime(2022, 2, 3, 15, 42, 50, 512, DateTimeKind.Utc).AddTicks(2724));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -303,6 +309,9 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCreateByCostPrice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsHiddenTextNds")
@@ -365,7 +374,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 21, 10, 1, 56, 362, DateTimeKind.Utc).AddTicks(3722));
+                        .HasDefaultValue(new DateTime(2022, 2, 3, 15, 42, 50, 516, DateTimeKind.Utc).AddTicks(4602));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -383,6 +392,9 @@ namespace API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsCreateByCostPrice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsHiddenTextNds")
@@ -474,7 +486,7 @@ namespace API.Migrations
                     b.Property<string>("PhoneNumber2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PositionId")
+                    b.Property<int>("PositionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -516,10 +528,17 @@ namespace API.Migrations
             modelBuilder.Entity("Shared.User", b =>
                 {
                     b.HasOne("Shared.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId");
+                        .WithMany("Users")
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("Shared.Position", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Shared.User", b =>

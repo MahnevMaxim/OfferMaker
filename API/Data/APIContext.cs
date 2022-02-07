@@ -85,6 +85,8 @@ namespace API.Data
 
             #region Offer
 
+            builder.Entity<Offer>().HasAlternateKey(o => o.Guid);
+
             builder.Entity<Offer>().Property(p => p.Customer).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<Customer>(v));
@@ -122,6 +124,8 @@ namespace API.Data
             #endregion Offer
 
             #region OfferTemplate 
+
+            builder.Entity<OfferTemplate>().HasAlternateKey(o => o.Guid);
 
             builder.Entity<OfferTemplate>().Property(p => p.Customer).HasConversion(
                 v => JsonConvert.SerializeObject(v),

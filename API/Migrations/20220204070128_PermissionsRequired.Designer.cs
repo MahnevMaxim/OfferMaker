@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(APIContext))]
-    [Migration("20220122050829_IsDelete")]
-    partial class IsDelete
+    [Migration("20220204070128_PermissionsRequired")]
+    partial class PermissionsRequired
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -62,6 +62,9 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("OriginalPath")
                         .HasColumnType("nvarchar(max)");
 
@@ -83,6 +86,9 @@ namespace API.Migrations
                     b.Property<string>("Guid")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("OriginalPath")
                         .HasColumnType("nvarchar(max)");
@@ -231,7 +237,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 22, 5, 8, 27, 231, DateTimeKind.Utc).AddTicks(9649));
+                        .HasDefaultValue(new DateTime(2022, 2, 4, 7, 1, 27, 602, DateTimeKind.Utc).AddTicks(9900));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -281,7 +287,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 22, 5, 8, 27, 237, DateTimeKind.Utc).AddTicks(5417));
+                        .HasDefaultValue(new DateTime(2022, 2, 4, 7, 1, 27, 607, DateTimeKind.Utc).AddTicks(4458));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -368,7 +374,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 1, 22, 5, 8, 27, 241, DateTimeKind.Utc).AddTicks(2326));
+                        .HasDefaultValue(new DateTime(2022, 2, 4, 7, 1, 27, 610, DateTimeKind.Utc).AddTicks(4194));
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -440,6 +446,7 @@ namespace API.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Permissions")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PositionName")
@@ -480,7 +487,7 @@ namespace API.Migrations
                     b.Property<string>("PhoneNumber2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PositionId")
+                    b.Property<int>("PositionId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -522,10 +529,17 @@ namespace API.Migrations
             modelBuilder.Entity("Shared.User", b =>
                 {
                     b.HasOne("Shared.Position", "Position")
-                        .WithMany()
-                        .HasForeignKey("PositionId");
+                        .WithMany("Users")
+                        .HasForeignKey("PositionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Position");
+                });
+
+            modelBuilder.Entity("Shared.Position", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Shared.User", b =>
