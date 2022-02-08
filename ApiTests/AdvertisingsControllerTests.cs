@@ -43,9 +43,10 @@ namespace ApiTests
                 //Act  
                 var response = await controller.AdvertisingsGet();
                 var res = response.Value;
+                var rr = context.Advertisings.Where(a => !a.IsDeleted).ToList();
 
                 //Assert 
-                Assert.True(res.Count() == context.Advertisings.Count());
+                Assert.True(res.Count() == context.Advertisings.Where(a=>!a.IsDeleted).Count());
             }
         }
 

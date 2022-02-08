@@ -224,13 +224,17 @@ namespace OfferMaker
             client.DownloadFile(new Uri(url), Path.Combine(imagesDirectory, filename));
         }
 
-        async internal Task SyncImagesWithServer(List<string> guids)
+        public List<string> GetExceptImages(List<string> guids)
         {
             string[] files = Directory.GetFiles(imagesDirectory);
             List<string> existingFilesGuids = new List<string>();
             files.ToList().ForEach(f => existingFilesGuids.Add(f.Split('.')[0].Replace(LocalDataConfig.ImageCacheDir + "\\", "")));
-            List<string> needDownloadGuids = guids.Except(existingFilesGuids).ToList();
+            return guids.Except(existingFilesGuids).ToList();
+        }
 
+        async internal Task SyncImagesWithServer(List<string> guids)
+        {
+            List<string> needDownloadGuids = GetExceptImages(guids);
             downLoadProgress = new DownLoadProgress() { BeginFilesCount = needDownloadGuids.Count };
             UpdateProgress();
 
@@ -321,6 +325,11 @@ namespace OfferMaker
             {
                 return new CallResult() { Error = new Error(ex) };
             }
+        }
+
+        async internal Task DownloadImage(string guid)
+        {
+            await Task.Run(() => GetImageFromServer(guid));
         }
     }
 

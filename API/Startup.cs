@@ -40,16 +40,16 @@ namespace API
             Log.Write("Debug");
             services.AddDbContext<APIContext>(options => options.UseSqlServer(Configuration.GetConnectionString("APIContext")).EnableSensitiveDataLogging());
 #else
-            Log.Write("Release");
-            try
-            {
-                string con = "Server=127.0.0.1,1433;Database=APIContext;User=sa;Password=dnhdhdsryWW33;";
-                services.AddDbContext<APIContext>(options => options.UseSqlServer(con));
-            }
-            catch(Exception ex)
-            {
-                Log.Write(ex.ToString());
-            }
+                        Log.Write("Release");
+                        try
+                        {
+                            Log.Write(Config.DbConnectionString);
+                            services.AddDbContext<APIContext>(options => options.UseSqlServer(Config.DbConnectionString));
+                        }
+                        catch(Exception ex)
+                        {
+                            Log.Write(ex.ToString());
+                        }
 #endif
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>

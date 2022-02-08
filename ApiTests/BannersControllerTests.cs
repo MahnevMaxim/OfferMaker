@@ -45,7 +45,7 @@ namespace ApiTests
                 var res = response.Value;
 
                 //Assert 
-                Assert.True(res.Count() == context.Banners.Count());
+                Assert.True(res.Count() == context.Banners.Where(b=>!b.IsDeleted).Count());
             }
         }
 

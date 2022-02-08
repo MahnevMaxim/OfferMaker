@@ -26,7 +26,7 @@ namespace API.Controllers
         [HttpGet(Name = nameof(AdvertisingsGet))]
         public async Task<ActionResult<IEnumerable<Advertising>>> AdvertisingsGet()
         {
-            return await _context.Advertisings.ToListAsync();
+            return await _context.Advertisings.Where(b => !b.IsDeleted).ToListAsync();
         }
 
         [HttpGet("{id}", Name = nameof(AdvertisingGet))]

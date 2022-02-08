@@ -923,7 +923,7 @@
                                        Visibility="{Binding IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                                        VerticalAlignment="Center"
                                        Margin="5"
-                                       Text="Затраты"
+                                       Text="С/с"
                                        FontFamily="Arial"
                                        FontSize="12"
                                        FontWeight="Bold" />

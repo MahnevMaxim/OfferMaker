@@ -29,7 +29,7 @@ namespace API
 #if DEBUG
                 string con = "Server=(localdb)\\mssqllocaldb;Database=APIContext;Trusted_Connection=True;MultipleActiveResultSets=true";
 #else
-            string con = "Server=127.0.0.1,1433;Database=kip;User=sa;Password=dnhdhdsryWW33;";
+                                string con = Config.DbConnectionString;
 #endif
                 DbContextOptions<APIContext> dbContextOptions = new DbContextOptionsBuilder<APIContext>()
                     .UseSqlServer(con)
@@ -47,7 +47,7 @@ namespace API
                     var res = controller.CurrencyEdit(0, curr).Result;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Write(ex);
             }

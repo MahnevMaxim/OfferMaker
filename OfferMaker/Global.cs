@@ -50,6 +50,5 @@ namespace OfferMaker
         public static ObservableCollection<Offer> OfferTemplates { get => Main.TemplatesStore.Offers; }
 
         public static ObservableCollection<Offer> Offers { get => Main.ArchiveStore.Offers; }
-
     }
 }

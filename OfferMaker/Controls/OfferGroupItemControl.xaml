@@ -324,7 +324,7 @@
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
                     <DataGridTemplateColumn Header="Название" DisplayIndex="0" Width="320" CellTemplate="{StaticResource NomTitle}"/>
-                    <DataGridTemplateColumn Header="Затраты" DisplayIndex="1" Width="95" CellTemplate="{StaticResource NomCostPriceTextBlock}">
+                    <DataGridTemplateColumn Header="С/с" DisplayIndex="1" Width="95" CellTemplate="{StaticResource NomCostPriceTextBlock}">
                         <DataGridTemplateColumn.HeaderStyle>
                             <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
                                 <Setter Property="Visibility" Value="Collapsed"/>
@@ -585,7 +585,7 @@
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Затраты" Grid.Column="1" 
+                <TextBlock Text="С/с" Grid.Column="1" 
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            VerticalAlignment="Center"
                            Margin="5"

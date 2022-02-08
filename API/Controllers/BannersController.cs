@@ -26,7 +26,7 @@ namespace API.Controllers
         [HttpGet(Name = nameof(BannersGet))]
         public async Task<ActionResult<IEnumerable<Banner>>> BannersGet()
         {
-            return await _context.Banners.ToListAsync();
+            return await _context.Banners.Where(b=>!b.IsDeleted).ToListAsync();
         }
 
         [HttpGet("{id}", Name = nameof(BannerGet))]

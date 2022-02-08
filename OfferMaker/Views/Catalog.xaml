@@ -345,7 +345,7 @@
                                         </Style>
                                     </DataGridTextColumn.ElementStyle>
                                 </DataGridTextColumn>
-                                <DataGridTextColumn Header="Затраты"
+                                <DataGridTextColumn Header="С/с"
                                                     Binding="{Binding CostPrice, StringFormat=F2}"
                                                     DisplayIndex="1" />
                                 <DataGridTextColumn Header="Наценка"

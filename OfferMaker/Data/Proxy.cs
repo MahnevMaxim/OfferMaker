@@ -397,7 +397,7 @@ namespace OfferMaker
             if (AppMode == AppMode.Offline)
             {
                 var cacheResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersPath);
-                var localResult = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersPath);
+                var localResult = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersPath, true);
                 return MergeCallResults(cacheResult, localResult);
             }
 
@@ -407,7 +407,7 @@ namespace OfferMaker
                 LocalData.UpdateCache(serverResult.Data, LocalDataConfig.ServerCacheOffersPath);
             else
                 serverResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersPath);
-            var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersPath);
+            var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersPath, true);
             return MergeCallResults(serverResult, localResult_);
         }
 

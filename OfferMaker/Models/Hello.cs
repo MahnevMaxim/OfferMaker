@@ -21,7 +21,6 @@ namespace OfferMaker
         public bool isAuthorizationOk;
 
         User User { get; set; }
-        //public string AccessToken { get; set; }
 
         Main main;
         DataRepository dataRepository;
@@ -329,9 +328,9 @@ namespace OfferMaker
         async private Task InitData()
         {
             main.DataRepository = DataRepository.GetInstance(Settings.GetInstance().AppMode, Settings.GetToken()); //инициализация хранилища
-            //dataRepository = main.DataRepository;
             await ReciveData(); //инициализация данных
             InitModules(); //инициализация модулей на основе данных
+            await UploadImages();
         }
 
         /// <summary>
@@ -427,9 +426,7 @@ namespace OfferMaker
             SetHelloStatus("получаем хинты...");
             var hintsCr = await dataRepository.HintsGet();
             if (hintsCr.Success)
-            {
                 hints = hintsCr.Data;
-            }
             else
                 errorMessage += hintsCr.Error.Message + "\n";
 
@@ -437,9 +434,7 @@ namespace OfferMaker
             SetHelloStatus("получаем баннеры...");
             var bannersCr = await dataRepository.BannersGet();
             if (bannersCr.Success)
-            {
                 banners = bannersCr.Data;
-            }
             else
                 errorMessage += bannersCr.Error.Message + "\n";
 
@@ -447,9 +442,7 @@ namespace OfferMaker
             SetHelloStatus("получаем рекламу...");
             var advertisingsCr = await dataRepository.AdvertisingsGet();
             if (advertisingsCr.Success)
-            {
                 advertisings = advertisingsCr.Data;
-            }
             else
                 errorMessage += advertisingsCr.Error.Message + "\n";
 
@@ -516,6 +509,20 @@ namespace OfferMaker
             SetOffers(offerTemplates, false);
             main.TemplatesStore = new OfferStore(offerTemplates, main.User);
             main.TemplatesStore.ApplyOfferFilter();
+        }
+
+        async private Task UploadImages()
+        {
+            List<string> guids = new List<string>();
+            main.BannersManager.Banners.ToList().ForEach(b=>guids.Add(b.Guid));
+            main.BannersManager.Advertisings.ToList().ForEach(a => guids.Add(a.Guid));
+            main.Users.ToList().ForEach(u => guids.Add(u.Image.Guid));
+            List<string> guids_ = ImageManager.GetInstance().GetExceptImages(guids);
+            foreach (var guid in guids_)
+            {
+                SetHelloStatus(guid);
+                await ImageManager.GetInstance().DownloadImage(guid);
+            }
         }
 
         /// <summary>
