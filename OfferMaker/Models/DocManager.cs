@@ -181,7 +181,7 @@ namespace OfferMaker
                 }
                 else
                 {
-                    //Global.Main.SendMess("Ошибка при попытке считать файл");
+                    Global.Main.SendMess("Ошибка при попытке считать файл");
                 }
             }
         }

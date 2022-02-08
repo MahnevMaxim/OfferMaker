@@ -33,7 +33,7 @@ namespace OfferMaker
 
         private static void OnTextBoxMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ClickCount == 2)
+            if (e.ClickCount == 3)
             {
                 ((TextBox)sender).SelectAll();
             }

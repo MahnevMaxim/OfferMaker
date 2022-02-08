@@ -120,6 +120,15 @@ namespace OfferMaker
             }
         }
 
+        async public void AddAdvertisingFromPdf()
+        {
+            string path = Helpers.GetFilePath("Pdf file (*.pdf) | *.pdf");
+            if (path != null)
+            {
+                
+            }
+        }
+
         /// <summary>
         /// Удаление рекламного материала.
         /// </summary>

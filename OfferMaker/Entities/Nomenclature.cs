@@ -286,7 +286,7 @@ namespace OfferMaker
             if (CostPrice != nomenclature.CostPrice || Markup != nomenclature.Markup)
                 return false;
 
-            if (nomenclature.Image.Guid != Image.Guid)
+            if (nomenclature.Image?.Guid != Image?.Guid)
                 return false;
 
             if (nomenclature.Images.Count != Images.Count)
