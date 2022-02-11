@@ -33,18 +33,21 @@ namespace OfferMaker
             return path;
         }
 
+        /// <summary>
+        /// Сериализация и сохранение объектов по указанному пути.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static CallResult SaveObject(string filePath, object obj)
         {
             try
             {
                 if (!Directory.Exists(LocalDataConfig.ServerCacheDataDir))
-                {
                     Directory.CreateDirectory(LocalDataConfig.ServerCacheDataDir);
-                }
                 if (!Directory.Exists(LocalDataConfig.LocalDataDir))
-                {
                     Directory.CreateDirectory(LocalDataConfig.LocalDataDir);
-                }
+
                 string output = JsonConvert.SerializeObject(obj);
                 File.WriteAllText(filePath, output);
                 return new CallResult() { SuccessMessage = "Изменения сохранены" };
@@ -56,6 +59,12 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Десериализация json объектов.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
         public static T InitObject<T>(string filePath)
         {
             try

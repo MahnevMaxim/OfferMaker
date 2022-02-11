@@ -63,6 +63,8 @@ namespace API.Controllers
             {
                 var files = Directory.GetFiles(uploadDir);
                 var file = files.Where(f => f.Contains(guid)).FirstOrDefault();
+                if (file == null)
+                    return null;
                 string ext = Path.GetExtension(file).Replace(".", "");
                 string fileName = Path.GetFileName(file);
                 return PhysicalFile(file, "image/" + ext, fileName);

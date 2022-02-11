@@ -8,8 +8,6 @@ namespace OfferMaker
 {
     public class Banner : Image
     {
-        public int Id { get; set; }
-
         public Banner(string guid, int creatorid, string path) : base(guid, creatorid, path)
         {
 

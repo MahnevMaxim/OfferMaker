@@ -29,4 +29,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="{x:Type local:ZoomBorder}">
+        
+    </Style>
 </ResourceDictionary>

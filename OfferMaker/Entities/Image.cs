@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using System.Windows.Media.Imaging;
 
 namespace OfferMaker
 {
@@ -41,6 +42,9 @@ namespace OfferMaker
         public bool IsCopied { get; set; }
 
         public bool IsUploaded { get; set; }
+
+        [JsonIgnore]
+        public BitmapImage Bitmap { get; set; }
 
         /// <summary>
         /// Флаг, указывающий, что при сохранении номенклатуры нужно загрузить изображение.

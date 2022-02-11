@@ -33,8 +33,6 @@ namespace API.Controllers
         /// <param name="password"></param>
         /// <returns></returns>
         [HttpPost("/token", Name = nameof(AccountGetToken))]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         async public Task<ActionResult> AccountGetToken(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(password))

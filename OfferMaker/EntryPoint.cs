@@ -17,23 +17,8 @@ namespace OfferMaker
     class EntryPoint
     {
         readonly string apiEndpoint = Global.apiEndpoint;
-        string token;
 
-        User user;
-        DataRepository dataRepository;
-        ObservableCollection<User> users;
-        ObservableCollection<Position> positions;
-        ObservableCollection<Category> categories;
-        ObservableCollection<Nomenclature> nomenclatures;
-        ObservableCollection<NomenclatureGroup> nomenclatureGroups;
-        ObservableCollection<Offer> offers;
-        ObservableCollection<Offer> offerTemplates;
-        ObservableCollection<Currency> currencies;
-        List<Hint> hints;
-        ObservableCollection<Banner> banners;
-        ObservableCollection<Advertising> advertisings;
-
-        async internal void Run()
+        internal void Run()
         {
             //настройка для логирования необработанных исключений
             AppDomain.CurrentDomain.UnhandledException +=

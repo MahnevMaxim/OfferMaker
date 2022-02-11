@@ -67,18 +67,36 @@ namespace OfferMaker
             try
             {
                 if (!Directory.Exists(imagesDirectory))
-                {
                     Directory.CreateDirectory(imagesDirectory);
-                }
 
                 string ext = Path.GetExtension(image.OriginalPath);
                 string filePath = Path.Combine(imagesDirectory, image.Guid + ext);
-                FileCopy(image.OriginalPath, filePath, maxImageWidth);
+                if (image.OriginalPath != null)
+                    FileCopy(image.OriginalPath, filePath, maxImageWidth);
+                else
+                    FileCreate(image.Bitmap, filePath);
                 image.IsCopied = true;
             }
             catch (Exception ex)
             {
                 Log.Write("исключение при попытке скорировать изображение в кэш", ex);
+            }
+        }
+
+        /// <summary>
+        /// С BitmapImage свойством на настоящий момент у нас только рекламные материалы. 
+        /// Метод создаёт файл по указанному пути из BitmapImage.
+        /// </summary>
+        /// <param name="bitmap"></param>
+        /// <param name="filePath"></param>
+        private void FileCreate(BitmapImage bitmap, string filePath)
+        {
+            BitmapEncoder encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bitmap));
+
+            using (var fileStream = new FileStream(filePath + ".png", FileMode.Create))
+            {
+                encoder.Save(fileStream);
             }
         }
 
@@ -244,7 +262,7 @@ namespace OfferMaker
                 UpdateProgress();
                 if (downLoadProgress.IsStop)
                     break;
-                var cr = await Task.Run(()=> GetImageFromServer(guid));
+                var cr = await Task.Run(() => GetImageFromServer(guid));
                 if (cr.Success)
                 {
                     downLoadProgress.CopiedFilesCount++;

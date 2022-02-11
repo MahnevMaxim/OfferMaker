@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Shared;
+using System.Windows.Media.Imaging;
 
 namespace OfferMaker
 {
@@ -66,13 +67,13 @@ namespace OfferMaker
         async public void RemoveBanner(Banner banner)
         {
             CallResult cr = await Global.Main.DataRepository.BannerDelete(banner);
-            if(cr.Success)
+            if (cr.Success)
             {
                 Banners.Remove(banner);
             }
             else
             {
-                if(cr.Error.Code==404)
+                if (cr.Error.Code == 404)
                     Banners.Remove(banner);
                 OnSendMessage(cr.Message);
             }
@@ -88,7 +89,7 @@ namespace OfferMaker
             {
                 Banner banner = new Banner(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
                 Global.ImageManager.Add(banner, null);
-                
+
                 CallResult cr = await Global.Main.DataRepository.BannerCreate(banner);
                 if (cr.Success)
                 {
@@ -106,26 +107,47 @@ namespace OfferMaker
         {
             string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
             if (path != null)
-            {
-                Advertising advertising = new Advertising(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
-                Global.ImageManager.Add(advertising, null);
+                await AddAdvertisingFromPath(path);
+        }
 
-                CallResult cr = await Global.Main.DataRepository.AdvertisingCreate(advertising);
-                if (cr.Success)
-                {
-                    Advertisings.Add(advertising);
-                }
-                else
-                    OnSendMessage(cr.Message);
+        async public Task AddAdvertisingFromPath(string path)
+        {
+            Advertising advertising = new Advertising(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
+            Global.ImageManager.Add(advertising, null);
+
+            CallResult cr = await Global.Main.DataRepository.AdvertisingCreate(advertising);
+            if (cr.Success)
+            {
+                Advertisings.Add(advertising);
             }
+            else
+                OnSendMessage(cr.Message);
         }
 
         async public void AddAdvertisingFromPdf()
         {
-            string path = Helpers.GetFilePath("Pdf file (*.pdf) | *.pdf");
-            if (path != null)
+            string pdfPath = Helpers.GetFilePath("Pdf file (*.pdf) | *.pdf");
+            if (pdfPath != null)
             {
-                
+                PdfGallery pg = new PdfGallery(pdfPath);
+                pg.Run();
+                MvvmFactory.CreateWindow(pg, new ViewModels.PdfGalleryViewModel(), new Views.PdfGallery(), ViewMode.ShowDialog);
+                if (pg.ResultPages.Count > 0)
+                {
+                    foreach(var page in pg.ResultPages)
+                    {
+                        Advertising advertising = new Advertising(Guid.NewGuid().ToString(), Global.User.Id, null) { IsNew = true, Bitmap = (BitmapImage)page.PageImage };
+                        Global.ImageManager.Add(advertising, null);
+
+                        CallResult cr = await Global.Main.DataRepository.AdvertisingCreate(advertising);
+                        if (cr.Success)
+                        {
+                            Advertisings.Add(advertising);
+                        }
+                        else
+                            OnSendMessage(cr.Message);
+                    }
+                }
             }
         }
 

@@ -20,7 +20,6 @@ using System.Net;
 using System.Xml.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
-using Newtonsoft.Json;
 using System.Text.Json;
 using System.Net.Http.Headers;
 using MahApps.Metro.Controls;
