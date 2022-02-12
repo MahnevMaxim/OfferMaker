@@ -75,6 +75,14 @@
                     VerticalAlignment="Top"
                     Width="196"
                     Click="NewExportButton_Click" />
+            <Button x:Name="ExportOldNomenclaturesButton"
+                    Style="{DynamicResource MahApps.Styles.Button.Square}"
+                    Content="Export all"
+                    HorizontalAlignment="Left"
+                    Margin="10"
+                    VerticalAlignment="Top"
+                    Width="196"
+                    Click="ExportOldNomenclaturesButton_Click"/>
         </StackPanel>
         <TextBox Margin="10" TextWrapping="Wrap" Grid.Column="1" x:Name="messagesTextBox"/>
 

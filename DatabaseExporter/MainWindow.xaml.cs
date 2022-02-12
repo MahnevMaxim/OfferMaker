@@ -24,6 +24,7 @@ using System.Text.Json;
 using System.Net.Http.Headers;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using Nom= DatabaseExporter.Nomenclatures;
 
 namespace DatabaseExporter
 {
@@ -57,6 +58,7 @@ namespace DatabaseExporter
         //позиция по умолчанию
         ApiLib.Position pos = new ApiLib.Position() { Permissions = new ObservableCollection<Permissions>() { Permissions.CanAll }, PositionName = "Админ" };
         private readonly AdsContext _context;
+        Nom.CommercialdbContext context = new Nom.CommercialdbContext();
 
         List<Ad> ads;
 
@@ -65,13 +67,11 @@ namespace DatabaseExporter
             InitializeComponent();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-
             string con = "Server=(localdb)\\mssqllocaldb;Database=AdsStore;Trusted_Connection=True;";
             var optionsBuilder = new DbContextOptionsBuilder<AdsContext>();
             optionsBuilder.UseSqlServer(con);
             _context = new AdsContext(optionsBuilder.Options);
             ads = _context.Ads.ToList();
-
             //var files = Directory.GetFiles("avitoimages");
             //foreach(var file in files)
             //{
@@ -387,6 +387,42 @@ namespace DatabaseExporter
                 try
                 {
                     //var res = await client.NomenclaturesPOSTAsync(nomenclature);
+                }
+                catch (Exception ex)
+                {
+                    Console.Write(ex);
+                }
+            }
+        }
+
+        async private void ExportOldNomenclaturesButton_Click(object sender, RoutedEventArgs e)
+        {
+            var oldNoms = context.Items.Include(i => i.Descriptions).ToList();
+            ObservableCollection<Nomenclature> noms = new ObservableCollection<Nomenclature>();
+            foreach(var oldNom in oldNoms)
+            {
+                string title = oldNom.Name;
+                List<Description> descs = new List<Description>();
+                foreach (var desc in oldNom.Descriptions)
+                {
+                    descs.Add(new Description() { Text = desc.Text, IsEnabled=true });
+                }
+                decimal costPrice = (decimal)oldNom.CostPrice;
+                decimal markUp = (decimal)oldNom.MarkUp;
+                string charCode = "RUB";
+                Nomenclature nomenclature = new Nomenclature()
+                {
+                    CostPrice = costPrice,
+                    Descriptions = descs,
+                    Markup = markUp,
+                    Title = title,
+                    CurrencyCharCode = charCode
+                };
+
+                try
+                {
+                    var res = await client.NomenclaturePostAsync(nomenclature);
+                    Message(nomenclature.Title + "..................добавлено");
                 }
                 catch (Exception ex)
                 {
