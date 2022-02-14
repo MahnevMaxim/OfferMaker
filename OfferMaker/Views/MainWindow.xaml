@@ -650,7 +650,7 @@
                                     VerticalAlignment="Top"
                                     BorderThickness="1"
                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                <Image Source="{Binding BannerImagePath}"
+                                <!--<Image Source="{Binding BannerImagePath}"
                                        Margin="2"
                                        ToolTip="Баннер">
                                     <Image.InputBindings>
@@ -658,6 +658,11 @@
                                                       CommandParameter="OpenBanners"
                                                       Command="{Binding Cmd}" />
                                     </Image.InputBindings>
+                                </Image>-->
+                                <Image>
+                                    <Image.Source>
+                                        <BitmapImage UriSource="/Images/no-profile-picture.png" />
+                                    </Image.Source>
                                 </Image>
                             </Border>
                             <ComboBox ItemsSource="{Binding Managers}"

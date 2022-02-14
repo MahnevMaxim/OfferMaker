@@ -1,9 +1,13 @@
 ﻿@page "/"
 @using ApiLib
+@using Blazor.Client
 @attribute [Authorize]
 @inject IUserService UserService
+@inject ApiService ApiService
 @inject IAuthenticationService AuthenticationService
 @inject NavigationManager NavigationManager
+@using System.IO
+@inject IJSRuntime JS
 
 <div class="card mt-4">
     <h4 class="card-header">You're logged in with Blazor WebAssembly & JWT!!</h4>
@@ -25,12 +29,21 @@
     </div>
 </div>
 
+<div class="card mt-4">
+    <h4 class="card-header">Offer Maker Beta</h4>
+    <div class="card-body">
+        <a class="btn btn-secondary" href="@(apiBaseUrl)/api/Download?fileName=OfferMaker.zip" role="button">Скачать Offer Maker</a>
+    </div>
+</div>
+
 @code {
     private bool loading;
     private IEnumerable<User> users;
+    string apiBaseUrl;
 
     protected override async Task OnInitializedAsync()
     {
+        apiBaseUrl = ApiService.GetApiBaseUrl();
         if (AuthenticationService.User == null) return;
         loading = true;
         users = await UserService.GetAll();

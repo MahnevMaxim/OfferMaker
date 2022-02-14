@@ -70,7 +70,7 @@ namespace OfferMaker
             }
         }
 
-        public string AppModeString 
+        public string AppModeString
         {
             get => appModeString;
             set
@@ -126,7 +126,10 @@ namespace OfferMaker
             //инициализация хранилища
             dataRepository = DataRepository.GetInstance(Settings.GetInstance().AppMode);
             //инициализация API-клиента
-            httpClient = new System.Net.Http.HttpClient();
+            httpClient = new System.Net.Http.HttpClient()
+            {
+                Timeout = new TimeSpan(0, 0, 0, 10)
+            };
             client = new Client(apiEndpoint, httpClient);
         }
 
@@ -141,7 +144,7 @@ namespace OfferMaker
             MvvmFactory.CreateWindow(Global.Settings, new ViewModels.SettingsViewModel(), new Views.Settings(true), ViewMode.ShowDialog);
             AppModeString = main.Settings.AppMode.ToString();
         }
-           
+
         #endregion Комманды
 
         #region Авторизация
@@ -195,7 +198,6 @@ namespace OfferMaker
             bool isOk = CheckUser();
             if (!isOk)
             {
-
                 OnSendMessage("Неправильный логин или пароль");
                 return false;
             }
@@ -257,7 +259,7 @@ namespace OfferMaker
             }
             catch (Exception ex)
             {
-                return new CallResult() { Error = new Error(ex) };
+                return new CallResult() { Error = new Error("Не удалось авторизоваться.\n" + ex.Message) };
             }
         }
 
@@ -514,7 +516,7 @@ namespace OfferMaker
         async private Task UploadImages()
         {
             List<string> guids = new List<string>();
-            main.BannersManager.Banners.ToList().ForEach(b=>guids.Add(b.Guid));
+            main.BannersManager.Banners.ToList().ForEach(b => guids.Add(b.Guid));
             main.BannersManager.Advertisings.ToList().ForEach(a => guids.Add(a.Guid));
             main.Users.ToList().ForEach(u => guids.Add(u.Image.Guid));
             List<string> guids_ = ImageManager.GetInstance().GetExceptImages(guids);

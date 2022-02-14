@@ -27,7 +27,7 @@ namespace API
             string destination = context.Request.Path;
 
             //если обновление токена или авторизация, то пропускаем запрос
-            if(destination== "/updatetoken" || destination== "/token")
+            if(destination== "/updatetoken" || destination== "/token" || destination == "/api/Download")
             {
                 await _next.Invoke(context);
             }

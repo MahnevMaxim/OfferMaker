@@ -3,11 +3,3 @@ Debug
 
 Connection complete
 
-ImagesController GetSystem.ArgumentNullException: Value cannot be null. (Parameter 'value')
-   at System.String.Contains(String value)
-   at API.Controllers.ImagesController.<>c__DisplayClass4_0.<ImageGet>b__0(String f) in C:\Users\Maxxx\source\repos\OfferMaker665\API\Controllers\ImagesController.cs:line 65
-   at System.Linq.Enumerable.WhereArrayIterator`1.MoveNext()
-   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Boolean& found)
-   at System.Linq.Enumerable.FirstOrDefault[TSource](IEnumerable`1 source)
-   at API.Controllers.ImagesController.ImageGet(String guid) in C:\Users\Maxxx\source\repos\OfferMaker665\API\Controllers\ImagesController.cs:line 65
-

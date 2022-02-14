@@ -14,7 +14,7 @@ namespace OfferMaker
         Position selectedPosition;
         Position newUserSelectedPosition;
         User selectedUser;
-        User newUser = new User() { Image = Global.NoProfileImage };
+        User newUser = new User();
 
         public ObservableCollection<User> Users { get; set; }
 
@@ -232,7 +232,7 @@ namespace OfferMaker
             if (cr.Success)
             {
                 Users.Add(cr.Data);
-                NewUser = new User() { Image = Global.NoProfileImage };
+                NewUser = new User();
                 ((ViewModels.AdminPanelViewModel)viewModel).ClearPwdNewUserPasswordTextBox();
                 MenuSelectedIndex = 1;
             }

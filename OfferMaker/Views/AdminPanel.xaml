@@ -578,10 +578,25 @@
                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                                                     Width="200">
                                                 <Grid>
-                                                    <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.Image.LocalPhotoPath}"
-                                                           Width="60"
-                                                           Height="60"
-                                                           Margin="10" />
+                                                    <Image>
+                                                        <Image.Source>
+                                                            <BitmapImage UriSource="/Images/no-profile-picture.png" />
+                                                        </Image.Source>
+                                                        <Image.Style>
+                                                            <Style TargetType="{x:Type Image}">
+                                                                <Setter Property="Visibility"
+                                                                        Value="Collapsed" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.Image}"
+                                                                                 Value="{x:Null}">
+                                                                        <Setter Property="Visibility"
+                                                                                Value="Visible" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>
+                                                    </Image>
+                                                    <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.Image.LocalPhotoPath}" />
                                                     <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
                                                             CommandParameter="NewUserPhotoEdit"
                                                             Style="{StaticResource MahApps.Styles.Button.Square}"

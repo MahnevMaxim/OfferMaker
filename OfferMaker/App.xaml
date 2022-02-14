@@ -33,8 +33,10 @@
                     </Style>
                 </ResourceDictionary>
                 <ResourceDictionary>
-                    <Style TargetType="Control" x:Key="VisibilityStyle">
-                        <Setter Property="Visibility" Value="Visible" />
+                    <Style TargetType="Control"
+                           x:Key="VisibilityStyle">
+                        <Setter Property="Visibility"
+                                Value="Visible" />
                     </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>

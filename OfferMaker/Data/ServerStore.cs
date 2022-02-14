@@ -49,7 +49,10 @@ namespace OfferMaker
 
         public ServerStore(string accessToken)
         {
-            httpClient = new HttpClient();
+            httpClient = new HttpClient()
+            {
+                Timeout = new TimeSpan(0, 0, 0, 10)
+            };
             if (accessToken != null)
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
             client = new Client(apiEndpoint, httpClient);

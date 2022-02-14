@@ -15,6 +15,7 @@ namespace Blazor.Client
         HttpClient _httpClient;
         ApiLib.Client apiClient;
         ILocalStorageService _localStorageService;
+        string apiBaseUrl = "https://localhost:44313";
 
         public ApiService(HttpClient httpClient, ILocalStorageService localStorageService)
         {
@@ -27,8 +28,10 @@ namespace Blazor.Client
             User user = await _localStorageService.GetItemAsync<User>("user");
             if (user != null)
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Account.Token);
-            apiClient = new ApiLib.Client("https://localhost:44313", _httpClient);
+            apiClient = new ApiLib.Client(apiBaseUrl, _httpClient);
             return apiClient;
         }
+
+        public string GetApiBaseUrl() => apiBaseUrl;
     }
 }
