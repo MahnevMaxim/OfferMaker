@@ -168,7 +168,7 @@
                     </mah:HamburgerMenuIconItem>
 
                     <mah:HamburgerMenuIconItem x:Name="permissionsItem"
-                                               IsVisible="{Binding IsCanControlPositions}"
+                                               IsVisible="{Binding IsCanControlUsers}"
                                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.ShowHamburgerAboutCommand}"
                                                Label="Разрешения">
                         <mah:HamburgerMenuIconItem.Icon>

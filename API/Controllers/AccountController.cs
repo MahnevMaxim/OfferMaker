@@ -33,6 +33,8 @@ namespace API.Controllers
         /// <param name="password"></param>
         /// <returns></returns>
         [HttpPost("/token", Name = nameof(AccountGetToken))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         async public Task<ActionResult> AccountGetToken(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(password))
@@ -84,6 +86,7 @@ namespace API.Controllers
                 return BadRequest(new { errorText = ex.StackTrace });
             }
 
+            user.Account.Password = null;
             var response = new
             {
                 access_token = encodedJwt,
@@ -105,7 +108,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(object))]
         async public Task<ActionResult> GetToken()
         {
-            //return BadRequest();
+            return BadRequest();
 
             var claims = new List<Claim> { new Claim(ClaimsIdentity.DefaultNameClaimType, "Export") };
             claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, Permissions.CanAll.ToString()));

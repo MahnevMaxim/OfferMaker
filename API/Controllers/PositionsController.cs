@@ -42,7 +42,7 @@ namespace API.Controllers
             return position;
         }
 
-        [Authorize(Roles = "CanControlPositions,CanAll")]
+        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPut("{id}", Name = nameof(PositionEdit))]
         public async Task<IActionResult> PositionEdit(int id, Position position)
         {
@@ -87,7 +87,7 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = "CanControlPositions,CanAll")]
+        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPut(Name = nameof(PositionsEdit))]
         public async Task<ActionResult<IEnumerable<Position>>> PositionsEdit(IEnumerable<Position> positions)
         {
@@ -107,7 +107,7 @@ namespace API.Controllers
             return new ActionResult<IEnumerable<Position>>(res);
         }
 
-        [Authorize(Roles = "CanControlPositions,CanAll")]
+        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpPost(Name = nameof(PositionPost))]
         public async Task<ActionResult<Position>> PositionPost(Position position)
         {
@@ -121,7 +121,7 @@ namespace API.Controllers
             return CreatedAtAction("PositionGet", new { id = position.Id }, position);
         }
 
-        [Authorize(Roles = "CanControlPositions,CanAll")]
+        [Authorize(Roles = "CanControlUsers,CanAll")]
         [HttpDelete("{id}", Name = nameof(PositionDelete))]
         public async Task<IActionResult> PositionDelete(int id)
         {

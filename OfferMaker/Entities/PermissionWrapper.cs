@@ -27,11 +27,9 @@ namespace OfferMaker
         private string GetName(Permissions permission) => permission switch
         {
             Permissions.CanAll => "Админ",
-            Permissions.CanControlPositions => "Управление должностями",
             Permissions.CanControlUsers => "Управление пользователями",
             Permissions.CanControlArchive => "Управление архивом",
             Permissions.CanControlTemplates => "Управление шаблонами",
-            //Permissions.CanEditPhotos => "Разрешение изменять и загружать фотографии",
             Permissions.CanEditCurrencies => "Разрешение изменять валюты",
             Permissions.CanEditProducts => "Разрешение изменять номенклатуру",
             Permissions.CanUseManager => "Разрешение назначать менеджера",
