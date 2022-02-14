@@ -105,11 +105,24 @@ namespace API
                 options.IgnoreObsoleteProperties();
             });
             
-
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
+
+#if DEBUG
+            //только для разработки
+            services.AddCors(options =>
+            {
+                options.AddPolicy("DevCorsPolicy", builder =>
+                {
+                    builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+            });
+#endif
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, APIContext apiContext)
@@ -125,6 +138,7 @@ namespace API
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors("DevCorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();

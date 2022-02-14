@@ -4587,7 +4587,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth roles: CanControlPositions,CanAll)
+        /// (Auth roles: CanControlUsers,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4598,7 +4598,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth roles: CanControlPositions,CanAll)
+        /// (Auth roles: CanControlUsers,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4682,7 +4682,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth roles: CanControlPositions,CanAll)
+        /// (Auth roles: CanControlUsers,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4693,7 +4693,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth roles: CanControlPositions,CanAll)
+        /// (Auth roles: CanControlUsers,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4873,7 +4873,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth roles: CanControlPositions,CanAll)
+        /// (Auth roles: CanControlUsers,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4884,7 +4884,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth roles: CanControlPositions,CanAll)
+        /// (Auth roles: CanControlUsers,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4966,7 +4966,7 @@ namespace ApiLib
         }
 
         /// <summary>
-        /// (Auth roles: CanControlPositions,CanAll)
+        /// (Auth roles: CanControlUsers,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -4977,7 +4977,7 @@ namespace ApiLib
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <summary>
-        /// (Auth roles: CanControlPositions,CanAll)
+        /// (Auth roles: CanControlUsers,CanAll)
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
@@ -6366,6 +6366,9 @@ namespace ApiLib
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Currency> Currencies { get; set; } = new System.Collections.ObjectModel.Collection<Currency>();
 
+        [System.Text.Json.Serialization.JsonPropertyName("oldIdentifer")]
+        public string OldIdentifer { get; set; }
+
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
@@ -6487,7 +6490,6 @@ namespace ApiLib
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
     public enum Permissions
     {
-        CanControlPositions,
         CanControlUsers,
         CanControlArchive,
         CanControlTemplates,
@@ -6512,10 +6514,8 @@ namespace ApiLib
         public string PositionName { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("permissions")]
-        public System.Collections.Generic.ICollection<Permissions> Permissions { get; set; }
-
-        [System.Text.Json.Serialization.JsonPropertyName("users")]
-        public System.Collections.Generic.ICollection<User> Users { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Permissions> Permissions { get; set; } = new System.Collections.ObjectModel.Collection<Permissions>();
 
     }
 

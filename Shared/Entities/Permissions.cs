@@ -8,7 +8,6 @@ namespace Shared
 {
     public enum Permissions
     {
-        CanControlPositions,
         CanControlUsers,
         CanControlArchive,
         CanControlTemplates,

@@ -615,7 +615,6 @@ namespace OfferMaker
         {
             MvvmFactory.CreateWindow(Global.Main.BannersManager, new ViewModels.BannersManagerViewModel(), new Views.BannersManager(), ViewMode.ShowDialog);
             UpdateBanners();
-            
         }
 
         private void UpdateBanners()
