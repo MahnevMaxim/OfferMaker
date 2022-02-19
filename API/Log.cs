@@ -23,15 +23,17 @@ namespace API
             if (logPath == null)
                 logPath = defaultLogPath;
 
-            DateTime date = DateTime.UtcNow;
+            DateTime date = DateTime.Now;
+            string time = String.Format("[{0:H:mm:ss:fff}] ", date);
+
             string text = "";
             if (exc != null)
             {
-                text += log_string + "\n" + exc.ToString() + "\n" + exc.StackTrace;
+                text += time + log_string + "\n" + exc.ToString() + "\n" + exc.StackTrace;
             }
             else
             {
-                text += log_string + "\n";
+                text += time + log_string + "\n";
             }
 
             try

@@ -64,7 +64,8 @@
                         Command="{Binding Cmd}"
                         CommandParameter="OpenSettingsCommand"
                         Width="26"
-                        Height="26">
+                        Height="26"
+                        ToolTip="Настройки">
                     <iconPacks:PackIconUnicons Kind="Setting"
                                                Width="13"
                                                Height="13"/>

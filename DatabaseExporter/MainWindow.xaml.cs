@@ -416,7 +416,8 @@ namespace DatabaseExporter
                     Descriptions = descs,
                     Markup = markUp,
                     Title = title,
-                    CurrencyCharCode = charCode
+                    CurrencyCharCode = charCode,
+                    Guid=Guid.NewGuid().ToString()
                 };
 
                 try

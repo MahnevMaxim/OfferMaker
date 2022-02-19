@@ -339,7 +339,7 @@ namespace OfferMaker
             IsBusy = true;
             List<string> guids = new List<string>();
             Global.Catalog.Nomenclatures.ToList().ForEach(n => n.Images.ToList().ForEach(i => guids.Add(i.Guid)));
-            Global.Users.Where(u => u.Image.Guid != null).ToList().ForEach(u => guids.Add(u.Image.Guid));
+            Global.Users.Where(u => u.Image?.Guid != null).ToList().ForEach(u => guids.Add(u.Image.Guid));
             Global.Main.BannersManager.Banners.ToList().ForEach(b => guids.Add(b.Guid));
             Global.Main.BannersManager.Advertisings.ToList().ForEach(a => guids.Add(a.Guid));
             if (imageManager == null)

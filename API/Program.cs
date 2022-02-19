@@ -43,7 +43,7 @@ namespace API
                         q.AddTrigger(opts => opts
                             .ForJob(jobKey) // link to the HelloWorldJob
                             .WithIdentity("CurrencyJob-trigger") // give the trigger a unique name
-                            .WithCronSchedule("0 0/3 * * * ?")); 
+                            .WithCronSchedule("0 0/5 * * * ?")); 
                     });
 
                     // Add the Quartz.NET hosted service

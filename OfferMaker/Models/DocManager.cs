@@ -31,60 +31,63 @@ namespace OfferMaker
         #endregion Singleton
 
         /// <summary>
-        /// Сохранение PDF с баннером.
+        /// Сохранение PDF.
         /// </summary>
-        async internal void SaveToPdfWithBanner()
+        async internal Task<CallResult> SaveToPdf(bool isWithBanner)
         {
-            bool isArchive = await IsArchive();
-            if (!isArchive) return;
-
-            constructor.CreateDocumentWithBanner();
-            FixedDocument fixedDoc = constructor.PdfDocument;
+            if (constructor.Offer.OfferState != OfferState.Archive)
+            {
+                CallResult cr = await OfferCreate();
+                if (!cr.Success)
+                {
+                    return cr;
+                }
+            }
+            FixedDocument fixedDoc;
+            if (isWithBanner)
+            {
+                constructor.CreateDocumentWithBanner();
+                fixedDoc = constructor.PdfDocument;
+            }
+            else
+            {
+                constructor.CreateDocumentWithoutBanner();
+                fixedDoc = constructor.PdfDocumentShort;
+            }
             SaveToPdf(fixedDoc);
+            return new CallResult();
         }
 
         /// <summary>
-        /// Сохранение Pdf без баннеров.
+        /// Отправка на печать.
         /// </summary>
-        async internal void SaveToPdfWithoutBanner()
-        {
-            bool isArchive = await IsArchive();
-            if (!isArchive) return;
-
-            constructor.CreateDocumentWithoutBanner();
-            FixedDocument fixedDoc = constructor.PdfDocumentShort;
-            SaveToPdf(fixedDoc);
-        }
-
-        /// <summary>
-        /// Не только проверяет архив или нет, но и пытается добавить в архив.
-        /// </summary>
+        /// <param name="isWithBanner"></param>
         /// <returns></returns>
-        async Task<bool> IsArchive()
+        async internal Task<CallResult> PrintPdf(bool isWithBanner)
         {
-            if (!constructor.Offer.IsArchive)
-                await OfferCreate();
-            return constructor.Offer.IsArchive;
-        }
+            if (constructor.Offer.OfferState != OfferState.Archive)
+            {
+                CallResult cr = await OfferCreate();
+                if (!cr.Success)
+                {
+                    return cr;
+                }
+            }
 
-        async internal void PrintPdfWithoutBanner()
-        {
-            bool isArchive = await IsArchive();
-            if (!isArchive) return;
+            FixedDocument fixedDoc;
+            if (isWithBanner)
+            {
+                constructor.CreateDocumentWithBanner();
+                fixedDoc = constructor.PdfDocument;
+            }
+            else
+            {
+                constructor.CreateDocumentWithoutBanner();
+                fixedDoc = constructor.PdfDocumentShort;
+            }
 
-            constructor.CreateDocumentWithoutBanner();
-            FixedDocument fixedDoc = constructor.PdfDocumentShort;
             PrintPdf(fixedDoc);
-        }
-
-        async internal void PrintPdfWithBanner()
-        {
-            bool isArchive = await IsArchive();
-            if (!isArchive) return;
-
-            constructor.CreateDocumentWithBanner();
-            FixedDocument fixedDoc = constructor.PdfDocument;
-            PrintPdf(fixedDoc);
+            return new CallResult();
         }
 
         async internal void PrintPdf(FixedDocument fixedDocument)
@@ -138,7 +141,33 @@ namespace OfferMaker
                 writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
         }
 
-        internal void OfferTemplateCreate() => OfferCreate(true);
+        async internal Task<CallResult> OfferTemplateCreate()
+        {
+            Offer temp = CreateTemplate(constructor.Offer);
+            CallResult cr = await Global.Main.DataRepository.OfferTemplateCreate(temp);
+            return cr;
+            bool isSuccess;
+            if (cr.Success)
+            {
+                isSuccess = true;
+            }
+            else if (cr.PreviousCallResult.Count > 0)
+            {
+                CallResult callResult = (CallResult)cr.PreviousCallResult[0];
+                if (callResult.Success)
+                {
+                    isSuccess = true;
+                }
+            }
+
+            if (isSuccess)
+            {
+                Global.Main.TemplatesStore.AddOffer(temp);
+                Global.Constructor.LoadOfferTemplate(temp);
+                Global.Main.TemplatesStore.ApplyOfferFilter();
+            }
+            Global.Main.SendMess(cr.GetAllMessages());
+        }
 
         internal void SaveOfferToFile()
         {
@@ -169,12 +198,12 @@ namespace OfferMaker
 
                 if (ext == ".omf")
                     offer = Helpers.InitObject<Offer>(ofd.FileName);
-                else
+                else if (ext == ".kcc")
                     offer = Utils.GetOldOffer(ofd.FileName);
-               
+
                 if (offer != null)
                 {
-                    if (offer.IsArchive)
+                    if (offer.OfferState == OfferState.Archive || offer.OfferState == OfferState.OldArchive)
                         Global.Constructor.LoadOfferFromArchive(offer);
                     else
                         Global.Constructor.LoadOfferTemplate(offer);
@@ -187,63 +216,32 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Сохранение(создание) шаблонов и КП на сервер/локально.
+        /// Сохранение КП на сервер/локально.
         /// </summary>
-        /// <param name="isTemplate"></param>
-        async internal Task OfferCreate(bool isTemplate = false)
+        async internal Task<CallResult> OfferCreate()
         {
-            if(!isTemplate)
+            if (constructor.Offer.Id != 0)
             {
-                if (constructor.Offer.Id != 0 || constructor.Offer.IsArchive)
-                {
-                    Global.Main.SendMess("Нельзя перезаписать архив.");
-                    return;
-                }
-
-                //если создаётся архивное КП
-                if (constructor.Offer.Id == 0 && !isTemplate)
-                {
-                    if (string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
-                        || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
-                        || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
-                    {
-                        Global.Main.SendMess("Имя клиента, компания и город должны быть заполнены.");
-                        return;
-                    }
-                }
+                return new CallResult() { Error = new Error("Нельзя перезаписать архив.") };
             }
 
-            CallResult cr;
-            if (isTemplate)
+            if (string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
+                || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
+                || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
             {
-                Offer temp = CreateTemplate(constructor.Offer);
-                cr = await Global.Main.DataRepository.OfferTemplateCreate(temp); 
-                if (cr.Success)
-                {
-                    Global.Main.TemplatesStore.AddOffer(temp);
-                    Global.Constructor.LoadOfferTemplate(temp);
-                }
-            }
-            else
-            {
-                cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer.PrepareArchive());
-                if(cr.Success)
-                {
-                    Global.Main.ArchiveStore.AddOffer(constructor.Offer);
-                    Global.Constructor.LoadOfferFromArchive(constructor.Offer);
-                }
+                return new CallResult() { Error = new Error("Имя клиента, компания и город должны быть заполнены.") };
             }
 
-            Global.Main.SendMess(cr.Message);
-            Global.Main.ArchiveStore.ApplyOfferFilter();
+            CallResult cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer.PrepareArchive());
+            return cr;
         }
 
         private Offer CreateTemplate(Offer offer)
         {
             Offer temp_ = Helpers.CloneObject<Offer>(offer);
             Offer temp = Utils.RestoreOffer(temp_, Global.Main.Users, false);
-            temp.IsTemplate = true;
-            temp.IsArchive = false;
+            temp.OfferState = OfferState.Template;
+            temp.OfferState = OfferState.Template;
             temp.IsEditableState = true;
             temp.IsEdited = false;
             temp.IsDelete = false;

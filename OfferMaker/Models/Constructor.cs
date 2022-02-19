@@ -47,7 +47,7 @@ namespace OfferMaker
             {
                 pdfControlSelectedIndex = value;
                 if (pdfControlSelectedIndex != 0)
-                    CreatePdf(); 
+                    CreatePdf();
             }
         }
 
@@ -143,11 +143,13 @@ namespace OfferMaker
         {
             get
             {
-                if(Offer.IsArchive)
+                if (Offer.OfferState == OfferState.Archive)
                     return "архив Id " + Offer.Id;
-                if (Offer.IsTemplate)
+                if (Offer.OfferState == OfferState.OldArchive)
+                    return "старый архив";
+                if (Offer.OfferState == OfferState.Template)
                 {
-                    if(Offer.Id==0)
+                    if (Offer.Id == 0)
                         return "шаблон";
                     else
                         return "шаблон Id " + Offer.Id;
@@ -174,7 +176,7 @@ namespace OfferMaker
         {
             get
             {
-                if (Offer.IsArchive)
+                if (Offer.OfferState == OfferState.Archive)
                     return Offer.Currencies;
                 else
                     return Global.Currencies;
@@ -221,9 +223,11 @@ namespace OfferMaker
         {
             Offer clone = Helpers.CloneObject<Offer>(offer);
             Offer offer_ = Utils.RestoreOffer(clone, Global.Users, true);
+            if (offer.OfferState == OfferState.OldArchive)
+                offer_.OfferState = OfferState.OldArchive;
             LoadOffer(offer_);
         }
-            
+
         /// <summary>
         /// Загрузка шаблона.
         /// </summary>
@@ -356,7 +360,7 @@ namespace OfferMaker
         {
             Nomenclature source = Helpers.CloneObject<Nomenclature>(nomWrapper.Nomenclature);
             MvvmFactory.CreateWindow(new NomenclurueCard(nomWrapper), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
-            if(!source.IsEqual(nomWrapper.Nomenclature))
+            if (!source.IsEqual(nomWrapper.Nomenclature))
             {
                 nomWrapper.UpdateCurrency();
                 nomWrapper.OnPropertyChanged(string.Empty);
@@ -412,14 +416,14 @@ namespace OfferMaker
         /// <returns></returns>
         internal CallResult SetDiscount()
         {
-            if(Offer.Discount.DiscountSum>0)
+            if (Offer.Discount.DiscountSum > 0)
             {
                 Offer.Discount.IsEnabled = true;
                 return new CallResult();
             }
             else
             {
-                return new CallResult() { Error=new Error("Сумма скидки должна быть больше нуля.")};
+                return new CallResult() { Error = new Error("Сумма скидки должна быть больше нуля.") };
             }
         }
 
@@ -626,7 +630,7 @@ namespace OfferMaker
                 viewModel.OnPropertyChanged("BannerImagePath");
             }
 
-            if(IsChangeAdvertisings(Offer.AdvertisingsUp, Global.Main.BannersManager.AdvertisingsUp))
+            if (IsChangeAdvertisings(Offer.AdvertisingsUp, Global.Main.BannersManager.AdvertisingsUp))
             {
                 Offer.AdvertisingsUp = GetPathCollection(Global.Main.BannersManager.AdvertisingsUp);
                 viewModel.OnPropertyChanged("AdvertisingsUp");
@@ -641,7 +645,7 @@ namespace OfferMaker
 
         private ObservableCollection<string> GetPathCollection(ObservableCollection<IImage> advertisingsUp)
         {
-            var res = advertisingsUp.Select(i=>i.LocalPhotoPath);
+            var res = advertisingsUp.Select(i => i.LocalPhotoPath);
             return new ObservableCollection<string>(res);
         }
 
@@ -649,7 +653,7 @@ namespace OfferMaker
         {
             if (advertisings.Count != advertisings_.Count)
                 return true;
-            for(int i=0;i<advertisings.Count;i++)
+            for (int i = 0; i < advertisings.Count; i++)
             {
                 if (advertisings[i] != advertisings_[i].LocalPhotoPath)
                     return true;

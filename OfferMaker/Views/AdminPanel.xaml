@@ -70,11 +70,35 @@
                       Margin="5,0"/>
         </DataTemplate>
         <DataTemplate x:Key="UserPhoto">
-            <Image Source="{Binding Image.LocalPhotoPath}"
-                   Width="40"
-                   Height="40"
-                   Margin="5,2"
-                   ToolTip="{Binding Position}" />
+            <Grid>
+                <Image Width="40"
+                       Height="40"
+                       Margin="5,2"
+                       ToolTip="{Binding Position}">
+                    <Image.Source>
+                        <BitmapImage UriSource="/Images/no-profile-picture.png" />
+                    </Image.Source>
+                    <Image.Style>
+                        <Style TargetType="{x:Type Image}">
+                            <Setter Property="Visibility"
+                                    Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Image}"
+                                             Value="{x:Null}">
+                                    <Setter Property="Visibility"
+                                            Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Image Source="{Binding Image.LocalPhotoPath}"
+                       Width="40"
+                       Height="40"
+                       Margin="5,2"
+                       ToolTip="{Binding Position}" />
+            </Grid>
+            
         </DataTemplate>
         <DataTemplate x:Key="UserButtons">
             <StackPanel Orientation="Horizontal">
@@ -243,10 +267,32 @@
                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                                                     Width="200">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.Image.LocalPhotoPath}"
-                                                           Width="110"
-                                                           Height="110"
-                                                           Margin="10" />
+                                                    <Grid>
+                                                        <Image Width="100"
+                                                               Height="100"
+                                                               Margin="10">
+                                                            <Image.Source>
+                                                                <BitmapImage UriSource="/Images/no-profile-picture.png" />
+                                                            </Image.Source>
+                                                            <Image.Style>
+                                                                <Style TargetType="{x:Type Image}">
+                                                                    <Setter Property="Visibility"
+                                                                            Value="Collapsed" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.Image}"
+                                                                                     Value="{x:Null}">
+                                                                            <Setter Property="Visibility"
+                                                                                    Value="Visible" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Image.Style>
+                                                        </Image>
+                                                        <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.User.Image.LocalPhotoPath}"
+                                                               Width="110"
+                                                               Height="110"
+                                                               Margin="10" />
+                                                    </Grid>
                                                     <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
                                                             CommandParameter="CurrentUserPhotoEdit"
                                                             Style="{StaticResource MahApps.Styles.Button.Square}"
@@ -462,10 +508,32 @@
                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                                                     Width="200">
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.Image.LocalPhotoPath}"
-                                                           Width="100"
-                                                           Height="100"
-                                                           Margin="10" />
+                                                    <Grid>
+                                                        <Image Width="100"
+                                                               Height="100"
+                                                               Margin="10">
+                                                            <Image.Source>
+                                                                <BitmapImage UriSource="/Images/no-profile-picture.png" />
+                                                            </Image.Source>
+                                                            <Image.Style>
+                                                                <Style TargetType="{x:Type Image}">
+                                                                    <Setter Property="Visibility"
+                                                                            Value="Collapsed" />
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.Image}"
+                                                                                     Value="{x:Null}">
+                                                                            <Setter Property="Visibility"
+                                                                                    Value="Visible" />
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Image.Style>
+                                                        </Image>
+                                                        <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.SelectedUser.Image.LocalPhotoPath}"
+                                                               Width="100"
+                                                               Height="100"
+                                                               Margin="10" />
+                                                    </Grid>
                                                     <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
                                                             CommandParameter="SelectedUserPhotoEdit"
                                                             Style="{StaticResource MahApps.Styles.Button.Square}"
@@ -578,7 +646,7 @@
                                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}"
                                                     Width="200">
                                                 <Grid>
-                                                    <Image>
+                                                    <Image Margin="5">
                                                         <Image.Source>
                                                             <BitmapImage UriSource="/Images/no-profile-picture.png" />
                                                         </Image.Source>
@@ -596,7 +664,8 @@
                                                             </Style>
                                                         </Image.Style>
                                                     </Image>
-                                                    <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.Image.LocalPhotoPath}" />
+                                                    <Image Source="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.NewUser.Image.LocalPhotoPath}"
+                                                           Margin="5" />
                                                     <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=mah:HamburgerMenu}, Path=DataContext.Cmd}"
                                                             CommandParameter="NewUserPhotoEdit"
                                                             Style="{StaticResource MahApps.Styles.Button.Square}"

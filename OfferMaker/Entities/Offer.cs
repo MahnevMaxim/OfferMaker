@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 
 namespace OfferMaker
 {
+    public enum OfferState { New, Template, Archive, OldArchive }
+
     public class Offer : BaseEntity, IEntity
     {
         /// <summary>
@@ -53,6 +55,7 @@ namespace OfferMaker
         bool isEdited;
         bool isEditableState;
         Offer offerEditBackup;
+        OfferState offerState;
 
         public int Id
         {
@@ -85,6 +88,19 @@ namespace OfferMaker
         /// Идентификатор старого КП.
         /// </summary>
         public string OldIdentifer { get; set; }
+
+        /// <summary>
+        /// Состояния документа: новый, шаблон, архив, старый архив.
+        /// </summary>
+        public OfferState OfferState
+        {
+            get => offerState;
+            set
+            {
+                offerState = value;
+                OnPropertyChanged(string.Empty);
+            }
+        }
 
         /// <summary>
         /// Группы номенклатур для контрола конструктора.
@@ -374,28 +390,12 @@ namespace OfferMaker
         /// <summary>
         /// Если IsTemplate=true, то это шаблон.
         /// </summary>
-        public bool IsTemplate
-        {
-            get => isTemplate;
-            set
-            {
-                isTemplate = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool IsTemplate { get => OfferState == OfferState.Template; }
 
         /// <summary>
         /// Если IsArchive=true, то это архив.
         /// </summary>
-        public bool IsArchive
-        {
-            get => isArchive;
-            set
-            {
-                isArchive = value;
-                OnPropertyChanged();
-            }
-        }
+        public bool IsArchive { get => OfferState == OfferState.Archive; }
 
         /// <summary>
         /// Пометка на удаление. 
@@ -712,6 +712,7 @@ namespace OfferMaker
         /// <returns></returns>
         internal Offer PrepareArchive()
         {
+            CreateDate = DateTime.Now;
             Currencies = new ObservableCollection<Currency>();
             Currency rub = Global.GetRub();
             Currencies.Add(rub);
@@ -734,7 +735,7 @@ namespace OfferMaker
                 }
             }
 
-            IsArchive = true;
+            OfferState = OfferState.Archive;
 
             return this;
         }

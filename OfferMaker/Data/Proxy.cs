@@ -332,7 +332,7 @@ namespace OfferMaker
             }
             else
             {
-                var localResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOfferTemplatesPath);
+                var localResult = await LocalData.Post<Offer>(offer, LocalDataConfig.LocalOfferTemplatesPath);
                 remoteResult.AddCallResult(localResult);
             }
             return remoteResult;
@@ -462,8 +462,9 @@ namespace OfferMaker
             }
             else
             {
-                var localResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOffersPath);
-                remoteResult.AddCallResult(localResult);
+                Log.Write(remoteResult.Message);
+                //в случае неудачи просто подменяет cr последним
+                remoteResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOffersPath);
             }
             return remoteResult;
         }

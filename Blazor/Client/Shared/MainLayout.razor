@@ -1,14 +1,14 @@
 ﻿@inherits LayoutComponentBase
 @inject IAuthenticationService AuthenticationService
 @inject NavigationManager NavigationManager
-
+@using System
 @if (AuthenticationService.User != null)
 {
     <!-- nav -->
     <nav class="navbar navbar-expand navbar-dark bg-dark">
         <div class="navbar-nav">
             <NavLink href="" Match="NavLinkMatch.All" class="nav-item nav-link">Главная</NavLink>
-
+            <NavLink href="demo" Match="NavLinkMatch.All" class="nav-item nav-link">Демо</NavLink>
             <NavLink href="docs" class="nav-item nav-link">Документация</NavLink>
             <NavLink href="logout" class="nav-item nav-link">Выход</NavLink>
         </div>

@@ -110,7 +110,6 @@ namespace API
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
 
-#if DEBUG
             //только для разработки
             services.AddCors(options =>
             {
@@ -122,7 +121,6 @@ namespace API
                         .AllowAnyHeader();
                 });
             });
-#endif
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, APIContext apiContext)
@@ -144,6 +142,7 @@ namespace API
             app.UseStaticFiles();
 
             app.UseMiddleware<TokenMiddleware>();
+            Log.Write("TokenMiddleware complete");
 
             app.UseEndpoints(endpoints =>
             {

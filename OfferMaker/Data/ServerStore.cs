@@ -94,7 +94,8 @@ namespace OfferMaker
         {
             try
             {
-                Global.ImageManager.UploadImage(user);
+                if (user.Image != null)
+                    Global.ImageManager.UploadImage(user);
                 ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
                 if (userCopy.Image?.Guid == null)
                     userCopy.Image = null;
@@ -237,7 +238,8 @@ namespace OfferMaker
         {
             try
             {
-                Global.ImageManager.UploadImage(user);
+                if (user.Image != null)
+                    Global.ImageManager.UploadImage(user);
                 ApiLib.User us = Helpers.CloneObject<ApiLib.User>(user);
                 if (us.Image.Guid == null)
                     us.Image = null;
@@ -259,7 +261,8 @@ namespace OfferMaker
         {
             try
             {
-                Global.ImageManager.UploadImage(user);
+                if (user.Image != null)
+                    Global.ImageManager.UploadImage(user);
                 ApiLib.User user_ = Helpers.CloneObject<ApiLib.User>(user);
                 await client.UserSelfEditAsync(user.Id, user.Pwd, user_);
                 return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
@@ -970,6 +973,10 @@ namespace OfferMaker
                 else if (apiEx.StatusCode == 404)
                 {
                     return new CallResult() { Error = new Error(errorMess + " Объект не найден.", apiEx.StatusCode) };
+                }
+                else if (apiEx.StatusCode == 503)
+                {
+                    return new CallResult() { Error = new Error(errorMess + " Сервер недоступен.", apiEx.StatusCode) };
                 }
                 else
                 {

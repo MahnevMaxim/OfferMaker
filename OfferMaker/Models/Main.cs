@@ -478,7 +478,7 @@ namespace OfferMaker
         {
             IsBusy = true;
             string message = null;
-            if (Settings.AppMode == AppMode.Auto)
+            if (Settings.AppMode == AppMode.Auto || Settings.AppMode == AppMode.Online)
             {
                 var forDelOffers = TemplatesStore.Offers.Where(a => a.IsDelete).ToList();
                 var forPostOffers = TemplatesStore.Offers.Where(a => a.Id == 0).ToList();
@@ -545,22 +545,66 @@ namespace OfferMaker
 
         #region DocManager
 
-        public void SaveToPdfWithBanner() => DocManager.SaveToPdfWithBanner();
+        async public void SaveToPdfWithBanner() => await SaveToPdf(true);
 
-        public void SaveToPdfWithoutBanner() => DocManager.SaveToPdfWithoutBanner();
+        async public void SaveToPdfWithoutBanner() => await SaveToPdf(false);
 
-        public void PrintPdfWithBanner() => DocManager.PrintPdfWithBanner();
+        async Task SaveToPdf(bool isWithBanner)
+        {
+            CallResult cr = await DocManager.SaveToPdf(isWithBanner);
+            if (cr.Success)
+            {
+                UpdateArchiveAfterSave();
+            }
+            else
+            {
+                SendMess(cr.Message);
+            }
+        }
 
-        public void PrintPdfWithoutBanner() => DocManager.PrintPdfWithoutBanner();
+        public void PrintPdfWithBanner() => PrintPdf(true);
 
-        public void OfferTemplateCreate() => DocManager.OfferTemplateCreate();
+        public void PrintPdfWithoutBanner() => PrintPdf(false);
+
+        async public void PrintPdf(bool isWithBanner)
+        {
+            CallResult cr = await DocManager.PrintPdf(isWithBanner);
+            if (cr.Success)
+            {
+                UpdateArchiveAfterSave();
+            }
+            else
+            {
+                SendMess(cr.Message);
+            }
+        }
 
         public void SaveOfferToFile() => DocManager.SaveOfferToFile();
 
         public void OpenOfferFromFile() => DocManager.OpenOfferFromFile();
 
-        async public void OfferCreate() => DocManager.OfferCreate();
+        async public void OfferTemplateCreate()
+        {
+            CallResult cr = await DocManager.OfferTemplateCreate();
+        }
+            
+        async public void OfferCreate()
+        {
+            CallResult cr = await DocManager.OfferCreate();
+            if (cr.Success)
+            {
+                UpdateArchiveAfterSave();
+            }
+            SendMess(cr.Message);
+        }
 
+        void UpdateArchiveAfterSave()
+        {
+            Global.Main.ArchiveStore.AddOffer(Constructor.Offer);
+            Global.Constructor.LoadOfferFromArchive(Constructor.Offer);
+            Global.Main.ArchiveStore.ApplyOfferFilter();
+        }
+           
         #endregion DocManager
 
         #region Settings

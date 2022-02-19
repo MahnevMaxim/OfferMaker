@@ -15,8 +15,11 @@ namespace Blazor.Client
         HttpClient _httpClient;
         ApiLib.Client apiClient;
         ILocalStorageService _localStorageService;
+#if DEBUG
         string apiBaseUrl = "https://localhost:44313";
-
+#else
+        string apiBaseUrl = "https://kip.mybot.su";
+#endif
         public ApiService(HttpClient httpClient, ILocalStorageService localStorageService)
         {
             _localStorageService = localStorageService;
@@ -26,6 +29,8 @@ namespace Blazor.Client
         async public Task<ApiLib.Client> GetApiClient()
         {
             User user = await _localStorageService.GetItemAsync<User>("user");
+            Console.WriteLine(user);
+            Console.WriteLine("user.Account.Token: " + user?.Account?.Token);
             if (user != null)
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Account.Token);
             apiClient = new ApiLib.Client(apiBaseUrl, _httpClient);

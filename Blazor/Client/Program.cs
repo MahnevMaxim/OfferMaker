@@ -37,17 +37,6 @@ namespace Blazor.Client
                .AddScoped<IUserService, UserService>()
                .AddScoped<IHttpService, HttpService>();
 
-            // configure http client
-            builder.Services.AddScoped(x => {
-                var apiUrl = new Uri(builder.Configuration["apiUrl"]);
-
-                // use fake backend if "fakeBackend" is "true" in appsettings.json
-                if (builder.Configuration["fakeBackend"] == "true")
-                    return new HttpClient(new FakeBackendHandler()) { BaseAddress = apiUrl };
-
-                return new HttpClient() { BaseAddress = apiUrl };
-            });
-
             await builder.Build().RunAsync();
         }
     }

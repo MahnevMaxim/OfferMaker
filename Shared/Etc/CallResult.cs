@@ -24,7 +24,7 @@ namespace Shared
         /// <summary>
         /// Previous CallResult, if was added.
         /// </summary>
-        List<ICallResult> PreviousCallResult { get; set; } = new List<ICallResult>();
+        public List<ICallResult> PreviousCallResult { get; set; } = new List<ICallResult>();
 
         /// <summary>
         /// An error if the call didn't succeed

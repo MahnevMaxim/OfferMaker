@@ -48,10 +48,12 @@ namespace API
                     if (res == null)
                     {
                         context.Response.StatusCode = 403;
+                        Log.Write("TokenMiddleware error");
                         await context.Response.WriteAsync("Token is invalid");
                     }
                     else
                     {
+                        Log.Write("TokenMiddleware good");
                         await _next.Invoke(context);
                     }
                 }

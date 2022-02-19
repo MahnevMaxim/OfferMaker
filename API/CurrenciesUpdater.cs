@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using API.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Shared;
+using System.Globalization;
 
 namespace API
 {
@@ -38,12 +39,12 @@ namespace API
                 var controller = new CurrenciesController(context);
 
                 var date = xdoc.Element("ValCurs").Attribute("Date").Value;
-                DateTime rateDatetime = DateTime.Parse(date);
+                DateTime rateDatetime = DateTime.ParseExact(date, "dd.MM.yyyy", null);
                 foreach (var item in el)
                 {
                     var code = item.Element("CharCode").Value;
                     var rate = item.Element("Value").Value;
-                    Currency curr = new Currency() { CharCode = code, Rate = decimal.Parse(rate), RateDatetime = rateDatetime };
+                    Currency curr = new Currency() { CharCode = code, Rate = decimal.Parse(rate, new CultureInfo("ru-RU")), RateDatetime = rateDatetime };
                     var res = controller.CurrencyEdit(0, curr).Result;
                 }
             }

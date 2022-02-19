@@ -77,7 +77,7 @@
                     Click="NewExportButton_Click" />
             <Button x:Name="ExportOldNomenclaturesButton"
                     Style="{DynamicResource MahApps.Styles.Button.Square}"
-                    Content="Export all"
+                    Content="Export Old"
                     HorizontalAlignment="Left"
                     Margin="10"
                     VerticalAlignment="Top"

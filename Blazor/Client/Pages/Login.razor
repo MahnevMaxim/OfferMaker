@@ -40,9 +40,10 @@
     private bool loading;
     private string error;
 
-    protected override void OnInitialized()
+    async protected override Task OnInitializedAsync()
     {
         // redirect to home if already logged in
+        await Task.Delay(10000);
         if (AuthenticationService.User != null)
         {
             NavigationManager.NavigateTo("");

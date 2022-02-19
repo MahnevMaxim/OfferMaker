@@ -96,10 +96,17 @@ namespace OfferMaker
         async private Task Init()
         {
             IsBusy = true;
-            await InitData();
+            CallResult res = await InitData();
             IsBusy = false;
-            isAuthorizationOk = true;
-            Close();
+            if(res.Success)
+            {
+                isAuthorizationOk = true;
+                Close();
+            }
+            else
+            {
+                OnSendMessage(res.Message);
+            }
         }
 
         public Main GetMain() => main;
@@ -263,6 +270,10 @@ namespace OfferMaker
             }
         }
 
+        /// <summary>
+        /// Проверка пароля при оффлайн авторизации.
+        /// </summary>
+        /// <returns></returns>
         private bool CheckUser()
         {
             if (Login == AppSettings.Default.Login)
@@ -288,6 +299,10 @@ namespace OfferMaker
             return null;
         }
 
+        /// <summary>
+        /// Попытка автоматической авторизации.
+        /// </summary>
+        /// <returns></returns>
         async private Task TryAuthAutomaticaly()
         {
             IsBusy = true;
@@ -327,19 +342,27 @@ namespace OfferMaker
         /// Инициализация модели.
         /// </summary>
         /// <returns></returns>
-        async private Task InitData()
+        async private Task<CallResult> InitData()
         {
             main.DataRepository = DataRepository.GetInstance(Settings.GetInstance().AppMode, Settings.GetToken()); //инициализация хранилища
-            await ReciveData(); //инициализация данных
-            InitModules(); //инициализация модулей на основе данных
-            await UploadImages();
+            CallResult res = await ReciveData(); //инициализация данных
+            if(res.Success)
+            {
+                InitModules(); //инициализация модулей на основе данных
+                await UploadImages();
+                return new CallResult();
+            }
+            else
+            {
+                return res;
+            }
         }
 
         /// <summary>
         /// Получение данных с сервера / из кэша.
         /// </summary>
         /// <returns></returns>
-        async private Task ReciveData()
+        async private Task<CallResult> ReciveData()
         {
             string errorMessage = "";
 
@@ -449,7 +472,8 @@ namespace OfferMaker
                 errorMessage += advertisingsCr.Error.Message + "\n";
 
             if (!string.IsNullOrWhiteSpace(errorMessage))
-                OnSendMessage(errorMessage);
+                return new CallResult() { Error = new Error(errorMessage) };
+            return new CallResult();
         }
 
         /// <summary>
@@ -464,10 +488,6 @@ namespace OfferMaker
             main.Users = users == null ? new ObservableCollection<User>() { User } : users;
             main.Users.ToList().ForEach(u =>
             {
-                if (u.Image == null)
-                {
-                    u.Image = Global.NoProfileImage;
-                }
                 main.Managers.Add(u);
                 if (u.Position != null)
                     u.Position = positions.Where(p => p.Id == u.Position.Id).FirstOrDefault();
@@ -518,7 +538,7 @@ namespace OfferMaker
             List<string> guids = new List<string>();
             main.BannersManager.Banners.ToList().ForEach(b => guids.Add(b.Guid));
             main.BannersManager.Advertisings.ToList().ForEach(a => guids.Add(a.Guid));
-            main.Users.ToList().ForEach(u => guids.Add(u.Image.Guid));
+            main.Users.Where(u => u.Image != null).ToList().ForEach(u => guids.Add(u.Image.Guid));
             List<string> guids_ = ImageManager.GetInstance().GetExceptImages(guids);
             foreach (var guid in guids_)
             {

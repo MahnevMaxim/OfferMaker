@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using Newtonsoft.Json;
 using Blazored.LocalStorage;
+using System;
 
 namespace Blazor.Client.Services
 {
@@ -17,7 +18,6 @@ namespace Blazor.Client.Services
 
     public class AuthenticationService : IAuthenticationService
     {
-        //private IHttpService _httpService;
         private NavigationManager _navigationManager;
         private ILocalStorageService _localStorageService;
         private ApiService _apiService;
@@ -54,6 +54,7 @@ namespace Blazor.Client.Services
         {
             User = null;
             await _localStorageService.RemoveItemAsync("user");
+            Console.WriteLine("Logout()");
             _navigationManager.NavigateTo("login");
         }
     }

@@ -650,7 +650,7 @@
                                     VerticalAlignment="Top"
                                     BorderThickness="1"
                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                <!--<Image Source="{Binding BannerImagePath}"
+                                <Image Source="{Binding BannerImagePath}"
                                        Margin="2"
                                        ToolTip="Баннер">
                                     <Image.InputBindings>
@@ -658,11 +658,6 @@
                                                       CommandParameter="OpenBanners"
                                                       Command="{Binding Cmd}" />
                                     </Image.InputBindings>
-                                </Image>-->
-                                <Image>
-                                    <Image.Source>
-                                        <BitmapImage UriSource="/Images/no-profile-picture.png" />
-                                    </Image.Source>
                                 </Image>
                             </Border>
                             <ComboBox ItemsSource="{Binding Managers}"
@@ -677,9 +672,31 @@
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Source="{Binding Image.LocalPhotoPath}"
-                                                   Width="38"
-                                                   Height="38" />
+                                            <Grid>
+                                                <Image Width="38"
+                                                       Height="38">
+                                                    <Image.Source>
+                                                        <BitmapImage UriSource="/Images/no-profile-picture.png" />
+                                                    </Image.Source>
+                                                    <Image.Style>
+                                                        <Style TargetType="{x:Type Image}">
+                                                            <Setter Property="Visibility"
+                                                                    Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Image}"
+                                                                             Value="{x:Null}">
+                                                                    <Setter Property="Visibility"
+                                                                            Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                                <Image Source="{Binding Image.LocalPhotoPath}"
+                                                       Width="38"
+                                                       Height="38" />
+                                            </Grid>
+                                            
                                             <StackPanel Margin="5,0,0,0">
                                                 <TextBlock Text="{Binding FirstName}" />
                                                 <TextBlock Text="{Binding LastName}" />
