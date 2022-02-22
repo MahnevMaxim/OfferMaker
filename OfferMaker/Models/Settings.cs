@@ -77,6 +77,8 @@ namespace OfferMaker
             }
         }
 
+        public string Version { get; set; }
+
         public string LightOrDark
         {
             get => lightOrDark == null ? "Light" : lightOrDark;
@@ -159,6 +161,7 @@ namespace OfferMaker
                 .Select(t => t.ColorScheme).ToList().ForEach(t => Themes.Add(t)); //просто получаем список тем
             LightOrDarkList = new List<string>() { "Light", "Dark" };
             appMode = (AppMode)AppSettings.Default.AppMode;
+            Version = AppSettings.Default.version;
             selectedTheme = AppSettings.Default.Theme;
             lightOrDark = AppSettings.Default.LightOrDark;
             SetSettings();

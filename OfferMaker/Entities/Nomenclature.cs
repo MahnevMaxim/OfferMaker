@@ -283,6 +283,9 @@ namespace OfferMaker
 
         internal bool IsEqual(Nomenclature nomenclature)
         {
+            if (nomenclature.Title != Title)
+                return false;
+
             if (CostPrice != nomenclature.CostPrice || Markup != nomenclature.Markup)
                 return false;
 

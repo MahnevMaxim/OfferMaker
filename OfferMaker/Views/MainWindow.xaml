@@ -9,6 +9,8 @@
                  xmlns:controls="clr-namespace:OfferMaker.Controls"
                  xmlns:pdf="clr-namespace:OfferMaker.Pdf"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                 Dialog:DialogParticipation.Register="{Binding}"
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  mc:Ignorable="d"
                  xmlns:dd="urn:gong-wpf-dragdrop"
@@ -362,6 +364,8 @@
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands ShowLastSeparator="False">
+            <Button Content="{Binding Version}"
+                    ToolTip="Версия приложения" />
             <Button Content="{Binding AppMode}"
                     ToolTip="Текущий режим приложения" />
             <Button Content="Выйти"
@@ -532,7 +536,7 @@
                                             Height="30"
                                             Width="30"
                                             Margin="5,5,0,5"
-                                            ToolTip="Клиент"
+                                            ToolTip="Клиент и название КП"
                                             Style="{StaticResource MahApps.Styles.Button.Square.Accent}">
                                         <iconPacks:PackIconMaterial Kind="AccountCashOutline"
                                                                     Width="18"
@@ -615,7 +619,7 @@
                                             Width="30"
                                             Margin="5,0,0,0"
                                             Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                            ToolTip="Сохранить в PDF с баннером">
+                                            ToolTip="Сохранение полного КП">
                                         <iconPacks:PackIconCodicons Kind="FilePdf"
                                                                     Width="18"
                                                                     Height="18" />
@@ -626,7 +630,7 @@
                                             Width="30"
                                             Margin="5,0,0,0"
                                             Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                            ToolTip="Сохранить в PDF без баннера">
+                                            ToolTip="Сохранение одностраничного КП">
                                         <iconPacks:PackIconBoxIcons Kind="SolidFilePdf"
                                                                     Width="18"
                                                                     Height="18" />
@@ -1081,7 +1085,7 @@
                             Background="{DynamicResource MahApps.Brushes.Accent4}">
                         <Button CommandParameter="AddOfferGroup"
                                 Command="{Binding Cmd}"
-                                Content="Добавить"
+                                Content="Добавить группу номенклатур"
                                 Style="{DynamicResource MahApps.Styles.Button.Square}"
                                 Click="ButtonClickAddOfferGroup"
                                 Margin="10" />

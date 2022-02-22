@@ -1,28 +1,38 @@
 ﻿<UserControl x:Class="OfferMaker.Controls.OfferGroupItemControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:OfferMaker.Controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:root="clr-namespace:OfferMaker"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="800">
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+             d:DesignWidth="800">
 
     <UserControl.Resources>
-        <root:MultiConverter x:Key="MultiConverter"/>
+        <root:MultiConverter x:Key="MultiConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <root:VisToBoolConverter x:Key="TrueIfVisible" Inverted="False" Not="False" />
-        <root:VisToBoolConverter x:Key="TrueIfNotVisible" Inverted="False" Not="True" />
-        <root:VisToBoolConverter x:Key="VisibleIfTrue" Inverted="True" Not="False" />
-        <root:VisToBoolConverter x:Key="VisibleIfNotTrue" Inverted="True" Not="True" />
-        <Style x:Key="MyColumnHeader" 
-               BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}" 
+        <root:VisToBoolConverter x:Key="TrueIfVisible"
+                                 Inverted="False"
+                                 Not="False" />
+        <root:VisToBoolConverter x:Key="TrueIfNotVisible"
+                                 Inverted="False"
+                                 Not="True" />
+        <root:VisToBoolConverter x:Key="VisibleIfTrue"
+                                 Inverted="True"
+                                 Not="False" />
+        <root:VisToBoolConverter x:Key="VisibleIfNotTrue"
+                                 Inverted="True"
+                                 Not="True" />
+        <Style x:Key="MyColumnHeader"
+               BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}"
                TargetType="{x:Type DataGridColumnHeader}">
-            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}" />
+            <Setter Property="Background"
+                    Value="{DynamicResource MahApps.Brushes.Accent4}" />
         </Style>
         <sys:Double x:Key="TitleWidth">300</sys:Double>
         <sys:Double x:Key="Width80">80</sys:Double>
@@ -38,7 +48,7 @@
                            Margin="10"
                            Width="300"
                            FontWeight="Bold"
-                           Foreground="{DynamicResource MahApps.Brushes.Text}"/>
+                           Foreground="{DynamicResource MahApps.Brushes.Text}" />
             </DataTemplate>
 
             <DataTemplate x:Key="NomCostPriceTextBlock">
@@ -47,24 +57,24 @@
                          Width="90"
                          TextWrapping="NoWrap"
                          FontWeight="Bold"
-                         Foreground="{DynamicResource MahApps.Brushes.Text}"/>
+                         Foreground="{DynamicResource MahApps.Brushes.Text}" />
             </DataTemplate>
 
             <DataTemplate x:Key="NomMarkup">
                 <TextBox Text="{Binding Markup, StringFormat=F2, ConverterCulture='ru-RU',UpdateSourceTrigger=PropertyChanged}"
-                           Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
-                           TextWrapping="NoWrap"
-                           Width="50"
-                           FontWeight="Bold"
-                           Foreground="{DynamicResource MahApps.Brushes.Text}"/>
+                         Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
+                         TextWrapping="NoWrap"
+                         Width="50"
+                         FontWeight="Bold"
+                         Foreground="{DynamicResource MahApps.Brushes.Text}" />
             </DataTemplate>
 
             <DataTemplate x:Key="NomPrice">
                 <TextBox Text="{Binding Price, StringFormat={}{0:N0}, ConverterCulture='ru-RU',UpdateSourceTrigger=PropertyChanged}"
-                           TextWrapping="NoWrap"
-                           Width="{StaticResource Width80}"
-                           FontWeight="Bold"
-                           Foreground="{DynamicResource MahApps.Brushes.Text}"/>
+                         TextWrapping="NoWrap"
+                         Width="{StaticResource Width80}"
+                         FontWeight="Bold"
+                         Foreground="{DynamicResource MahApps.Brushes.Text}" />
             </DataTemplate>
 
             <DataTemplate x:Key="NomProfit">
@@ -73,7 +83,7 @@
                            TextWrapping="NoWrap"
                            Width="{StaticResource Width80}"
                            FontWeight="Bold"
-                           Foreground="{DynamicResource MahApps.Brushes.Text}"/>
+                           Foreground="{DynamicResource MahApps.Brushes.Text}" />
             </DataTemplate>
 
             <DataTemplate x:Key="NomAmount">
@@ -89,17 +99,17 @@
                            TextWrapping="Wrap"
                            Width="{StaticResource Width80}"
                            FontWeight="Bold"
-                           Foreground="{DynamicResource MahApps.Brushes.Text}"/>
+                           Foreground="{DynamicResource MahApps.Brushes.Text}" />
             </DataTemplate>
 
             <DataTemplate x:Key="NomCurrency">
                 <ComboBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.UsingCurrencies}"
                           SelectedItem="{Binding CurrencyCharCode, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                          Width="70"/>
+                          Width="70" />
             </DataTemplate>
 
             <DataTemplate x:Key="DescriptionStateCheckbox">
-                <CheckBox IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <CheckBox IsChecked="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </DataTemplate>
 
             <DataTemplate x:Key="DescriptionTextBox">
@@ -108,38 +118,41 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBox Grid.Row="0" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Grid.Row="0"
+                             Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Visibility="{Binding IsComment, Converter={StaticResource VisibleIfTrue}, UpdateSourceTrigger=PropertyChanged}"
                              TextWrapping="Wrap"
                              Width="500"
                              FontFamily="Arial"
                              FontStyle="Italic"
                              FontWeight="Bold"
-                             Foreground="Blue"/>
-                    <TextBox Grid.Row="1" Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Foreground="Blue" />
+                    <TextBox Grid.Row="1"
+                             Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              Visibility="{Binding IsComment, Converter={StaticResource VisibleIfNotTrue}, UpdateSourceTrigger=PropertyChanged}"
                              TextWrapping="Wrap"
-                             Width="500"/>
+                             Width="500" />
                 </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="DescriptionControlsLeft">
                 <StackPanel Orientation="Horizontal">
-                    <Button Name="DescriptionMoveUp" 
+                    <Button Name="DescriptionMoveUp"
                             Style="{StaticResource MahApps.Styles.Button.Square}"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                             Height="25"
                             Width="25"
                             Margin="5"
                             ToolTip="Вверх">
-                        <iconPacks:PackIconMaterial Kind="ArrowUp" 
-                                                  Width="13"
-                                                  Height="13"/>
+                        <iconPacks:PackIconMaterial Kind="ArrowUp"
+                                                    Width="13"
+                                                    Height="13" />
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="DescriptionMoveUp"/>
-                                <Binding Path="."/>
-                                <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}"/>
+                                <Binding Source="DescriptionMoveUp" />
+                                <Binding Path="." />
+                                <Binding Path="DataContext"
+                                         RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}" />
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
@@ -149,15 +162,16 @@
                             Height="25"
                             Width="25"
                             Margin="5"
-                            ToolTip="Добавить в группу">
-                        <iconPacks:PackIconMaterial Kind="ArrowDown" 
-                                                  Width="13"
-                                                  Height="13"/>
+                            ToolTip="Вниз">
+                        <iconPacks:PackIconMaterial Kind="ArrowDown"
+                                                    Width="13"
+                                                    Height="13" />
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="DescriptionMoveDown"/>
-                                <Binding Path="."/>
-                                <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}"/>
+                                <Binding Source="DescriptionMoveDown" />
+                                <Binding Path="." />
+                                <Binding Path="DataContext"
+                                         RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}" />
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
@@ -171,14 +185,15 @@
                         Width="25"
                         Margin="5"
                         ToolTip="Удалить">
-                    <iconPacks:PackIconMaterial Kind="Close" 
-                                                    Width="13"
-                                                    Height="13"/>
+                    <iconPacks:PackIconMaterial Kind="Close"
+                                                Width="13"
+                                                Height="13" />
                     <Button.CommandParameter>
                         <MultiBinding Converter="{StaticResource MultiConverter}">
-                            <Binding Source="DeleteDescriptionFromNomWrapper"/>
-                            <Binding Path="."/>
-                            <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}"/>
+                            <Binding Source="DeleteDescriptionFromNomWrapper" />
+                            <Binding Path="." />
+                            <Binding Path="DataContext"
+                                     RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}" />
                         </MultiBinding>
                     </Button.CommandParameter>
                 </Button>
@@ -190,25 +205,26 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" 
+        <Grid Grid.Row="0"
               Background="{DynamicResource MahApps.Brushes.Accent2}">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="290"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="290" />
             </Grid.ColumnDefinitions>
-            <ComboBox x:Name="groupComboBox" 
+            <ComboBox x:Name="groupComboBox"
                       SelectionChanged="groupComboBox_SelectionChanged"
                       Margin="10"
                       MaxWidth="800"
-                      Height="30"/>
+                      Height="30" />
             <TextBox Text="{Binding GroupTitle, UpdateSourceTrigger=PropertyChanged}"
                      IsEnabled="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}"
                      Name="groupTitleTextBox"
                      Margin="10"
                      Height="30"
                      MaxWidth="800"
-                     KeyUp="TextBox_KeyUp"/>
-            <StackPanel Grid.Row="0"  Grid.Column="1"
+                     KeyUp="TextBox_KeyUp" />
+            <StackPanel Grid.Row="0"
+                        Grid.Column="1"
                         Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal"
                             IsEnabled="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}">
@@ -220,11 +236,11 @@
                             ToolTip="Добавить номенклатуру">
                         <iconPacks:PackIconMaterial Kind="Plus"
                                                     Width="15"
-                                                    Height="15"/>
+                                                    Height="15" />
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="AddNomenclatureToOfferGroup"/>
-                                <Binding Path="."/>
+                                <Binding Source="AddNomenclatureToOfferGroup" />
+                                <Binding Path="." />
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
@@ -236,11 +252,11 @@
                             ToolTip="Вверх">
                         <iconPacks:PackIconMaterial Kind="ArrowUp"
                                                     Width="15"
-                                                    Height="15"/>
+                                                    Height="15" />
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="UpOfferGroup"/>
-                                <Binding Path="."/>
+                                <Binding Source="UpOfferGroup" />
+                                <Binding Path="." />
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
@@ -252,15 +268,16 @@
                             ToolTip="Вниз">
                         <iconPacks:PackIconMaterial Kind="ArrowDown"
                                                     Width="15"
-                                                    Height="15"/>   
+                                                    Height="15" />
                         <Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="DownOfferGroup"/>
-                                <Binding Path="."/>
+                                <Binding Source="DownOfferGroup" />
+                                <Binding Path="." />
                             </MultiBinding>
                         </Button.CommandParameter>
                     </Button>
-                    <Button Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
+                    <Button Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.DeleteOfferGroupCommand}"
+                            CommandParameter="{Binding Path=.}"
                             Height="28"
                             Width="28"
                             Margin="5,0,0,0"
@@ -268,30 +285,31 @@
                             ToolTip="Удалить группу">
                         <iconPacks:PackIconMaterial Kind="Close"
                                                     Width="15"
-                                                    Height="15"/>
-                        <Button.CommandParameter>
+                                                    Height="15" />
+                        <!--<Button.CommandParameter>
                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                <Binding Source="DelOfferGroup"/>
-                                <Binding Path="."/>
+                                <Binding Source="DeleteOfferGroup" />
+                                <Binding Path="." />
                             </MultiBinding>
-                        </Button.CommandParameter>
+                        </Button.CommandParameter>-->
                     </Button>
                     <CheckBox IsChecked="{Binding IsOption}"
-                              Content="опция" 
+                              Content="опция"
                               ToolTip="Эта группа опциональна и не попадает в общую стоимость КП"
-                              Margin="15,0,0,0"/>
+                              Margin="15,0,0,0" />
                 </StackPanel>
-                <mah:ToggleSwitch IsOn="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                <mah:ToggleSwitch IsOn="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                   ToolTip="Вкл/выкл"
                                   OffContent=""
                                   OnContent=""
-                                  Margin="30,0,0,0"/>
+                                  Margin="30,0,0,0" />
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.ColumnSpan="4"
+        <Grid Grid.Row="1"
+              Grid.ColumnSpan="4"
               Visibility="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource VisibleIfTrue}}">
-            <DataGrid ItemsSource="{Binding NomWrappers}" 
+            <DataGrid ItemsSource="{Binding NomWrappers}"
                       IsEnabled="{Binding IsEnabled, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                       Margin="10"
                       Visibility="{Binding IsContainsNoms, Converter={StaticResource VisibleIfTrue}}"
@@ -309,64 +327,110 @@
                 </i:Interaction.Behaviors>
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}"></Setter>
+                        <Setter Property="Background"
+                                Value="{DynamicResource MahApps.Brushes.Accent4}"></Setter>
                         <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="BorderThickness" Value="0" />
+                            <Trigger Property="IsSelected"
+                                     Value="True">
+                                <Setter Property="BorderBrush"
+                                        Value="Black" />
+                                <Setter Property="BorderThickness"
+                                        Value="0" />
                             </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="BorderThickness" Value="0" />
+                            <Trigger Property="IsSelected"
+                                     Value="False">
+                                <Setter Property="BorderBrush"
+                                        Value="Black" />
+                                <Setter Property="BorderThickness"
+                                        Value="0" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </DataGrid.RowStyle>
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Название" DisplayIndex="0" Width="320" CellTemplate="{StaticResource NomTitle}"/>
-                    <DataGridTemplateColumn Header="С/с" DisplayIndex="1" Width="95" CellTemplate="{StaticResource NomCostPriceTextBlock}">
+                    <DataGridTemplateColumn Header="Название"
+                                            DisplayIndex="0"
+                                            Width="320"
+                                            CellTemplate="{StaticResource NomTitle}" />
+                    <DataGridTemplateColumn Header="С/с"
+                                            DisplayIndex="1"
+                                            Width="95"
+                                            CellTemplate="{StaticResource NomCostPriceTextBlock}">
                         <DataGridTemplateColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                            <Style TargetType="DataGridColumnHeader"
+                                   BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                                <Setter Property="Visibility"
+                                        Value="Collapsed" />
+                                <Setter Property="Background"
+                                        Value="{StaticResource MahApps.Brushes.Accent4}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible"/>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails}"
+                                                 Value="True">
+                                        <Setter Property="Visibility"
+                                                Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Наценка" DisplayIndex="2" Width="80" CellTemplate="{StaticResource NomMarkup}">
+                    <DataGridTemplateColumn Header="Наценка"
+                                            DisplayIndex="2"
+                                            Width="80"
+                                            CellTemplate="{StaticResource NomMarkup}">
                         <DataGridTemplateColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                                <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                            <Style TargetType="DataGridColumnHeader"
+                                   BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                                <Setter Property="Visibility"
+                                        Value="Collapsed" />
+                                <Setter Property="Background"
+                                        Value="{StaticResource MahApps.Brushes.Accent4}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible" />
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails}"
+                                                 Value="True">
+                                        <Setter Property="Visibility"
+                                                Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Цена" DisplayIndex="3" Width="90" CellTemplate="{StaticResource NomPrice}"/>
-                    <DataGridTemplateColumn Header="Прибыль" DisplayIndex="4" Width="90" CellTemplate="{StaticResource NomProfit}">
+                    <DataGridTemplateColumn Header="Цена"
+                                            DisplayIndex="3"
+                                            Width="90"
+                                            CellTemplate="{StaticResource NomPrice}" />
+                    <DataGridTemplateColumn Header="Прибыль"
+                                            DisplayIndex="4"
+                                            Width="90"
+                                            CellTemplate="{StaticResource NomProfit}">
                         <DataGridTemplateColumn.HeaderStyle>
-                            <Style TargetType="DataGridColumnHeader" BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
-                                <Setter Property="Visibility" Value="Hidden"/>
-                                <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent4}" />
+                            <Style TargetType="DataGridColumnHeader"
+                                   BasedOn="{StaticResource MahApps.Styles.DataGridColumnHeader}">
+                                <Setter Property="Visibility"
+                                        Value="Hidden" />
+                                <Setter Property="Background"
+                                        Value="{StaticResource MahApps.Brushes.Accent4}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails}" Value="True">
-                                        <Setter Property="Visibility" Value="Visible" />
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails}"
+                                                 Value="True">
+                                        <Setter Property="Visibility"
+                                                Value="Visible" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
                         </DataGridTemplateColumn.HeaderStyle>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Кол-во" DisplayIndex="5" Width="100" CellTemplate="{StaticResource NomAmount}"/>
-                    <DataGridTemplateColumn Header="Сумма" DisplayIndex="6" Width="80" CellTemplate="{StaticResource NomSum}"/>
-                    <DataGridTemplateColumn Header="Валюта" DisplayIndex="7" Width="80" CellTemplate="{StaticResource NomCurrency}"/>
+                    <DataGridTemplateColumn Header="Кол-во"
+                                            DisplayIndex="5"
+                                            Width="100"
+                                            CellTemplate="{StaticResource NomAmount}" />
+                    <DataGridTemplateColumn Header="Сумма"
+                                            DisplayIndex="6"
+                                            Width="80"
+                                            CellTemplate="{StaticResource NomSum}" />
+                    <DataGridTemplateColumn Header="Валюта"
+                                            DisplayIndex="7"
+                                            Width="80"
+                                            CellTemplate="{StaticResource NomCurrency}" />
                 </DataGrid.Columns>
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
@@ -374,8 +438,9 @@
                                 BorderBrush="{DynamicResource MahApps.Brushes.Gray2}"
                                 Margin="0,0,0,-2">
                             <StackPanel Margin="0,0,0,10">
-                                <StackPanel Margin="10,0,0,0" Orientation="Horizontal">
-                                    <Button Name="OpenDescriptions" 
+                                <StackPanel Margin="10,0,0,0"
+                                            Orientation="Horizontal">
+                                    <Button Name="OpenDescriptions"
                                             Style="{StaticResource MahApps.Styles.Button.Square}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                                             Visibility="{Binding IsRowDetailsVisibility, Converter={StaticResource VisibleIfNotTrue}}"
@@ -383,17 +448,17 @@
                                             Width="28"
                                             Margin="3"
                                             ToolTip="Открыть описание">
-                                        <iconPacks:PackIconMaterial Kind="ChevronDown" 
+                                        <iconPacks:PackIconMaterial Kind="ChevronDown"
                                                                     Width="15"
-                                                                    Height="15"/>
+                                                                    Height="15" />
                                         <Button.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                <Binding Source="OpenDescriptions"/>
-                                                <Binding Path="."/>
+                                                <Binding Source="OpenDescriptions" />
+                                                <Binding Path="." />
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
-                                    <Button Name="CloseRowDetails" 
+                                    <Button Name="CloseRowDetails"
                                             Style="{StaticResource MahApps.Styles.Button.Square}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                                             Visibility="{Binding IsRowDetailsVisibility, Converter={StaticResource VisibleIfTrue}}"
@@ -401,30 +466,30 @@
                                             Width="28"
                                             Margin="3"
                                             ToolTip="Свернуть описания">
-                                        <iconPacks:PackIconMaterial Kind="ChevronUp" 
+                                        <iconPacks:PackIconMaterial Kind="ChevronUp"
                                                                     Width="15"
-                                                                    Height="15"/>
+                                                                    Height="15" />
                                         <Button.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                <Binding Source="CloseRowDetails"/>
-                                                <Binding Path="."/>
+                                                <Binding Source="CloseRowDetails" />
+                                                <Binding Path="." />
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
-                                    <Button Name="AddDescriptionToNomWrapper" 
+                                    <Button Name="AddDescriptionToNomWrapper"
                                             Style="{StaticResource MahApps.Styles.Button.Square}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                                             Height="28"
                                             Width="28"
                                             Margin="3"
                                             ToolTip="Добавить описание">
-                                        <iconPacks:PackIconMaterial Kind="TextBoxOutline" 
+                                        <iconPacks:PackIconMaterial Kind="TextBoxOutline"
                                                                     Width="15"
-                                                                    Height="15"/>
+                                                                    Height="15" />
                                         <Button.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                <Binding Source="AddDescriptionToNomWrapper"/>
-                                                <Binding Path="."/>
+                                                <Binding Source="AddDescriptionToNomWrapper" />
+                                                <Binding Path="." />
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
@@ -435,13 +500,13 @@
                                             Width="28"
                                             Margin="3"
                                             ToolTip="Добавить комментарий">
-                                        <iconPacks:PackIconMaterial Kind="CommentTextOutline" 
+                                        <iconPacks:PackIconMaterial Kind="CommentTextOutline"
                                                                     Width="15"
-                                                                    Height="15"/>
+                                                                    Height="15" />
                                         <Button.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                <Binding Source="AddCommentToNomWrapper"/>
-                                                <Binding Path="."/>
+                                                <Binding Source="AddCommentToNomWrapper" />
+                                                <Binding Path="." />
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
@@ -452,32 +517,34 @@
                                             Width="28"
                                             Margin="3"
                                             ToolTip="Вверх">
-                                        <iconPacks:PackIconMaterial Kind="ArrowUp" 
+                                        <iconPacks:PackIconMaterial Kind="ArrowUp"
                                                                     Width="15"
-                                                                    Height="15"/>
+                                                                    Height="15" />
                                         <Button.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                <Binding Source="MoveUpNomWrapper"/>
-                                                <Binding Path="."/>
-                                                <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}"/>
+                                                <Binding Source="MoveUpNomWrapper" />
+                                                <Binding Path="." />
+                                                <Binding Path="DataContext"
+                                                         RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}" />
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
-                                    <Button Name="MoveDownNomWrapper" 
+                                    <Button Name="MoveDownNomWrapper"
                                             Style="{StaticResource MahApps.Styles.Button.Square}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                                             Height="28"
                                             Width="28"
                                             Margin="3"
                                             ToolTip="Вниз">
-                                        <iconPacks:PackIconMaterial Kind="ArrowDown" 
+                                        <iconPacks:PackIconMaterial Kind="ArrowDown"
                                                                     Width="15"
-                                                                    Height="15"/>
+                                                                    Height="15" />
                                         <Button.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                <Binding Source="MoveDownNomWrapper"/>
-                                                <Binding Path="."/>
-                                                <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}"/>
+                                                <Binding Source="MoveDownNomWrapper" />
+                                                <Binding Path="." />
+                                                <Binding Path="DataContext"
+                                                         RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}" />
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
@@ -498,30 +565,33 @@
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
-                                    <Button Name="DeleteNomWrapper" 
+                                    <Button Name="DeleteNomWrapper"
                                             Style="{StaticResource MahApps.Styles.Button.Square}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType=ListView}, Path=DataContext.Cmd}"
                                             Height="28"
                                             Width="28"
                                             Margin="3"
                                             ToolTip="Удалить">
-                                        <iconPacks:PackIconMaterial Kind="Close" 
+                                        <iconPacks:PackIconMaterial Kind="Close"
                                                                     Width="15"
-                                                                    Height="15"/>
+                                                                    Height="15" />
                                         <Button.CommandParameter>
                                             <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                <Binding Source="DeleteNomWrapper"/>
-                                                <Binding Path="."/>
-                                                <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}"/>
+                                                <Binding Source="DeleteNomWrapper" />
+                                                <Binding Path="." />
+                                                <Binding Path="DataContext"
+                                                         RelativeSource="{RelativeSource Mode=FindAncestor,AncestorType=DataGrid}" />
                                             </MultiBinding>
                                         </Button.CommandParameter>
                                     </Button>
                                     <CheckBox IsChecked="{Binding IsShowPrice, UpdateSourceTrigger=PropertyChanged}"
-                                              Margin="5" 
-                                              ToolTip="Отображать стоимость позиции в группе в КП"/>
+                                              Margin="5"
+                                              ToolTip="Отображать стоимость позиции в группе в КП"
+                                              Content="отображать стоимость позиции" />
                                     <CheckBox IsChecked="{Binding IsIncludeIntoOffer, UpdateSourceTrigger=PropertyChanged}"
                                               Margin="5"
-                                              ToolTip="Включать в итоговую стоимость КП"/>
+                                              ToolTip="Включать в итоговую стоимость КП"
+                                              Content="включать в итоговую стоимость" />
                                 </StackPanel>
                                 <DataGrid ItemsSource="{Binding Nomenclature.Descriptions}"
                                           Visibility="{Binding IsRowDetailsVisibility, Converter={StaticResource BoolToVis}}"
@@ -536,26 +606,39 @@
                                           Width="700"
                                           HorizontalAlignment="Left">
                                     <DataGrid.RowStyle>
-                                        <Style TargetType="DataGridRow"  BasedOn="{StaticResource {x:Type DataGridRow}}">
+                                        <Style TargetType="DataGridRow"
+                                               BasedOn="{StaticResource {x:Type DataGridRow}}">
                                             <Style.Triggers>
-                                                <Trigger Property="IsSelected" Value="True">
-                                                    <Setter Property="BorderBrush" Value="Black" />
-                                                    <Setter Property="BorderThickness" Value="0" />
-                                                    <Setter Property="Foreground" Value="Black" />
+                                                <Trigger Property="IsSelected"
+                                                         Value="True">
+                                                    <Setter Property="BorderBrush"
+                                                            Value="Black" />
+                                                    <Setter Property="BorderThickness"
+                                                            Value="0" />
+                                                    <Setter Property="Foreground"
+                                                            Value="Black" />
                                                 </Trigger>
-                                                <Trigger Property="IsSelected" Value="False">
-                                                    <Setter Property="BorderBrush" Value="Black" />
-                                                    <Setter Property="BorderThickness" Value="0" />
-                                                    <Setter Property="Foreground" Value="Black" />
+                                                <Trigger Property="IsSelected"
+                                                         Value="False">
+                                                    <Setter Property="BorderBrush"
+                                                            Value="Black" />
+                                                    <Setter Property="BorderThickness"
+                                                            Value="0" />
+                                                    <Setter Property="Foreground"
+                                                            Value="Black" />
                                                 </Trigger>
                                             </Style.Triggers>
                                         </Style>
                                     </DataGrid.RowStyle>
                                     <DataGrid.Columns>
-                                        <DataGridTemplateColumn DisplayIndex="0" CellTemplate="{StaticResource DescriptionControlsLeft}"/>
-                                        <DataGridTemplateColumn DisplayIndex="1" CellTemplate="{StaticResource DescriptionStateCheckbox}"/>
-                                        <DataGridTemplateColumn DisplayIndex="2" CellTemplate="{StaticResource DescriptionTextBox}"/>
-                                        <DataGridTemplateColumn DisplayIndex="3" CellTemplate="{StaticResource DescriptionControlsRight}"/>
+                                        <DataGridTemplateColumn DisplayIndex="0"
+                                                                CellTemplate="{StaticResource DescriptionControlsLeft}" />
+                                        <DataGridTemplateColumn DisplayIndex="1"
+                                                                CellTemplate="{StaticResource DescriptionStateCheckbox}" />
+                                        <DataGridTemplateColumn DisplayIndex="2"
+                                                                CellTemplate="{StaticResource DescriptionTextBox}" />
+                                        <DataGridTemplateColumn DisplayIndex="3"
+                                                                CellTemplate="{StaticResource DescriptionControlsRight}" />
                                     </DataGrid.Columns>
                                 </DataGrid>
                             </StackPanel>
@@ -564,7 +647,7 @@
                 </DataGrid.RowDetailsTemplate>
             </DataGrid>
         </Grid>
-        
+
         <Border Grid.Row="2"
                 Grid.ColumnSpan="4"
                 Visibility="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource VisibleIfTrue}}"
@@ -572,91 +655,95 @@
                 BorderThickness="0 1 0 0">
             <Grid Background="{DynamicResource MahApps.Brushes.Accent4}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="30" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="330"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="80"/>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="330" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="80" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="80" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="С/с" Grid.Column="1" 
+                <TextBlock Text="С/с"
+                           Grid.Column="1"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            VerticalAlignment="Center"
                            Margin="5"
                            FontFamily="Arial"
                            FontSize="12"
-                           FontWeight="Bold"/>
-                <TextBlock Text="Наценка" Grid.Column="2" 
+                           FontWeight="Bold" />
+                <TextBlock Text="Наценка"
+                           Grid.Column="2"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            Margin="5"
                            VerticalAlignment="Center"
                            FontFamily="Arial"
                            FontSize="12"
-                           FontWeight="Bold"/>
-                <TextBlock Text="Прибыль" Grid.Column="4" 
+                           FontWeight="Bold" />
+                <TextBlock Text="Прибыль"
+                           Grid.Column="4"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            Margin="5"
                            VerticalAlignment="Center"
                            FontFamily="Arial"
                            FontSize="12"
-                           FontWeight="Bold"/>
-                <TextBlock Text="Сумма" Grid.Column="6" 
+                           FontWeight="Bold" />
+                <TextBlock Text="Сумма"
+                           Grid.Column="6"
                            Margin="5"
                            VerticalAlignment="Center"
                            FontFamily="Arial"
                            FontSize="12"
-                           FontWeight="Bold"/>
-                <TextBlock Text="Итого:" Grid.Column="0" 
-                           Grid.Row="1" 
+                           FontWeight="Bold" />
+                <TextBlock Text="Итого:"
+                           Grid.Column="0"
+                           Grid.Row="1"
                            VerticalAlignment="Center"
                            FontFamily="Arial"
                            FontSize="12"
                            Margin="30,0"
                            TextAlignment="Right"
-                           FontWeight="Bold"/>
-                <TextBlock Text="{Binding CostPriceSum, StringFormat={}{0:### ### ### ### ###}}" Grid.Column="1"
+                           FontWeight="Bold" />
+                <TextBlock Text="{Binding CostPriceSum, StringFormat={}{0:### ### ### ### ###}}"
+                           Grid.Column="1"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            Margin="5"
-                           Grid.Row="1" 
+                           Grid.Row="1"
                            VerticalAlignment="Center"
                            FontFamily="Arial"
                            FontSize="12"
-                           FontWeight="Bold"/>
-                <TextBlock Grid.Column="2" 
+                           FontWeight="Bold" />
+                <TextBlock Grid.Column="2"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            Margin="5"
-                           Grid.Row="1" 
+                           Grid.Row="1"
                            VerticalAlignment="Center"
                            Text="{Binding CommmonMarkup, StringFormat=F2}"
                            FontFamily="Arial"
                            FontSize="12"
-                           FontWeight="Bold"/>
+                           FontWeight="Bold" />
                 <TextBlock Grid.Column="4"
                            Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.IsShowPriceDetails, Converter={StaticResource BoolToVis}}"
                            Margin="5"
-                           Grid.Row="1" 
+                           Grid.Row="1"
                            VerticalAlignment="Center"
                            Text="{Binding ProfitSum, StringFormat={}{0:### ### ### ### ###}}"
                            FontFamily="Arial"
                            FontSize="12"
-                           FontWeight="Bold"/>
+                           FontWeight="Bold" />
                 <TextBlock Grid.Column="6"
                            Margin="5"
-                           Grid.Row="1" 
+                           Grid.Row="1"
                            VerticalAlignment="Center"
                            Text="{Binding PriceSum, StringFormat={}{0:### ### ### ### ###}}"
                            FontFamily="Arial"
                            FontSize="12"
-                           FontWeight="Bold"/>
+                           FontWeight="Bold" />
             </Grid>
-
         </Border>
-
     </Grid>
 </UserControl>

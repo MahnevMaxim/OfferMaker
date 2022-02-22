@@ -25,10 +25,12 @@ namespace OfferMaker.Views
     /// </summary>
     public partial class MainWindow : MetroWindow, IView
     {
+        public DialogCoordinator dialogCoordinator;
 
         public MainWindow()
         {
             InitializeComponent();
+            dialogCoordinator = (DialogCoordinator)DialogCoordinator.Instance;
         }
 
         MetroDialogSettings ms = new MetroDialogSettings();

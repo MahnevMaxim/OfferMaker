@@ -176,7 +176,7 @@ namespace OfferMaker
             try
             {
                 ApiLib.User userCopy = Helpers.CloneObject<ApiLib.User>(user);
-                var response = await client.UserSelfChangePasswordAsync(oldPwd, userCopy);
+                var response = await client.UserSelfChangePasswordAsync(oldPwd, user.Pwd, userCopy);
                 if (response.StatusCode == 204)
                 {
                     return new CallResult() { SuccessMessage = "Пароль обновлён" };
@@ -264,7 +264,7 @@ namespace OfferMaker
                 if (user.Image != null)
                     Global.ImageManager.UploadImage(user);
                 ApiLib.User user_ = Helpers.CloneObject<ApiLib.User>(user);
-                await client.UserSelfEditAsync(user.Id, user.Pwd, user_);
+                await client.UserSelfEditAsync(user.Id, user_);
                 return new CallResult() { SuccessMessage = "Настройки пользователя сохранены" };
             }
             catch (Exception ex)

@@ -108,5 +108,42 @@ namespace OfferMaker.Views
         private void ShowWithoutCategoryButton_Click(object sender, RoutedEventArgs e) => UnselectTreeItem();
 
         #endregion Categories filter
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if(WindowState == WindowState.Maximized)
+            {
+                AppSettings.Default.AddNomIsMaximized = true;
+            }
+            else
+            {
+                AppSettings.Default.AddNomIsMaximized = false;
+                AppSettings.Default.AddNomTop = Top;
+                AppSettings.Default.AddNomLeft = Left;
+                AppSettings.Default.AddNomHeight = Height;
+                AppSettings.Default.AddNomWidth = Width;
+            }
+            AppSettings.Default.Save();
+        }
+
+        private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            bool isMaximized = AppSettings.Default.AddNomIsMaximized;
+            if (isMaximized)
+            {
+                WindowState = WindowState.Maximized;
+                return;
+            }
+            double top = AppSettings.Default.AddNomTop;
+            double left = AppSettings.Default.AddNomLeft;
+            double height = AppSettings.Default.AddNomHeight;
+            double width = AppSettings.Default.AddNomWidth;
+            if (top == 0 && left == 0 && height == 0 && width == 0) 
+                return;
+            Top = top;
+            Left = left;
+            Height = height;
+            Width = width;
+        }
     }
 }

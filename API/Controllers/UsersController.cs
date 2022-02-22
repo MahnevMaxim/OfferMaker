@@ -93,19 +93,19 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}/self", Name = nameof(UserSelfEdit))]
-        public async Task<IActionResult> UserSelfEdit(int id, User user, string password)
+        public async Task<IActionResult> UserSelfEdit(int id, User user)
         {
             var uName = User.Identity.Name;
             if (uName == user.Email)
             {
                 User user_ = _context.Users.Include(u => u.Account).FirstOrDefault(u => u.Email == user.Email);
 
-                var ph = new PasswordHasher();
-                var isCurrentHashValid = ph.VerifyHashedPassword(user_.Account.Password, password);
-                if (isCurrentHashValid != Microsoft.AspNet.Identity.PasswordVerificationResult.Success)
-                {
-                    return BadRequest(new { errorText = "Invalid username or password." });
-                }
+                //var ph = new PasswordHasher();
+                //var isCurrentHashValid = ph.VerifyHashedPassword(user_.Account.Password, password);
+                //if (isCurrentHashValid != Microsoft.AspNet.Identity.PasswordVerificationResult.Success)
+                //{
+                //    return BadRequest(new { errorText = "Invalid username or password." });
+                //}
 
                 if (id != user.Id)
                 {
@@ -163,7 +163,7 @@ namespace API.Controllers
         }
 
         [HttpPut("self_password", Name = nameof(UserSelfChangePassword))]
-        public async Task<IActionResult> UserSelfChangePassword(User user, string oldPassword)
+        public async Task<IActionResult> UserSelfChangePassword(User user, string oldPassword, string newPassword)
         {
             var uName = User.Identity.Name;
             User user_ = _context.Users.Include(u => u.Account).Where(u => u.Email == user.Email).FirstOrDefault();
@@ -189,7 +189,7 @@ namespace API.Controllers
                 try
                 {
                     var ph = new PasswordHasher();
-                    user_.Account.Password = ph.HashPassword(oldPassword);
+                    user_.Account.Password = ph.HashPassword(newPassword);
                     await _context.SaveChangesAsync();
                     return NoContent();
                 }

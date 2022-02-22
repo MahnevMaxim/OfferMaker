@@ -181,7 +181,8 @@ namespace OfferMaker
             set
             {
                 decimal koef = value / Price;
-                Nomenclature.CostPrice = Nomenclature.CostPrice * koef;
+                Nomenclature.Markup = Nomenclature.Markup * koef;
+                OnPropertyChanged(nameof(Markup));
                 UpdateAmount();
             }
         }
@@ -360,6 +361,7 @@ namespace OfferMaker
             OnPropertyChanged(nameof(Sum));
             OnPropertyChanged(nameof(CostSum));
             OnPropertyChanged(nameof(ProfitSum));
+            OnPropertyChanged(nameof(Price));
             offerGroup?.NomWrappers_CollectionChanged(null, null);
         }
 

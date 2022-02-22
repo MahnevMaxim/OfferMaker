@@ -20,8 +20,10 @@
 
     protected override async Task OnInitializedAsync()
     {
+#if DEBUG
         await Task.Delay(10000);
+#endif
         apiBaseUrl = ApiService.GetApiBaseUrl();
-Console.WriteLine(apiBaseUrl);
+        Console.WriteLine(apiBaseUrl);
     }
 }

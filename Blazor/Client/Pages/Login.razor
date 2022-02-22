@@ -43,7 +43,9 @@
     async protected override Task OnInitializedAsync()
     {
         // redirect to home if already logged in
+#if DEBUG
         await Task.Delay(10000);
+#endif
         if (AuthenticationService.User != null)
         {
             NavigationManager.NavigateTo("");

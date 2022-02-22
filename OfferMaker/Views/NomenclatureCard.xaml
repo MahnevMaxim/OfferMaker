@@ -20,12 +20,14 @@
     <Window.Resources>
         <root:MultiConverter x:Key="MultiConverter" />
         <root:EmptyStringToBoolConverter x:Key="TrueIfStringNotEmpty" />
+        <root:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <root:VisToBoolConverter x:Key="VisibleIfNotTrue"
                                  Inverted="True"
                                  Not="True" />
     </Window.Resources>
 
     <Grid Margin="10,10">
+
         <Grid.Resources>
             <DataTemplate x:Key="RemoveDescriptionButton">
                 <Button Style="{DynamicResource MahApps.Styles.Button.Square}"
@@ -44,6 +46,10 @@
                         </MultiBinding>
                     </Button.CommandParameter>
                 </Button>
+            </DataTemplate>
+            <DataTemplate x:Key="DescriptionText">
+                <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                         TextWrapping="Wrap" />
             </DataTemplate>
         </Grid.Resources>
 
@@ -350,11 +356,11 @@
                           BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Описание"
-                                            MinWidth="300"
-                                            MaxWidth="650"
-                                            Binding="{Binding Text}"
-                                            DisplayIndex="0" />
+                        <DataGridTemplateColumn Header="Описание"
+                                                MinWidth="300"
+                                                MaxWidth="650"
+                                                DisplayIndex="0"
+                                                CellTemplate="{StaticResource DescriptionText}" />
                         <DataGridTemplateColumn Header=""
                                                 DisplayIndex="1"
                                                 MaxWidth="50"

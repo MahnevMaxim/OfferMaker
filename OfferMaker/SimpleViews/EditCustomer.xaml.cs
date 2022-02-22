@@ -31,10 +31,10 @@ namespace OfferMaker.SimpleViews
             InitializeComponent();
             Offer = offer;
 
-            Offer.OfferName = "Название КП";
-            Offer.Customer.FullName = "Сергей Иванович";
-            Offer.Customer.Organization = "Монолит";
-            Offer.Customer.Location = "Красноярск";
+            //Offer.OfferName = "Название КП";
+            //Offer.Customer.FullName = "Сергей Иванович";
+            //Offer.Customer.Organization = "Монолит";
+            //Offer.Customer.Location = "Красноярск";
 
             offerBackup = Helpers.CloneObject<Offer>(offer);
             DataContext = Offer;

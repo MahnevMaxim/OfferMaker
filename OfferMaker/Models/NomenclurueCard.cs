@@ -119,14 +119,12 @@ namespace OfferMaker
             string retPath = newImagePath + DateTime.Now.ToShortDateString() + ".png";
             try
             {
-                System.IO.File.WriteAllBytes(retPath, result);
+                File.WriteAllBytes(retPath, result);
             }
             catch (Exception ex)
             {
                 retPath = "";
             }
-
-            //string path = Helpers.GetFilePath("Image files (*.jpg, *.jpeg, *.png, *.bmp) | *.jpg; *.jpeg; *.png; *.bmp");
 
             return retPath;
         }
@@ -144,7 +142,8 @@ namespace OfferMaker
         /// </summary>
         public void AddDesription()
         {
-            if (Nomenclature.Descriptions == null) Nomenclature.Descriptions = new ObservableCollection<Description>();
+            if (Nomenclature.Descriptions == null) 
+                Nomenclature.Descriptions = new ObservableCollection<Description>();
             Nomenclature.Descriptions.Add(new Description() { Text = "Описание" });
         }
 

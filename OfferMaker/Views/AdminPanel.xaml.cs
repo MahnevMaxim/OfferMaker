@@ -44,21 +44,10 @@ namespace OfferMaker.Views
 
         //с паролями всё неоднозначно, т.к. они в DataTemplate, может стоит сделать по другому, но пока приходится отлавливать
         //контролы паролей таким уродливым способом
-        PasswordBox accessPasswordTextBox;
         PasswordBox newUserPasswordTextBox;
         PasswordBox newPasswordTextBox;
         PasswordBox newPasswordTextBoxRepeat;
         PasswordBox oldPasswordTextBox;
-
-        /// <summary>
-        /// Пароль для редактирования текущего аккаунта
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void accessPasswordTextBox_PasswordChanged(object sender, RoutedEventArgs e)
-        {
-            ((ViewModels.AdminPanelViewModel)DataContext).User.Pwd = ((PasswordBox)sender).Password; 
-        }
 
         /// <summary>
         /// Пароль нового пользователя.

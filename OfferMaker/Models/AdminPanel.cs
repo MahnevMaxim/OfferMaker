@@ -174,11 +174,6 @@ namespace OfferMaker
 
         async public void UserSelfEdit()
         {
-            if (string.IsNullOrWhiteSpace(User.Pwd))
-            {
-                OnSendMessage("Введите пароль");
-                return;
-            }
             CallResult cr = await Global.Main.DataRepository.UserSelfEdit(User);
             OnSendMessage(cr.Message);
         }

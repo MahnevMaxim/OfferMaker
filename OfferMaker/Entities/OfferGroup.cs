@@ -111,6 +111,8 @@ namespace OfferMaker
             {
                 decimal sum = 0;
                 NomWrappers.ToList().ForEach(n => { if (n.IsIncludeIntoOffer) sum += n.SumInOfferCurrency; });
+                OnPropertyChanged(nameof(PriceSumWrapper));
+                OnPropertyChanged(nameof(CurrencyWrapper));
                 return sum;
             }
         }

@@ -7,6 +7,7 @@ using ControlzEx.Theming;
 using System.Windows;
 using System.Collections.ObjectModel;
 using System.Windows.Documents;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace OfferMaker.ViewModels
 {
@@ -18,9 +19,12 @@ namespace OfferMaker.ViewModels
         bool isOfferTemplatesFilterOpen = false;
         string appMode;
 
+        private IDialogCoordinator dialogCoordinator;
+
         public override void InitializeViewModel()
         {
             modelMain = (Main)model;
+            dialogCoordinator = ((Views.MainWindow)view).dialogCoordinator;
         }
 
         #region Fly menu
@@ -134,6 +138,31 @@ namespace OfferMaker.ViewModels
         #endregion Main
 
         #region Constructor
+
+        public RelayCommand DeleteOfferGroupCommand
+        {
+            get => new RelayCommand(obj =>
+            {
+                DeleteOfferGroup((OfferGroup)obj);
+            });
+        }
+
+        async void DeleteOfferGroup(OfferGroup group)
+        {
+            if(group.NomWrappers.Count>0)
+            {
+                var dialogSettings = new MetroDialogSettings()
+                {
+                    AffirmativeButtonText = "Удалить",
+                    NegativeButtonText = "Отмена"
+                };
+                var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "", "Удалить группу?",
+                    MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+                if (dialogRes != MessageDialogResult.Affirmative)
+                    return;
+            }
+            modelMain.DelOfferGroup(group);
+        }
 
         #region Offer
 
@@ -400,8 +429,8 @@ namespace OfferMaker.ViewModels
 
         public string PhotoNumberTeh { get => modelMain.Constructor.PhotoNumberTeh; }
 
-        public string AppMode 
-        { 
+        public string AppMode
+        {
             get
             {
                 if (appMode == null)
@@ -409,6 +438,8 @@ namespace OfferMaker.ViewModels
                 return appMode;
             }
         }
+
+        public string Version { get => Settings.GetInstance().Version; }
 
         #endregion Constructor
     }
