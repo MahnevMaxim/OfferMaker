@@ -352,6 +352,17 @@ namespace OfferMaker
             return new CallResult();
         }
 
+        internal void PromoText()
+        {
+            SimpleViews.PromoText form = new SimpleViews.PromoText(Offer.PromoText);
+            var res = form.ShowDialog();
+            if(res.Value)
+            {
+                Offer.PromoText = form.PromoText_;
+                viewModel.OnPropertyChanged("PromoText");
+            }
+        }
+
         /// <summary>
         /// Редактирование копии номенклатуры.
         /// </summary>

@@ -56,6 +56,7 @@ namespace OfferMaker
         bool isEditableState;
         Offer offerEditBackup;
         OfferState offerState;
+        string promoText;
 
         public int Id
         {
@@ -334,6 +335,19 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Призыв КП.
+        /// </summary>
+        public string PromoText
+        {
+            get => promoText;
+            set
+            {
+                promoText = value;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// Если IsWithNds=true, то считать цену с НДС.
         /// </summary>
         public bool IsWithNds
@@ -591,7 +605,10 @@ namespace OfferMaker
 
         #endregion Money
 
-        public Offer() { }
+        public Offer() 
+        {
+            PromoText = Global.DefaultPromotext;
+        }
 
         /// <summary>
         /// Конструктор первой инициализации объекта.
@@ -608,6 +625,7 @@ namespace OfferMaker
             OfferGroups.CollectionChanged += OfferGroups_CollectionChanged;
             Guid = System.Guid.NewGuid().ToString();
             discount = new Discount(this);
+            PromoText = Global.DefaultPromotext;
         }
 
         /// <summary>

@@ -340,6 +340,8 @@ namespace OfferMaker
             if (!cr.Success) OnSendMessage(cr.Error.Message);
         }
 
+        public void PromoText() => Constructor.PromoText();
+
         public void RemoveInformBlock(OfferInfoBlock offerInfoBlock) => Constructor.RemoveInformBlock(offerInfoBlock);
 
         public void SendMess(string mess) => OnSendMessage(mess);

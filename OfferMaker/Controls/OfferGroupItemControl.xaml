@@ -205,6 +205,9 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
+
+        <!--#region Кнопки и текстбокс группы -->
+
         <Grid Grid.Row="0"
               Background="{DynamicResource MahApps.Brushes.Accent2}">
             <Grid.ColumnDefinitions>
@@ -223,8 +226,7 @@
                      Height="30"
                      MaxWidth="800"
                      KeyUp="TextBox_KeyUp" />
-            <StackPanel Grid.Row="0"
-                        Grid.Column="1"
+            <StackPanel Grid.Column="1"
                         Orientation="Horizontal">
                 <StackPanel Orientation="Horizontal"
                             IsEnabled="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged}">
@@ -306,6 +308,8 @@
             </StackPanel>
         </Grid>
 
+        <!--#endregion Кнопки и текстбокс группы -->
+        
         <Grid Grid.Row="1"
               Grid.ColumnSpan="4"
               Visibility="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource VisibleIfTrue}}">
@@ -327,6 +331,8 @@
                 </i:Interaction.Behaviors>
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">
+                        <EventSetter Event="PreviewMouseLeftButtonDown"
+                                     Handler="SelectRowDetails" />
                         <Setter Property="Background"
                                 Value="{DynamicResource MahApps.Brushes.Accent4}"></Setter>
                         <Style.Triggers>
@@ -432,6 +438,9 @@
                                             Width="80"
                                             CellTemplate="{StaticResource NomCurrency}" />
                 </DataGrid.Columns>
+
+                <!--#region Описания и кнопки -->
+                
                 <DataGrid.RowDetailsTemplate>
                     <DataTemplate>
                         <Border BorderThickness="0 0 0 2"
@@ -645,9 +654,14 @@
                         </Border>
                     </DataTemplate>
                 </DataGrid.RowDetailsTemplate>
+
+                <!--#region Описания и кнопки -->
+                
             </DataGrid>
         </Grid>
 
+        <!--#region Низ -->
+        
         <Border Grid.Row="2"
                 Grid.ColumnSpan="4"
                 Visibility="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource VisibleIfTrue}}"
@@ -745,5 +759,8 @@
                            FontWeight="Bold" />
             </Grid>
         </Border>
+
+        <!--#endregion Низ -->
+        
     </Grid>
 </UserControl>

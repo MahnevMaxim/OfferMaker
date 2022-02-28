@@ -90,5 +90,24 @@ namespace OfferMaker.Controls
             if(((ComboBox)sender).SelectedValue!=null)
                 groupTitleTextBox.Text = ((ComboBox)sender).SelectedValue.ToString();
         }
+
+        private void SelectRowDetails(object sender, MouseButtonEventArgs e)
+        {
+            var row = sender as DataGridRow;
+            if (row == null)
+            {
+                return;
+            }
+            row.Focusable = true;
+            row.Focus();
+
+            var focusDirection = FocusNavigationDirection.Next;
+            var request = new TraversalRequest(focusDirection);
+            var elementWithFocus = Keyboard.FocusedElement as UIElement;
+            if (elementWithFocus != null)
+            {
+                elementWithFocus.MoveFocus(request);
+            }
+        }
     }
 }

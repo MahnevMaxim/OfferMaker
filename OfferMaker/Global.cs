@@ -12,8 +12,8 @@ namespace OfferMaker
         /// <summary>
         /// Если true - Тогда подключение идёт удалённому серверу.
         /// </summary>
-        static bool IsRealMode = true;
-        //static bool IsRealMode;
+        //static bool IsRealMode = true;
+        static bool IsRealMode;
 
         public static string apiEndpoint { get => IsRealMode ? "https://kip.mybot.su/" : "https://localhost:44313/"; }
 
@@ -50,5 +50,7 @@ namespace OfferMaker
         public static ObservableCollection<Offer> OfferTemplates { get => Main.TemplatesStore.Offers; }
 
         public static ObservableCollection<Offer> Offers { get => Main.ArchiveStore.Offers; }
+
+        public static string DefaultPromotext = "ЗАКАЗЫВАЙТЕ ОБОРУДОВАНИЕ У ПРОВЕРЕННОГО ПОСТАВЩИКА!";
     }
 }

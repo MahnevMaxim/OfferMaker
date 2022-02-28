@@ -10,14 +10,16 @@
         <StackPanel HorizontalAlignment="Stretch">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="55"/>
+                    <RowDefinition Height="*"/>
                     <RowDefinition Height="45"/>
                     <RowDefinition Height="220"/>
                 </Grid.RowDefinitions>
-                <Border Grid.Row="0" Margin="11,0,0,0" Background="Yellow" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <Border Grid.Row="0" Margin="11,0,0,0" Background="Yellow" HorizontalAlignment="Left" VerticalAlignment="Center" Width="18cm">
                     <TextBlock FontSize="16pt" 
+                               TextWrapping="Wrap"
+                               TextAlignment="Center"
                                FontFamily="Segoe UI Light"
-                               Text="ЗАКАЗЫВАЙТЕ ОБОРУДОВАНИЕ У ПРОВЕРЕННОГО ПОСТАВЩИКА!" 
+                               Text="{Binding PromoText}" 
                                Margin="20,1"/>
                 </Border>
 

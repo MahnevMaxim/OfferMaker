@@ -31,6 +31,7 @@ namespace OfferMaker
                     offer.OfferState = OfferState.Archive;
                 else
                     offer.OfferState = OfferState.Template;
+                offer.PromoText = offer.PromoText == null ? Global.DefaultPromotext : offer.PromoText;
             }
             catch (Exception ex)
             {

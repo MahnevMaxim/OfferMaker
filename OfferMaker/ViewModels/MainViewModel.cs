@@ -349,6 +349,8 @@ namespace OfferMaker.ViewModels
 
         public string OfferStatus { get => modelMain.Constructor.OfferStatus; }
 
+        public string PromoText { get => modelMain.Constructor.Offer.PromoText; }
+
         #endregion Offer
 
         public int PdfControlSelectedIndex
