@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using ImageCropperLibrary;
 using System.Windows;
 using System.IO;
+using Shared;
 
 namespace OfferMaker
 {
@@ -54,9 +55,9 @@ namespace OfferMaker
 
         public List<string> Currencies { get; set; }
 
-        public NomenclurueCard(Nomenclature nomenclature, Catalog catalog)
+        public NomenclurueCard(Nomenclature nomenclature)
         {
-            this.catalog = catalog;
+            catalog = Global.Catalog;
             Nomenclature = nomenclature;
             CurrencyCharCode = nomenclature.CurrencyCharCode;
             Currencies = Global.Main.UsingCurrencies.ToList();
@@ -70,6 +71,7 @@ namespace OfferMaker
         /// <param name="nomWrapper"></param>
         public NomenclurueCard(NomWrapper nomWrapper)
         {
+            catalog = Global.Catalog;
             Nomenclature = nomWrapper.Nomenclature;
             CurrencyCharCode = nomWrapper.Nomenclature.CurrencyCharCode;
             Currencies = Global.Main.UsingCurrencies.ToList();
@@ -90,6 +92,16 @@ namespace OfferMaker
         {
             catalog.CatalogFilter.RemoveFromCategory(Nomenclature);
             CategoryTitle = null;
+        }
+
+        /// <summary>
+        /// Сохранение номенклатуры в каталог.
+        /// </summary>
+        public void SaveNomToCatalog()
+        {
+            CallResult res = catalog.EditNomenclature(Nomenclature);
+            if (!res.Success)
+                OnSendMessage(res.Message);
         }
 
         /// <summary>
@@ -142,7 +154,7 @@ namespace OfferMaker
         /// </summary>
         public void AddDesription()
         {
-            if (Nomenclature.Descriptions == null) 
+            if (Nomenclature.Descriptions == null)
                 Nomenclature.Descriptions = new ObservableCollection<Description>();
             Nomenclature.Descriptions.Add(new Description() { Text = "Описание" });
         }

@@ -141,32 +141,11 @@ namespace OfferMaker
                 writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
         }
 
-        async internal Task<CallResult> OfferTemplateCreate()
+        async internal Task<CallResult<Offer>> OfferTemplateCreate()
         {
             Offer temp = CreateTemplate(constructor.Offer);
             CallResult cr = await Global.Main.DataRepository.OfferTemplateCreate(temp);
-            return cr;
-            bool isSuccess;
-            if (cr.Success)
-            {
-                isSuccess = true;
-            }
-            else if (cr.PreviousCallResult.Count > 0)
-            {
-                CallResult callResult = (CallResult)cr.PreviousCallResult[0];
-                if (callResult.Success)
-                {
-                    isSuccess = true;
-                }
-            }
-
-            if (isSuccess)
-            {
-                Global.Main.TemplatesStore.AddOffer(temp);
-                Global.Constructor.LoadOfferTemplate(temp);
-                Global.Main.TemplatesStore.ApplyOfferFilter();
-            }
-            Global.Main.SendMess(cr.GetAllMessages());
+            return new CallResult<Offer>() { Data = temp };
         }
 
         internal void SaveOfferToFile()

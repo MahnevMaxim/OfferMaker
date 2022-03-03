@@ -78,7 +78,7 @@ namespace API.Controllers
         {
             if (offerTemplate.Banner_ != null)
             {
-                Banner banner = _context.Banners.Where(b => b.Guid == offerTemplate.Banner_.Guid).First();
+                Banner banner = _context.Banners.Where(b => b.Guid == offerTemplate.Banner_.Guid).FirstOrDefault();
                 offerTemplate.Banner_ = banner;
             }
 

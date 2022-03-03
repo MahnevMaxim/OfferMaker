@@ -179,7 +179,7 @@ namespace OfferMaker
                 if (Offer.OfferState == OfferState.Archive)
                     return Offer.Currencies;
                 else
-                    return Global.Currencies;
+                    return Global.Main.Currencies;
             }
         }
 

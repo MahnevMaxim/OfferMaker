@@ -523,7 +523,8 @@ namespace OfferMaker
 
             IsBusy = false;
 
-            OnSendMessage(message);
+            if(!string.IsNullOrWhiteSpace(message))
+                OnSendMessage(message);
         }
 
         /// <summary>
@@ -587,7 +588,30 @@ namespace OfferMaker
 
         async public void OfferTemplateCreate()
         {
-            CallResult cr = await DocManager.OfferTemplateCreate();
+            CallResult<Offer> cr = await DocManager.OfferTemplateCreate();
+            bool isSuccess=false;
+            if (cr.Success)
+            {
+                isSuccess = true;
+            }
+            else if (cr.PreviousCallResult.Count > 0)
+            {
+                CallResult callResult = (CallResult)cr.PreviousCallResult[0];
+                if (callResult.Success)
+                {
+                    isSuccess = true;
+                }
+            }
+
+            if (isSuccess)
+            {
+                TemplatesStore.AddOffer(cr.Data);
+                Constructor.LoadOfferTemplate(cr.Data);
+                TemplatesStore.ApplyOfferFilter();
+            }
+            string mess = cr.GetAllMessages();
+            if(!string.IsNullOrWhiteSpace(mess))
+                SendMess(cr.GetAllMessages());
         }
             
         async public void OfferCreate()

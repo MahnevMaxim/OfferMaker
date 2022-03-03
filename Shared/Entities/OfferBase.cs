@@ -58,5 +58,7 @@ namespace Shared
         public bool IsTemplate { get; set; }
 
         public bool IsDelete { get; set; }
+
+        public string Comment { get; set; }
     }
 }

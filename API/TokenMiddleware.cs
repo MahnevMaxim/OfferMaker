@@ -27,7 +27,7 @@ namespace API
             string destination = context.Request.Path;
 
             //если обновление токена или авторизация, то пропускаем запрос
-            if(destination== "/updatetoken" || destination== "/token" || destination == "/api/Download")
+            if (destination == "/updatetoken" || destination == "/token" || destination == "/api/Download")
             {
                 await _next.Invoke(context);
             }
@@ -35,7 +35,7 @@ namespace API
             {
                 //если экспорт, то пропускаем
                 var identity = context.User.Identity as ClaimsIdentity;
-                if (identity.Name== "Export")
+                if (identity.Name == "Export")
                 {
                     await _next.Invoke(context);
                 }

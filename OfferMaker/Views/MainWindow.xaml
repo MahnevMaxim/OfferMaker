@@ -479,15 +479,13 @@
                     </Button>
                 </DataTemplate>
 
-                <!--<DataTemplate x:Key="GroupName">
-                <TextBox Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}"
-                         Width="250"
-                         BorderThickness="0"
-                         MaxWidth="350"
-                         MinWidth="100" 
-                         TextWrapping="Wrap"
-                         PreviewDragOver="TextBox_PreviewDragOver"/>
-            </DataTemplate>-->
+                <DataTemplate x:Key="CommentTextBox">
+                    <TextBox Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                             TextWrapping="Wrap"
+                             Margin="5"
+                             BorderThickness="0"
+                             HorizontalAlignment="Stretch"/>
+                </DataTemplate>
 
             </Grid.Resources>
 
@@ -1472,16 +1470,10 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Заказчик"
-                                                    Binding="{Binding Customer.FullName}"
+                                <DataGridTextColumn Header="Создатель"
+                                                    Binding="{Binding OfferCreator.FullName}"
                                                     DisplayIndex="3" />
-                                <DataGridTextColumn Header="Компания"
-                                                    Binding="{Binding Customer.Organization}"
-                                                    DisplayIndex="4" />
-                                <DataGridTextColumn Header="Город"
-                                                    Binding="{Binding Customer.Location}"
-                                                    DisplayIndex="5" />
-                                <DataGridTemplateColumn DisplayIndex="6">
+                                <DataGridTemplateColumn DisplayIndex="4">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal"
@@ -1538,6 +1530,10 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Комментарий"
+                                                        DisplayIndex="5"
+                                                        Width="*"
+                                                        CellTemplate="{StaticResource CommentTextBox}" />
                             </DataGrid.Columns>
                         </DataGrid>
                     </AdornerDecorator>

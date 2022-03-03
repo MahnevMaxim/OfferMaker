@@ -312,5 +312,21 @@ namespace OfferMaker
 
             return true;
         }
+
+        internal void Edit(Nomenclature nom)
+        {
+            Title = nom.Title;
+            CostPrice = nom.CostPrice;
+            Markup = nom.Markup;
+
+            Images.Clear();
+            nom.Images.ToList().ForEach(i => Images.Add(i));
+            Image = nom.Image;
+
+            Descriptions.Clear();
+            nom.Descriptions.ToList().ForEach(d => Descriptions.Add(d));
+
+            isEdit = true;
+        }
     }
 }

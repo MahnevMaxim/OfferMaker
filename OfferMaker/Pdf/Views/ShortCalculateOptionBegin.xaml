@@ -12,7 +12,9 @@
     </UserControl.Resources>
     <Grid Width="18cm" 
               Name="ShortBeginGrid">
-        <TextBlock Margin="0.6cm, 0, 0, 0.2cm" VerticalAlignment="Bottom" Text="Краткий расчёт стоимости опций" FontSize="18pt" FontFamily="Segoe UI Semibold"/>
+        <TextBlock Margin="0.6cm, 0, 0, 0.2cm"
+                   VerticalAlignment="Bottom"
+                   Text="Краткий расчёт стоимости опционального оборудования" FontSize="18pt" FontFamily="Segoe UI Semibold"/>
         <Line X1="0.2cm" Y1="1.3cm" X2="0.2cm" Y2="0.8cm" Stroke="Black" StrokeThickness="1"/>
         <Line X1="0.2cm" 
                   Y1="{Binding ElementName=ShortOptionBegin, Path=ActualHeight}" 

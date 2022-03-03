@@ -6434,6 +6434,9 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("isDelete")]
         public bool IsDelete { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("comment")]
+        public string Comment { get; set; }
+
         [System.Text.Json.Serialization.JsonPropertyName("currencies")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Currency> Currencies { get; set; } = new System.Collections.ObjectModel.Collection<Currency>();
@@ -6556,6 +6559,9 @@ namespace ApiLib
 
         [System.Text.Json.Serialization.JsonPropertyName("isDelete")]
         public bool IsDelete { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("comment")]
+        public string Comment { get; set; }
 
     }
 

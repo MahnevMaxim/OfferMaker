@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Diagnostics;
+using System.Windows.Controls.Primitives;
 
 namespace OfferMaker.Controls
 {
@@ -94,19 +96,24 @@ namespace OfferMaker.Controls
         private void SelectRowDetails(object sender, MouseButtonEventArgs e)
         {
             var row = sender as DataGridRow;
-            if (row == null)
-            {
-                return;
-            }
-            row.Focusable = true;
-            row.Focus();
 
-            var focusDirection = FocusNavigationDirection.Next;
-            var request = new TraversalRequest(focusDirection);
-            var elementWithFocus = Keyboard.FocusedElement as UIElement;
-            if (elementWithFocus != null)
+            if (e.Source is DataGridDetailsPresenter) // Like this
             {
-                elementWithFocus.MoveFocus(request);
+                if (row == null)
+                {
+                    return;
+                }
+
+                row.Focusable = true;
+                row.Focus();
+
+                var focusDirection = FocusNavigationDirection.Next;
+                var request = new TraversalRequest(focusDirection);
+                var elementWithFocus = Keyboard.FocusedElement as UIElement;
+                if (elementWithFocus != null)
+                {
+                    elementWithFocus.MoveFocus(request);
+                }
             }
         }
     }

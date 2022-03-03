@@ -24,6 +24,9 @@
         <root:VisToBoolConverter x:Key="VisibleIfNotTrue"
                                  Inverted="True"
                                  Not="True" />
+        <root:VisToBoolConverter x:Key="VisibleIfTrue"
+                                 Inverted="True"
+                                 Not="False" />
     </Window.Resources>
 
     <Grid Margin="10,10">
@@ -250,6 +253,23 @@
                                    Minimum="0"
                                    Maximum="365"
                                    Visibility="{Binding IsEditConstructor, Converter={StaticResource VisibleIfNotTrue}}" />
+
+                <Button CommandParameter="SaveNomToCatalog"
+                        Grid.Row="3"
+                        HorizontalAlignment="Right"
+                        Margin="10,3"
+                        Grid.Column="3"
+                        VerticalAlignment="Top"
+                        Command="{Binding Cmd}"
+                        Height="30"
+                        Width="30"
+                        ToolTip="Сохранить"
+                        Style="{DynamicResource MahApps.Styles.Button.Square}"
+                        Visibility="{Binding IsEditConstructor, Converter={StaticResource VisibleIfTrue}}">
+                    <iconPacks:PackIconMaterial Kind="ContentSaveMoveOutline"
+                                                Width="15"
+                                                Height="15" />
+                </Button>
             </Grid>
         </Border>
 

@@ -217,7 +217,7 @@ namespace OfferMaker {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.0.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.2.0")]
         public string version {
             get {
                 return ((string)(this["version"]));

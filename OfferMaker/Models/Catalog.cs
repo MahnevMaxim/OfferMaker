@@ -147,7 +147,7 @@ namespace OfferMaker
         /// </summary>
         public void EditCurrencies()
         {
-            new CurrenciesView(new ObservableCollection<Currency>(Global.Currencies)).ShowDialog();
+            new CurrenciesView(new ObservableCollection<Currency>(Global.Main.Currencies)).ShowDialog();
             Global.Main.OnPropertyChanged(nameof(Global.Main.UsingCurrencies));
         }
 
@@ -341,7 +341,7 @@ namespace OfferMaker
         /// <param name="nomenclature"></param>
         public void OpenNomenclurueCard(Nomenclature nomenclature)
         {
-            MvvmFactory.CreateWindow(new NomenclurueCard(nomenclature, this), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
+            MvvmFactory.CreateWindow(new NomenclurueCard(nomenclature), new ViewModels.NomenclatureCardViewModel(), new Views.NomenclatureCard(), ViewMode.ShowDialog);
         }
 
         /// <summary>
@@ -394,6 +394,28 @@ namespace OfferMaker
         /// </summary>
         /// <param name="nomenclature"></param>
         public void DelNomFromNomenclatureGroup(Nomenclature nomenclature) => SelectedNomenclatureGroup.Nomenclatures.Remove(nomenclature);
+
+
+        /// <summary>
+        /// Редактирование номенклатуры из-вне
+        /// </summary>
+        /// <param name="nomenclature"></param>
+        /// <returns></returns>
+        internal CallResult EditNomenclature(Nomenclature nomenclature)
+        {
+            var nom = Nomenclatures.Where(n => n.Guid == nomenclature.Guid).FirstOrDefault();
+            if(nom!=null)
+            {
+                //чтобы не терять потерять ссылку, если что-то ссылается на номенклатуру, правим действующий объект
+                nom.Edit(nomenclature);
+                return new CallResult();
+            }
+            else
+            {
+                return new CallResult() { Error=new Error("Номенклатура не найдена")};
+            }
+        }
+
 
         #endregion Nomenclature
     }

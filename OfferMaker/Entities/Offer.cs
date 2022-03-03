@@ -57,6 +57,7 @@ namespace OfferMaker
         Offer offerEditBackup;
         OfferState offerState;
         string promoText;
+        string comment;
 
         public int Id
         {
@@ -348,6 +349,20 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Комментарий для шаблона.
+        /// </summary>
+        public string Comment
+        {
+            get => comment;
+            set
+            {
+                comment = value;
+                IsEdited = true;
+                OnPropertyChanged();
+            }
+        }
+
+        /// <summary>
         /// Если IsWithNds=true, то считать цену с НДС.
         /// </summary>
         public bool IsWithNds
@@ -605,7 +620,7 @@ namespace OfferMaker
 
         #endregion Money
 
-        public Offer() 
+        public Offer()
         {
             PromoText = Global.DefaultPromotext;
         }
@@ -734,7 +749,8 @@ namespace OfferMaker
             Currencies = new ObservableCollection<Currency>();
             Currency rub = Global.GetRub();
             Currencies.Add(rub);
-            if (!Currencies.Contains(Currency))
+            var res = Currencies.Where(c => c.CharCode == Currency.CharCode).FirstOrDefault();
+            if (res == null)
                 Currencies.Add(Currency);
             foreach (OfferGroup offerGroup in OfferGroups)
             {

@@ -22,6 +22,8 @@ namespace OfferMaker
         {
             try
             {
+                if (!isArchive)
+                    SetNomenclatures(offer);
                 offer.OfferCreator = users.Where(u => u.Id == offer.OfferCreatorId).FirstOrDefault();
                 offer.Manager = users.Where(u => u.Id == offer.ManagerId).FirstOrDefault();
                 offer.OfferGroups.ToList().ForEach(g => g.NomWrappers.ToList().ForEach(n => n.SetOfferGroup(g)));
@@ -32,12 +34,25 @@ namespace OfferMaker
                 else
                     offer.OfferState = OfferState.Template;
                 offer.PromoText = offer.PromoText == null ? Global.DefaultPromotext : offer.PromoText;
+                offer.IsEdited = false;
             }
             catch (Exception ex)
             {
                 Log.Write(ex);
             }
             return offer;
+        }
+
+        private static void SetNomenclatures(Offer offer)
+        {
+            offer.OfferGroups.ToList().ForEach(o => o.NomWrappers.ToList().ForEach(n => SetActualNomenclature(n)));
+        }
+
+        private static void SetActualNomenclature(NomWrapper n)
+        {
+            var nomenclature = Global.Catalog.Nomenclatures.Where(nom => nom.Id == n.Nomenclature.Id).FirstOrDefault();
+            if (nomenclature != null)
+                n.Nomenclature = nomenclature;
         }
 
         internal static Offer GetOldOffer(string fileName)
