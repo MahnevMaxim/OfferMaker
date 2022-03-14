@@ -6,6 +6,7 @@
 log.txt
 ef_log.txt
 Downloads/
+Migrations/
 
 # User-specific files
 *.rsuser

@@ -235,7 +235,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 28, 8, 30, 51, 624, DateTimeKind.Utc).AddTicks(6077));
+                        .HasDefaultValue(new DateTime(2022, 3, 14, 8, 45, 26, 598, DateTimeKind.Utc).AddTicks(3563));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -276,8 +276,20 @@ namespace API.Migrations
                     b.Property<string>("AdvertisingsDown")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AdvertisingsDown_")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("[]");
+
                     b.Property<string>("AdvertisingsUp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AdvertisingsUp_")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("[]");
 
                     b.Property<int?>("Banner_Id")
                         .HasColumnType("int");
@@ -288,7 +300,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 28, 8, 30, 51, 631, DateTimeKind.Utc).AddTicks(8884));
+                        .HasDefaultValue(new DateTime(2022, 3, 14, 8, 45, 26, 607, DateTimeKind.Utc).AddTicks(3530));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -371,8 +383,20 @@ namespace API.Migrations
                     b.Property<string>("AdvertisingsDown")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AdvertisingsDown_")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("[]");
+
                     b.Property<string>("AdvertisingsUp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AdvertisingsUp_")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("[]");
 
                     b.Property<int?>("Banner_Id")
                         .HasColumnType("int");
@@ -383,7 +407,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 2, 28, 8, 30, 51, 635, DateTimeKind.Utc).AddTicks(8005));
+                        .HasDefaultValue(new DateTime(2022, 3, 14, 8, 45, 26, 612, DateTimeKind.Utc).AddTicks(1677));
 
                     b.Property<string>("Currency")
                         .IsRequired()

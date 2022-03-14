@@ -10,7 +10,8 @@ namespace OfferMaker
     {
         public Banner(string guid, int creatorid, string path) : base(guid, creatorid, path)
         {
-
+            if (guid == null)
+                throw new Exception("guid is null");
         }
     }
 }

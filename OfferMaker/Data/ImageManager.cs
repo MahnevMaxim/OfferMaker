@@ -170,14 +170,16 @@ namespace OfferMaker
         /// <returns></returns>
         internal string GetImagePath(string guid)
         {
+            if (guid == null) return null;
+
             //сначала пытаемся получить изображение из кэша
             string localFilePath = TryGetLocalFilePath(guid);
             if (localFilePath != null)
                 return localFilePath;
 
-            //если работаем в оффлайн режиме, то возвращаем картинку по умолчанию
+            //если работаем в оффлайн режиме, то 
             if (Global.Settings.AppMode == AppMode.Offline)
-                return Environment.CurrentDirectory + @"\Images\no-image.jpg";
+                return null;
 
             //если в кэше нет, то пытаемся качнуть,
             //при скачивании файл кэшируется
@@ -194,8 +196,8 @@ namespace OfferMaker
                 throw new Exception("image not found");
             }
 
-            //если не удалось качнуть, то возвращаем картинку по умолчанию
-            return Environment.CurrentDirectory + @"\Images\no-image.jpg";
+            //если не удалось качнуть
+            return null;
         }
 
         /// <summary>
@@ -244,6 +246,8 @@ namespace OfferMaker
 
         public List<string> GetExceptImages(List<string> guids)
         {
+            if (!Directory.Exists(imagesDirectory))
+                Directory.CreateDirectory(imagesDirectory);
             string[] files = Directory.GetFiles(imagesDirectory);
             List<string> existingFilesGuids = new List<string>();
             files.ToList().ForEach(f => existingFilesGuids.Add(f.Split('.')[0].Replace(LocalDataConfig.ImageCacheDir + "\\", "")));

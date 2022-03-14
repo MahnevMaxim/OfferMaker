@@ -664,15 +664,40 @@
                                     VerticalAlignment="Top"
                                     BorderThickness="1"
                                     BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-                                <Image Source="{Binding BannerImagePath}"
-                                       Margin="2"
-                                       ToolTip="Баннер">
-                                    <Image.InputBindings>
-                                        <MouseBinding MouseAction="LeftClick"
-                                                      CommandParameter="OpenBanners"
-                                                      Command="{Binding Cmd}" />
-                                    </Image.InputBindings>
-                                </Image>
+                                <Grid>
+                                    <Image Margin="2">
+                                        <Image.Source>
+                                            <BitmapImage UriSource="/Images/no-image.png" />
+                                        </Image.Source>
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Setter Property="Visibility"
+                                                        Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding BannerImagePath}"
+                                                                 Value="{x:Null}">
+                                                        <Setter Property="Visibility"
+                                                                Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                        <Image.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick"
+                                                          CommandParameter="OpenBanners"
+                                                          Command="{Binding Cmd}" />
+                                        </Image.InputBindings>
+                                    </Image>
+                                    <Image Source="{Binding BannerImagePath}"
+                                           Margin="2"
+                                           ToolTip="Баннер">
+                                        <Image.InputBindings>
+                                            <MouseBinding MouseAction="LeftClick"
+                                                          CommandParameter="OpenBanners"
+                                                          Command="{Binding Cmd}" />
+                                        </Image.InputBindings>
+                                    </Image>
+                                </Grid>
                             </Border>
                             <ComboBox ItemsSource="{Binding Managers}"
                                       SelectedItem="{Binding Manager}"
@@ -908,8 +933,8 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="800"
-                                      MinWidth="400"
+                    <ColumnDefinition Width="900"
+                                      MinWidth="200"
                                       MaxWidth="900" />
                 </Grid.ColumnDefinitions>
 
@@ -1554,6 +1579,5 @@
             </StackPanel>
         </Grid>
     </Grid>
-    
     
 </mah:MetroWindow>

@@ -11,11 +11,11 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
         <convert:NumConvertors x:Key="numConvertors"/>
     </UserControl.Resources>
-    <Grid Width="18cm" Name="ShortEndGrid" VerticalAlignment="Bottom">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="1cm"/>
-        </Grid.RowDefinitions>
-        <Line X1="0.1875cm"  Y1="0" X2="{Binding ElementName=ShortEndGrid, Path=ActualWidth}" Y2="0" Stroke="Black" StrokeThickness="1" SnapsToDevicePixels="True" />
+    <Grid Name="ShortEndGrid" VerticalAlignment="Bottom">
+        <Border BorderBrush="Black"
+                BorderThickness="0 0 0 1"
+                Margin="7,0,0,0"
+                Grid.ColumnSpan="5">
+        </Border>
     </Grid>
 </UserControl>

@@ -133,6 +133,18 @@ namespace OfferMaker.ViewModels
 
         public string CopyStatus { get => settingsModel.CopyStatus; }
 
+        public int ContentWidth
+        {
+            get => settingsModel.ContentWidth;
+            set => settingsModel.ContentWidth = value;
+        }
+
+        public int AdvertisingWidth
+        {
+            get => settingsModel.AdvertisingWidth;
+            set => settingsModel.AdvertisingWidth = value;
+        }
+
         #endregion Properties
     }
 }

@@ -10,7 +10,8 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
         <convert:NumConvertors x:Key="numConvertors"/>
     </UserControl.Resources>
-    <Grid Width="18cm" Name="GridViewTextBlock">
+    
+    <Grid Name="GridViewTextBlock">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="auto"/>
@@ -18,6 +19,12 @@
             <ColumnDefinition Width="auto"/>
         </Grid.ColumnDefinitions>
 
+        <Border BorderBrush="Black"
+                BorderThickness="1 0"
+                Margin="7,0,0,0"
+                Grid.ColumnSpan="4">
+        </Border>
+        
         <TextBlock Name="TextBlockName" 
                    Grid.Column="0" 
                    Text="{Binding GroupTitle}"
@@ -73,30 +80,12 @@
                    FontFamily="Segoe UI"
                    Margin="0,2,5,10"/>
 
-        <TextBlock Name="TextBlockDescription" 
-                   Grid.Column="3" 
-                   FontSize="12pt" 
+        <TextBlock Name="TextBlockDescription"
+                   Grid.Column="3"
+                   FontSize="12pt"
                    Text="{Binding Currency.Symbol}"
                    FontFamily="Segoe UI"
-                   Margin="0,2,13,10"/>
-
-        <Grid x:Name="linegrid" 
-              Grid.ColumnSpan="4"
-              Background="Transparent">
-            <Line X1="0.2cm" 
-                  Y1="0"
-                  X2="0.2cm" 
-                  Y2="{Binding ActualHeight, ElementName=GridViewTextBlock}" 
-                  Stroke="Black"
-                  StrokeThickness="1" 
-                  SnapsToDevicePixels="True"/>
-            <Line X1="{Binding ElementName=GridViewTextBlock, Path=ActualWidth}" 
-                  Y1="0" 
-                  X2="{Binding ElementName=GridViewTextBlock, Path=ActualWidth}"
-                  Y2="{Binding ElementName=GridViewTextBlock, Path=ActualHeight}" 
-                  Stroke="Black" 
-                  StrokeThickness="2"
-                  SnapsToDevicePixels="True"/>
-        </Grid>
+                   Margin="0,2,13,10" />
+        
     </Grid>
 </UserControl>

@@ -34,6 +34,8 @@ namespace OfferMaker
         int copiedFilesCount;
         int errorFilesCount;
         string copyStatus;
+        int contentWidth;
+        int advertisingWidth;
 
         #endregion Fields
 
@@ -139,7 +141,25 @@ namespace OfferMaker
             }
         }
 
+        public int ContentWidth
+        {
+            get => contentWidth;
+            set
+            {
+                contentWidth = value;
+                UpdateSettings();
+            }
+        }
 
+        public int AdvertisingWidth
+        {
+            get => advertisingWidth;
+            set
+            {
+                advertisingWidth = value;
+                UpdateSettings();
+            }
+        }
 
         #endregion Properties
 
@@ -164,6 +184,8 @@ namespace OfferMaker
             Version = AppSettings.Default.version;
             selectedTheme = AppSettings.Default.Theme;
             lightOrDark = AppSettings.Default.LightOrDark;
+            contentWidth = AppSettings.Default.ContentWidth;
+            advertisingWidth = AppSettings.Default.AdvertisingWidth;
             SetSettings();
         }
 
@@ -176,6 +198,8 @@ namespace OfferMaker
                 AppSettings.Default.LightOrDark = LightOrDark;
             if (LightOrDark != null)
                 AppSettings.Default.Theme = SelectedTheme;
+            AppSettings.Default.ContentWidth = ContentWidth;
+            AppSettings.Default.AdvertisingWidth = AdvertisingWidth;
             AppSettings.Default.Save();
             SetSettings();
         }
@@ -223,7 +247,7 @@ namespace OfferMaker
             AppSettings.Default.Save();
         }
 
-        public static string GetDefaultBannerGuid() => AppSettings.Default.DefaultBannerGuid;
+        public static string GetDefaultBannerGuid() => string.IsNullOrWhiteSpace(AppSettings.Default.DefaultBannerGuid) ? null : AppSettings.Default.DefaultBannerGuid;
 
         public static int GetMaxInfoblocksCount() => AppSettings.Default.MaxInfoblocksCount;
 

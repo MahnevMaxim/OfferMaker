@@ -10,9 +10,46 @@
         <convert:NumConvertors x:Key="numConvertors"/>
     </UserControl.Resources>
 
-    <StackPanel HorizontalAlignment="Stretch" >
-        <Grid x:Name="grid" Background="White" Width="18cm">
-            <Line X1="0.225cm" Y1="0" X2="{Binding ElementName=grid, Path=ActualWidth}" Y2="0" Stroke="Black" StrokeThickness="1" SnapsToDevicePixels="True" />
-        </Grid>
-    </StackPanel>
+    <Grid x:Name="grid"
+          Height="55">
+        <Border BorderBrush="Black"
+                BorderThickness="1 0"
+                Margin="7,0,0,0"
+                Grid.ColumnSpan="2" />
+        <StackPanel Margin="0,0.2cm,0.3cm,0.2cm"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            <TextBlock FontSize="12pt"
+                       FontFamily="Segoe UI Semibold"
+                       Margin="0,15,0,0">
+                <TextBlock.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsHiddenTextNds}"
+                                         Value="True">
+                                <Setter Property="TextBlock.Text"
+                                        Value="Итого стоимость:   " />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsHiddenTextNds}"
+                                         Value="False">
+                                <Setter Property="TextBlock.Text"
+                                        Value="Итого стоимость (с НДС):  " />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <TextBlock Text="{Binding PriceSumWrapper, Converter={StaticResource numConvertors}}"
+                       FontSize="16pt"
+                       HorizontalAlignment="Right"
+                       Margin="0,10,0,0"
+                       FontFamily="Segoe UI Semibold" />
+            <TextBlock Text="{Binding CurrencyWrapper.Symbol}"
+                       FontSize="16pt"
+                       Margin="5,10,0,0"
+                       HorizontalAlignment="Left"
+                       FontFamily="Segoe UI Semibold" />
+        </StackPanel>
+
+    </Grid>
 </UserControl>

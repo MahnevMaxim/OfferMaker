@@ -60,5 +60,11 @@ namespace Shared
         public bool IsDelete { get; set; }
 
         public string Comment { get; set; }
-    }
+
+        [Required]
+        public ObservableCollection<Advertising> AdvertisingsUp_ { get; set; }
+
+        [Required]
+        public ObservableCollection<Advertising> AdvertisingsDown_ { get; set; }
+}
 }

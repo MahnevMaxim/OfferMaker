@@ -7,9 +7,15 @@
              mc:Ignorable="d" 
              x:Name="main">
     <StackPanel HorizontalAlignment="Stretch">
-        <Grid Width="18cm" Background="White">
-            <Rectangle Margin="0.212cm, 0, 0, 0" Stroke="Black" StrokeThickness="1"/>
-            <TextBlock Margin="0.6cm, 0.2cm, 0, 0.3cm" Text="{Binding GroupTitle}" FontSize="14pt" TextWrapping="WrapWithOverflow" FontFamily="Segoe UI Semibold"/>
+        <Grid>
+            <Border BorderBrush="Black"
+                    BorderThickness="1"
+                    Margin="7,0,0,0" />
+            <TextBlock Margin="0.6cm, 0.2cm, 0.3cm, 0.3cm" 
+                       Text="{Binding GroupTitle}"
+                       FontSize="14pt" 
+                       TextWrapping="WrapWithOverflow" 
+                       FontFamily="Segoe UI Semibold"/>
         </Grid>
     </StackPanel>
 </UserControl>

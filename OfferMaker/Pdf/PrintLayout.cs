@@ -13,7 +13,8 @@ namespace OfferMaker.Pdf
     /// </summary>
     public class PrintLayout
     {
-        public static readonly PrintLayout A4 = new PrintLayout("21cm", "29.7cm", "2cm", "1cm", "1cm", "1cm");
+        public static readonly PrintLayout A4 = new PrintLayout("21cm", "29.7cm", "1cm", "1cm", "1cm", "1cm");
+        public static readonly PrintLayout A4Advertising = new PrintLayout("21cm", "29.7cm", "0cm", "0cm", "0cm", "0cm");
         public static readonly PrintLayout A3 = new PrintLayout("29.7cm", "42cm", "2cm", "1cm", "1cm", "1cm");
 
         private Size _Size;

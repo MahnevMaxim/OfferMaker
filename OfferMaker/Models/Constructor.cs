@@ -212,6 +212,7 @@ namespace OfferMaker
         {
             ObservableCollection<OfferInfoBlock> offerInfoBlocks = GetInfoBlocks();
             Currency currency = Global.GetRub();
+            string bannerGuid = Settings.GetDefaultBannerGuid();
             Offer = new Offer(this, currency, offerInfoBlocks, Global.Main.User, Settings.GetDefaultBannerGuid());
         }
 
@@ -319,15 +320,14 @@ namespace OfferMaker
 
         public void CreateDocumentWithBanner()
         {
-            FlowDocument flowDocument = ((Views.MainWindow)viewModel.view).pdfControl.flowDocumentAll;
-            WrapperAllPages wrapper = new WrapperAllPages(flowDocument, viewModel, smallLogo);
-            PdfDocument = wrapper.GetPdf(2, 1, 1, 1);
+            WrapperAllPages wrapper = new WrapperAllPages(viewModel, smallLogo);
+            PdfDocument = wrapper.GetPdf();
         }
 
         public void CreateDocumentWithoutBanner()
         {
             WrapperOnePage wrapper = new WrapperOnePage(viewModel, smallLogo);
-            PdfDocumentShort = wrapper.GetPdf(2, 1, 1, 1);
+            PdfDocumentShort = wrapper.GetPdf();
         }
 
         #endregion Create PDF
@@ -643,13 +643,13 @@ namespace OfferMaker
 
             if (IsChangeAdvertisings(Offer.AdvertisingsUp, Global.Main.BannersManager.AdvertisingsUp))
             {
-                Offer.AdvertisingsUp = GetPathCollection(Global.Main.BannersManager.AdvertisingsUp);
+                Offer.AdvertisingsUp_ = Helpers.CloneObject<ObservableCollection<Advertising>>(Global.Main.BannersManager.AdvertisingsUp);
                 viewModel.OnPropertyChanged("AdvertisingsUp");
             }
 
             if (IsChangeAdvertisings(Offer.AdvertisingsDown, Global.Main.BannersManager.AdvertisingsDown))
             {
-                Offer.AdvertisingsDown = GetPathCollection(Global.Main.BannersManager.AdvertisingsDown);
+                Offer.AdvertisingsDown_ = Helpers.CloneObject<ObservableCollection<Advertising>>(Global.Main.BannersManager.AdvertisingsDown);
                 viewModel.OnPropertyChanged("AdvertisingsDown");
             }
         }

@@ -76,16 +76,24 @@ namespace API.Controllers
         [HttpPost(Name = nameof(OfferTemplatePost))]
         public async Task<ActionResult<OfferTemplate>> OfferTemplatePost(OfferTemplate offerTemplate)
         {
-            if (offerTemplate.Banner_ != null)
+            try
             {
-                Banner banner = _context.Banners.Where(b => b.Guid == offerTemplate.Banner_.Guid).FirstOrDefault();
-                offerTemplate.Banner_ = banner;
+                if (offerTemplate.Banner_ != null)
+                {
+                    Banner banner = _context.Banners.Where(b => b.Guid == offerTemplate.Banner_.Guid).FirstOrDefault();
+                    offerTemplate.Banner_ = banner;
+                }
+
+                _context.OfferTemplates.Add(offerTemplate);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(OfferTemplateGet), new { id = offerTemplate.Id }, offerTemplate);
             }
-
-            _context.OfferTemplates.Add(offerTemplate);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(OfferTemplateGet), new { id = offerTemplate.Id }, offerTemplate);
+            catch(Exception ex)
+            {
+                Log.Write(ex);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.StackTrace);
+            }
         }
 
         [Authorize(Roles = "CanAll,CanControlTemplates")]

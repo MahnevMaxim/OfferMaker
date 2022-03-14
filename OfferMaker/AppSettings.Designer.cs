@@ -226,5 +226,29 @@ namespace OfferMaker {
                 this["version"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int ContentWidth {
+            get {
+                return ((int)(this["ContentWidth"]));
+            }
+            set {
+                this["ContentWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int AdvertisingWidth {
+            get {
+                return ((int)(this["AdvertisingWidth"]));
+            }
+            set {
+                this["AdvertisingWidth"] = value;
+            }
+        }
     }
 }

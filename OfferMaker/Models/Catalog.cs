@@ -395,7 +395,6 @@ namespace OfferMaker
         /// <param name="nomenclature"></param>
         public void DelNomFromNomenclatureGroup(Nomenclature nomenclature) => SelectedNomenclatureGroup.Nomenclatures.Remove(nomenclature);
 
-
         /// <summary>
         /// Редактирование номенклатуры из-вне
         /// </summary>
@@ -415,7 +414,6 @@ namespace OfferMaker
                 return new CallResult() { Error=new Error("Номенклатура не найдена")};
             }
         }
-
 
         #endregion Nomenclature
     }

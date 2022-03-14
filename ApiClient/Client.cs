@@ -6437,6 +6437,12 @@ namespace ApiLib
         [System.Text.Json.Serialization.JsonPropertyName("comment")]
         public string Comment { get; set; }
 
+        [System.Text.Json.Serialization.JsonPropertyName("advertisingsUp_")]
+        public System.Collections.Generic.ICollection<Advertising> AdvertisingsUp_ { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("advertisingsDown_")]
+        public System.Collections.Generic.ICollection<Advertising> AdvertisingsDown_ { get; set; }
+
         [System.Text.Json.Serialization.JsonPropertyName("currencies")]
         [System.ComponentModel.DataAnnotations.Required]
         public System.Collections.Generic.ICollection<Currency> Currencies { get; set; } = new System.Collections.ObjectModel.Collection<Currency>();
@@ -6562,6 +6568,12 @@ namespace ApiLib
 
         [System.Text.Json.Serialization.JsonPropertyName("comment")]
         public string Comment { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("advertisingsUp_")]
+        public System.Collections.Generic.ICollection<Advertising> AdvertisingsUp_ { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("advertisingsDown_")]
+        public System.Collections.Generic.ICollection<Advertising> AdvertisingsDown_ { get; set; }
 
     }
 

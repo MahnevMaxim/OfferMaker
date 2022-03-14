@@ -107,6 +107,16 @@ namespace API.Data
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
 
+            builder.Entity<Offer>().Property(p => p.AdvertisingsUp_).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Advertising>>(v))
+                .HasDefaultValue(new ObservableCollection<Advertising>());
+
+            builder.Entity<Offer>().Property(p => p.AdvertisingsDown_).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Advertising>>(v))
+                .HasDefaultValue(new ObservableCollection<Advertising>());
+
             builder.Entity<Offer>().Property(p => p.Discount).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<Discount>(v));
@@ -146,6 +156,16 @@ namespace API.Data
             builder.Entity<OfferTemplate>().Property(p => p.AdvertisingsDown).HasConversion(
                 v => JsonConvert.SerializeObject(v),
                 v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
+
+            builder.Entity<OfferTemplate>().Property(p => p.AdvertisingsUp_).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Advertising>>(v))
+                .HasDefaultValue(new ObservableCollection<Advertising>());
+
+            builder.Entity<OfferTemplate>().Property(p => p.AdvertisingsDown_).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Advertising>>(v))
+                .HasDefaultValue(new ObservableCollection<Advertising>());
 
             builder.Entity<OfferTemplate>().Property(p => p.Discount).HasConversion(
                 v => JsonConvert.SerializeObject(v),

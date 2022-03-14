@@ -7,14 +7,17 @@
              mc:Ignorable="d" 
              x:Name="main" Width="21cm" Height="29.7cm">
     
-    <Viewbox  x:Name="viewbox" Stretch="Uniform" VerticalAlignment="Top" >
-        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Top" Width="{Binding Width, ElementName=main}" Height="{Binding Height, ElementName=main}" >
+    <!--<Viewbox  x:Name="viewbox" Stretch="Uniform" VerticalAlignment="Top" >
+        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="{Binding Width, ElementName=main}" Height="{Binding Height, ElementName=main}" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <StackPanel VerticalAlignment="Top" Orientation="Vertical" x:Name="container"/>
-            <Grid x:Name="colontitul" Grid.Row="1">
+            <StackPanel VerticalAlignment="Center" 
+                        x:Name="container" />
+            <Grid x:Name="colontitul"
+                  Grid.Row="1"
+                  Margin="1cm,0.7cm">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -27,6 +30,44 @@
                 <TextBlock x:Name="pageNumber" Margin="25,0,0,0" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="10pt"/>
             </Grid>
         </Grid>
-    </Viewbox>
-    
+    </Viewbox>-->
+    <Grid HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          Width="{Binding Width, ElementName=main}"
+          Height="{Binding Height, ElementName=main}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel VerticalAlignment="Center"
+                    x:Name="container" />
+        <Grid x:Name="colontitul"
+              Grid.Row="1"
+              Margin="1cm,0.7cm">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Image x:Name="image"
+                   Width="2cm"
+                   HorizontalAlignment="Left"
+                   Margin="0,0,25,0" />
+            <StackPanel Grid.Column="1"
+                        HorizontalAlignment="Stretch">
+                <TextBlock HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           FontFamily="Segoe UI"
+                           FontSize="10pt"
+                           Text="тел.: (843) 210-03-10,  8-800-770-75-70   |   www.kip-group.com   |   info@kip-group.com" />
+            </StackPanel>
+            <TextBlock x:Name="pageNumber"
+                       Margin="25,0,0,0"
+                       Grid.Column="2"
+                       HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       FontFamily="Segoe UI"
+                       FontSize="10pt" />
+        </Grid>
+    </Grid>
 </UserControl>

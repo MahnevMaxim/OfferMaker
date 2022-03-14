@@ -11,230 +11,307 @@
         <convert:NumConvertors x:Key="numConvertors"></convert:NumConvertors>
     </UserControl.Resources>
 
-    <StackPanel HorizontalAlignment="Stretch" Width="18cm">
-        <Grid Background="White">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Итоговая стоимость" 
-                       Margin="0.6cm,0.3cm,0,0.2cm"
-                       VerticalAlignment="Center" 
-                       FontSize="14pt" 
-                       FontFamily="Segoe UI" />
+        <Border BorderBrush="Black"
+                BorderThickness="1 1 0 0"
+                Margin="7,0,0,0"
+                Grid.ColumnSpan="5" />
+        <Ellipse Fill="White"
+                 Grid.RowSpan="2"
+                 Width="0.4cm"
+                 Height="0.4cm"
+                 Stroke="Black"
+                 StrokeThickness="1"
+                 Margin="0,0.45cm,0,0"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top" />
+        
+        <!--#region Итого-->
+        
+        <TextBlock Text="Итоговая стоимость"
+                   Grid.RowSpan="2"
+                   VerticalAlignment="Center"
+                   Margin="0.6cm,0.3cm,0,0.2cm"
+                   FontSize="14pt"
+                   FontFamily="Segoe UI" />
 
-            <TextBlock Text="{Binding TotalSumWithoutOptions, Converter={StaticResource numConvertors}}"
-                       HorizontalAlignment="Right"
-                       Margin="0,5,0,0" 
-                       Grid.Column="3" 
-                       VerticalAlignment="Center" 
-                       FontSize="18pt" 
-                       FontFamily="Segoe UI Semibold">
-                <TextBlock.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
-                                <Setter Property="TextBlock.TextDecorations">
-                                    <Setter.Value>
-                                        <TextDecorationCollection>
-                                            <TextDecoration Location="Strikethrough">
-                                                <TextDecoration.Pen>
-                                                    <Pen Brush="Black" Thickness="2"/>
-                                                </TextDecoration.Pen>
-                                            </TextDecoration>
-                                        </TextDecorationCollection>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="TextBlock.Foreground" Value="Black"/>
-                            </DataTrigger>
+        <TextBlock Text="{Binding TotalSumWithoutOptions, Converter={StaticResource numConvertors}}"
+                   HorizontalAlignment="Right"
+                   Margin="0,5,0,0"
+                   Grid.Column="3"
+                   Grid.RowSpan="2"
+                   VerticalAlignment="Center"
+                   FontSize="18pt"
+                   FontFamily="Segoe UI Semibold">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="True">
+                            <Setter Property="TextBlock.TextDecorations">
+                                <Setter.Value>
+                                    <TextDecorationCollection>
+                                        <TextDecoration Location="Strikethrough">
+                                            <TextDecoration.Pen>
+                                                <Pen Brush="Black"
+                                                     Thickness="2" />
+                                            </TextDecoration.Pen>
+                                        </TextDecoration>
+                                    </TextDecorationCollection>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="Black" />
+                        </DataTrigger>
 
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
-                                <Setter Property="TextBlock.TextDecorations">
-                                    <Setter.Value>
-                                        <TextDecorationCollection>
-                                            <TextDecoration Location="Strikethrough">
-                                                <TextDecoration.Pen>
-                                                    <Pen Brush="{x:Null}" Thickness="0"/>
-                                                </TextDecoration.Pen>
-                                            </TextDecoration>
-                                        </TextDecorationCollection>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="TextBlock.Foreground" Value="#1074bc"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="False">
+                            <Setter Property="TextBlock.TextDecorations">
+                                <Setter.Value>
+                                    <TextDecorationCollection>
+                                        <TextDecoration Location="Strikethrough">
+                                            <TextDecoration.Pen>
+                                                <Pen Brush="{x:Null}"
+                                                     Thickness="0" />
+                                            </TextDecoration.Pen>
+                                        </TextDecoration>
+                                    </TextDecorationCollection>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="#1074bc" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-            <TextBlock Name="CurrencySymbol"
-                       HorizontalAlignment="Left" 
-                       Margin="5,5,10,0" 
-                       Grid.Column="4"  
-                       VerticalAlignment="Center"
-                       FontSize="18pt" 
-                       FontFamily="Segoe UI Semibold">
-                <TextBlock.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
-                                <Setter Property="TextBlock.Foreground" Value="Black"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
-                                <Setter Property="TextBlock.Foreground" Value="#1074bc"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
-                                <Setter Property="TextBlock.Text" Value="₽"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
-                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+        <TextBlock Name="CurrencySymbol"
+                   HorizontalAlignment="Left"
+                   Margin="5,5,10,0"
+                   Grid.Column="4"
+                   Grid.RowSpan="2"
+                   VerticalAlignment="Center"
+                   FontSize="18pt"
+                   FontFamily="Segoe UI Semibold">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="Black" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="#1074bc" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsResultSummInRub}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Text"
+                                    Value="₽" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsResultSummInRub}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Text"
+                                    Value="{Binding Currency.Symbol}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-            <TextBlock Text="Персональная скидка клиента" 
-                       FontSize="14pt" 
-                       Grid.Column="0" Grid.Row="1" 
-                       FontFamily="Segoe UI "
-                       Margin="23,5,0,0">
-                <TextBlock.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
-                                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
-                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+        <!--#endregion-->
+        
+        <!--#region Скидка-->
+        
+        <TextBlock Text="Персональная скидка клиента"
+                   FontSize="14pt"
+                   Grid.Column="0"
+                   Grid.Row="2"
+                   FontFamily="Segoe UI "
+                   Margin="23,5,0,0">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="Red"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Visibility"
+                                    Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-            <TextBlock Text="{Binding  Discount.DiscountSum, Converter={StaticResource numConvertors}}"
-                       FontSize="14pt"
-                       HorizontalAlignment="Right"
-                       Grid.Column="3" Grid.Row="1" 
-                       FontFamily="Segoe UI semibold"
-                       Margin="0,5,0,0">
-                <TextBlock.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
-                                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
-                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+        <TextBlock Text="{Binding  Discount.DiscountSum, Converter={StaticResource numConvertors}}"
+                   FontSize="14pt"
+                   HorizontalAlignment="Right"
+                   Grid.Column="3"
+                   Grid.Row="2"
+                   FontFamily="Segoe UI semibold"
+                   Margin="0,5,0,0">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="Red"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Visibility"
+                                    Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-            <TextBlock Name="CurrencySymbolPersonalDiscount"
-                       FontSize="14pt" 
-                       HorizontalAlignment="Left" 
-                       Grid.Column="4" Grid.Row="1" 
-                       FontFamily="Segoe UI semibold"
-                       Margin="5,5,0,0">
-                <TextBlock.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
-                                <Setter Property="TextBlock.Foreground" Value="Red"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
-                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
-                                <Setter Property="TextBlock.Text" Value="₽"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
-                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+        <TextBlock Name="CurrencySymbolPersonalDiscount"
+                   FontSize="14pt"
+                   HorizontalAlignment="Left"
+                   Grid.Column="4"
+                   Grid.Row="2"
+                   FontFamily="Segoe UI semibold"
+                   Margin="5,5,0,0">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="Red"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Visibility"
+                                    Value="Collapsed" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsResultSummInRub}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Text"
+                                    Value="₽" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsResultSummInRub}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Text"
+                                    Value="{Binding Currency.Symbol}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-            <TextBlock Text="Итоговая стоимость со скидкой" 
-                       FontSize="14pt" 
-                       Grid.Column="0" Grid.Row="2" 
-                       FontFamily="Segoe UI"
-                       Margin="23,10,0,0">
-                <TextBlock.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
-                                <Setter Property="TextBlock.Foreground" Value="DodgerBlue"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
-                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+        <!--#endregion-->
 
-            <TextBlock Text="{Binding Discount.PriceWithDiscount, Converter={StaticResource numConvertors}}" 
-                       FontSize="14pt"
-                       HorizontalAlignment="Right"
-                       Grid.Column="3" Grid.Row="2" 
-                       FontFamily="Segoe UI semibold"
-                       Margin="0,10,0,0">
-                <TextBlock.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
-                                <Setter Property="TextBlock.Foreground" Value="DodgerBlue"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
-                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+        <!--#region Итоговая стоимость со скидкой-->
+        
+        <TextBlock Text="Итоговая стоимость со скидкой"
+                   FontSize="14pt"
+                   Grid.Column="0"
+                   Grid.Row="3"
+                   FontFamily="Segoe UI"
+                   Margin="23,10,0,0">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="DodgerBlue"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Visibility"
+                                    Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-            <TextBlock Name="CurrencySymbolCommon" 
-                       FontSize="14pt" 
-                       Grid.Column="4" Grid.Row="2" 
-                       FontFamily="Segoe UI semibold"
-                       Margin="5,10,0,0">
-                <TextBlock.Style>
-                    <Style>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="True">
-                                <Setter Property="TextBlock.Foreground" Value="DodgerBlue"></Setter>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Discount.IsEnabled}" Value="False">
-                                <Setter Property="TextBlock.Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="True">
-                                <Setter Property="TextBlock.Text" Value="₽"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding IsResultSummInRub}" Value="False">
-                                <Setter Property="TextBlock.Text" Value="{Binding Currency.Symbol}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
+        <TextBlock Text="{Binding Discount.PriceWithDiscount, Converter={StaticResource numConvertors}}"
+                   FontSize="14pt"
+                   HorizontalAlignment="Right"
+                   Grid.Column="3"
+                   Grid.Row="3"
+                   FontFamily="Segoe UI semibold"
+                   Margin="0,10,0,0">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="DodgerBlue"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Visibility"
+                                    Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-            <Line X1="0.5" Y1="0" X2="0.5" Y2="0.6cm" Stroke="Black" StrokeThickness="1" Margin="0.212cm,0,0,0" />
-            <Ellipse Fill="White" Width="0.4cm" Height="0.4cm" Stroke="Black" StrokeThickness="1" Margin="0.030cm,0.45cm,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        </Grid>
+        <TextBlock Name="CurrencySymbolCommon"
+                   FontSize="14pt"
+                   Grid.Column="4"
+                   Grid.Row="3"
+                   FontFamily="Segoe UI semibold"
+                   Margin="5,10,0,0">
+            <TextBlock.Style>
+                <Style>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Foreground"
+                                    Value="DodgerBlue"></Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Discount.IsEnabled}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Visibility"
+                                    Value="Collapsed" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsResultSummInRub}"
+                                     Value="True">
+                            <Setter Property="TextBlock.Text"
+                                    Value="₽" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsResultSummInRub}"
+                                     Value="False">
+                            <Setter Property="TextBlock.Text"
+                                    Value="{Binding Currency.Symbol}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
 
-    </StackPanel>
+        <!--#endregion-->
+        
+    </Grid>
 </UserControl>

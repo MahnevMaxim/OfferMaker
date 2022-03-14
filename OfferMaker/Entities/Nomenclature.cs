@@ -38,6 +38,7 @@ namespace OfferMaker
             set
             {
                 title = value;
+                OnPropertyChanged();
                 SetIsEdit();
             }
         }

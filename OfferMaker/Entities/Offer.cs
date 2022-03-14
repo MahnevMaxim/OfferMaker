@@ -49,8 +49,6 @@ namespace OfferMaker
         bool isShowPriceDetails;
         bool isCreateByCostPrice;
         bool isHideNomsPrice;
-        bool isTemplate;
-        bool isArchive;
         bool isDelete;
         bool isEdited;
         bool isEditableState;
@@ -58,6 +56,8 @@ namespace OfferMaker
         OfferState offerState;
         string promoText;
         string comment;
+        ObservableCollection<Advertising> advertisingsDown_ = new ObservableCollection<Advertising>();
+        ObservableCollection<Advertising> advertisingsUp_ = new ObservableCollection<Advertising>();
 
         public int Id
         {
@@ -233,28 +233,58 @@ namespace OfferMaker
         }
 
         /// <summary>
-        /// Рекламмные материалы, идущие после титульника.
+        /// Рекламмные материалы, идущие после титульника, абсолютные пути.
         /// </summary>
+        [JsonIgnore]
         public ObservableCollection<string> AdvertisingsUp
         {
-            get => advertisingsUp;
+            get => new ObservableCollection<string>(AdvertisingsUp_.Select(a => a.LocalPhotoPath));
+        }
+
+        /// <summary>
+        /// Рекламмные материалы, идущие после титульника.
+        /// </summary>
+        public ObservableCollection<Advertising> AdvertisingsUp_
+        {
+            get
+            {
+                if (advertisingsUp_ == null)
+                    advertisingsUp_ = new ObservableCollection<Advertising>();
+                return advertisingsUp_;
+            }
             set
             {
-                advertisingsUp = value;
+                advertisingsUp_ = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(AdvertisingsUp));
             }
+        }
+
+        /// <summary>
+        /// Рекламмные материалы, идущие внизу, абсолютные пути.
+        /// </summary>
+        [JsonIgnore]
+        public ObservableCollection<string> AdvertisingsDown
+        {
+            get => new ObservableCollection<string>(AdvertisingsDown_.Select(a=>a.LocalPhotoPath));
         }
 
         /// <summary>
         /// Рекламмные материалы, идущие внизу.
         /// </summary>
-        public ObservableCollection<string> AdvertisingsDown
+        public ObservableCollection<Advertising> AdvertisingsDown_
         {
-            get => advertisingsDown;
+            get
+            {
+                if (advertisingsDown_ == null)
+                    advertisingsDown_ = new ObservableCollection<Advertising>();
+                return advertisingsDown_;
+            }
             set
             {
-                advertisingsDown = value;
+                advertisingsDown_ = value;
                 OnPropertyChanged();
+                OnPropertyChanged(nameof(AdvertisingsDown));
             }
         }
 
@@ -270,12 +300,7 @@ namespace OfferMaker
         [JsonIgnore]
         public string BannerImagePath
         {
-            get
-            {
-                if (banner_ != null)
-                    return banner_.LocalPhotoPath;
-                return Environment.CurrentDirectory + @"\Images\no-image.jpg";
-            }
+            get => banner_?.LocalPhotoPath;
             set
             {
                 bannerImagePath = value;
@@ -651,8 +676,9 @@ namespace OfferMaker
         private Banner GetBannerByGuid(string bannerGuid)
         {
             string path = ImageManager.GetInstance().GetImagePath(bannerGuid);
-            Banner bann = new Banner(bannerGuid, 0, path);
-            return bann;
+            if (path == null)
+                return null;
+            return new Banner(bannerGuid, 0, path);
         }
 
         #region Edit
@@ -796,6 +822,7 @@ namespace OfferMaker
             constructor.viewModel.OnPropertyChanged(nameof(OfferGroupsOptions));
             constructor.viewModel.OnPropertyChanged(nameof(OfferGroupsNotOptions));
             constructor.viewModel.OnPropertyChanged(nameof(TotalSumWithoutOptions));
+            constructor.viewModel.OnPropertyChanged(nameof(TotalSumOptions));
         }
 
         private void OfferInfoBlocks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

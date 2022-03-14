@@ -7,22 +7,36 @@
              mc:Ignorable="d" 
              x:Name="ShortBegin"
              Height="1.3cm">
+    
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisConv"/>
     </UserControl.Resources>
-    <Grid Width="18cm" 
-              Name="ShortBeginGrid">
+    
+    <Grid Name="ShortBeginGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Border BorderBrush="Black"
+                BorderThickness="1 0 0 1"
+                Grid.Row="1"
+                Margin="7,0,0,0">
+        </Border>
         <TextBlock Margin="0.6cm, 0, 0, 0.2cm"
+                   Grid.RowSpan="2"
                    VerticalAlignment="Bottom"
-                   Text="Краткий расчёт стоимости опционального оборудования" FontSize="18pt" FontFamily="Segoe UI Semibold"/>
-        <Line X1="0.2cm" Y1="1.3cm" X2="0.2cm" Y2="0.8cm" Stroke="Black" StrokeThickness="1"/>
-        <Line X1="0.2cm" 
-                  Y1="{Binding ElementName=ShortOptionBegin, Path=ActualHeight}" 
-                  X2="18cm" 
-                  Y2="{Binding ElementName=ShortOptionBegin, Path=ActualHeight}" 
-                  Stroke="Black"
-                  VerticalAlignment="Bottom"
-                  StrokeThickness="1"/>
-        <Ellipse Fill="White" Width="0.4cm" Height="0.4cm" Stroke="Black" StrokeThickness="1" Margin="0,0.55cm,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+                   Text="Краткий расчёт стоимости опционального оборудования"
+                   FontSize="18pt"
+                   FontFamily="Segoe UI Semibold" />
+        <Ellipse Fill="White"
+                 Grid.RowSpan="2"
+                 Width="0.4cm" 
+                 Height="0.4cm"
+                 Stroke="Black" 
+                 StrokeThickness="1"
+                 Margin="0,0.55cm,0,0" 
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Top"
+                 SnapsToDevicePixels="True"/>
     </Grid>
 </UserControl>

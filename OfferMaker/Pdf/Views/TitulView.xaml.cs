@@ -21,17 +21,20 @@ namespace OfferMaker.Pdf.Views
     /// </summary>
     public partial class TitulView : UserControl, IClonable
     {
+        bool isBannerVisibility;
+
         public TitulView()
         {
             InitializeComponent();
         }
 
-        public TitulView(object DataContext)
+        public TitulView(object DataContext, bool isBannerVisibility)
         {
             this.DataContext = DataContext;
             InitializeComponent();
+            bannerGrid.Visibility = isBannerVisibility ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public UserControl Copy() => new TitulView(DataContext);
+        public UserControl Copy() => new TitulView(DataContext, isBannerVisibility);
     }
 }

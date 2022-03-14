@@ -72,7 +72,7 @@
                 BorderThickness="2"
                 VerticalAlignment="Stretch"
                 BorderBrush="{DynamicResource MahApps.Brushes.AccentBase}">
-            <TextBox Text="{Binding Nomenclature.Title, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding Nomenclature.Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                      TextWrapping="Wrap"
                      Margin="0"
                      BorderThickness="0"

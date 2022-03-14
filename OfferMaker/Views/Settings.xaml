@@ -15,7 +15,7 @@
                  BorderThickness="1"
                  ResizeMode="NoResize"
                  Title="Настройки"
-                 Height="350"
+                 Height="480"
                  Width="360"
                  Closing="MetroWindow_Closing">
     <Window.Resources>
@@ -39,6 +39,8 @@
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
             <Label Content="Тема"
                    Grid.Row="0"
@@ -50,6 +52,14 @@
                    Margin="10" />
             <Label Content="Режим"
                    Grid.Row="2"
+                   HorizontalAlignment="Right"
+                   Margin="10" />
+            <Label Content="ширина контента, %"
+                   Grid.Row="6"
+                   HorizontalAlignment="Right"
+                   Margin="10" />
+            <Label Content="ширина рекламы, %"
+                   Grid.Row="7"
                    HorizontalAlignment="Right"
                    Margin="10" />
             <ComboBox Grid.Row="0"
@@ -106,6 +116,20 @@
                     CommandParameter="ClearLocalData"
                     Margin="10"
                     Style="{StaticResource MahApps.Styles.Button.Square}" />
+            <mah:NumericUpDown Value="{Binding ContentWidth}"
+                               Grid.Row="6"
+                               Grid.Column="1"
+                               Margin="10"
+                               ToolTip="Ширина контента в % к ширине документа"
+                               Minimum="1"
+                               Maximum="100"/>
+            <mah:NumericUpDown Value="{Binding AdvertisingWidth}"
+                               Grid.Row="7"
+                               Grid.Column="1"
+                               Margin="10"
+                               ToolTip="Ширина рекламных баннеров в % к ширине документа"
+                               Minimum="1"
+                               Maximum="100" />
         </Grid>
         <Grid Visibility="{Binding IsBusy, Converter={StaticResource VisibleIfTrue}}"
               d:Visibility="Collapsed">

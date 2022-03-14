@@ -53,5 +53,11 @@
     <Setting Name="version" Type="System.String" Scope="User">
       <Value Profile="(Default)">1.2.0</Value>
     </Setting>
+    <Setting Name="ContentWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="AdvertisingWidth" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
