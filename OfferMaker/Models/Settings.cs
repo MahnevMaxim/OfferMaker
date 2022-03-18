@@ -36,6 +36,7 @@ namespace OfferMaker
         string copyStatus;
         int contentWidth;
         int advertisingWidth;
+        double pdfControlWidth;
 
         #endregion Fields
 
@@ -161,6 +162,16 @@ namespace OfferMaker
             }
         }
 
+        public double PdfControlWidth
+        {
+            get => pdfControlWidth;
+            set
+            {
+                pdfControlWidth = value;
+                UpdateSettings();
+            }
+        }
+
         #endregion Properties
 
         #endregion MVVM
@@ -170,8 +181,6 @@ namespace OfferMaker
         #region Singleton
 
         private static readonly Settings instance = new Settings();
-
-
 
         public static Settings GetInstance() => instance;
 
@@ -186,6 +195,7 @@ namespace OfferMaker
             lightOrDark = AppSettings.Default.LightOrDark;
             contentWidth = AppSettings.Default.ContentWidth;
             advertisingWidth = AppSettings.Default.AdvertisingWidth;
+            pdfControlWidth = AppSettings.Default.PdfControlWidth;
             SetSettings();
         }
 
@@ -200,6 +210,7 @@ namespace OfferMaker
                 AppSettings.Default.Theme = SelectedTheme;
             AppSettings.Default.ContentWidth = ContentWidth;
             AppSettings.Default.AdvertisingWidth = AdvertisingWidth;
+            AppSettings.Default.PdfControlWidth = PdfControlWidth;
             AppSettings.Default.Save();
             SetSettings();
         }

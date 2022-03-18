@@ -11,7 +11,8 @@ namespace OfferMaker
 {
     /// <summary>
     /// Класс для хранения, управления и синхронизации данных,
-    /// абстрагирование разработчика и логики приложения от источников данных
+    /// абстрагирование разработчика и логики приложения от источников данных,
+    /// по сути это интерфейс.
     /// </summary>
     public class DataRepository
     {
@@ -146,5 +147,11 @@ namespace OfferMaker
         async internal Task<CallResult> AdvertisingDelete(int id) => await Proxy.AdvertisingDelete(id);
 
         #endregion Banners
+
+        #region ImageGuids
+
+        async internal Task<CallResult<HashSet<string>>> ImageGuidsGet() => await Proxy.ImageGuidsGet();
+
+        #endregion ImageGuids
     }
 }

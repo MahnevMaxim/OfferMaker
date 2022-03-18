@@ -15,7 +15,7 @@
                  BorderThickness="1"
                  ResizeMode="NoResize"
                  Title="Настройки"
-                 Height="480"
+                 Height="500"
                  Width="360"
                  Closing="MetroWindow_Closing">
     <Window.Resources>
@@ -33,6 +33,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
                 <RowDefinition />
@@ -62,6 +63,10 @@
                    Grid.Row="7"
                    HorizontalAlignment="Right"
                    Margin="10" />
+            <Label Content="ширина рабочей &#x0a;области"
+                   Grid.Row="8"
+                   HorizontalAlignment="Right"
+                   Margin="5" />
             <ComboBox Grid.Row="0"
                       Grid.Column="1"
                       Margin="10"
@@ -130,6 +135,13 @@
                                ToolTip="Ширина рекламных баннеров в % к ширине документа"
                                Minimum="1"
                                Maximum="100" />
+            <mah:NumericUpDown Value="{Binding PdfControlWidth}"
+                               Grid.Row="8"
+                               Grid.Column="1"
+                               Margin="10"
+                               ToolTip="Начальная ширина рабочей области"
+                               Minimum="200"
+                               Maximum="900" />
         </Grid>
         <Grid Visibility="{Binding IsBusy, Converter={StaticResource VisibleIfTrue}}"
               d:Visibility="Collapsed">

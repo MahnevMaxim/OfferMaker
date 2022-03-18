@@ -427,7 +427,10 @@ namespace OfferMaker
 
             IsBusy = false;
 
-            OnSendMessage(message);
+            if(!string.IsNullOrWhiteSpace(message))
+                OnSendMessage(message);
+            else
+                OnSendMessage("Нет данных для сохранения");
         }
 
         #endregion Archive
@@ -525,6 +528,8 @@ namespace OfferMaker
 
             if(!string.IsNullOrWhiteSpace(message))
                 OnSendMessage(message);
+            else
+                OnSendMessage("Нет данных для сохранения.");
         }
 
         /// <summary>

@@ -109,7 +109,7 @@ namespace OfferMaker
         /// </summary>
         public void AddImage()
         {
-            string path = SomeMethod();
+            string path = GetPath();
             if (path != null && path != "")
             {
                 Image image = new Image(Guid.NewGuid().ToString(), Global.User.Id, path) { IsNew = true };
@@ -118,8 +118,9 @@ namespace OfferMaker
             }
         }
 
-        private string SomeMethod()
+        private string GetPath()
         {
+            ImageCropper.resultImage = null;
             byte[] result = ImageCropper.GetImage(new Size(500, 300), null);
 
             string currentDirectory = Directory.GetCurrentDirectory();
@@ -128,14 +129,14 @@ namespace OfferMaker
             {
                 Directory.CreateDirectory(newImagePath);
             }
-            string retPath = newImagePath + DateTime.Now.ToShortDateString() + ".png";
+            string retPath = newImagePath + DateTime.Now.ToShortDateString() + Guid.NewGuid().ToString() + ".png";
             try
             {
                 File.WriteAllBytes(retPath, result);
             }
             catch (Exception ex)
             {
-                retPath = "";
+                retPath = null;
             }
 
             return retPath;

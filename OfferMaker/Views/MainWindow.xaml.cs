@@ -26,6 +26,10 @@ namespace OfferMaker.Views
     public partial class MainWindow : MetroWindow, IView
     {
         public DialogCoordinator dialogCoordinator;
+        bool isNeedClosing;
+
+        public delegate void CloseWindowHandler();
+        public event CloseWindowHandler CloseWindow;
 
         public MainWindow()
         {
@@ -58,6 +62,21 @@ namespace OfferMaker.Views
             {
                 offerGroupsListView.Items.MoveCurrentToLast();
                 offerGroupsListView.ScrollIntoView(offerGroupsListView.Items.CurrentItem);
+            }
+        }
+
+        async private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (!isNeedClosing)
+            {
+                e.Cancel = true;
+                var vm = (MainViewModel)DataContext;
+                isNeedClosing = await vm.TryClose();
+                if (isNeedClosing)
+                {
+                    base.OnClosed(e);
+                    Application.Current.Shutdown();
+                }
             }
         }
     }

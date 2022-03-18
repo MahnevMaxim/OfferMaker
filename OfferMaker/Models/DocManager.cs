@@ -217,6 +217,7 @@ namespace OfferMaker
 
         private Offer CreateTemplate(Offer offer)
         {
+            offer.Customer = new Customer();
             Offer temp_ = Helpers.CloneObject<Offer>(offer);
             Offer temp = Utils.RestoreOffer(temp_, Global.Main.Users, false);
             temp.OfferState = OfferState.Template;

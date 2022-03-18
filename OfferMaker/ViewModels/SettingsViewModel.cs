@@ -145,6 +145,12 @@ namespace OfferMaker.ViewModels
             set => settingsModel.AdvertisingWidth = value;
         }
 
+        public double PdfControlWidth
+        {
+            get => settingsModel.PdfControlWidth;
+            set => settingsModel.PdfControlWidth = value;
+        }
+
         #endregion Properties
     }
 }

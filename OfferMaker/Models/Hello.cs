@@ -35,6 +35,7 @@ namespace OfferMaker
         List<Hint> hints;
         ObservableCollection<Banner> banners;
         ObservableCollection<Advertising> advertisings;
+        HashSet<string> serverImageGuids; 
 
         #region MVVM
 
@@ -471,6 +472,13 @@ namespace OfferMaker
             else
                 errorMessage += advertisingsCr.Error.Message + "\n";
 
+            //получаем гуиды изображений
+            var imageGuidsCr = await dataRepository.ImageGuidsGet();
+            if (imageGuidsCr.Success)
+                serverImageGuids = imageGuidsCr.Data;
+            else
+                errorMessage += imageGuidsCr.Error.Message + "\n";
+
             if (!string.IsNullOrWhiteSpace(errorMessage))
                 return new CallResult() { Error = new Error(errorMessage) };
             return new CallResult();
@@ -498,7 +506,7 @@ namespace OfferMaker
 
             //менеджер картинок
             SetHelloStatus("инициализация менеджера картинок...");
-            main.ImageManager = ImageManager.GetInstance();
+            main.ImageManager = ImageManager.GetInstance(serverImageGuids);
 
             //каталог
             SetHelloStatus("инициализация каталога...");

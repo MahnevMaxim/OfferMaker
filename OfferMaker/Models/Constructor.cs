@@ -220,12 +220,19 @@ namespace OfferMaker
         /// Загрузка КП из архива.
         /// </summary>
         /// <param name="offer"></param>
-        internal void LoadOfferFromArchive(Offer offer)
+        async internal void LoadOfferFromArchive(Offer offer)
         {
+            Global.Main.IsBusy = true;
+
             Offer clone = Helpers.CloneObject<Offer>(offer);
             Offer offer_ = Utils.RestoreOffer(clone, Global.Users, true);
             if (offer.OfferState == OfferState.OldArchive)
                 offer_.OfferState = OfferState.OldArchive;
+            await Task.Run(() => ImageManager.GetInstance().PrepareImages(offer));
+
+            Global.Main.IsBusy = false;
+            await Task.Delay(20);
+
             LoadOffer(offer_);
         }
 
@@ -233,8 +240,11 @@ namespace OfferMaker
         /// Загрузка шаблона.
         /// </summary>
         /// <param name="offer"></param>
-        internal void LoadOfferTemplate(Offer offer)
+        async internal void LoadOfferTemplate(Offer offer)
         {
+            Global.Main.IsBusy = true;
+
+            offer.Customer = new Customer();
             Offer clone = Helpers.CloneObject<Offer>(offer);
             Offer offer_ = Utils.RestoreOffer(clone, Global.Users, false);
 
@@ -242,6 +252,11 @@ namespace OfferMaker
             offer_.Guid = Guid.NewGuid().ToString();
             offer_.Manager = Global.Main.User;
             offer_.OfferCreator = Global.Main.User;
+
+            await Task.Run(() => ImageManager.GetInstance().PrepareImages(offer));
+            Global.Main.IsBusy = false;
+            await Task.Delay(20);
+
             LoadOffer(offer_);
         }
 
@@ -251,6 +266,7 @@ namespace OfferMaker
         /// <param name="offer"></param>
         internal void EditOfferTemplate(Offer offer)
         {
+            offer.Customer = new Customer();
             offer.Manager = Global.Main.User;
             offer.OfferCreator = Global.Main.User;
             LoadOffer(offer);
@@ -356,7 +372,7 @@ namespace OfferMaker
         {
             SimpleViews.PromoText form = new SimpleViews.PromoText(Offer.PromoText);
             var res = form.ShowDialog();
-            if(res.Value)
+            if (res.Value)
             {
                 Offer.PromoText = form.PromoText_;
                 viewModel.OnPropertyChanged("PromoText");

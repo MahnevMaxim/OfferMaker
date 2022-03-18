@@ -73,16 +73,19 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "CanEditProducts,CanAll")]
-        [HttpPut(Name = nameof(NomenclaturesEdit))]
-        public async Task<ActionResult<Nomenclature>> NomenclaturesEdit(IEnumerable<Nomenclature> noms)
+        [HttpPut(Name = nameof(NomenclaturesSave))]
+        public async Task<ActionResult<IEnumerable<Nomenclature>>> NomenclaturesSave(IEnumerable<Nomenclature> noms)
         {
+            List<Nomenclature> nomenclatures = new List<Nomenclature>();
             foreach (var nom in noms)
             {
                 try
                 {
                     if (nom.Id == 0)
                     {
-                        await NomenclaturePost(nom);
+                        var res = await NomenclaturePost(nom);
+                        CreatedAtActionResult actionRes = (CreatedAtActionResult)res.Result;
+                        nomenclatures.Add((Nomenclature)actionRes.Value);
                     }
                     else
                     {
@@ -94,7 +97,7 @@ namespace API.Controllers
                     Log.Write("Исключение при попытке сохранить номенклатуру " + nom.Id, ex);
                 }
             }
-            return NoContent();
+            return Ok(nomenclatures);
         }
 
         [Authorize(Roles = "CanEditProducts,CanAll")]

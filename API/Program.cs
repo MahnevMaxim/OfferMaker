@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Core;
+using System.IO;
 
 namespace API
 {
@@ -43,11 +44,22 @@ namespace API
                         q.AddTrigger(opts => opts
                             .ForJob(jobKey) // link to the HelloWorldJob
                             .WithIdentity("CurrencyJob-trigger") // give the trigger a unique name
-                            .WithCronSchedule("0 0/5 * * * ?")); 
+                            .WithCronSchedule("0 0/5 * * * ?"));
+
+                        // Create a "key" for the job
+                        var jobKeyImages = new JobKey("ImagesJob");
+
+                        // Register the job with the DI container
+                        q.AddJob<ImagesJob>(opts => opts.WithIdentity(jobKeyImages));
+
+                        // Create a trigger for the job
+                        q.AddTrigger(opts => opts
+                            .ForJob(jobKeyImages) // link to the HelloWorldJob
+                            .WithIdentity("ImagesJob-trigger") // give the trigger a unique name
+                            .WithCronSchedule("0 0/1 * * * ?"));
                     });
 
                     // Add the Quartz.NET hosted service
-
                     services.AddQuartzHostedService(
                         q => q.WaitForJobsToComplete = true);
 
@@ -64,6 +76,19 @@ namespace API
         public Task Execute(IJobExecutionContext context)
         {
             CurrenciesUpdater.Update();
+            return Task.CompletedTask;
+        }
+    }
+
+    /// <summary>
+    /// Задание для планировщика.
+    /// </summary>
+    [DisallowConcurrentExecution]
+    public class ImagesJob : IJob
+    {
+        public Task Execute(IJobExecutionContext context)
+        {
+            ImagesUpdater.Update();
             return Task.CompletedTask;
         }
     }

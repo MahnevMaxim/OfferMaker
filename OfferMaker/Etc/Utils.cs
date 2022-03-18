@@ -66,14 +66,14 @@ namespace OfferMaker
 
                 var cust = doc.Root.Element("Customer");
 
-                offer.OldIdentifer = cust.Element("KpNumber").Value;
-                offer.OfferName = cust.Element("KpName").Value;
-                var date = cust.Element("Date").Value;
+                offer.OldIdentifer = cust.Element("KpNumber")?.Value;
+                offer.OfferName = cust.Element("KpName")?.Value;
+                var date = cust.Element("Date")?.Value;
                 offer.CreateDate = DateTime.Parse(date);
 
-                var customerName = cust.Element("Name").Value;
-                var organization = cust.Element("Organization").Value;
-                var location = cust.Element("Location").Value;
+                var customerName = cust.Element("Name")?.Value;
+                var organization = cust.Element("Organization")?.Value;
+                var location = cust.Element("Location")?.Value;
 
                 offer.Customer = new Customer()
                 {

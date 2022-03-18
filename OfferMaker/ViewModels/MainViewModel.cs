@@ -147,6 +147,8 @@ namespace OfferMaker.ViewModels
             });
         }
 
+        public double PdfControlWidth { get => AppSettings.Default.PdfControlWidth; }
+
         async void DeleteOfferGroup(OfferGroup group)
         {
             if(group.NomWrappers.Count>0)
@@ -162,6 +164,26 @@ namespace OfferMaker.ViewModels
                     return;
             }
             modelMain.DelOfferGroup(group);
+        }
+
+        public async Task<bool> TryClose()
+        {
+            var newNoms = Global.Catalog.Nomenclatures.Where(n => n.Id == 0 || n.GetIsEdit() == true).ToList();
+            if (newNoms.Count > 0)
+            {
+                var dialogSettings = new MetroDialogSettings()
+                {
+                    AffirmativeButtonText = "Закрыть",
+                    NegativeButtonText = "Отмена"
+                };
+                var dialogRes = await dialogCoordinator.ShowMessageAsync(this, "", "Имеются несохранённые номенклатуры.",
+                    MessageDialogStyle.AffirmativeAndNegative, dialogSettings);
+                if (dialogRes == MessageDialogResult.Affirmative)
+                    return true;
+                else
+                    return false;
+            }
+            return true;
         }
 
         #region Offer

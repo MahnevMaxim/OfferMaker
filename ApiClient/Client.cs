@@ -2327,6 +2327,98 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<ImageGuid>>> ImageGuidsGetAsync()
+        {
+            return ImageGuidsGetAsync(System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <summary>
+        /// (Auth)
+        /// </summary>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<ImageGuid>>> ImageGuidsGetAsync(System.Threading.CancellationToken cancellationToken)
+        {
+            var urlBuilder_ = new System.Text.StringBuilder();
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/ImageGuids");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200 || status_ == 201 || status_ == 204)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ImageGuid>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return new ApiResponse<System.Collections.Generic.ICollection<ImageGuid>>(status_, headers_, objectResponse_.Object);
+                        }
+                        else
+                        if (status_ == 401)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Unauthorized", status_, responseText_, headers_, null);
+                        }
+                        else
+                        if (status_ == 403)
+                        {
+                            string responseText_ = ( response_.Content == null ) ? string.Empty : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("Forbidden", status_, responseText_, headers_, null);
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new ApiException("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// (Auth)
+        /// </summary>
+        /// <returns>Success</returns>
+        /// <exception cref="ApiException">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<ApiResponse> ImagePostAsync(FileParameter file)
         {
             return ImagePostAsync(file, System.Threading.CancellationToken.None);
@@ -3172,9 +3264,9 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesEditAsync(System.Collections.Generic.IEnumerable<Nomenclature> body)
+        public virtual System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesSaveAsync(System.Collections.Generic.IEnumerable<Nomenclature> body)
         {
-            return NomenclaturesEditAsync(body, System.Threading.CancellationToken.None);
+            return NomenclaturesSaveAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -3183,7 +3275,7 @@ namespace ApiLib
         /// </summary>
         /// <returns>Success</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ApiResponse<Nomenclature>> NomenclaturesEditAsync(System.Collections.Generic.IEnumerable<Nomenclature> body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>> NomenclaturesSaveAsync(System.Collections.Generic.IEnumerable<Nomenclature> body, System.Threading.CancellationToken cancellationToken)
         {
             var urlBuilder_ = new System.Text.StringBuilder();
             urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/Nomenclatures");
@@ -3223,12 +3315,12 @@ namespace ApiLib
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200 || status_ == 201 || status_ == 204)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<Nomenclature>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<Nomenclature>>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
-                            return new ApiResponse<Nomenclature>(status_, headers_, objectResponse_.Object);
+                            return new ApiResponse<System.Collections.Generic.ICollection<Nomenclature>>(status_, headers_, objectResponse_.Object);
                         }
                         else
                         if (status_ == 401)
@@ -6275,6 +6367,15 @@ namespace ApiLib
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
+    public partial class ImageGuid
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("guid")]
+        public string Guid { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.15.5.0 (NJsonSchema v10.6.6.0 (Newtonsoft.Json v9.0.0.0))")]
     public partial class Nomenclature
     {
 
@@ -6438,10 +6539,12 @@ namespace ApiLib
         public string Comment { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("advertisingsUp_")]
-        public System.Collections.Generic.ICollection<Advertising> AdvertisingsUp_ { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Advertising> AdvertisingsUp_ { get; set; } = new System.Collections.ObjectModel.Collection<Advertising>();
 
         [System.Text.Json.Serialization.JsonPropertyName("advertisingsDown_")]
-        public System.Collections.Generic.ICollection<Advertising> AdvertisingsDown_ { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Advertising> AdvertisingsDown_ { get; set; } = new System.Collections.ObjectModel.Collection<Advertising>();
 
         [System.Text.Json.Serialization.JsonPropertyName("currencies")]
         [System.ComponentModel.DataAnnotations.Required]
@@ -6570,10 +6673,12 @@ namespace ApiLib
         public string Comment { get; set; }
 
         [System.Text.Json.Serialization.JsonPropertyName("advertisingsUp_")]
-        public System.Collections.Generic.ICollection<Advertising> AdvertisingsUp_ { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Advertising> AdvertisingsUp_ { get; set; } = new System.Collections.ObjectModel.Collection<Advertising>();
 
         [System.Text.Json.Serialization.JsonPropertyName("advertisingsDown_")]
-        public System.Collections.Generic.ICollection<Advertising> AdvertisingsDown_ { get; set; }
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.ICollection<Advertising> AdvertisingsDown_ { get; set; } = new System.Collections.ObjectModel.Collection<Advertising>();
 
     }
 

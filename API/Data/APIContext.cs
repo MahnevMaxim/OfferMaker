@@ -14,7 +14,6 @@ namespace API.Data
     {
         public DbSet<Nomenclature> Nomenclatures { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Customer> Customers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Offer> Offers { get; set; }
@@ -24,6 +23,7 @@ namespace API.Data
         public DbSet<Hint> Hints { get; set; }
         public DbSet<Banner> Banners { get; set; }
         public DbSet<Advertising> Advertisings { get; set; }
+        public DbSet<ImageGuid> ImageGuids { get; set; }
 
         public APIContext(DbContextOptions<APIContext> options)
             : base(options)

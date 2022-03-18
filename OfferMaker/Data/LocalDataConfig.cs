@@ -26,6 +26,7 @@ namespace OfferMaker
         static string BannersPath = "banners.json";
         static string AdvertisingsPath = "advertisings.json";
         static string PositionsPath = "positions.json";
+        static string ImageGuidsPath = "image_guids.json";
 
         //локальные пути локальных данных, созданных или изменённых локально, относительно директории приложения
         public static string LocalCurrenciesPath = Path.Combine(LocalDataDir, CurrenciesPath);
@@ -39,6 +40,7 @@ namespace OfferMaker
         public static string LocalBannersPath = Path.Combine(LocalDataDir, BannersPath);
         public static string LocalAdvertisingsPath = Path.Combine(LocalDataDir, AdvertisingsPath);
         public static string LocalPositionsPath = Path.Combine(LocalDataDir, PositionsPath);
+        public static string LocalImageGuidsPath = Path.Combine(LocalDataDir, ImageGuidsPath);
 
         //локальные пути кэшированных данных с сервера относительно директории приложения
         public static string ServerCacheCurrenciesPath = Path.Combine(ServerCacheDataDir, CurrenciesPath);
@@ -52,5 +54,6 @@ namespace OfferMaker
         public static string ServerCacheBannersPath = Path.Combine(ServerCacheDataDir, BannersPath);
         public static string ServerCacheAdvertisingsPath = Path.Combine(ServerCacheDataDir, AdvertisingsPath);
         public static string ServerCachePositionsPath = Path.Combine(ServerCacheDataDir, PositionsPath);
+        public static string ServerCacheImageGuidsPath = Path.Combine(ServerCacheDataDir, ImageGuidsPath);
     }
 }

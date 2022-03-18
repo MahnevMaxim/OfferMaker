@@ -600,6 +600,27 @@ namespace OfferMaker
 
         #endregion Banners
 
+        #region ImageGuids
+
+
+        async internal Task<CallResult<HashSet<string>>> ImageGuidsGet()
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerStore.ImageGuidsGet();
+            if (AppMode == AppMode.Offline)
+                return await LocalData.GetData<HashSet<string>>(LocalDataConfig.ServerCacheImageGuidsPath);
+
+            CallResult<HashSet<string>> callResult = await ServerStore.ImageGuidsGet();
+            if (callResult.Success)
+            {
+                LocalData.UpdateCache(callResult.Data, LocalDataConfig.ServerCacheImageGuidsPath);
+                return callResult;
+            }
+            return await LocalData.GetData<HashSet<string>>(LocalDataConfig.ServerCacheImageGuidsPath);
+        }
+
+        #endregion ImageGuids
+
         /// <summary>
         /// Слияние
         /// </summary>

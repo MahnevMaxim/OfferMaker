@@ -195,6 +195,16 @@ namespace API.Migrations
                     b.ToTable("Hints");
                 });
 
+            modelBuilder.Entity("Shared.ImageGuid", b =>
+                {
+                    b.Property<string>("Guid")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Guid");
+
+                    b.ToTable("ImageGuids");
+                });
+
             modelBuilder.Entity("Shared.Nomenclature", b =>
                 {
                     b.Property<int>("Id")
@@ -235,7 +245,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 14, 8, 45, 26, 598, DateTimeKind.Utc).AddTicks(3563));
+                        .HasDefaultValue(new DateTime(2022, 3, 17, 9, 36, 56, 989, DateTimeKind.Utc).AddTicks(5711));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -300,7 +310,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 14, 8, 45, 26, 607, DateTimeKind.Utc).AddTicks(3530));
+                        .HasDefaultValue(new DateTime(2022, 3, 17, 9, 36, 56, 996, DateTimeKind.Utc).AddTicks(241));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -407,7 +417,7 @@ namespace API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 14, 8, 45, 26, 612, DateTimeKind.Utc).AddTicks(1677));
+                        .HasDefaultValue(new DateTime(2022, 3, 17, 9, 36, 57, 0, DateTimeKind.Utc).AddTicks(3949));
 
                     b.Property<string>("Currency")
                         .IsRequired()

@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Shared;
 using Microsoft.AspNetCore.Authorization;
+using API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -18,9 +20,11 @@ namespace API.Controllers
     {
         public static IWebHostEnvironment _environment;
         static string uploadDir;
+        private readonly APIContext _context;
 
-        public ImagesController(IWebHostEnvironment environment)
+        public ImagesController(IWebHostEnvironment environment, APIContext context)
         {
+            _context = context;
             _environment = environment;
             uploadDir = environment.WebRootPath + "/Upload/";
         }
@@ -41,6 +45,16 @@ namespace API.Controllers
                     {
                         await file.CopyToAsync(fileStream);
                         fileStream.Flush();
+                        try
+                        {
+                            _context.ImageGuids.Add(new ImageGuid() { Guid = file.FileName.Split('.')[0] });
+                            _context.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            //здесь может быть исключение в теории, если во время отладки до сохранения планировщик сохранит в базу уже
+                            Log.Write(ex);
+                        }
                         return Ok(uploadDir + file.FileName);
                     }
                 }
@@ -52,7 +66,7 @@ namespace API.Controllers
             catch (Exception ex)
             {
                 Log.Write(ex);
-                return BadRequest("Upload image exeption:\n"+ex.StackTrace);
+                return BadRequest("Upload image exeption:\n" + ex.StackTrace);
             }
         }
 
@@ -69,7 +83,7 @@ namespace API.Controllers
                 string fileName = Path.GetFileName(file);
                 return PhysicalFile(file, "image/" + ext, fileName);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Write("ImagesController Get" + ex);
                 return null;

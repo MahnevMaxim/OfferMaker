@@ -18,7 +18,8 @@
                  WindowStartupLocation="CenterScreen"
                  BorderThickness="0"
                  WindowState = "Maximized"
-                 Title="KIP Offer Maker" Height="650" Width="1200">
+                 Title="KIP Offer Maker" Height="650" Width="1200"
+                 Closing="MetroWindow_Closing">
 
     <Window.Resources>
         <root:MultiConverter x:Key="MultiConverter"/>
@@ -379,7 +380,7 @@
     </mah:MetroWindow.RightWindowCommands>
 
     <Grid>
-        <Grid Visibility="{Binding IsBusy, Converter={StaticResource VisibleIfNotTrue}}">
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -931,9 +932,9 @@
                     </Style>
                 </Grid.Style>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition  />
                     <ColumnDefinition Width="auto" />
-                    <ColumnDefinition Width="900"
+                    <ColumnDefinition Width="{Binding PdfControlWidth, Mode=OneWay}"
                                       MinWidth="200"
                                       MaxWidth="900" />
                 </Grid.ColumnDefinitions>
@@ -1130,6 +1131,7 @@
 
                 <GridSplitter Width="2"
                               Grid.Column="1"
+                              
                               VerticalAlignment="Stretch"
                               HorizontalAlignment="Center" />
 
@@ -1570,6 +1572,10 @@
         </Grid>
         <Grid Visibility="{Binding IsBusy, Converter={StaticResource VisibleIfTrue}}"
               d:Visibility="Collapsed">
+            <Grid.Background>
+                <SolidColorBrush Opacity="0.5"
+                                 Color="White" />
+            </Grid.Background>
             <StackPanel VerticalAlignment="Center">
                 <mah:ProgressRing IsActive="True"
                                   IsLarge="True" />

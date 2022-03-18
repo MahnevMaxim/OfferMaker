@@ -46,6 +46,7 @@ namespace OfferMaker
         static readonly string advertisingsGetErrorMess = "Ошибка при попытке получить рекламные изображения с сервера.";
         static readonly string advertisingCreateErrorMess = "Ошибка при попытке создать рекламное изображение с сервера.";
         static readonly string advertisingDeleteErrorMess = "Ошибка при попытке удалить рекламное изображение с сервера.";
+        static readonly string imageGuidsGetErrorMess = "Ошибка при попытке получить список изображений с сервера.";
 
         public ServerStore(string accessToken)
         {
@@ -481,7 +482,13 @@ namespace OfferMaker
                 newNoms.AddRange(Global.Catalog.CatalogFilter.GetDeletedNoms()); //также добавляем помеченные на удаление
                 Global.ImageManager.UploadNewImages(newNoms);
                 IEnumerable<ApiLib.Nomenclature> noms = Helpers.CloneObject<IEnumerable<ApiLib.Nomenclature>>(newNoms);
-                await client.NomenclaturesEditAsync(noms);
+                var response = await client.NomenclaturesSaveAsync(noms);
+                foreach (var nom in response.Result)
+                {
+                    var newNom = newNoms.Where(n => n.Guid == nom.Guid).FirstOrDefault();
+                    if (newNom != null)
+                        newNom.Id = nom.Id;
+                }
                 newNoms.ToList().ForEach(n => n.SkipIsEdit());
                 return new CallResult();
             }
@@ -655,6 +662,7 @@ namespace OfferMaker
         {
             try
             {
+                Global.ImageManager.UploadNewImages(offer);
                 ApiLib.Offer offerCopy = Helpers.CloneObject<ApiLib.Offer>(offer);
                 var res = await client.OfferPostAsync(offerCopy);
                 offer.Id = res.Result.Id;
@@ -951,6 +959,36 @@ namespace OfferMaker
         }
 
         #endregion Banners
+
+        #region ImageGuids
+
+        async internal Task<CallResult<HashSet<string>>> ImageGuidsGet()
+        {
+            try
+            {
+                var response = await client.ImageGuidsGetAsync();
+                if (response.StatusCode == 200)
+                {
+                    List<string> list = new List<string>();
+                    foreach(var imageGuid in response.Result)
+                    {
+                        list.Add(imageGuid.Guid);
+                    }
+                    HashSet<string> set = new HashSet<string>(list);
+                    return new CallResult<HashSet<string>>() { Data = set };
+                }
+                else
+                {
+                    return GetApiError<HashSet<string>>(imageGuidsGetErrorMess, response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return GetApiError<HashSet<string>>(imageGuidsGetErrorMess, ex);
+            }
+        }
+
+        #endregion ImageGuids
 
         #region Errors
 

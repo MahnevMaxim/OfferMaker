@@ -217,7 +217,7 @@ namespace OfferMaker {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.2.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1.4.0")]
         public string version {
             get {
                 return ((string)(this["version"]));
@@ -248,6 +248,18 @@ namespace OfferMaker {
             }
             set {
                 this["AdvertisingWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("700")]
+        public double PdfControlWidth {
+            get {
+                return ((double)(this["PdfControlWidth"]));
+            }
+            set {
+                this["PdfControlWidth"] = value;
             }
         }
     }

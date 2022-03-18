@@ -31,6 +31,12 @@ namespace OfferMaker
         string token;
         string imagesDirectory = AppSettings.Default.ImageManagerDir;
         public DownLoadProgress downLoadProgress;
+        /// <summary>
+        /// Перечисление того, что есть на сервере, для того, чтобы не опрашивать сервер лишний раз,
+        /// по поводу не существующих картинок, которых там по сути быть не должно, но они иногда есть, при разработке 
+        /// часто такое случается. 
+        /// </summary>
+        HashSet<string> serverGuids = new HashSet<string>();
 
         #region Singleton
 
@@ -45,6 +51,12 @@ namespace OfferMaker
         private static readonly ImageManager instance = new ImageManager();
 
         public static ImageManager GetInstance() => instance;
+
+        public static ImageManager GetInstance(HashSet<string> serverImageGuids)
+        {
+            instance.serverGuids = serverImageGuids;
+            return instance;
+        }
 
         #endregion Singleton
 
@@ -215,8 +227,15 @@ namespace OfferMaker
             return file;
         }
 
-        private CallResult GetImageFromServer(string guid)
+        /// <summary>
+        /// Скачивает изображение в кэш.
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public CallResult GetImageFromServer(string guid)
         {
+            if(!serverGuids.Contains(guid))
+                return new CallResult() { Error = new Error("no image on server") };
             string imageUrl = apiEndpoint + "api/Images?guid=" + guid;
             try
             {
@@ -254,6 +273,32 @@ namespace OfferMaker
             return guids.Except(existingFilesGuids).ToList();
         }
 
+        /// <summary>
+        /// Подгружаем картинки в отдельном потоке, если надо.
+        /// </summary>
+        /// <param name="offer"></param>
+        public void PrepareImages(Offer offer)
+        {
+            List<string> imageGuids = new List<string>();
+            offer.OfferGroups.ToList().ForEach(o => o.NomWrappers.ToList().ForEach(n =>
+            {
+                if (n.Nomenclature.Image != null)
+                    imageGuids.Add(n.Nomenclature.Image.Guid);
+            }));
+
+            List<string> needDownloadGuids = GetExceptImages(imageGuids);
+            foreach (var guid in needDownloadGuids)
+            {
+                Global.Main.ProcessStatus = "Загрузка изображения " + guid;
+                GetImageFromServer(guid);
+            }
+        }
+
+        /// <summary>
+        /// Синхронизация кэша с сервером.
+        /// </summary>
+        /// <param name="guids"></param>
+        /// <returns></returns>
         async internal Task SyncImagesWithServer(List<string> guids)
         {
             List<string> needDownloadGuids = GetExceptImages(guids);
@@ -280,6 +325,10 @@ namespace OfferMaker
             }
         }
 
+        async internal Task DownloadImage(string guid)
+        {
+            await Task.Run(() => GetImageFromServer(guid));
+        }
 
         internal void DownloadStop() => downLoadProgress.IsStop = true;
 
@@ -294,13 +343,20 @@ namespace OfferMaker
             }
         }
 
+        internal void UploadNewImages(Offer offer)
+        {
+            List<Nomenclature> noms = new List<Nomenclature>();
+            offer.OfferGroups.ToList().ForEach(o=>o.NomWrappers.ToList().ForEach(n=>noms.Add(n.Nomenclature)));
+            UploadNewImages(noms);
+        }
+
         async internal void UploadNewImages(List<Nomenclature> newNoms)
         {
             foreach (var nom in newNoms)
             {
                 foreach (var image in nom.Images)
                 {
-                    if (image.IsNew)
+                    if (image.IsNew && !serverGuids.Contains(image.Guid))
                     {
                         try
                         {
@@ -308,6 +364,7 @@ namespace OfferMaker
                             using var stream = new MemoryStream(File.ReadAllBytes(file).ToArray());
                             FileParameter param = new FileParameter(stream, Path.GetFileName(file));
                             var res = await client.ImagePostAsync(param);
+                            serverGuids.Add(image.Guid);
                         }
                         catch (Exception ex)
                         {
@@ -347,11 +404,6 @@ namespace OfferMaker
             {
                 return new CallResult() { Error = new Error(ex) };
             }
-        }
-
-        async internal Task DownloadImage(string guid)
-        {
-            await Task.Run(() => GetImageFromServer(guid));
         }
     }
 

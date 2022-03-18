@@ -61,8 +61,23 @@ namespace API.Controllers
         {
             if(offer.Banner_!=null)
             {
-                Banner banner = _context.Banners.Where(b => b.Guid == offer.Banner_.Guid).First();
-                offer.Banner_ = banner;
+                Banner banner = _context.Banners.Where(b => b.Guid == offer.Banner_.Guid).FirstOrDefault();
+                if(banner==null)
+                {
+                    banner = _context.Banners.First();
+                    if(banner==null)
+                    {
+                        return BadRequest("banner is null, upload banner to system");
+                    }
+                    else
+                    {
+                        offer.Banner_ = banner;
+                    }
+                }
+                else
+                {
+                    offer.Banner_ = banner;
+                }
             }
             
             _context.Offers.Add(offer);

@@ -25,6 +25,11 @@ namespace OfferMaker
         ObservableCollection<Image> images = new ObservableCollection<Image>();
         bool isDelete;
 
+        /// <summary>
+        /// Была ли номенклатура отредактирована.
+        /// </summary>
+        bool isEdit;
+
         public int Id { get; set; }
 
         public string Guid { get; set; }
@@ -246,10 +251,10 @@ namespace OfferMaker
             }
         }
 
-        /// <summary>
-        /// Была ли номенклатура отредактирована.
-        /// </summary>
-        bool isEdit;
+        public Nomenclature()
+        {
+            Guid = System.Guid.NewGuid().ToString();
+        }
 
         void SetIsEdit() => isEdit = true;
 
