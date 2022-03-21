@@ -31,6 +31,7 @@ namespace API
         }
 
         public IConfiguration Configuration { get; }
+        static public string connectionString;
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -38,7 +39,8 @@ namespace API
             Log.Clear("ef_log.txt");
 #if DEBUG
             Log.Write("Debug");
-            services.AddDbContext<APIContext>(options => options.UseSqlServer(Configuration.GetConnectionString("APIContext")).EnableSensitiveDataLogging());
+            connectionString = Configuration.GetConnectionString("APIContextConnectionString");
+            services.AddDbContext<APIContext>(options => options.UseSqlServer(connectionString).EnableSensitiveDataLogging());
 #else
                         Log.Write("Release");
                         try
@@ -82,15 +84,7 @@ namespace API
             services.AddSwaggerGen(options =>
             {
                 options.ExampleFilters();
-
-                //options.OperationFilter<AddHeaderOperationFilter>("correlationId", "Correlation Id for the request");
-
-                //options.OperationFilter<AddResponseHeadersFilter>();
-
                 options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
-
-                //var filePath = Path.Combine(System.AppContext.BaseDirectory, "API.xml");
-                //options.IncludeXmlComments(filePath);
 
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
@@ -134,7 +128,7 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseCors("DevCorsPolicy");
             app.UseAuthentication();

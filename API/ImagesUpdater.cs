@@ -25,9 +25,9 @@ namespace API
             {
                 string uploadDir = Directory.GetCurrentDirectory() + "/wwwroot/Upload/";
 #if DEBUG
-                string con = "Server=(localdb)\\mssqllocaldb;Database=APIContext;Trusted_Connection=True;MultipleActiveResultSets=true";
+                string con = Startup.connectionString;
 #else
-                                string con = Config.DbConnectionString;
+                string con = Config.DbConnectionString;
 #endif
                 DbContextOptions<APIContext> dbContextOptions = new DbContextOptionsBuilder<APIContext>()
                     .UseSqlServer(con)
