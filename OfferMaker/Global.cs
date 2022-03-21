@@ -9,14 +9,9 @@ namespace OfferMaker
 {
     class Global
     {
-        /// <summary>
-        /// Если true - Тогда подключение идёт удалённому серверу.
-        /// </summary>
-        //static bool IsRealMode = true;
-        static bool IsRealMode;
-
-        public static string apiEndpoint { get => IsRealMode ? "https://kip.mybot.su/" : "https://localhost:44313/"; }
-        //public static string apiEndpoint { get => IsRealMode ? "http://api.kip-group.com//" : "https://localhost:44313/"; }
+        public static string apiEndpoint = "https://localhost:44313/";
+        //public static string apiEndpoint = "https://kip.mybot.su/";
+        //public static string apiEndpoint = "http://api.kip-group.com/";
 
         public static Main Main;
 

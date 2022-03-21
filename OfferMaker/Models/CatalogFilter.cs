@@ -68,6 +68,7 @@ namespace OfferMaker
         {
             Nomenclature newNom = Helpers.CloneObject<Nomenclature>(nomenclature);
             newNom.Id = 0;
+            newNom.Guid = Guid.NewGuid().ToString();
             int index = Nomenclatures.IndexOf(nomenclature);
             Nomenclatures.Insert(index + 1, newNom);
             if (FilterMode == FilterMode.Category)
