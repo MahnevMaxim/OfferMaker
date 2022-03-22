@@ -125,10 +125,10 @@ namespace OfferMaker.Pdf
 
         #region EmployeePDF
 
-        internal void AddEmployee()
+        internal void AddEmployee(bool isNeedClosePage)
         {
             EmployeePDF employee = new EmployeePDF(vm);
-            AddElement(employee);
+            AddElement(employee, isNeedClosePage);
         }
 
         #endregion EmployeePDF
@@ -271,7 +271,7 @@ namespace OfferMaker.Pdf
         /// Добавление элемента.
         /// </summary>
         /// <param name="element"></param>
-        void AddElement(UserControl element)
+        void AddElement(UserControl element, bool isNeedClosePage = false)
         {
             bool isNewPage = false;
             if (allContainers.Last().PageStatus == PageStatus.Close)
@@ -284,6 +284,7 @@ namespace OfferMaker.Pdf
             page.TryAddElement(element);
             if (page.container.ActualHeight + page.colontitul.ActualHeight > (height - heightDifference))
             {
+                //если страница новая, а элемент не влазит, то не удаляем, иначе мы это никуда не добавим
                 if (!isNewPage)
                 {
                     page.RemoveElement(element);
@@ -295,6 +296,8 @@ namespace OfferMaker.Pdf
                 }
                 page.PageStatus = PageStatus.Close;
             }
+            if(isNeedClosePage)
+                page.PageStatus = PageStatus.Close;
         }
 
         /// <summary>

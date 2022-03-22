@@ -43,12 +43,12 @@ namespace OfferMaker
             builder.AddTitulView(false);
             builder.AddCalc();
             builder.AddInformBlockPdf();
-            builder.AddEmployee();
+            builder.AddEmployee(false);
 
             return builder.allContainers;
         }
 
-        FixedDocument GetFixedDocument(List<PageContainer> pagesContainer)
+        public static FixedDocument GetFixedDocument(List<PageContainer> pagesContainer)
         {
             FixedDocument result = new FixedDocument();
             result.DocumentPaginator.PageSize = PrintLayout.A4.Size;
@@ -59,7 +59,7 @@ namespace OfferMaker
             return result;
         }
 
-        PageContent GetPageContent(PageContainer pc)
+        public static PageContent GetPageContent(PageContainer pc)
         {
             try
             {

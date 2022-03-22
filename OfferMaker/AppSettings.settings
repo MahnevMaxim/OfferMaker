@@ -54,10 +54,10 @@
       <Value Profile="(Default)">1.4.0</Value>
     </Setting>
     <Setting Name="ContentWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">100</Value>
+      <Value Profile="(Default)">95</Value>
     </Setting>
     <Setting Name="AdvertisingWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">100</Value>
+      <Value Profile="(Default)">95</Value>
     </Setting>
     <Setting Name="PdfControlWidth" Type="System.Double" Scope="User">
       <Value Profile="(Default)">700</Value>

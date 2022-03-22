@@ -28,7 +28,7 @@ namespace OfferMaker
         internal FixedDocument GetPdf()
         {
             List<PageContainer> pages = GetPagesContainer();
-            FixedDocument result = GetFixedDocument(pages);
+            FixedDocument result = WrapperOnePage.GetFixedDocument(pages);
             return result;
         }
 
@@ -42,7 +42,7 @@ namespace OfferMaker
             builder.AddShortCalcs();
             builder.AddShortCalcsOption();
             builder.AddInformBlockPdf();
-            builder.AddEmployee();
+            builder.AddEmployee(true);
             builder.AddCalc();
             builder.AddCalcOptions();
             builder.AddAdvertisingsDown();
@@ -50,32 +50,32 @@ namespace OfferMaker
             return builder.allContainers;
         }
 
-        FixedDocument GetFixedDocument(List<PageContainer> pagesContainer)
-        {
-            FixedDocument result = new FixedDocument();
-            result.DocumentPaginator.PageSize = PrintLayout.A4.Size;
-            foreach (PageContainer page in pagesContainer)
-            {
-                result.Pages.Add(GetPageContent(page));
-            }
-            return result;
-        }
+        //FixedDocument GetFixedDocument(List<PageContainer> pagesContainer)
+        //{
+        //    FixedDocument result = new FixedDocument();
+        //    result.DocumentPaginator.PageSize = PrintLayout.A4.Size;
+        //    foreach (PageContainer page in pagesContainer)
+        //    {
+        //        result.Pages.Add(WrapperOnePage.GetPageContent(page));
+        //    }
+        //    return result;
+        //}
 
-        PageContent GetPageContent(PageContainer pc)
-        {
-            try
-            {
-                PageContent result = new PageContent();
-                FixedPage page = new FixedPage();
-                page.Children.Add(pc);
-                ((IAddChild)result).AddChild(page);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                Log.Write(ex);
-                return null;
-            }
-        }
+        //PageContent GetPageContent(PageContainer pc)
+        //{
+        //    try
+        //    {
+        //        PageContent result = new PageContent();
+        //        FixedPage page = new FixedPage();
+        //        page.Children.Add(pc);
+        //        ((IAddChild)result).AddChild(page);
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Log.Write(ex);
+        //        return null;
+        //    }
+        //}
     }
 }

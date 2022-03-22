@@ -1,31 +1,31 @@
 ﻿
-[19:39:51:908] Debug
+[12:29:44:411] Debug
 
-[19:39:51:971] Connection complete
+[12:29:44:468] Connection complete
 
-[19:39:52:588] TokenMiddleware complete
+[12:29:45:111] TokenMiddleware complete
 
-[19:39:55:821] TokenMiddleware good
+[12:29:49:346] TokenMiddleware good
 
-[19:39:55:959] TokenMiddleware good
+[12:29:49:461] TokenMiddleware good
 
-[19:39:56:023] TokenMiddleware good
+[12:29:49:519] TokenMiddleware good
 
-[19:39:56:119] TokenMiddleware good
+[12:29:49:612] TokenMiddleware good
 
-[19:39:56:209] TokenMiddleware good
+[12:29:49:677] TokenMiddleware good
 
-[19:39:56:664] TokenMiddleware good
+[12:29:50:127] TokenMiddleware good
 
-[19:39:56:794] TokenMiddleware good
+[12:29:50:248] TokenMiddleware good
 
-[19:39:57:068] TokenMiddleware good
+[12:29:50:604] TokenMiddleware good
 
-[19:39:57:220] TokenMiddleware good
+[12:29:50:747] TokenMiddleware good
 
-[19:39:57:265] TokenMiddleware good
+[12:29:50:791] TokenMiddleware good
 
-[19:39:57:304] TokenMiddleware good
+[12:29:50:886] TokenMiddleware good
 
-[19:39:57:352] TokenMiddleware good
+[12:29:50:935] TokenMiddleware good
 

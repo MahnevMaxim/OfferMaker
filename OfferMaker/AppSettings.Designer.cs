@@ -229,7 +229,7 @@ namespace OfferMaker {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("95")]
         public int ContentWidth {
             get {
                 return ((int)(this["ContentWidth"]));
@@ -241,7 +241,7 @@ namespace OfferMaker {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("95")]
         public int AdvertisingWidth {
             get {
                 return ((int)(this["AdvertisingWidth"]));
