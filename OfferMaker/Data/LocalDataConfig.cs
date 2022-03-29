@@ -21,6 +21,7 @@ namespace OfferMaker
         static string CategoriesPath = "categories.json";
         static string NomenclatureGroupsPath = "nomenclature_groups.json";
         static string OffersPath = "offers.json";
+        static string OffersHistoryPath = "offers_history.json";
         static string HintsPath = "hints.json";
         static string OfferTemplatesPath = "offer_templates.json";
         static string BannersPath = "banners.json";
@@ -35,6 +36,7 @@ namespace OfferMaker
         public static string LocalCategoriesPath = Path.Combine(LocalDataDir, CategoriesPath);
         public static string LocalNomenclatureGroupsPath = Path.Combine(LocalDataDir, NomenclatureGroupsPath);
         public static string LocalOffersPath = Path.Combine(LocalDataDir, OffersPath);
+        public static string LocalOffersHistoryPath = Path.Combine(LocalDataDir, OffersHistoryPath);
         public static string LocalHintsPath = Path.Combine(LocalDataDir, HintsPath);
         public static string LocalOfferTemplatesPath = Path.Combine(LocalDataDir, OfferTemplatesPath);
         public static string LocalBannersPath = Path.Combine(LocalDataDir, BannersPath);
@@ -49,6 +51,7 @@ namespace OfferMaker
         public static string ServerCacheCategoriesPath = Path.Combine(ServerCacheDataDir, CategoriesPath);
         public static string ServerCacheNomenclatureGroupsPath = Path.Combine(ServerCacheDataDir, NomenclatureGroupsPath);
         public static string ServerCacheOffersPath = Path.Combine(ServerCacheDataDir, OffersPath);
+        public static string ServerCacheOffersHistoryPath = Path.Combine(ServerCacheDataDir, OffersHistoryPath);
         public static string ServerCacheHintsPath = Path.Combine(ServerCacheDataDir, HintsPath);
         public static string ServerCacheOfferTemplatesPath = Path.Combine(ServerCacheDataDir, OfferTemplatesPath);
         public static string ServerCacheBannersPath = Path.Combine(ServerCacheDataDir, BannersPath);

@@ -12,8 +12,14 @@ namespace Shared
     {
         public int Id { get; set; }
 
+        public int? ParentId { get; set; }
+
+        public int? ChildId { get; set; }
+
         [Required]
         public string Guid { get; set; }
+
+        public string ParentGuid { get; set; }
 
         [Required]
         public string OfferName { get; set; }

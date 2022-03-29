@@ -104,8 +104,6 @@ namespace OfferMaker.Pdf
             AddElement(shortCalculateOptionEnd);
         }
 
-
-
         #endregion Краткий расчёт опций
 
         #region InformBlockPDF

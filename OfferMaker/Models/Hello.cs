@@ -30,6 +30,7 @@ namespace OfferMaker
         ObservableCollection<Nomenclature> nomenclatures;
         ObservableCollection<NomenclatureGroup> nomenclatureGroups;
         ObservableCollection<Offer> offers;
+        ObservableCollection<Offer> offersHistory;
         ObservableCollection<Offer> offerTemplates;
         ObservableCollection<Currency> currencies;
         List<Hint> hints;
@@ -429,15 +430,26 @@ namespace OfferMaker
                 var offersCr = await dataRepository.OffersGet();
                 if (!offersCr.Success)
                     errorMessage += offersCr.Error.Message + "\n";
+
+                var offersHistoryCr = await dataRepository.OffersHistoryGet();
+                if (!offersHistoryCr.Success)
+                    errorMessage += offersHistoryCr.Error.Message + "\n";
+
+                offersHistory = offersHistoryCr.Data;
                 offers = offersCr.Data;
             }
             else
             {
                 var offersCr = await dataRepository.OffersSelfGet();
-                if (offersCr.Success)
-                    offers = offersCr.Data;
-                else
+                if (!offersCr.Success)
                     errorMessage += offersCr.Error.Message + "\n";
+
+                var offersHistoryCr = await dataRepository.OffersHistorySelfGet();
+                if (!offersHistoryCr.Success)
+                    errorMessage += offersHistoryCr.Error.Message + "\n";
+
+                offersHistory = offersHistoryCr.Data;
+                offers = offersCr.Data;
             }
 
             //получаем шаблоны
@@ -531,7 +543,11 @@ namespace OfferMaker
             //архив
             SetHelloStatus("инициализация архива...");
             SetOffers(offers, true);
-            main.ArchiveStore = new OfferStore(offers, main.User);
+            
+            //история
+            SetHelloStatus("инициализация истории...");
+            SetOffers(offersHistory, true);
+            main.ArchiveStore = new OfferStore(offers, offersHistory, main.User);
             main.ArchiveStore.ApplyOfferFilter();
 
             //шаблоны

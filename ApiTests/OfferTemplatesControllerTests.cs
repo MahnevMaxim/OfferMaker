@@ -108,7 +108,9 @@ namespace ApiTests
                     Currency = context.Currencies.First(),
                     Customer = new Customer(),
                     Guid = Guid.NewGuid().ToString(),
-                    OfferName = newName
+                    OfferName = newName,
+                    AdvertisingsDown_=new(),
+                    AdvertisingsUp_=new()
                 };
 
                 //Act  

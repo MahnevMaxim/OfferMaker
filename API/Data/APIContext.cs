@@ -17,6 +17,7 @@ namespace API.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Currency> Currencies { get; set; }
         public DbSet<Offer> Offers { get; set; }
+        public DbSet<OfferHistory> OffersHistory { get; set; }
         public DbSet<OfferTemplate> OfferTemplates { get; set; }
         public DbSet<NomenclatureGroup> NomenclatureGroups { get; set; }
         public DbSet<Position> Positions { get; set; }
@@ -32,7 +33,7 @@ namespace API.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.LogTo(message => Log.EfWrite(message));
+            optionsBuilder.LogTo(message => Log.EfWrite(message));
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -132,6 +133,56 @@ namespace API.Data
                 v => JsonConvert.DeserializeObject<ObservableCollection<Currency>>(v));
 
             #endregion Offer
+
+            #region OfferChilds
+
+            builder.Entity<OfferHistory>().HasAlternateKey(o => o.Guid);
+
+            builder.Entity<OfferHistory>().Property(p => p.Customer).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Customer>(v));
+
+            builder.Entity<OfferHistory>().Property(p => p.OfferGroups).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<OfferGroup>>(v));
+
+            builder.Entity<OfferHistory>().Property(p => p.OfferInfoBlocks).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<OfferInfoBlock>>(v));
+
+            builder.Entity<OfferHistory>().Property(p => p.AdvertisingsUp).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
+
+            builder.Entity<OfferHistory>().Property(p => p.AdvertisingsDown).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<string>>(v));
+
+            builder.Entity<OfferHistory>().Property(p => p.AdvertisingsUp_).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Advertising>>(v))
+                .HasDefaultValue(new ObservableCollection<Advertising>());
+
+            builder.Entity<OfferHistory>().Property(p => p.AdvertisingsDown_).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Advertising>>(v))
+                .HasDefaultValue(new ObservableCollection<Advertising>());
+
+            builder.Entity<OfferHistory>().Property(p => p.Discount).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Discount>(v));
+
+            builder.Entity<OfferHistory>().Property(p => p.Currency).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<Currency>(v));
+
+            builder.Entity<OfferHistory>().Property(n => n.CreateDate).HasDefaultValue(DateTime.UtcNow);
+
+            builder.Entity<OfferHistory>().Property(p => p.Currencies).HasConversion(
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<ObservableCollection<Currency>>(v));
+
+            #endregion OfferChilds
 
             #region OfferTemplate 
 

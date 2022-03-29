@@ -144,7 +144,7 @@ namespace OfferMaker
             get
             {
                 if (Offer.OfferState == OfferState.Archive)
-                    return "архив Id " + Offer.Id;
+                    return "архив Id " + Offer.VisibleId;
                 if (Offer.OfferState == OfferState.OldArchive)
                     return "старый архив";
                 if (Offer.OfferState == OfferState.Template)
@@ -231,7 +231,7 @@ namespace OfferMaker
             await Task.Run(() => ImageManager.GetInstance().PrepareImages(offer));
 
             Global.Main.IsBusy = false;
-            await Task.Delay(20);
+            await Task.Delay(20);//не спрашивай
 
             LoadOffer(offer_);
         }
@@ -336,14 +336,16 @@ namespace OfferMaker
 
         public void CreateDocumentWithBanner()
         {
-            WrapperAllPages wrapper = new WrapperAllPages(viewModel, smallLogo);
-            PdfDocument = wrapper.GetPdf();
+            //WrapperAllPages wrapper = new WrapperAllPages(viewModel, smallLogo);
+            //PdfDocument = wrapper.GetPdf();
+            WrapperOnePage wrapper = new WrapperOnePage(viewModel, smallLogo);
+            PdfDocument = wrapper.GetPdf(true);
         }
 
         public void CreateDocumentWithoutBanner()
         {
             WrapperOnePage wrapper = new WrapperOnePage(viewModel, smallLogo);
-            PdfDocumentShort = wrapper.GetPdf();
+            PdfDocumentShort = wrapper.GetPdf(false);
         }
 
         #endregion Create PDF

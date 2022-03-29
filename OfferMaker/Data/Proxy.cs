@@ -412,6 +412,31 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Пытаемся получить историю КП с сервера или из кэша.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersHistoryGet()
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerStore.OffersHistoryGet();
+            if (AppMode == AppMode.Offline)
+            {
+                var cacheResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersHistoryPath);
+                var localResult = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersHistoryPath, true);
+                return MergeCallResults(cacheResult, localResult);
+            }
+
+            //в режиме auto получаем 2 колекции, если что-то локально помечено к удалению, то также помечаем к удалению данные сервера
+            var serverResult = await ServerStore.OffersHistoryGet();
+            if (serverResult.Success)
+                LocalData.UpdateCache(serverResult.Data, LocalDataConfig.ServerCacheOffersHistoryPath);
+            else
+                serverResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersHistoryPath);
+            var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersHistoryPath, true);
+            return MergeCallResults(serverResult, localResult_);
+        }
+
+        /// <summary>
         /// Пытаемся получить КП текущего пользователя с сервера или из кэша.
         /// </summary>
         /// <returns></returns>
@@ -433,6 +458,31 @@ namespace OfferMaker
             else
                 serverResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersPath);
             var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersPath);
+            return MergeCallResults(serverResult, localResult_);
+        }
+
+        /// <summary>
+        /// Пытаемся получить истории КП текущего пользователя с сервера или из кэша.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersHistorySelfGet()
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerStore.OffersHistorySelfGet();
+            if (AppMode == AppMode.Offline)
+            {
+                var cacheResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersHistoryPath);
+                var localResult = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersHistoryPath);
+                return MergeCallResults(cacheResult, localResult);
+            }
+
+            //в режиме auto получаем 2 колекции, если что-то локально помечено к удалению, то также помечаем к удалению данные сервера
+            var serverResult = await ServerStore.OffersHistorySelfGet();
+            if (serverResult.Success)
+                LocalData.UpdateCache(serverResult.Data, LocalDataConfig.ServerCacheOffersHistoryPath);
+            else
+                serverResult = await LocalData.GetData<ObservableCollection<Offer>>(LocalDataConfig.ServerCacheOffersHistoryPath);
+            var localResult_ = await LocalData.GetData<List<Offer>>(LocalDataConfig.LocalOffersHistoryPath);
             return MergeCallResults(serverResult, localResult_);
         }
 
@@ -470,6 +520,39 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Пытаемся сохранить историю КП на сервере или в кэше.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> OfferHistoryCreate(Offer offer)
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerStore.OfferHistoryCreate(offer);
+            if (AppMode == AppMode.Offline)
+                return await LocalData.Post<Offer>(offer, LocalDataConfig.LocalOffersHistoryPath);
+
+            //в режиме auto приходит или вновь созданное КП или уже существующее локально,
+            //в случае удачного добавления удаляем из локальных данных это КП, если оно есть, и добавляем в кэш,
+            //в случаее неудачного добавления на сервер добавляем(если нету) КП в локальные данные
+            var remoteResult = await ServerStore.OfferHistoryCreate(offer);
+            string message = remoteResult.Message;
+            if (remoteResult.Success)
+            {
+                var localResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOffersHistoryPath);
+                remoteResult.AddCallResult(localResult);
+                var serverCachResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOffersHistoryPath);
+                remoteResult.AddCallResult(serverCachResult);
+            }
+            else
+            {
+                Log.Write(remoteResult.Message);
+                //в случае неудачи просто подменяет cr последним
+                remoteResult = await LocalData.Post<Offer>(offer, LocalDataConfig.ServerCacheOffersHistoryPath);
+            }
+            return remoteResult;
+        }
+
+        /// <summary>
         /// Удаляем КП из кэша и с сервера.
         /// </summary>
         /// <param name="offer"></param>
@@ -485,6 +568,26 @@ namespace OfferMaker
             var serverResult = await ServerStore.OfferDelete(offer);
             var localResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOffersPath, !serverResult.Success);
             var serverCacheResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.ServerCacheOffersPath, !serverResult.Success);
+            localResult.AddCallResult(serverCacheResult);
+            return MergeCallResults(serverResult, localResult);
+        }
+
+        /// <summary>
+        /// Удаляем историю КП из кэша и с сервера.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <param name="offers"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> OfferHistoryDelete(Offer offer)
+        {
+            if (AppMode == AppMode.Online)
+                return await ServerStore.OfferHistoryDelete(offer);
+            if (AppMode == AppMode.Offline)
+                return await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOffersHistoryPath, true);
+
+            var serverResult = await ServerStore.OfferHistoryDelete(offer);
+            var localResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.LocalOffersHistoryPath, !serverResult.Success);
+            var serverCacheResult = await LocalData.Delete<Offer>(offer, LocalDataConfig.ServerCacheOffersHistoryPath, !serverResult.Success);
             localResult.AddCallResult(serverCacheResult);
             return MergeCallResults(serverResult, localResult);
         }

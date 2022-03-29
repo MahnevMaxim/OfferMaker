@@ -159,27 +159,6 @@ namespace API.Migrations
                     b.ToTable("Currencies");
                 });
 
-            modelBuilder.Entity("Shared.Customer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Organization")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Customers");
-                });
-
             modelBuilder.Entity("Shared.Hint", b =>
                 {
                     b.Property<int>("Id")
@@ -245,7 +224,7 @@ namespace API.Migrations
                     b.Property<DateTime?>("LastChangePriceDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 17, 9, 36, 56, 989, DateTimeKind.Utc).AddTicks(5711));
+                        .HasDefaultValue(new DateTime(2022, 3, 29, 4, 36, 3, 615, DateTimeKind.Utc).AddTicks(7097));
 
                     b.Property<decimal>("Markup")
                         .HasColumnType("decimal(18,2)");
@@ -304,13 +283,16 @@ namespace API.Migrations
                     b.Property<int?>("Banner_Id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 17, 9, 36, 56, 996, DateTimeKind.Utc).AddTicks(241));
+                        .HasDefaultValue(new DateTime(2022, 3, 29, 4, 36, 3, 622, DateTimeKind.Utc).AddTicks(5390));
 
                     b.Property<string>("Currencies")
                         .IsRequired()
@@ -374,6 +356,12 @@ namespace API.Migrations
                     b.Property<string>("OldIdentifer")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ParentGuid")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasAlternateKey("Guid");
@@ -383,7 +371,7 @@ namespace API.Migrations
                     b.ToTable("Offers");
                 });
 
-            modelBuilder.Entity("Shared.OfferTemplate", b =>
+            modelBuilder.Entity("Shared.OfferHistory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -411,13 +399,20 @@ namespace API.Migrations
                     b.Property<int?>("Banner_Id")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ChildId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 3, 17, 9, 36, 57, 0, DateTimeKind.Utc).AddTicks(3949));
+                        .HasDefaultValue(new DateTime(2022, 3, 29, 4, 36, 3, 629, DateTimeKind.Utc).AddTicks(3741));
+
+                    b.Property<string>("Currencies")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Currency")
                         .IsRequired()
@@ -473,6 +468,124 @@ namespace API.Migrations
                     b.Property<string>("OfferName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OldIdentifer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParentGuid")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasAlternateKey("Guid");
+
+                    b.HasIndex("Banner_Id");
+
+                    b.ToTable("OffersHistory");
+                });
+
+            modelBuilder.Entity("Shared.OfferTemplate", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AdvertisingsDown")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AdvertisingsDown_")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("[]");
+
+                    b.Property<string>("AdvertisingsUp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AdvertisingsUp_")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("[]");
+
+                    b.Property<int?>("Banner_Id")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValue(new DateTime(2022, 3, 29, 4, 36, 3, 633, DateTimeKind.Utc).AddTicks(7400));
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Customer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discount")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Guid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsCreateByCostPrice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsHiddenTextNds")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsHideNomsPrice")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsResultSummInRub")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsShowPriceDetails")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsTemplate")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsWithNds")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ManagerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OfferCreatorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OfferGroups")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfferInfoBlocks")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfferName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParentGuid")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -554,6 +667,15 @@ namespace API.Migrations
                 });
 
             modelBuilder.Entity("Shared.Offer", b =>
+                {
+                    b.HasOne("Shared.Banner", "Banner_")
+                        .WithMany()
+                        .HasForeignKey("Banner_Id");
+
+                    b.Navigation("Banner_");
+                });
+
+            modelBuilder.Entity("Shared.OfferHistory", b =>
                 {
                     b.HasOne("Shared.Banner", "Banner_")
                         .WithMany()

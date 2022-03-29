@@ -178,7 +178,7 @@
                             </TextBlock.Style>
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} {1}">
-                                    <Binding Source="На " />
+                                    <Binding Source="НА " />
                                     <Binding Path="OfferName" />
                                 </MultiBinding>
                             </TextBlock.Text>

@@ -28,23 +28,38 @@ namespace OfferMaker
         /// <summary>
         /// Функция возвращает страничный фиксированный документ
         /// </summary>
-        public FixedDocument GetPdf()
+        public FixedDocument GetPdf(bool isWithBanner)
         {
-            List<PageContainer> pages = GetPagesContainer();
-            FixedDocument result = GetFixedDocument(pages);
+            List<PageContainer> pages = GetPagesContainer(isWithBanner);
+            FixedDocument result = WrapperOnePage.GetFixedDocument(pages);
             return result;
         }
 
-        List<PageContainer> GetPagesContainer()
+        List<PageContainer> GetPagesContainer(bool isWithBanner)
         {
             PdfBuilder builder = new PdfBuilder(_context, image);
             ViewModels.MainViewModel vm = (ViewModels.MainViewModel)_context;
 
-            builder.AddTitulView(false);
-            builder.AddCalc();
-            builder.AddInformBlockPdf();
-            builder.AddEmployee(false);
-
+            if (isWithBanner)
+            {
+                builder.AddTitulView(true);
+                builder.AddAdvertisings();
+                builder.AddShortCalcs();
+                builder.AddShortCalcsOption();
+                builder.AddInformBlockPdf();
+                builder.AddEmployee(true);
+                builder.AddCalc();
+                builder.AddCalcOptions();
+                builder.AddAdvertisingsDown();
+            }
+            else
+            {
+                builder.AddTitulView(false);
+                builder.AddCalc();
+                builder.AddInformBlockPdf();
+                builder.AddEmployee(false);
+            }
+            
             return builder.allContainers;
         }
 

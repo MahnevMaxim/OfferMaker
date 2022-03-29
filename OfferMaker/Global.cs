@@ -9,9 +9,9 @@ namespace OfferMaker
 {
     class Global
     {
-        public static string apiEndpoint = "https://localhost:44313/";
+        //public static string apiEndpoint = "https://localhost:44313/";
         //public static string apiEndpoint = "https://kip.mybot.su/";
-        //public static string apiEndpoint = "http://api.kip-group.com/";
+        public static string apiEndpoint = "http://api.kip-group.com/";
 
         public static Main Main;
 

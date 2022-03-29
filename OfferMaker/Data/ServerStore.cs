@@ -629,6 +629,31 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Пытаемся получить историю архивов КП с сервера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersHistoryGet()
+        {
+            try
+            {
+                var response = await client.OffersHistoryGetAsync();
+                if (response.StatusCode == 200)
+                {
+                    ObservableCollection<Offer> res = Helpers.CloneObject<ObservableCollection<Offer>>(response.Result);
+                    return new CallResult<ObservableCollection<Offer>>() { Data = res };
+                }
+                else
+                {
+                    return GetApiError<ObservableCollection<Offer>>(getOffersErrorMess, response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return GetApiError<ObservableCollection<Offer>>(getOffersErrorMess, ex);
+            }
+        }
+
+        /// <summary>
         /// Пытаемся получить архив КП текущего пользователя с сервера.
         /// </summary>
         /// <returns></returns>
@@ -637,6 +662,31 @@ namespace OfferMaker
             try
             {
                 var response = await client.OffersSelfGetAsync();
+                if (response.StatusCode == 200)
+                {
+                    ObservableCollection<Offer> res = Helpers.CloneObject<ObservableCollection<Offer>>(response.Result);
+                    return new CallResult<ObservableCollection<Offer>>() { Data = res };
+                }
+                else
+                {
+                    return GetApiError<ObservableCollection<Offer>>(offersSelfGetErrorMess, response.StatusCode);
+                }
+            }
+            catch (Exception ex)
+            {
+                return GetApiError<ObservableCollection<Offer>>(offersSelfGetErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// Пытаемся получить архив КП текущего пользователя с сервера.
+        /// </summary>
+        /// <returns></returns>
+        async internal Task<CallResult<ObservableCollection<Offer>>> OffersHistorySelfGet()
+        {
+            try
+            {
+                var response = await client.OffersHistorySelfGetAsync();
                 if (response.StatusCode == 200)
                 {
                     ObservableCollection<Offer> res = Helpers.CloneObject<ObservableCollection<Offer>>(response.Result);
@@ -675,6 +725,28 @@ namespace OfferMaker
         }
 
         /// <summary>
+        /// Пытаемся сохранить историю КП на сервере.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> OfferHistoryCreate(Offer offer)
+        {
+            try
+            {
+                Global.ImageManager.UploadNewImages(offer);
+                ApiLib.OfferHistory offerHistoryCopy = Helpers.CloneObject<ApiLib.OfferHistory>(offer);
+                var res = await client.OfferHistoryPostAsync(offerHistoryCopy);
+                offer.Id = res.Result.Id;
+                offer.ChildId = res.Result.ChildId;
+                return new CallResult() { SuccessMessage = "КП сохранено в архив" };
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(offerCreateErrorMess, ex);
+            }
+        }
+
+        /// <summary>
         /// Удаление КП с сервера.
         /// </summary>
         /// <param name="offer"></param>
@@ -686,6 +758,25 @@ namespace OfferMaker
                 if (offer.Id == 0) return new CallResult(); // нельзя удалить то, чего нет
                 await client.OfferDeleteAsync(offer.Id);
                 return new CallResult() { SuccessMessage = "КП Id " + offer.Id + " удалено." };
+            }
+            catch (Exception ex)
+            {
+                return GetApiError(offerDeleteErrorMess, ex);
+            }
+        }
+
+        /// <summary>
+        /// Удаление истории КП с сервера.
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        async internal Task<CallResult> OfferHistoryDelete(Offer offer)
+        {
+            try
+            {
+                if (offer.Id == 0) return new CallResult(); // нельзя удалить то, чего нет
+                await client.OfferHistoryDeleteAsync(offer.Id);
+                return new CallResult() { SuccessMessage = "История КП Id " + offer.Id + " удалено." };
             }
             catch (Exception ex)
             {

@@ -28,14 +28,14 @@ namespace API.Controllers
         [HttpGet(Name = nameof(OffersGet))]
         public async Task<ActionResult<IEnumerable<Offer>>> OffersGet()
         {
-            return await _context.Offers.Where(o=>o.IsDelete==false).Include(o => o.Banner_).ToListAsync();
+            return await _context.Offers.Where(o => o.IsDelete == false).Include(o => o.Banner_).ToListAsync();
         }
 
-        [HttpGet("/self", Name = nameof(OffersSelfGet))]
+        [HttpGet("/api/Offers/self", Name = nameof(OffersSelfGet))]
         public async Task<ActionResult<IEnumerable<Offer>>> OffersSelfGet()
         {
             User user = _context.Users.AsNoTracking().FirstOrDefault(x => x.Email == User.Identity.Name);
-            return await _context.Offers.Where(o => o.OfferCreatorId == user.Id).Where(o => o.IsDelete == false).ToListAsync();
+            return await _context.Offers.Where(o => o.OfferCreatorId == user.Id).Where(o => o.IsDelete == false).Include(o => o.Banner_).ToListAsync();
         }
 
         [Authorize(Roles = "CanAll,CanSeeAllOffers")]
@@ -48,7 +48,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            else if(offer.IsDelete)
+            else if (offer.IsDelete)
             {
                 return NotFound();
             }
@@ -59,13 +59,13 @@ namespace API.Controllers
         [HttpPost(Name = nameof(OfferPost))]
         public async Task<ActionResult<Offer>> OfferPost(Offer offer)
         {
-            if(offer.Banner_!=null)
+            if (offer.Banner_ != null)
             {
                 Banner banner = _context.Banners.Where(b => b.Guid == offer.Banner_.Guid).FirstOrDefault();
-                if(banner==null)
+                if (banner == null)
                 {
                     banner = _context.Banners.First();
-                    if(banner==null)
+                    if (banner == null)
                     {
                         return BadRequest("banner is null, upload banner to system");
                     }
@@ -79,12 +79,9 @@ namespace API.Controllers
                     offer.Banner_ = banner;
                 }
             }
-            
             _context.Offers.Add(offer);
             await _context.SaveChangesAsync();
-
-            TryAddHints(offer);
-
+            TryAddHints(offer, _context);
             return CreatedAtAction("OfferGet", new { id = offer.Id }, offer);
         }
 
@@ -109,7 +106,7 @@ namespace API.Controllers
             return _context.Offers.Any(e => e.Id == id);
         }
 
-        private void TryAddHints(Offer offer)
+        public static void TryAddHints(Offer offer, APIContext _context)
         {
             var newHintsStrings = offer.OfferGroups.Select(o => o.GroupTitle);
             var oldHintsStrings = _context.Hints.Select(h => h.HintString);

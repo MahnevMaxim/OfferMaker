@@ -9,7 +9,11 @@ using System.Collections.ObjectModel;
 
 namespace Shared
 {
-    public class Offer : OfferBase
+    public class Offer : ArchiveBase
+    {
+    }
+
+    abstract public class ArchiveBase : OfferBase
     {
         [Required]
         public ObservableCollection<Currency> Currencies { get; set; }

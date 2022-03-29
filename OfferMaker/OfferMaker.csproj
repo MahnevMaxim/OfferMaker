@@ -99,11 +99,12 @@
   <ItemGroup>
     <Folder Include="Images\common_images\" />
     <Folder Include="Images\informIcons\" />
+    <Folder Include="packages\" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="ImageCropperLibrary">
-      <HintPath>..\..\..\..\Desktop\ImageCropperLibrary.dll</HintPath>
+      <HintPath>packages\ImageCropperLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
 

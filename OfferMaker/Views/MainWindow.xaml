@@ -1182,6 +1182,11 @@
                                             <Setter Property="Background"
                                                     Value="#33a20025" />
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsHistory}"
+                                                     Value="True">
+                                            <Setter Property="Background"
+                                                    Value="#3376608a" />
+                                        </DataTrigger>
                                         <MultiDataTrigger>
                                             <MultiDataTrigger.Conditions>
                                                 <Condition Binding="{Binding Path=Id}"
@@ -1230,6 +1235,30 @@
                                                         Value="#cca20025" />
                                             </MultiDataTrigger.Setters>
                                         </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=IsHistory}"
+                                                           Value="True" />
+                                                <Condition Binding="{Binding Path=IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                                           Value="True" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Background"
+                                                        Value="#9976608a" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
+                                        <MultiDataTrigger>
+                                            <MultiDataTrigger.Conditions>
+                                                <Condition Binding="{Binding Path=IsHistory}"
+                                                           Value="True" />
+                                                <Condition Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Self}}"
+                                                           Value="True" />
+                                            </MultiDataTrigger.Conditions>
+                                            <MultiDataTrigger.Setters>
+                                                <Setter Property="Background"
+                                                        Value="#cc76608a" />
+                                            </MultiDataTrigger.Setters>
+                                        </MultiDataTrigger>
                                     </Style.Triggers>
 
                                 </Style>
@@ -1241,7 +1270,7 @@
                             </DataGrid.InputBindings>
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="№"
-                                                    Binding="{Binding Id}"
+                                                    Binding="{Binding VisibleId}"
                                                     DisplayIndex="0" />
                                 <DataGridTextColumn Header="Название"
                                                     Binding="{Binding OfferName}"
@@ -1305,22 +1334,104 @@
                                                         </MultiBinding>
                                                     </Button.CommandParameter>
                                                 </Button>
-                                                <Button Height="30"
-                                                        Width="30"
-                                                        Margin="5,0"
-                                                        ToolTip="Удалить"
-                                                        Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
-                                                        Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}">
-                                                    <iconPacks:PackIconMaterial Kind="CloseBoxOutline"
-                                                                                Width="15"
-                                                                                Height="15" />
-                                                    <Button.CommandParameter>
-                                                        <MultiBinding Converter="{StaticResource MultiConverter}">
-                                                            <Binding Source="DeleteOfferFromArchive" />
-                                                            <Binding Path="." />
-                                                        </MultiBinding>
-                                                    </Button.CommandParameter>
-                                                </Button>
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="IsEnabled"
+                                                                    Value="False" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsHaveHistory}"
+                                                                             Value="true">
+                                                                    <Setter Property="IsEnabled"
+                                                                            Value="True" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding IsOpenHistory}"
+                                                                             Value="true">
+                                                                    <Setter Property="Visibility"
+                                                                            Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Margin="5,0,0,0"
+                                                            ToolTip="История"
+                                                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}">
+                                                        <iconPacks:PackIconMaterial Kind="History"
+                                                                                    Width="15"
+                                                                                    Height="15" />
+                                                        <Button.CommandParameter>
+                                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                                <Binding Source="LoadArchiveHistory" />
+                                                                <Binding Path="." />
+                                                            </MultiBinding>
+                                                        </Button.CommandParameter>
+                                                    </Button>
+                                                </Grid>
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="Visibility"
+                                                                    Value="Collapsed" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsOpenHistory}"
+                                                                             Value="true">
+                                                                    <Setter Property="Visibility"
+                                                                            Value="Visible" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Margin="5,0,0,0"
+                                                            ToolTip="История"
+                                                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}">
+                                                        <iconPacks:PackIconMaterial Kind="ChevronUp"
+                                                                                    Width="15"
+                                                                                    Height="15" />
+                                                        <Button.CommandParameter>
+                                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                                <Binding Source="CloseArchiveHistory" />
+                                                                <Binding Path="." />
+                                                            </MultiBinding>
+                                                        </Button.CommandParameter>
+                                                    </Button>
+                                                </Grid>
+                                                <Grid>
+                                                    <Grid.Style>
+                                                        <Style TargetType="Grid">
+                                                            <Setter Property="IsEnabled"
+                                                                    Value="True" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsHistory}"
+                                                                             Value="True">
+                                                                    <Setter Property="IsEnabled"
+                                                                            Value="False" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Grid.Style>
+                                                    <Button Height="30"
+                                                            Width="30"
+                                                            Margin="5,0"
+                                                            ToolTip="Удалить"
+                                                            Style="{StaticResource MahApps.Styles.Button.Square.Accent}"
+                                                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.Cmd}">
+                                                        <iconPacks:PackIconMaterial Kind="CloseBoxOutline"
+                                                                                    Width="15"
+                                                                                    Height="15" />
+                                                        <Button.CommandParameter>
+                                                            <MultiBinding Converter="{StaticResource MultiConverter}">
+                                                                <Binding Source="DeleteOfferFromArchive" />
+                                                                <Binding Path="." />
+                                                            </MultiBinding>
+                                                        </Button.CommandParameter>
+                                                    </Button>
+                                                </Grid>
                                             </StackPanel>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>

@@ -32,6 +32,9 @@ namespace OfferMaker
         User manager;
 
         int id;
+        int? parentId;
+        int? childId;
+        string parentGuid;
         string guid;
         User offerCreator;
         Currency currency;
@@ -58,6 +61,9 @@ namespace OfferMaker
         string comment;
         ObservableCollection<Advertising> advertisingsDown_ = new ObservableCollection<Advertising>();
         ObservableCollection<Advertising> advertisingsUp_ = new ObservableCollection<Advertising>();
+        bool isHistory;
+        bool isHaveHistory;
+        bool isOpenHistory;
 
         public int Id
         {
@@ -69,6 +75,17 @@ namespace OfferMaker
                 constructor?.viewModel.OnPropertyChanged(nameof(AltId));
             }
         }
+
+        public int? ParentId { get => parentId; set => parentId = value; }
+
+        public int? ChildId { get => childId; set => childId = value; }
+
+        public string VisibleId
+        {
+            get => parentGuid == null ? id.ToString() : parentId.ToString() + "." + ChildId;
+        }
+
+        public string ParentGuid { get => parentGuid; set => parentGuid = value; }
 
         public string Guid
         {
@@ -84,7 +101,7 @@ namespace OfferMaker
         /// Альтернативный человекочитаемый id с датой, публикуется в КП.
         /// </summary>
         [JsonIgnore]
-        public string AltId { get => OldIdentifer == null ? (Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + Id) : OldIdentifer; }
+        public string AltId { get => OldIdentifer == null ? (Id == 0 ? "" : CreateDate.ToShortDateString() + "-" + VisibleId) : OldIdentifer; }
 
         /// <summary>
         /// Идентификатор старого КП.
@@ -266,7 +283,7 @@ namespace OfferMaker
         [JsonIgnore]
         public ObservableCollection<string> AdvertisingsDown
         {
-            get => new ObservableCollection<string>(AdvertisingsDown_.Select(a=>a.LocalPhotoPath));
+            get => new ObservableCollection<string>(AdvertisingsDown_.Select(a => a.LocalPhotoPath));
         }
 
         /// <summary>
@@ -495,6 +512,21 @@ namespace OfferMaker
                 OnPropertyChanged();
             }
         }
+
+        /// <summary>
+        /// История.
+        /// </summary>
+        [JsonIgnore]
+        public List<Offer> OfferHistory = new List<Offer>();
+
+        [JsonIgnore]
+        public bool IsHistory { get => isHistory; set => isHistory = value; }
+
+        [JsonIgnore]
+        public bool IsHaveHistory { get => isHaveHistory; set => isHaveHistory = value; }
+
+        [JsonIgnore]
+        public bool IsOpenHistory { get => isOpenHistory; set => isOpenHistory = value; }
 
         internal void UnsetIsEdited() => IsEdited = false;
 
@@ -783,12 +815,14 @@ namespace OfferMaker
                 foreach (NomWrapper nw in offerGroup.NomWrappers)
                 {
                     nw.SetCurrencyCharCode();
-                    if (!Currencies.Contains(nw.Currency))
+                    var curr_ = Currencies.Where(c => c.CharCode == nw.Currency.CharCode).FirstOrDefault();
+                    if (curr_ == null)
                     {
                         Currencies.Add(nw.Currency);
                     }
 
-                    if (!Currencies.Contains(nw.DefaultCurrency))
+                    var currDefault_ = Currencies.Where(c => c.CharCode == nw.DefaultCurrency.CharCode).FirstOrDefault();
+                    if (currDefault_ == null)
                     {
                         Currencies.Add(nw.DefaultCurrency);
                     }

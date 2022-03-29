@@ -34,6 +34,8 @@ namespace API
                         // Use a Scoped container to create jobs. I'll touch on this later
                         q.UseMicrosoftDependencyInjectionScopedJobFactory();
 
+                        //#################################
+
                         // Create a "key" for the job
                         var jobKey = new JobKey("CurrencyJob");
 
@@ -46,6 +48,8 @@ namespace API
                             .WithIdentity("CurrencyJob-trigger") // give the trigger a unique name
                             .WithCronSchedule("0 0/5 * * * ?"));
 
+                        //#################################
+
                         // Create a "key" for the job
                         var jobKeyImages = new JobKey("ImagesJob");
 
@@ -57,13 +61,25 @@ namespace API
                             .ForJob(jobKeyImages) // link to the HelloWorldJob
                             .WithIdentity("ImagesJob-trigger") // give the trigger a unique name
                             .WithCronSchedule("0 0/1 * * * ?"));
+
+                        //#################################
+
+                        // Create a "key" for the job
+                        var jobKeyBackup = new JobKey("BackupJob");
+
+                        // Register the job with the DI container
+                        q.AddJob<BackupJob>(opts => opts.WithIdentity(jobKeyBackup));
+
+                        // Create a trigger for the job
+                        q.AddTrigger(opts => opts
+                            .ForJob(jobKeyBackup) // link to the HelloWorldJob
+                            .WithIdentity("BackupJob-trigger") // give the trigger a unique name
+                            .WithCronSchedule("0 0 0/12 * * ?"));
                     });
 
                     // Add the Quartz.NET hosted service
                     services.AddQuartzHostedService(
                         q => q.WaitForJobsToComplete = true);
-
-                    // other config
                 });
     }
 
@@ -89,6 +105,19 @@ namespace API
         public Task Execute(IJobExecutionContext context)
         {
             ImagesUpdater.Update();
+            return Task.CompletedTask;
+        }
+    }
+
+    /// <summary>
+    /// Задание для планировщика.
+    /// </summary>
+    [DisallowConcurrentExecution]
+    public class BackupJob : IJob
+    {
+        public Task Execute(IJobExecutionContext context)
+        {
+            BackupMaker.Backup();
             return Task.CompletedTask;
         }
     }

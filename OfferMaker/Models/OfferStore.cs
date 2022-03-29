@@ -74,6 +74,34 @@ namespace OfferMaker
             EndDateTime = null;
         }
 
+        public OfferStore(ObservableCollection<Offer> offers, ObservableCollection<Offer> offersHistory, User currentUser)
+        {
+            ObservableCollection<Offer> offers_ = new ObservableCollection<Offer>();
+            for (int i=0;i<offers.Count;i++)
+            {
+                string guid = offers[i].Guid;
+                var history = offersHistory.Where(o => o.ParentGuid == guid);
+                if(history.Count()==0)
+                {
+                    offers_.Add(offers[i]);
+                }
+                else
+                {
+                    var lastVersion = history.Last();
+                    lastVersion.IsHaveHistory = true;
+                    offers[i].IsHistory = true;
+                    lastVersion.OfferHistory.Add(offers[i]);
+                    lastVersion.OfferHistory.AddRange(history.Take(history.Count()-1));
+                    lastVersion.OfferHistory.ForEach(o => o.IsHistory = true);
+                    offers_.Add(lastVersion);
+                }
+            }
+            this.offers = offers_;
+            this.currentUser = currentUser;
+            BeginDateTime = null;
+            EndDateTime = null;
+        }
+
         OfferStore() { } //закрываем конструктор
 
         internal void ApplyOfferFilter()
@@ -177,7 +205,44 @@ namespace OfferMaker
 
         internal void AddOffer(Offer offer)
         {
-            Offers.Add(offer);
+            if(offer.ParentGuid==null)
+            {
+                Offers.Add(offer);
+            }
+            else
+            {
+                offer.IsHaveHistory = true;
+                string parentGuid = offer.ParentGuid;
+                //ищем индекс первого вхождения, в нём наша история и формируем историю
+                var parent = offers.Where(o => o.Guid == parentGuid).FirstOrDefault();
+                var firstChild = offers.Where(o => o.ParentGuid == parentGuid).FirstOrDefault();
+                int index = 0;
+                if(firstChild != null)
+                {
+                    index = offers.IndexOf(firstChild);
+                }
+                else
+                {
+                    index = offers.IndexOf(parent);
+                }
+                var offerWithHistory = offers[index];
+                var history =  offerWithHistory.OfferHistory;
+                var newHistory = new List<Offer>();
+                history.ForEach(o => newHistory.Add(o));
+                offerWithHistory.OfferHistory.Clear();
+                newHistory.Add(offerWithHistory);
+                offer.OfferHistory = newHistory;
+
+                //удаляем всю хуйню и засовываем туда наш оффер, а вся хуйня у нас в истории
+                offer.OfferHistory.ForEach(o=> 
+                { 
+                    offers.Remove(o);
+                    o.IsHaveHistory = false;
+                    o.IsHistory = true;
+                    o.IsOpenHistory = false;
+                });
+                offers.Insert(index, offer);
+            }
         }
 
         public void SetArchiveMode(ArchiveMode archiveMode) => this.archiveMode = archiveMode;
@@ -216,6 +281,24 @@ namespace OfferMaker
         internal void RemoveOffer(Offer offer)
         {
             Offers.Remove(offer);
+            ApplyOfferFilter();
+        }
+
+        internal void ShowHistory(Offer offer)
+        {
+            offer.IsOpenHistory = true;
+            int index = Offers.IndexOf(offer);
+            offer.OfferHistory.ForEach(o => offers.Insert(++index, o));
+            ApplyOfferFilter();
+        }
+
+        internal void HideHistory(Offer offer)
+        {
+            offer.IsOpenHistory = false;
+            string parentGuid = offer.ParentGuid;
+            string offerGuid = offer.Guid;
+            List<Offer> forRemove = offers.Where(o => (o.ParentGuid == parentGuid && o.Guid != offerGuid) || o.Guid==parentGuid).ToList();
+            forRemove.ForEach(o => offers.Remove(o));
             ApplyOfferFilter();
         }
     }

@@ -11,6 +11,8 @@ using System.Drawing.Printing;
 using System.IO;
 using Shared;
 using System.Windows.Forms;
+using System.Windows.Xps.Packaging;
+using System.IO.Packaging;
 
 namespace OfferMaker
 {
@@ -43,6 +45,21 @@ namespace OfferMaker
                     return cr;
                 }
             }
+
+
+            //название кп заказчик номер
+            //номер с датой, конечно
+            string path;
+            var offer = Global.Constructor.Offer;
+            string defaultFileName = offer.OfferName + " " + offer.Customer.Organization + " " + offer.AltId + ".pdf";
+            defaultFileName = defaultFileName.Replace("\"","");
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.FileName = defaultFileName;
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                path = saveFileDialog.FileName;
+            else
+                return new CallResult();
+
             FixedDocument fixedDoc;
             if (isWithBanner)
             {
@@ -54,7 +71,8 @@ namespace OfferMaker
                 constructor.CreateDocumentWithoutBanner();
                 fixedDoc = constructor.PdfDocumentShort;
             }
-            SaveToPdf(fixedDoc);
+            await Task.Delay(1000);
+            SaveToPdf(fixedDoc, path);
             return new CallResult();
         }
 
@@ -104,41 +122,60 @@ namespace OfferMaker
             }
         }
 
-        internal void SaveToPdf(FixedDocument fixedDoc)
+        internal void SaveToPdf(FixedDocument fixedDoc, string filePath) => FixedDocument2Pdf(fixedDoc, filePath);
+        //{
+        //    System.Windows.Controls.PrintDialog printDialog = new System.Windows.Controls.PrintDialog();
+        //    var serv = new LocalPrintServer();
+        //    printDialog.PrintQueue = serv.GetPrintQueue("Microsoft Print to PDF");
+
+        //    PrintTicket pt = new PrintTicket()
+        //    {
+        //        OutputColor = OutputColor.Color,
+        //        PageBorderless = PageBorderless.Borderless,
+        //        PageMediaSize = new PageMediaSize(PageMediaSizeName.ISOA4),
+        //        OutputQuality = OutputQuality.Photographic,
+        //        PageMediaType = PageMediaType.ScreenPaged,
+        //        PageOrder = PageOrder.Standard,
+        //        PageOrientation = PageOrientation.Portrait,
+        //        PageResolution = new PageResolution(PageQualitativeResolution.High),
+        //        PagesPerSheet = 1
+        //    };
+
+        //    printDialog.PrintTicket = pt;
+        //    FixedDocumentSequence fixedDocumentSequence1 = (IDocumentPaginatorSource)fixedDoc as FixedDocumentSequence;
+
+        //    if (fixedDoc != null)
+        //        fixedDoc.PrintTicket = printDialog.PrintTicket;
+
+        //    if (fixedDocumentSequence1 != null)
+        //        fixedDocumentSequence1.PrintTicket = printDialog.PrintTicket;
+
+        //    XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printDialog.PrintQueue);
+
+        //    if (fixedDoc != null)
+        //        writer.WriteAsync(fixedDoc, printDialog.PrintTicket);
+
+        //    if (fixedDocumentSequence1 != null)
+        //        writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
+        //}
+
+        public static void FixedDocument2Pdf(FixedDocument fd, string filePath)
         {
-            System.Windows.Controls.PrintDialog printDialog = new System.Windows.Controls.PrintDialog();
-            var serv = new LocalPrintServer();
-            printDialog.PrintQueue = serv.GetPrintQueue("Microsoft Print to PDF");
+            // Convert FixedDocument to XPS file in memory
+            var ms = new MemoryStream();
+            var package = Package.Open(ms, FileMode.Create);
+            var doc = new XpsDocument(package);
+            var writer = XpsDocument.CreateXpsDocumentWriter(doc);
+            writer.Write(fd.DocumentPaginator);
+            doc.Close();
+            package.Close();
 
-            PrintTicket pt = new PrintTicket()
-            {
-                OutputColor = OutputColor.Color,
-                PageBorderless = PageBorderless.Borderless,
-                PageMediaSize = new PageMediaSize(PageMediaSizeName.ISOA4),
-                OutputQuality = OutputQuality.Photographic,
-                PageMediaType = PageMediaType.ScreenPaged,
-                PageOrder = PageOrder.Standard,
-                PageOrientation = PageOrientation.Portrait,
-                PageResolution = new PageResolution(PageQualitativeResolution.High),
-                PagesPerSheet = 1
-            };
+            // Get XPS file bytes
+            var bytes = ms.ToArray();
+            ms.Dispose();
 
-            printDialog.PrintTicket = pt;
-            FixedDocumentSequence fixedDocumentSequence1 = (IDocumentPaginatorSource)fixedDoc as FixedDocumentSequence;
-
-            if (fixedDoc != null)
-                fixedDoc.PrintTicket = printDialog.PrintTicket;
-
-            if (fixedDocumentSequence1 != null)
-                fixedDocumentSequence1.PrintTicket = printDialog.PrintTicket;
-
-            XpsDocumentWriter writer = PrintQueue.CreateXpsDocumentWriter(printDialog.PrintQueue);
-
-            if (fixedDoc != null)
-                writer.WriteAsync(fixedDoc, printDialog.PrintTicket);
-
-            if (fixedDocumentSequence1 != null)
-                writer.WriteAsync(fixedDocumentSequence1, printDialog.PrintTicket);
+            // Print to PDF
+            PdfFilePrinter.PrintXpsToPdf(bytes, filePath, "Document Title");
         }
 
         async internal Task<CallResult<Offer>> OfferTemplateCreate()
@@ -199,20 +236,35 @@ namespace OfferMaker
         /// </summary>
         async internal Task<CallResult> OfferCreate()
         {
-            if (constructor.Offer.Id != 0)
-            {
-                return new CallResult() { Error = new Error("Нельзя перезаписать архив.") };
-            }
-
             if (string.IsNullOrWhiteSpace(constructor.Offer.Customer.FullName)
-                || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
-                || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
+                   || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Organization)
+                   || string.IsNullOrWhiteSpace(constructor.Offer.Customer.Location))
             {
                 return new CallResult() { Error = new Error("Имя клиента, компания и город должны быть заполнены.") };
             }
 
-            CallResult cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer.PrepareArchive());
-            return cr;
+            if (constructor.Offer.IsArchive)
+            {
+                //создаём дочерний архив, меняем родителя только для первого потомка, для остальных родитель тот же, 1 поколение только у потомков
+                if (constructor.Offer.ParentGuid == null)
+                {
+                    string parentGuid = constructor.Offer.Guid;
+                    int parentId = constructor.Offer.Id;
+                    constructor.Offer.ParentId = parentId;
+                    constructor.Offer.ParentGuid = parentGuid;
+                }
+
+                constructor.Offer.Id = 0;
+                constructor.Offer.Guid = Guid.NewGuid().ToString();
+
+                CallResult cr = await Global.Main.DataRepository.OfferHistoryCreate(constructor.Offer.PrepareArchive());
+                return cr;
+            }
+            else
+            {
+                CallResult cr = await Global.Main.DataRepository.OfferCreate(constructor.Offer.PrepareArchive());
+                return cr;
+            }
         }
 
         private Offer CreateTemplate(Offer offer)

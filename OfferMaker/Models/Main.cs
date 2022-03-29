@@ -185,6 +185,7 @@ namespace OfferMaker
         #region Fields
 
         public static List<Hint> hints;
+        //public static ObservableCollection<Offer> offersHistory;
 
         #endregion Fields
 
@@ -307,25 +308,6 @@ namespace OfferMaker
 
         #endregion NomWrapper
 
-        #region Discount
-
-        public void SetDiscount()
-        {
-            CallResult cr = Constructor.SetDiscount();
-            if (!cr.Success)
-                OnSendMessage(cr.Error.Message);
-            else
-                IsDiscountOpen = false;
-        }
-
-        public void CancelDiscount()
-        {
-            Constructor.CancelDiscount();
-            IsDiscountOpen = false;
-        }
-
-        #endregion Discount
-
         #region Etc
 
         public void SkipOffer() => Constructor.SkipOffer();
@@ -390,15 +372,54 @@ namespace OfferMaker
 
         async public void DeleteOfferFromArchive(Offer offer)
         {
-            var cr = await DataRepository.OfferDelete(offer);
-            if (cr.Success)
+            if (offer.ParentGuid != null)
             {
-                if (!(offer.Id != 0 && Settings.AppMode == AppMode.Offline))
-                    ArchiveStore.RemoveOffer(offer);
+                string errorMess = null;
+                var offers = offer.OfferHistory;
+                offers.Add(offer);
+                for (int i = 0; i < offers.Count; i++)
+                {
+                    CallResult cr;
+                    if (offers[i].ParentGuid == null)
+                        cr = await DataRepository.OfferDelete(offers[i]);
+                    else
+                        cr = await DataRepository.OfferHistoryDelete(offers[i]);
+                    if (cr.Success)
+                    {
+                        if (!(offers[i].Id != 0 && Settings.AppMode == AppMode.Offline))
+                            ArchiveStore.RemoveOffer(offers[i]);
+                    }
+                    else
+                    {
+                        errorMess += cr.Error.Message + "\n";
+                    }
+                }
+                if (!string.IsNullOrEmpty(errorMess))
+                    OnSendMessage(errorMess);
                 ArchiveStore.ApplyOfferFilter();
             }
             else
-                OnSendMessage(cr.Error.Message);
+            {
+                var cr = await DataRepository.OfferDelete(offer);
+                if (cr.Success)
+                {
+                    if (!(offer.Id != 0 && Settings.AppMode == AppMode.Offline))
+                        ArchiveStore.RemoveOffer(offer);
+                    ArchiveStore.ApplyOfferFilter();
+                }
+                else
+                    OnSendMessage(cr.Error.Message);
+            }
+        }
+
+        public void LoadArchiveHistory(Offer offer)
+        {
+            ArchiveStore.ShowHistory(offer);
+        }
+
+        public void CloseArchiveHistory(Offer offer)
+        {
+            ArchiveStore.HideHistory(offer);
         }
 
         async public void SaveAllArchiveChanges()
@@ -409,7 +430,7 @@ namespace OfferMaker
             var forPostOffers = ArchiveStore.Offers.Where(a => a.Id == 0).ToList();
             string message = null;
 
-            foreach(var forDel in forDelOffers)
+            foreach (var forDel in forDelOffers)
             {
                 ProcessStatus = "Удаление архива Id " + forDel.Id;
                 var cr = await DataRepository.OfferDelete(forDel);
@@ -427,7 +448,7 @@ namespace OfferMaker
 
             IsBusy = false;
 
-            if(!string.IsNullOrWhiteSpace(message))
+            if (!string.IsNullOrWhiteSpace(message))
                 OnSendMessage(message);
             else
                 OnSendMessage("Нет данных для сохранения");
@@ -512,7 +533,7 @@ namespace OfferMaker
                     message += cr.Message + "\n";
                 }
             }
-            else if(Settings.AppMode == AppMode.Offline)
+            else if (Settings.AppMode == AppMode.Offline)
             {
                 var forEditOffers = TemplatesStore.Offers.Where(a => a.IsEdited).ToList();
 
@@ -526,7 +547,7 @@ namespace OfferMaker
 
             IsBusy = false;
 
-            if(!string.IsNullOrWhiteSpace(message))
+            if (!string.IsNullOrWhiteSpace(message))
                 OnSendMessage(message);
             else
                 OnSendMessage("Нет данных для сохранения.");
@@ -560,11 +581,7 @@ namespace OfferMaker
         async Task SaveToPdf(bool isWithBanner)
         {
             CallResult cr = await DocManager.SaveToPdf(isWithBanner);
-            if (cr.Success)
-            {
-                UpdateArchiveAfterSave();
-            }
-            else
+            if (!cr.Success)
             {
                 SendMess(cr.Message);
             }
@@ -594,7 +611,7 @@ namespace OfferMaker
         async public void OfferTemplateCreate()
         {
             CallResult<Offer> cr = await DocManager.OfferTemplateCreate();
-            bool isSuccess=false;
+            bool isSuccess = false;
             if (cr.Success)
             {
                 isSuccess = true;
@@ -615,10 +632,10 @@ namespace OfferMaker
                 TemplatesStore.ApplyOfferFilter();
             }
             string mess = cr.GetAllMessages();
-            if(!string.IsNullOrWhiteSpace(mess))
+            if (!string.IsNullOrWhiteSpace(mess))
                 SendMess(cr.GetAllMessages());
         }
-            
+
         async public void OfferCreate()
         {
             CallResult cr = await DocManager.OfferCreate();
@@ -635,7 +652,7 @@ namespace OfferMaker
             Global.Constructor.LoadOfferFromArchive(Constructor.Offer);
             Global.Main.ArchiveStore.ApplyOfferFilter();
         }
-           
+
         #endregion DocManager
 
         #region Settings
