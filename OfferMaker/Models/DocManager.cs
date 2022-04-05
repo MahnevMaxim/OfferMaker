@@ -44,8 +44,8 @@ namespace OfferMaker
                 {
                     return cr;
                 }
+                Global.Main.UpdateArchiveAfterSave();
             }
-
 
             //название кп заказчик номер
             //номер с датой, конечно

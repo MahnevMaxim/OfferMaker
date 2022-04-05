@@ -646,7 +646,7 @@ namespace OfferMaker
             SendMess(cr.Message);
         }
 
-        void UpdateArchiveAfterSave()
+        public void UpdateArchiveAfterSave()
         {
             Global.Main.ArchiveStore.AddOffer(Constructor.Offer);
             Global.Constructor.LoadOfferFromArchive(Constructor.Offer);
