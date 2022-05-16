@@ -125,7 +125,8 @@ namespace OfferMaker.ViewModels
             set => modelMain.CurrentMainSelectedTabIndex = value;
         }
 
-        public ObservableCollection<string> UsingCurrencies { get => modelMain.ConstructorCurrencies; }
+        //public ObservableCollection<string> UsingCurrencies { get => modelMain.ConstructorCurrencies; }
+        public ObservableCollection<string> UsingCurrencies { get => modelMain.UsingCurrencies; }
 
         public User User { get => modelMain.User; }
 
