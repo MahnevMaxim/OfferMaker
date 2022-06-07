@@ -21,6 +21,8 @@ namespace OfferMaker
 
         public decimal Rate { get; set; }
 
+        public int Nominal { get; set; }
+
         public string Symbol { get; set; }
 
         public DateTime RateDatetime { get; set; }

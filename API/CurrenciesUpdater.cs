@@ -43,8 +43,10 @@ namespace API
                 foreach (var item in el)
                 {
                     var code = item.Element("CharCode").Value;
-                    var rate = item.Element("Value").Value;
-                    Currency curr = new Currency() { CharCode = code, Rate = decimal.Parse(rate, new CultureInfo("ru-RU")), RateDatetime = rateDatetime };
+                    var nominal = item.Element("Nominal").Value;
+                    var value = item.Element("Value").Value;
+                    var rate = decimal.Parse(value, new CultureInfo("ru-RU"))/ decimal.Parse(nominal, new CultureInfo("ru-RU"));
+                    Currency curr = new Currency() { CharCode = code, Rate = rate, RateDatetime = rateDatetime };
                     var res = controller.CurrencyEdit(0, curr).Result;
                 }
             }
